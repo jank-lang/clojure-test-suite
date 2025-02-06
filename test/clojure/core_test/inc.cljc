@@ -25,10 +25,11 @@
 
     (testing "overflow"
       #?(:clj (is (thrown? Exception (inc Long/MAX_VALUE)))
-         :cljs (is (= (inc js/Number.MAX_SAFE_INTEGER) (+ 2 js/Number.MAX_SAFE_INTEGER)))))
+         :cljs (is (= (inc js/Number.MAX_SAFE_INTEGER) (+ 2 js/Number.MAX_SAFE_INTEGER)))
+         :default (is false "overflow untested")))
 
     (testing "inc-nil"
       ;; ClojureScript says (= 1 (inc nil)) because JavaScript casts null to 0
       ;; https://clojuredocs.org/clojure.core/inc#example-6156a59ee4b0b1e3652d754f
-      #?(:clj (is (thrown? Exception (inc #_:clj-kondo/ignore nil)))
-         :cljs (is (= 1 (inc #_:clj-kondo/ignore nil)))))))
+      #?(:cljs (is (= 1 (inc #_:clj-kondo/ignore nil)))
+         :default (is (thrown? #?(:clj Exception) (inc #_:clj-kondo/ignore nil)))))))

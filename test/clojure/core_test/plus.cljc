@@ -138,8 +138,8 @@
            ;; This case is pretty safe.
            1.5 1.0 1/2)
 
-         (is (thrown? #?(:cljs :default :default Exception) (+ 1/2 nil)))
-         (is (thrown? #?(:cljs :default :default Exception) (+ nil 1/2)))
+         (is (thrown? #?(:cljs :default :clj Exception) (+ 1/2 nil)))
+         (is (thrown? #?(:cljs :default :clj Exception) (+ nil 1/2)))
 
          #?@(:cljs nil
              :default

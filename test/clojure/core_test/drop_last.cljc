@@ -15,5 +15,5 @@
     ;; Negative tests
     ;; Note: `doall` is required to realize the lazy sequence and
     ;; force it to throw
-    (is (thrown? #?(:cljs :default, :default Exception)
+    (is (thrown? #?(:cljs :default :clj Exception)
                  (doall (drop-last nil (range 5)))))))

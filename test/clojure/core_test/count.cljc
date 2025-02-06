@@ -2,6 +2,9 @@
   (:require [clojure.test :as t :refer [deftest testing is are]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
 
+#?(:cljs nil
+   :default (def a-char \a))
+
 (when-var-exists clojure.core/count
   (deftest test-count
     (are [expected x] (= expected (count x))
@@ -23,8 +26,8 @@
       2 "ab")
 
     ;; Negative tests
-    (are [x] (thrown? #?(:cljs :default, :default Exception) (count x))
+    (are [x] (thrown? #?(:cljs :default :clj Exception) (count x))
       1
       :a
       'a
-      #?(:clj \a))))
+      #?@(:cljs [] :default [a-char]))))

@@ -23,5 +23,5 @@
         [(is (= (range 0 10) (nthnext (range 0 10) nil)))
          (is (= '(0 1 2) (nthnext [0 1 2] nil)))]
         :default
-        [(is (thrown? #?(:cljs :default, :default Exception) (nthnext (range 0 10) nil)))
-         (is (thrown? #?(:cljs :default, :default Exception) (nthnext [0 1 2] nil)))])))
+        [(is (thrown? #?(:cljs :default :clj Exception) (nthnext (range 0 10) nil)))
+         (is (thrown? #?(:cljs :default :clj Exception) (nthnext [0 1 2] nil)))])))
