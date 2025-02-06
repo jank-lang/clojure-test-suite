@@ -4,7 +4,6 @@
 
 (when-var-exists clojure.core/intern
  (deftest test-intern
-   ((requiring-resolve 'clojure.pprint/pprint) (sort (map ns-name (all-ns))))
    ;; Intern and bind
    (let [x-var (intern 'clojure.core-test.intern 'x 42)]
      (is (= 42 (var-get x-var))))

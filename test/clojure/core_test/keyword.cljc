@@ -82,7 +82,7 @@
     #?(:cljs nil         ; CLJS creates a keyword that isn't
                          ; readable (symbol part is null string: ":abc/")
        :default
-       (is (thrown? Exception (keyword "abc" nil))))
+       (is (thrown? #?(:clj Exception) (keyword "abc" nil))))
   
     #?@(:cljs
         ;; IMO, CLJS gets this right
@@ -94,7 +94,7 @@
         ;; In Clojure JVM, two arg version requires namespace and
         ;; symbol to be a string, not a symbol or keyword like the one
         ;; arg version.
-        [(is (thrown? Exception (keyword 'abc "abc")))
-         (is (thrown? Exception (keyword "abc" 'abc)))
-         (is (thrown? Exception (keyword :abc "abc")))
-         (is (thrown? Exception (keyword "abc" :abc)))])))
+        [(is (thrown? #?(:clj Exception) (keyword 'abc "abc")))
+         (is (thrown? #?(:clj Exception) (keyword "abc" 'abc)))
+         (is (thrown? #?(:clj Exception) (keyword :abc "abc")))
+         (is (thrown? #?(:clj Exception) (keyword "abc" :abc)))])))
