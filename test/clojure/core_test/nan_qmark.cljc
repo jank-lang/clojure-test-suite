@@ -8,8 +8,8 @@
        [(is (not (NaN? nil)))
         (is (NaN? "##NaN"))]            ; Surprising
        :default
-       [(is (thrown? Exception (NaN? nil)))
-        (is (thrown? Exception (NaN? "##NaN")))])
+       [(is (thrown? #?(:clj Exception) (NaN? nil)))
+        (is (thrown? #?(:clj Exception) (NaN? "##NaN")))])
    (is (double? ##NaN))
    ;; NaN is not equal to anything, even itself.
    ;; See: https://clojure.org/guides/equality
