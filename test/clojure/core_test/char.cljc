@@ -13,5 +13,5 @@
      ;; TODO: Add Unicode tests
      )
 
-   #?(:cljs nil :default (is (thrown? Exception (char -1))))
-   (is (thrown? #?(:cljs :default :default Exception) (char nil)))))
+   #?(:cljs nil :default (is (thrown? #?(:clj Exception) (char -1))))
+   (is (thrown? #?(:cljs :default :clj Exception) (char nil)))))
