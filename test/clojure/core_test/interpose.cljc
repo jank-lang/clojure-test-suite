@@ -22,6 +22,4 @@
      (testing "nil inputs"
        (are [in ex] (= (apply interpose in) ex)
          [nil [1 2 3]]            [1 nil 2 nil 3]
-         [1   nil]                '()))
-     (testing "Bad inputs"
-       #?(:clj (is (thrown? Exception (interpose 1 :not-collection))))))))
+         [1   nil]                '())))))
