@@ -82,19 +82,19 @@
     #?(:cljs nil         ; CLJS creates a keyword that isn't
                          ; readable (symbol part is null string: ":abc/")
        :default
-       (is (thrown? Exception (keyword "abc" nil))))
+       (is (thrown? #?(:clj Exception) (keyword "abc" nil))))
   
-    #?@(:cljs
+    #?@(:clj
+        ;; In Clojure JVM, two arg version requires namespace and
+        ;; symbol to be a string, not a symbol or keyword like the one
+        ;; arg version.
+        [(is (thrown? #?(:clj Exception) (keyword 'abc "abc")))
+         (is (thrown? #?(:clj Exception) (keyword "abc" 'abc)))
+         (is (thrown? #?(:clj Exception) (keyword :abc "abc")))
+         (is (thrown? #?(:clj Exception) (keyword "abc" :abc)))]
+        :default ; + :jank
         ;; IMO, CLJS gets this right
         [(is (= :abc/abc (keyword 'abc "abc")))
          (is (= :abc/abc (keyword "abc" 'abc)))
          (is (= :abc/abc (keyword :abc "abc")))
-         (is (= :abc/abc (keyword "abc" :abc)))]
-        :default
-        ;; In Clojure JVM, two arg version requires namespace and
-        ;; symbol to be a string, not a symbol or keyword like the one
-        ;; arg version.
-        [(is (thrown? Exception (keyword 'abc "abc")))
-         (is (thrown? Exception (keyword "abc" 'abc)))
-         (is (thrown? Exception (keyword :abc "abc")))
-         (is (thrown? Exception (keyword "abc" :abc)))])))
+         (is (= :abc/abc (keyword "abc" :abc)))])))

@@ -70,8 +70,8 @@
       5 1N 5
       5 1N 5N)
 
-    (is (thrown? #?(:cljs :default :default Exception) (*' 1 nil)))
-    (is (thrown? #?(:cljs :default :default Exception) (*' nil 1)))
+    (is (thrown? #?(:cljs :default :clj Exception) (*' 1 nil)))
+    (is (thrown? #?(:cljs :default :clj Exception) (*' nil 1)))
 
     (is (instance? clojure.lang.BigInt (*' 0 1N)))
     (is (instance? clojure.lang.BigInt (*' 0N 1)))

@@ -1,5 +1,7 @@
 (ns clojure.core-test.number-range)
 
+;; TODO jank support blocked on https://github.com/jank-lang/jank/issues/195
+
 (def ^:const max-int #?(:clj Long/MAX_VALUE
                         :cljs js/Number.MAX_SAFE_INTEGER
                         :default 0x7FFFFFFFFFFFFFFF))

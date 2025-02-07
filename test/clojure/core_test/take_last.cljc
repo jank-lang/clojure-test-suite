@@ -11,5 +11,5 @@
     ;; `clojure.core`.
 
     ;; Negative testing
-    (is (thrown? #?(:cljs :default, :default Exception)
+    (is (thrown? #?(:cljs :default :clj Exception)
                  (doall (take-last nil (range 0 10)))))))

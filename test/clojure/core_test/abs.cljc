@@ -22,7 +22,7 @@
            [-1/5           1/5]))
      (is (NaN? (abs ##NaN)))
      #?(:cljs (is (zero? (abs nil)))
-        :default(is (thrown? Exception (abs nil)))))
+        :default (is (thrown? #?(:clj Exception) (abs nil)))))
 
     (testing "unboxed"
       (let [a  42

@@ -15,7 +15,7 @@
     (is (= [] (into [] (drop-while #(< % 5)) nil)))
 
     ;; Negative tests
-    (is (thrown? #?(:cljs :default, :default Exception)
+    (is (thrown? #?(:cljs :default :clj Exception)
                  (doall (drop-while nil (range 0 10)))))
-    (is (thrown? #?(:cljs :default, :default Exception)
+    (is (thrown? #?(:cljs :default :clj Exception)
                  (into [] (drop-while nil) (range 0 10))))))

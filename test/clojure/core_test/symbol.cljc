@@ -75,8 +75,8 @@
 
       'abc*+!-_'?<>=/abc*+!-_'?<>= "abc*+!-_'?<>=" "abc*+!-_'?<>=")
 
-    (is (thrown? #?(:cljs :default :clj Exception) (symbol nil))) ; keyword returns nil
-    (is (= 'abc (symbol nil "abc"))) ; But if ns is nil, it just ignores it.
+    (is (thrown? #?(:cljs :default :clj Exception) (symbol nil)))
+    (is (= 'abc (symbol nil "abc"))) ; if ns is nil, it just ignores it.
 
     ;; prints as 'abc/null but the null is really a nil. Since this is
     ;; not readable via the standard Clojure reader, I'm not even sure
@@ -92,7 +92,7 @@
          ;; (is (= :abc/abc (symbol :abc "abc"))) results in unreadable value
          (is (= 'abc/:abc (symbol "abc" :abc)))]
         :default
-        [(is (thrown? Exception (symbol 'abc "abc")))
-         (is (thrown? Exception (symbol "abc" 'abc)))
-         (is (thrown? Exception (symbol :abc "abc")))
-         (is (thrown? Exception (symbol "abc" :abc)))])))
+        [(is (thrown? #?(:clj Exception) (symbol 'abc "abc")))
+         (is (thrown? #?(:clj Exception) (symbol "abc" 'abc)))
+         (is (thrown? #?(:clj Exception) (symbol :abc "abc")))
+         (is (thrown? #?(:clj Exception) (symbol "abc" :abc)))])))
