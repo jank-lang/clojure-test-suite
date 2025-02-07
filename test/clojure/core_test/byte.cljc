@@ -9,9 +9,7 @@
     ;; `java.lang.Byte`, but there is no predicate for it. Here, we just
     ;; test whether it's a fixed-length integer of some sort.
     (is (int? (byte 0)))
-    #?@(:cljs []
-        :default
-        [(is (instance? java.lang.Byte (byte 0)))])
+    #?(:clj (is (instance? java.lang.Byte (byte 0))))
 
     ;; Check conversions and rounding from other numeric types
     (are [expected x] (= expected (byte x))
@@ -56,12 +54,12 @@
          (is (= nil (byte nil)))]
         :default
         [ ;; `byte` throws outside the range of 127 ... -128.
-         (is (thrown? Exception (byte -128.000001)))
-         (is (thrown? Exception (byte -129)))
-         (is (thrown? Exception (byte 128)))
-         (is (thrown? Exception (byte 127.000001)))
+         (is (thrown? #?(:clj Exception) (byte -128.000001)))
+         (is (thrown? #?(:clj Exception) (byte -129)))
+         (is (thrown? #?(:clj Exception) (byte 128)))
+         (is (thrown? #?(:clj Exception) (byte 127.000001)))
          ;; Check handling of other types
-         (is (thrown? Exception (byte "0")))
-         (is (thrown? Exception (byte :0)))
-         (is (thrown? Exception (byte [0])))
-         (is (thrown? Exception (byte nil)))])))
+         (is (thrown? #?(:clj Exception) (byte "0")))
+         (is (thrown? #?(:clj Exception) (byte :0)))
+         (is (thrown? #?(:clj Exception) (byte [0])))
+         (is (thrown? #?(:clj Exception) (byte nil)))])))

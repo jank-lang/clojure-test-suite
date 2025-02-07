@@ -13,4 +13,4 @@
      "abc*+!-_'?<>=" :abc/abc*+!-_'?<>=
      "abc*+!-_'?<>=" 'abc/abc*+!-_'?<>=)
 
-   (is (thrown? #?(:cljs :default :default Exception) (name nil)))))
+   (is (thrown? #?(:cljs :default :clj Exception) (name nil)))))

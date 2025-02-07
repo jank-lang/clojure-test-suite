@@ -27,6 +27,6 @@
          (is (= '(0 1 2) (nthrest [0 1 2] nil)))
          (is (nil? (nthrest nil nil)))]
         :default
-        [(is (thrown? #?(:cljs :default, :default Exception) (nthrest (range 0 10) nil)))
-         (is (thrown? #?(:cljs :default, :default Exception) (nthrest [0 1 2] nil)))
-         (is (thrown? #?(:cljs :default, :default Exception) (nthrest nil nil)))])))
+        [(is (thrown? #?(:cljs :default :clj Exception) (nthrest (range 0 10) nil)))
+         (is (thrown? #?(:cljs :default :clj Exception) (nthrest [0 1 2] nil)))
+         (is (thrown? #?(:cljs :default :clj Exception) (nthrest nil nil)))])))
