@@ -90,7 +90,7 @@
          ;; (is (= :abc/abc (symbol :abc "abc"))) results in unreadable value
          (is (= 'abc/:abc (symbol "abc" :abc)))]
         :default
-        [(is (thrown? Exception (symbol 'abc "abc")))
-         (is (thrown? Exception (symbol "abc" 'abc)))
-         (is (thrown? Exception (symbol :abc "abc")))
-         (is (thrown? Exception (symbol "abc" :abc)))])))
+        [(is (thrown? #?(:clj Exception) (symbol 'abc "abc")))
+         (is (thrown? #?(:clj Exception) (symbol "abc" 'abc)))
+         (is (thrown? #?(:clj Exception) (symbol :abc "abc")))
+         (is (thrown? #?(:clj Exception) (symbol "abc" :abc)))])))
