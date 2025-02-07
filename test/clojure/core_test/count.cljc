@@ -2,9 +2,6 @@
   (:require [clojure.test :as t :refer [deftest testing is are]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
 
-#?(:cljs nil
-   :default (def a-char \a))
-
 (when-var-exists clojure.core/count
   (deftest test-count
     (are [expected x] (= expected (count x))
@@ -30,4 +27,4 @@
       1
       :a
       'a
-      #?@(:cljs [] :default [a-char]))))
+      #?@(:cljs [] :default [\a]))))
