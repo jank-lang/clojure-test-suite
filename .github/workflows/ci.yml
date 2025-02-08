@@ -8,87 +8,33 @@ on:
   workflow_dispatch: # Supports manual triggering
 
 jobs:
-  clojure:
-    strategy:
-      matrix:
-        # Uncomment to enable all of them
-        # os: [ubuntu-latest, macOS-latest, windows-latest]
-        os: [ubuntu-latest]
-
-    runs-on: ${{ matrix.os }}
-
+  test:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Prepare java
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
-          distribution: "zulu"
-          java-version: "17"
-
-      - name: Install clojure tools
-        uses: DeLaGuardo/setup-clojure@13.1
+          distribution: "temurin"
+          java-version: "21"
+      - uses: DeLaGuardo/setup-clojure@13.1
         with:
-          cli: 1.10.1.693 # Clojure CLI based on tools.deps
-          lein: 2.11.2 # Leiningen
-
-      - name: Cache clojure dependencies
-        uses: actions/cache@v4
+          cli: 1.12.0.1501
+          lein: 2.11.2
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.m2/repository
             ~/.gitlibs
             ~/.deps.clj
-          # List all files containing dependencies:
           key: cljdeps-${{ hashFiles('project.clj') }}
           restore-keys: cljdeps-
-
-      - name: Run Tests
-        run: lein test
-  clojurescript:
-    strategy:
-      matrix:
-        # Uncomment to enable all of them
-        # os: [ubuntu-latest, macOS-latest, windows-latest]
-        os: [ubuntu-latest]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Prepare java
-        uses: actions/setup-java@v4
-        with:
-          distribution: "zulu"
-          java-version: "17"
-
-      - name: Cache clojure dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.m2/repository
-            ~/.gitlibs
-            ~/.deps.clj
-          # List all files containing dependencies:
-          key: cljsdeps-${{ hashFiles('project.clj') }}
-          restore-keys: cljsdeps-
-
-      - name: Prepare node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "23.x"
           check-latest: true
           cache: 'npm'
           cache-dependency-path: "package-lock.json"
-
-      - name: Install Node Dependencies
-        run: npm ci
-
-      - name: Compile Tests
-        run: npm run build
-
-      - name: Run Tests
-        run: npm test
+      - run: lein test
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
