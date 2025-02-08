@@ -7,6 +7,9 @@ on:
     branches: [main]
   workflow_dispatch: # Supports manual triggering
 
+env:
+  CACHE_VERSION: "v1"
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -26,8 +29,8 @@ jobs:
             ~/.m2/repository
             ~/.gitlibs
             ~/.deps.clj
-          key: cljdeps-${{ hashFiles('project.clj') }}
-          restore-keys: cljdeps-
+          key: cljdeps-${{ env.CACHE_VERSION }}-${{ hashFiles('project.clj') }}
+          restore-keys: cljdeps-${{ env.CACHE_VERSION }}-
       - uses: actions/setup-node@v4
         with:
           node-version: "23.x"
