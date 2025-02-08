@@ -11,7 +11,7 @@ yet, so we're just focusing on building out the test cases for now.
 ## How to contribute
 Anyone with Clojure knowledge can help out!
 
-Check out the latest progress and the steps for helping out here: https://github.com/jank-lang/clojure.core-test/issues/1
+Check out the latest progress and the steps for helping out here: https://github.com/jank-lang/clojure-test-suite/issues/1
 
 ## Running the tests
 
