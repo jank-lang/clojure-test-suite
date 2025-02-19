@@ -24,8 +24,8 @@
       nil :nil-result
       ##Inf :inf-result
       ##-Inf :negative-inf-result
-      #?@(:clj ['(list of syms) :list-of-syms-result] ; Note that these are not alternatives in CLJ
-          :default [])
+      #?(:cljs ('(list of syms))        ; CLJS wants to eval the inner list, even though it shouldn't
+         :default ((list of syms))) :list-of-syms-result ; if you need to match a list, wrap it in another list
       [:vec :of :kws] :vec-of-kws-result
       {:a :map :of :kws} :map-of-kws-result
       #{:a :set :of :kws} :set-of-kws-result
@@ -63,7 +63,7 @@
     (case x
       (range 0 5) :bad-range-result ; range not eval'd. matches 'range, 0, or 5.
       (1 2 3 4) :real-range-result  ; can't include 0 because previous clause
-      'foo :quote-foo-result ; reader expands to (quote foo), a list of alternatives
+      'foo :quote-foo-result ; reader expands to `(quote foo)`, a list of alternatives
       ##NaN :nan-result
       ;; empty default clause, so will throw if no matches
       ))
@@ -112,16 +112,17 @@
             :default
             [1/2 :ratio-result])
         \a :character-result      ; CLJS reader will convert \a to "a"
-        #?@(:cljs ["a" :character-result]) ; since chars are single character strings
+        #?@(:cljs ["a" :character-result] :default []) ; CLJS matches this to `\a`
         true :boolean-true-result
         false :boolean-false-result
         nil :nil-result
         ##Inf :inf-result
         ##-Inf :negative-inf-result
-        #?@(:clj ['(list of syms) :list-of-syms-result]) ; works in CLJ to match a list
+        '(list of syms) :list-of-syms-result
         [:vec :of :kws] :vec-of-kws-result
         '(:vec :of :kws) :vec-of-kws-result ; `case` allows vec pattern to match a list
-        #?@(:clj ['[list of syms] :list-of-syms-result]) ; works in CLj
+        #?@(:cljs []
+            :default ['[list of syms] :list-of-syms-result])
         {:a :map :of :kws} :map-of-kws-result
         #{:a :set :of :kws} :set-of-kws-result
         :either :one-of-multiple-result
@@ -170,5 +171,5 @@
         'quote :quote-foo-result
         'foo :quote-foo-result)
 
-      (is (thrown? #?(:cljs :default, :default Exception) (negative-tests ##NaN)))
-      (is (thrown? #?(:cljs :default, :default Exception) (negative-tests :something-not-found))))))
+      (is (thrown? #?(:cljs :default, :clj Exception) (negative-tests ##NaN)))
+      (is (thrown? #?(:cljs :default, :clj Exception) (negative-tests :something-not-found))))))
