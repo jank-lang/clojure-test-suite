@@ -9,6 +9,7 @@
         [1 2 3]
         '(1 2 3)                        ; surprising for traditional Lispers
         #{1 2 3}
+        #?@(:cljs [nil] :default [])    ; CLJS nil is `counted?`
         (array-map :a 1 :b 2 :c 3)
         (hash-map :a 1 :b 2 :c 3)
         (sorted-map :a 1 :b 2 :c 3)
@@ -21,7 +22,7 @@
         1.0M
         :a-keyword
         'a-sym
-        nil                             ; surprising since `(count nil)` = 0
+        #?@(:cljs [] :default [nil])    ; surprising since `(count nil)` = 0
         ;; `count` works on strings, arrays, and other Java
         ;; collections, but they are not `counted?`.
         "a string"
