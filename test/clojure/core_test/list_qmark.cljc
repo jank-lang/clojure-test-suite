@@ -8,7 +8,7 @@
       false [1 2 3]
       false (sorted-map :a 1)
       false (sorted-set :a)
-      true '(1 2 3)                     ; lists are naturally seqs
+      true '(1 2 3)
       false (hash-map :a 1)
       false (array-map :a 1)
       false (hash-set :a)
