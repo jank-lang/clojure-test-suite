@@ -9,5 +9,6 @@
     (is (str/blank? nil))
     (is (str/blank? "  "))
     (is (str/blank? " \t "))
+    (is (thrown? #?(:cljs :default :clj Exception) (str/blank? (symbol ""))))
     (is (not (str/blank? "nil")))
     (is (not (str/blank? " as df ")))))
