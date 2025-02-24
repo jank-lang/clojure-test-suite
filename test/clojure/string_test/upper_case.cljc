@@ -5,13 +5,18 @@
 
 (when-var-exists str/upper-case
   (deftest test-upper-case
-    (is (thrown? #?(:clj Exception) (str/upper-case nil)))
+    (is (thrown? #?(:cljs :default :clj Exception) (str/upper-case nil)))
     (is (= "" (str/upper-case "")))
     (is (= "ASDF" (str/upper-case "aSDf")))
     (is (= "ASDF" (str/upper-case "ASDF")))
     (let [s "asdf"]
       (is (= "ASDF" (str/upper-case "asdf")))
       (is (= "asdf" s) "original string mutated"))
-    (is (= ":ASDF" (str/upper-case :asdf)))
-    (is (= ":ASDF/ASDF" (str/upper-case :asdf/asdf)))
-    (is (= "ASDF" (str/upper-case 'asdf)))))
+    #?(:cljs (is (thrown? :default (str/upper-case :asdf)))
+       :default (is (= ":ASDF" (str/upper-case :asdf))))
+    #?(:cljs (is (thrown? :default (str/upper-case :asdf/asdf)))
+       :default (is (= ":ASDF/ASDF" (str/upper-case :asdf/asdf))))
+    #?(:cljs (is (thrown? :default (str/upper-case 'asdf)))
+       :default (is (= "ASDF" (str/upper-case 'asdf))))
+    #?(:cljs (is (thrown? :default (str/upper-case 'asdf/asdf)))
+       :default (is (= "ASDF/ASDF" (str/upper-case 'asdf/asdf))))))
