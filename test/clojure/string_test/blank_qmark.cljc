@@ -18,7 +18,7 @@
     #?(:cljs (is (false? (str/blank? 1)))
        :default (is (thrown? #?(:clj Exception) (str/blank? 1))))
     #?(:cljs (do (is (true? (str/blank? \space)))
-                 (is (true? (str/blank? \a))))
+                 (is (false? (str/blank? \a))))
        :default (is (thrown? #?(:clj Exception) (str/blank? \space))))
     (is (false? (str/blank? "nil")))
     (is (false? (str/blank? " as df ")))))
