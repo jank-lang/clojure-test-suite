@@ -7,6 +7,7 @@
   (deftest test-blank?
     (is (true? (str/blank? "")))
     (is (true? (str/blank? nil)))
+    (is (false? (str/blank? "֎")))
     (is (true? (str/blank? "  ")))
     (is (true? (str/blank? " \t ")))
     #?(:cljs (do (is (true? (str/blank? (symbol ""))))

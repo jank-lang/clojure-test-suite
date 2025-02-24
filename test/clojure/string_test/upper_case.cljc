@@ -7,6 +7,7 @@
   (deftest test-upper-case
     (is (thrown? #?(:cljs :default :clj Exception) (str/upper-case nil)))
     (is (= "" (str/upper-case "")))
+    (is (= "֎" (str/upper-case "֎")))
     (is (= "ASDF" (str/upper-case "aSDf")))
     (is (= "ASDF" (str/upper-case "ASDF")))
     (let [s "asdf"]

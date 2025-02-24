@@ -17,6 +17,7 @@
                     (is (= ":asdf/asdf" (str/capitalize :asDf/aSdf)))))
     (is (= "" (str/capitalize "")))
     (is (= "A" (str/capitalize "a")))
+    (is (= "֎" (str/capitalize "֎")))
     (is (= "A thing" (str/capitalize "a Thing")))
     (is (= "A thing" (str/capitalize "A THING")))
     (is (= "A thing" (str/capitalize "A thing")))))

@@ -7,6 +7,7 @@
   (deftest test-lower-case
     (is (thrown? #?(:cljs :default :clj Exception) (str/lower-case nil)))
     (is (= "" (str/lower-case "")))
+    (is (= "֎" (str/lower-case "֎")))
     (is (= "asdf" (str/lower-case "AsdF")))
     (is (= "asdf" (str/lower-case "asdf")))
     (let [s "ASDF"]
