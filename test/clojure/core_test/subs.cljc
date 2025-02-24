@@ -4,12 +4,26 @@
 
 (when-var-exists clojure.core/subs
   (deftest test-subs
+    (is (= "abcde" (subs "abcde" 0)))
+    (is (= "abcde" (subs "abcde" 0 5)))
+    (is (= "ab֎de" (subs "ab֎de" 0)))
+    (is (= "ab֎de" (subs "ab֎de" 0 5)))
     (is (= "bcde" (subs "abcde" 1)))
+    (is (= "bcde" (subs "֎bcde" 1)))
     (is (= "bcd" (subs "abcde" 1 4)))
+    (is (= "bcd" (subs "֎bcde" 1 4)))
     (is (= "abc" (subs "abcde" 0 3)))
+    (is (= "ab֎" (subs "ab֎de" 0 3)))
+    (is (= "" (subs "" 0 0)))
+    (is (= "" (subs "" 0)))
     (is (= "" (subs "abcde" 0 0)))
+    (is (= "" (subs "֎bcde" 0 0)))
     (is (= "" (subs "abcde" 5)))
+    (is (= "" (subs "abcd֎" 5)))
     (is (= "" (subs "abcde" 5 5)))
+    (is (= "" (subs "abcd֎" 5 5)))
+    (is (= "" (subs "abcde" 4 4)))
+    (is (= "" (subs "abc֎e" 4 4)))
     #?@(:cljs
         [(is (= "b" (subs "abcde" 2 1)))
          (is (= "bcde" (subs "abcde" 1 6)))
