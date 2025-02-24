@@ -8,7 +8,7 @@
     (is (true? (str/blank? "")))
     (is (true? (str/blank? nil)))
     (is (false? (str/blank? "֎")))
-    (testing "https://unicodeplus.com/U+2007"
+    (testing "U+2007"
       #?(:cljs (is (true? (str/blank? " ")))
          :default (is (false? (str/blank? " "))))
       #?(:cljs (is (true? (str/blank? "\u2007")))
