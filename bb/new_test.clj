@@ -6,8 +6,8 @@
             [selmer.util :as util]))
 
 ;;; *, +, !, -, _, ', ?, <, > and =
-(defn sym-name->ns-name
-  "Replace special characters in symbol name to make an ns-name."
+(defn sym-name->ns-suffix
+  "Replace special characters in symbol name to make the final component of the ns name."
   [sym]
   (let [n (name sym)
         ns-sym (-> (if (str/starts-with? n "-")
@@ -26,31 +26,37 @@
       (subs ns-sym 1)
       ns-sym)))
 
-(defn ns-name->file-name
+(defn ns-suffix->file-name
   "Replace hyphens with underscores to create the file name."
   [ns-name]
   (str/replace ns-name "-" "_"))
+
+(defn ns->resource [nsym]
+  (-> nsym namespace-munge (str/replace "." "/")))
 
 (defn new-test
   "Create a new test file for the symbol which is the first command line argument."
   [args]
   (if (zero? (count args))
     (println "Please supply one or more Clojure symbols corresponding to the new tests.")
-    (loop [[sym-name & args] args]
-      (when sym-name
-        (let [ns-name (sym-name->ns-name sym-name)
-              file-name (ns-name->file-name ns-name)
-              dest-file-name (str "test/clojure/core_test/" file-name ".cljc")]
+    (loop [[sym & args] (map symbol args)]
+      (when sym
+        (let [sym-name (if (namespace sym)
+                         (-> sym name symbol)
+                         sym)
+              base-ns (or (some-> sym namespace symbol)
+                          'clojure.core)
+              ns-suffix (sym-name->ns-suffix sym-name)
+              file-name (namespace-munge ns-suffix)
+              dest-file-name (format "test/%s_test/%s.cljc" (ns->resource base-ns) file-name)]
           (if (fs/exists? dest-file-name)
             (println dest-file-name "already exists. No action taken.")
             (do (println "Creating" dest-file-name)
                 (let [template (slurp "templates/test-template.cljc")]
                   (spit dest-file-name
                         (util/without-escaping
-                         (s/render template {:sym-name sym-name
-                                             :ns-name ns-name
+                         (s/render template {:base-ns base-ns
+                                             :sym-name sym-name
+                                             :ns-suffix ns-suffix
                                              :file-name file-name})))))))
         (recur args)))))
-          
-
-
