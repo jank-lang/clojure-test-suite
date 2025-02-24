@@ -19,6 +19,7 @@
     (is (false? (str/ends-with? :ab "a")))
     (is (false? (str/ends-with? "" "a")))
     (is (true? (str/ends-with? "a-test" "")))
+    (is (true? (str/ends-with? "a-test֎" "֎")))
     (is (true? (str/ends-with? "a-test" "t")))
     (is (true? (str/ends-with? "a-test" "a-test")))
     (is (false? (str/ends-with? "a-test" "s")))

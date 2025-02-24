@@ -17,6 +17,7 @@
        :default (is (thrown? #?(:clj Exception) (str/starts-with? "a" 'a))))
     (is (false? (str/starts-with? "" "a")))
     (is (true? (str/starts-with? "a-test" "")))
+    (is (true? (str/starts-with? "֎a-test" "֎")))
     (is (true? (str/starts-with? "a-test" "a")))
     (is (true? (str/starts-with? "a-test" "a-test")))
     (is (false? (str/starts-with? "a-test" "-")))
