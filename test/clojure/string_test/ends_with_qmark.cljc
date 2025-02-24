@@ -5,6 +5,9 @@
 
 (when-var-exists str/ends-with?
   (deftest test-ends-with?
-    (is (str/ends-with? "" ""))
-    (is (str/ends-with? "a-test" "t"))
-    (is (not (str/ends-with? "a-test" "s")))))
+    (is (true? (str/ends-with? "" "")))
+    #?(:cljs (is (false? (str/ends-with? "" nil)))
+       :default (is (thrown? #?(:clj Exception) (str/ends-with? "" nil))))
+    (is (false? (str/ends-with? "" "a")))
+    (is (true? (str/ends-with? "a-test" "t")))
+    (is (false? (str/ends-with? "a-test" "s")))))
