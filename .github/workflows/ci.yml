@@ -47,14 +47,14 @@ jobs:
           cache: 'npm'
           cache-dependency-path: "package-lock.json"
 
-      - name: Run Clojure tests
-        run: lein test
-
       - name: Install Node Dependencies
         run: npm ci
 
-      - name: Compile Tests
+      - name: Compile ClojureScript Tests
         run: npm run build
 
-      - name: Run Tests
+      - name: Run ClojureScript Tests
         run: npm test
+
+      - name: Run Clojure tests
+        run: lein test
