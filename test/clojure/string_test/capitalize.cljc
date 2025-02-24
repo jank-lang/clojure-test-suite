@@ -6,12 +6,15 @@
 (when-var-exists str/capitalize
   (deftest test-capitalize
     (is (thrown? #?(:cljs :default :clj Exception) (str/capitalize nil)))
-    #?(:cljs nil
+    #?(:cljs (do (is (thrown? :default (str/capitalize 1)))
+                 (is (thrown? :default (str/capitalize 'a)))
+                 (is (thrown? :default (str/capitalize 'a/a)))
+                 (is (thrown? :default (str/capitalize :a)))
+                 (is (thrown? :default (str/capitalize :a/a))))
        :default (do (is (= "1" (str/capitalize 1)))
                     (is (= "Asdf" (str/capitalize 'Asdf)))
-                    (is (= "Asdf" (str/capitalize 'Asdf)))
-                    (is (= ":clojure.string-test.capitalize/asdf" (str/capitalize ::asdf)))
-                    (is (= ":clojure.string-test.capitalize/asdf" (str/capitalize ::Asdf)))))
+                    (is (= "Asdf/asdf" (str/capitalize 'asDf/aSdf)))
+                    (is (= ":asdf/asdf" (str/capitalize :asDf/aSdf)))))
     (is (= "" (str/capitalize "")))
     (is (= "A" (str/capitalize "a")))
     (is (= "A thing" (str/capitalize "a Thing")))
