@@ -24,4 +24,4 @@
     (is (true? (str/starts-with? "a-test" "a")))
     (is (true? (str/starts-with? "a-test" "a-test")))
     (is (false? (str/starts-with? "a-test" "-")))
-    (is (false? (str/starts-with? "a-test" "t"))))
+    (is (false? (str/starts-with? "a-test" "t")))))
