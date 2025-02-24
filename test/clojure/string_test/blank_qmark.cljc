@@ -10,7 +10,9 @@
     (is (false? (str/blank? "֎")))
     (testing "https://unicodeplus.com/U+2007"
       #?(:cljs (is (true? (str/blank? " ")))
-         :default (is (false? (str/blank? " ")))))
+         :default (is (false? (str/blank? " "))))
+      #?(:cljs (is (true? (str/blank? "\u2007")))
+         :default (is (false? (str/blank? "\u2007")))))
     (is (true? (str/blank? "  ")))
     (is (true? (str/blank? " \t ")))
     #?(:cljs (do (is (true? (str/blank? (symbol ""))))
