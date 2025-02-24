@@ -7,37 +7,88 @@ on:
     branches: [main]
   workflow_dispatch: # Supports manual triggering
 
-env:
-  CACHE_VERSION: "v1"
-
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  clojure:
+    strategy:
+      matrix:
+        # Uncomment to enable all of them
+        # os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # It is important to install java before installing clojure tools which needs java
+      # exclusions: babashka, clj-kondo and cljstyle
+      - name: Prepare java
+        uses: actions/setup-java@v3
         with:
-          distribution: "temurin"
-          java-version: "21"
-      - uses: DeLaGuardo/setup-clojure@13.1
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@12.5
         with:
-          cli: 1.12.0.1501
-          lein: 2.11.2
-      - uses: actions/cache@v4
+          # Install just one or all simultaneously
+          # The value must indicate a particular version of the tool, or use 'latest'
+          # to always provision the latest version
+          cli: 1.10.1.693 # Clojure CLI based on tools.deps
+          lein: 2.11.2 # Leiningen
+
+      # Optional step:
+      - name: Cache clojure dependencies
+        uses: actions/cache@v3
         with:
           path: |
             ~/.m2/repository
             ~/.gitlibs
             ~/.deps.clj
-          key: cljdeps-${{ env.CACHE_VERSION }}-${{ hashFiles('project.clj') }}
-          restore-keys: cljdeps-${{ env.CACHE_VERSION }}-
-      - uses: actions/setup-node@v4
+          # List all files containing dependencies:
+          key: cljdeps-${{ hashFiles('project.clj') }}
+          # key: cljdeps-${{ hashFiles('deps.edn', 'bb.edn') }}
+          # key: cljdeps-${{ hashFiles('project.clj') }}
+          # key: cljdeps-${{ hashFiles('build.boot') }}
+          restore-keys: cljdeps-
+
+      - name: Run Tests
+        run: lein test
+  clojurescript:
+    strategy:
+      matrix:
+        # Uncomment to enable all of them
+        # os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # It is important to install java before installing clojure tools which needs java
+      # exclusions: babashka, clj-kondo and cljstyle
+      - name: Prepare java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Prepare node
+        uses: actions/setup-node@v4
         with:
           node-version: "23.x"
           check-latest: true
           cache: 'npm'
           cache-dependency-path: "package-lock.json"
-      - run: lein test
-      - run: npm ci
-      - run: npm run build
-      - run: npm test
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Compile Tests
+        run: npm run build
+
+      - name: Run Tests
+        run: npm test

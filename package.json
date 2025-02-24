@@ -1,8 +1,8 @@
 {
-  "name": "io.github.jank-lang/clojure-test-suite",
+  "name": "clojure.core-test",
   "version": "1.0.0",
   "description": "Node config for compiling tests to js",
-  "repository": "https://github.com/jank-lang/clojure-test-suite",
+  "repository": "https://github.com/jank-lang/clojure.core-test",
   "directories": {
     "test": "test"
   },
