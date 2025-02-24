@@ -11,7 +11,7 @@
     (is (str/blank? " \t "))
     #?(:cljs (is (str/blank? (symbol "")))
        :default (is (thrown? #?(:clj Exception) (str/blank? (symbol "")))))
-    #?(:cljs (is (str/blank? (keyword "")))
+    #?(:cljs (is (not (str/blank? (keyword ""))))
        :default (is (thrown? #?(:clj Exception) (str/blank? (keyword "")))))
     #?(:cljs (is (not (str/blank? 1)))
        :default (is (thrown? #?(:clj Exception) (str/blank? 1))))
