@@ -11,7 +11,7 @@ yet, so we're just focusing on building out the test cases for now.
 ## How to contribute
 Anyone with Clojure knowledge can help out!
 
-Check out the latest progress and the steps for helping out here: https://github.com/jank-lang/clojure.core-test/issues/1
+Check out the latest progress and the steps for helping out here: https://github.com/jank-lang/clojure-test-suite/issues/1
 
 ## Running the tests
 
@@ -83,8 +83,8 @@ The following tasks are available:
 
 test-jvm  Runs JVM tests
 test-cljs Runs CLJS tests
-new-test  Creates new test for the Clojure symbols named by <args>
-
+new-test  Creates new test for the Clojure symbols named by <args>. Unqualified symbols assume clojure.core
+nrepl     Starts an nrepl server on port 1339 using an .nrepl-port file
 ```
 
 Currently, there are tasks to run the Clojure JVM and Clojurescript test suites.
@@ -95,6 +95,8 @@ wanted to test a function named `clojure.core/foo`, for instance, you
 would type:
 
 ```bash
+bb new-test clojure.core/foo
+;; or
 bb new-test foo
 ```
 
