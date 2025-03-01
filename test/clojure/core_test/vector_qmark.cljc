@@ -6,6 +6,7 @@
   (deftest test-vector?
     (are [expected x] (= expected (vector? x))
       true [1 2 3]
+      true (first {:a 1})               ; map entries are also vectors
       false (sorted-map :a 1)
       false (sorted-set :a)
       false '(1 2 3)
