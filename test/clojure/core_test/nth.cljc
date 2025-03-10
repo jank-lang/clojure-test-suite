@@ -21,4 +21,5 @@
     ;; `nth` accepts a default argument
     (is (= :default (nth nil 0 :default)))
     (is (= :default (nth [0] 1 :default)))
-    (is (= :default (nth [0 1] 2 :default)))))
+    (is (= :default (nth [0 1] 2 :default)))
+    (is (= :default (nth [0 1] -1 :default)))))
