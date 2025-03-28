@@ -33,7 +33,28 @@
                       :cljs js/Error) (reduce nil nil)))
       (is (= 6 (reduce + 0 [1 2 3]))))
 
-    (testing "edge cases"
+    (testing "val is not supplied"
+      (is (= 3 (reduce (fn [a b]
+                         (+ a b))
+                       [1 2])))
+
+      (testing "empty coll"
+        (is (= 1 (reduce (fn [] 1) []))))
+
+      (testing "coll with 1 item"
+        (is (= 1 (reduce (fn []
+                           (is false)
+                           (throw (ex-info "should not get here" {})))
+                         [1])))))
+
+    (testing "val is supplied, empty coll"
+      (is (= 1 (reduce (fn []
+                           (is false)
+                         (throw (ex-info "should not get here" {})))
+                       1
+                       []))))
+
+    (testing "reduction by type"
       (let [int-new (interop :int-new)
             char-new (interop :char-new)
             byte-new (interop :byte-new)
@@ -46,27 +67,30 @@
             float-array (into-array (:Float interop) arange)
             double-array (into-array (:Double interop) arange)
             all-true (into-array (:Boolean interop) (repeat 10 true))]
-        (is (== 4950
-                (reduce + arange)
-                (reduce + avec)
-                #?(:clj (.reduce ^IReduce avec +))
-                (reduce + alist)
-                (reduce + obj-array)
-                (reduce + int-array)
-                (reduce + long-array)
-                (reduce + float-array)
-                (reduce + double-array)))
 
-        (is (== 4951
-                (reduce + 1 arange)
-                (reduce + 1 avec)
-                #?(:clj (.reduce ^IReduce avec + 1))
-                (reduce + 1 alist)
-                (reduce + 1 obj-array)
-                (reduce + 1 int-array)
-                (reduce + 1 long-array)
-                (reduce + 1 float-array)
-                (reduce + 1 double-array)))
+        (testing "val is not supplied"
+          (is (== 4950
+                  (reduce + arange)
+                  (reduce + avec)
+                  #?(:clj (.reduce ^IReduce avec +))
+                  (reduce + alist)
+                  (reduce + obj-array)
+                  (reduce + int-array)
+                  (reduce + long-array)
+                  (reduce + float-array)
+                  (reduce + double-array))))
+
+        (testing "val is supplied"
+          (is (== 4951
+                  (reduce + 1 arange)
+                  (reduce + 1 avec)
+                  #?(:clj (.reduce ^IReduce avec + 1))
+                  (reduce + 1 alist)
+                  (reduce + 1 obj-array)
+                  (reduce + 1 int-array)
+                  (reduce + 1 long-array)
+                  (reduce + 1 float-array)
+                  (reduce + 1 double-array))))
 
         (is (= true
                (reduce #(and %1 %2) all-true)
