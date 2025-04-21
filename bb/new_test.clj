@@ -48,10 +48,12 @@
                           'clojure.core)
               ns-suffix (sym-name->ns-suffix sym-name)
               file-name (namespace-munge ns-suffix)
-              dest-file-name (format "test/%s_test/%s.cljc" (ns->resource base-ns) file-name)]
+              dest-dir (format "test/%s_test" (ns->resource base-ns))
+              dest-file-name (format "%s/%s.cljc" dest-dir file-name)]
           (if (fs/exists? dest-file-name)
             (println dest-file-name "already exists. No action taken.")
             (do (println "Creating" dest-file-name)
+                (fs/create-dirs dest-dir)
                 (let [template (slurp "templates/test-template.cljc")]
                   (spit dest-file-name
                         (util/without-escaping
