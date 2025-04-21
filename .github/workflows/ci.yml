@@ -8,6 +8,7 @@ on:
   workflow_dispatch: # Supports manual triggering
 
 env:
+  # increment to "clear" the cache
   CACHE_VERSION: "v1"
 
 jobs:
@@ -23,9 +24,9 @@ jobs:
           java-version: "21"
 
       - name: Install clojure tools
-        uses: DeLaGuardo/setup-clojure@13.1
+        uses: DeLaGuardo/setup-clojure@13.2
         with:
-          cli: 1.12.0.1501
+          cli: 1.12.0.1530
           lein: 2.11.2
 
       - name: Cache clojure dependencies
