@@ -24,4 +24,11 @@
            nil r/max-int
            nil r/min-int
            #?@(:cljs [nil (js/Date)]
-               :clj  [nil (new Object)])))))
+               :clj  [nil (new Object)])))
+
+    (testing "datatypes"
+      (defrecord Record [field])
+      (deftype Type [field])
+      (is (= nil (empty (->Type ""))))
+      #?@(:cljs [(is (= nil (empty (->Record ""))))]
+          :clj  [(is (thrown? UnsupportedOperationException (empty (->Record ""))))]))))
