@@ -24,17 +24,16 @@
            nil r/max-int
            nil r/min-int
            #?@(:cljs [nil (js/Date)]
-               :clj  [nil (new Object)])))))
+               :clj  [nil (new Object)])))
 
-(when-var-exists clojure.core/defrecord
-  (deftest test-empty-on-records
-    (testing "record"
-      (defrecord Record [field])
-      #?@(:cljs [(is (= nil (empty (->Record ""))))]
-          :clj  [(is (thrown? UnsupportedOperationException (empty (->Record ""))))]))))
+    (when-var-exists clojure.core/defrecord
+      (testing "record"
+        (defrecord Record [field])
+        #?@(:cljs [(is (= nil (empty (->Record ""))))]
+            :clj  [(is (thrown? UnsupportedOperationException (empty (->Record ""))))])))
 
-(when-var-exists clojure.core/deftype
-  (deftest test-empty-on-types
-    (testing "datatype"
-      (deftype Type [field])
-      (is (= nil (empty (->Type "")))))))
+    (when-var-exists clojure.core/deftype
+      (testing "datatype"
+        (deftype Type [field])
+        (is (= nil (empty (->Type ""))))))))
+
