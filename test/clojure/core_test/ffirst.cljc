@@ -14,6 +14,8 @@
       (is (= :a (ffirst {:a :b})))
       (is (= 0 (ffirst [[0 1] [2 3]])))
       (is (= 0 (ffirst '([0 1] [2 3]))))
+      (is (= 0 (ffirst (repeat (range)))))
+      (is (= 0 (ffirst [(range)])))
       (is (= \a (ffirst ["ab" "cd"])))
       (is (= \a (ffirst ["abcd"])))
       (is (= \a (ffirst #{"abcd"}))))
