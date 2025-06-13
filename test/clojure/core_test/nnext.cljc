@@ -10,7 +10,7 @@
       (is (= 2 (first (nnext (range)))))        ; infinite lazy seq
       (is (= '(3) (nnext [1 2 3])))
       (is (= '([:c 3] [:d 4]) (nnext {:a 1, :b 2, :c 3, :d 4})))
-      (is (nil? (next nil)))
-      (is (nil? (next '())))
-      (is (nil? (next [])))
-      (is (nil? (next #{}))))))
+      (is (nil? (nnext nil)))
+      (is (nil? (nnext '())))
+      (is (nil? (nnext [])))
+      (is (nil? (nnext #{}))))))
