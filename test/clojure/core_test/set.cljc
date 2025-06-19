@@ -12,6 +12,7 @@
       (is (= #{\a \b \c} (set "abc")))
       (is (= #{} (set #{})))
       (is (= #{:a} (set #{:a})))
+      (is (= #{1 2 3} (set [1 1 2 2 3 3 3])))
       (is (= #{:a 1 "a"} (set '(:a 1 "a"))))
       (is (= #{:a 1 "a"} (set [:a 1 "a"])))
       (is (= #{:a 1 "a" [\space]} (set [:a 1 "a" [\space]])))
