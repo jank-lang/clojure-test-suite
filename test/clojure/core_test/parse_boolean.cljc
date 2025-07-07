@@ -9,12 +9,21 @@
       (are [expected x] (= expected (parse-boolean x))
            false "false"
            true  "true"
+           nil   "0"
+           nil   "1"
            nil   ""
            nil   "foo"
            nil   "False"
            nil   "FALSE"
            nil   "True"
-           nil   "TRUE"))
+           nil   "TRUE"
+           nil   "ttrue"
+           nil   "truee"
+           nil   "ffalse"
+           nil   "falsee"
+           nil   " true"
+           nil   "tr ue"
+           nil   "true "))
     
     (testing "exceptions"
       #?(:clj (are [x] (thrown? Exception (parse-boolean x))
