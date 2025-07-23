@@ -39,8 +39,17 @@
        [{nil 1} nil inc]         {nil 2}
        [{{} 1}  {}  inc]         {{} 2}
        [{[] 1}  []  inc]         {[] 2}
+       [{dec 1} dec inc]         {dec 2}
        [{"" 1}  ""  inc]         {"" 2}
        [{0 1}   0   inc]         {0 2}
+
+       ;; Can work with non-functions
+       [{:k 5} :k :f]           {:k nil}
+       [{:k 5} :k #{}]          {:k nil}
+       [{:k 5} :k {}]           {:k nil}
+       [nil    :k :f]           {:k nil}
+       [nil    :k #{}]          {:k nil}
+       [nil    :k {}]           {:k nil}
 
        ;; CLJS can accept arbitrary arguments
        ;; While CLJ will Throw (See last test case)
@@ -69,24 +78,10 @@
        [[1 3 9] 0 - 3 4 5 6]    [(- 1 3 4 5 6)   3 9]
        [[1 3 9] 0 - 3 4 5 6 7]  [(- 1 3 4 5 6 7) 3 9]
 
-       ;; `update` will create `:not-found` keys, and pass `nil`
-       [{:a 5} :k identity]      {:k nil,  :a 5}
-       [{:a 5} :k nil?]          {:k true, :a 5}
-       [{}     :k identity]      {:k nil}
-       [{}     :k nil?]          {:k true}
-
-       ;; If map is `nil` always treat everything as keys, even for index access
-       [nil    :k identity]      {:k nil}
-       [nil    :k nil?]          {:k true}
-       [nil    0 identity]       {0 nil}
-       [nil    0 nil?]           {0 true}
-
-       ;; Can work with non-keyword keys
-       [{nil 1} nil inc]         {nil 2}
-       [{{} 1}  {}  inc]         {{} 2}
-       [{[] 1}  []  inc]         {[] 2}
-       [{"" 1}  ""  inc]         {"" 2}
-       [{0 1}   0   inc]         {0 2}))
+       ;; Can work with non-functions
+       [[] 0 #{}]               [nil]
+       [[] 0  {}]               [nil]
+       [[] 0  :f]               [nil]))
 
    (testing "Throws"
      (are [in] (thrown? #?(:clj Exception :cljs js/Error) (apply update in))
@@ -102,6 +97,14 @@
        ["hi"       :k identity]
        ['()        :k identity]
        ['(1 2 3)   :k identity]
+
+       ;; Throw when passing a val instead of function
+       [{:k 5} :k 1]
+       [{:k 5} :k '()]
+       [{:k 5} :k '()]
+       [{:k 5} :k []]
+       [{:k 5} :k nil]
+       [{:k 5} :k ""]
 
        ;; Laziness doesn't work on CLJS
        #?(:clj [(repeat 1) :k identity])
