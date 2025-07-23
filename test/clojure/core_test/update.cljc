@@ -74,8 +74,12 @@
        [{:a 5} :k nil?]          {:k true, :a 5}
        [{}     :k identity]      {:k nil}
        [{}     :k nil?]          {:k true}
+
+       ;; If map is `nil` always treat everything as keys, even for index access
        [nil    :k identity]      {:k nil}
        [nil    :k nil?]          {:k true}
+       [nil    0 identity]       {0 nil}
+       [nil    0 nil?]           {0 true}
 
        ;; Can work with non-keyword keys
        [{nil 1} nil inc]         {nil 2}
