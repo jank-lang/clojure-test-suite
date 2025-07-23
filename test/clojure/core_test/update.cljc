@@ -42,6 +42,11 @@
        [{"" 1}  ""  inc]         {"" 2}
        [{0 1}   0   inc]         {0 2}
 
+       ;; CLJS can accept arbitrary arguments
+       ;; While CLJ will Throw (See last test case)
+       #?@(:cljs
+           ([{:k 1} :k inc 1 2 3 4] {:k 2}))
+
        ;; Update Vector inside Map
        [{:a [0 1 2], :b 4} :a conj 3] {:a [0 1 2 3], :b 4}))
 
@@ -93,7 +98,9 @@
        ["hi"       :k identity]
        ['()        :k identity]
        ['(1 2 3)   :k identity]
-       [(repeat 1) :k identity]
-       ;; Throw when wrong number of indices are passed to the function
-       [{:k 1} :k identity 1 2 3 4]))))
 
+       ;; Laziness doesn't work on CLJS
+       #?(:clj [(repeat 1) :k identity])
+       ;; Throw when wrong number of indices are passed to the function
+       ;; CLJS returns 1, and doesn't throw!
+       #?(:clj [{:k 1} :k identity 1 2 3 4])))))
