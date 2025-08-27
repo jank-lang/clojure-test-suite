@@ -5,9 +5,9 @@
 (when-var-exists clojure.core/bit-shift-left
   (deftest test-bit-shift-left
     #?(:cljs (is (= 0 (bit-shift-left nil 1)))
-       :default (is (thrown? #?(:clj Exception) (bit-shift-left nil 1))))
+       :default (is (thrown? #?(:clj Exception :cljr Exception) (bit-shift-left nil 1))))
     #?(:cljs (is (= 1 (bit-shift-left 1 nil)))
-       :default (is (thrown? #?(:clj Exception) (bit-shift-left 1 nil))))
+       :default (is (thrown? #?(:clj Exception :cljr Exception) (bit-shift-left 1 nil))))
 
     (are [ex a b] (= ex (bit-shift-left a b))
       1024     1      10

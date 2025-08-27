@@ -25,4 +25,4 @@
 
     #?@(:cljs []
         :default
-        [(is (instance? java.math.BigDecimal (bigdec 1)))])))
+        [(is (instance? #?(:cljr clojure.lang.BigDecimal :default java.math.BigDecimal) (bigdec 1)))])))

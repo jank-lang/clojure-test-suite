@@ -19,4 +19,5 @@
       (is (= '([:a :b]) (keys {[:a :b] :c})))
       (is (= '((:a)) (keys {(keys {:a :b}) :c})))
       #?@(:cljs [(is (thrown? js/Error (keys 0)))]
+	      :cljr [(is (thrown? Exception (keys 0)))]
           :clj  [(is (thrown? Exception (keys 0)))]))))

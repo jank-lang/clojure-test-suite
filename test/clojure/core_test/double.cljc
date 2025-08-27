@@ -24,11 +24,16 @@
        [(is (= "0" (double "0")))
         (is (= :0 (double :0)))]
        :default
-       [(is (thrown? #?(:clj Exception) (double "0")))
-        (is (thrown? #?(:clj Exception) (double :0)))])
+       [(is (thrown? #?(:clj Exception :cljr Exception) (double "0")))
+        (is (thrown? #?(:clj Exception :cljr Exception) (double :0)))])
 
    #?@(:clj
        [(is (instance? java.lang.Double (double 0)))
         (is (instance? java.lang.Double (double 0.0)))
         (is (instance? java.lang.Double (double 0N)))
-        (is (instance? java.lang.Double (double 0.0M)))])))
+        (is (instance? java.lang.Double (double 0.0M)))]
+	   :cljr
+       [(is (instance? System.Double (double 0)))
+        (is (instance? System.Double (double 0.0)))
+        (is (instance? System.Double (double 0N)))
+        (is (instance? System.Double (double 0.0M)))])))

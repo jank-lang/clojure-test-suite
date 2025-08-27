@@ -114,7 +114,7 @@
 
       ;; Zero arg
       #?(:cljs nil
-         :default (is (thrown? #?(:cljs :default :clj Exception) (/))))
+         :default (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (/))))
 
       ;; Single arg
       #?(:cljs (is (= 0.5 (/ 2)))
@@ -156,8 +156,8 @@
          ;; Multi arg
          (is (= 362880N (/ 1/1 1/2 1/3 1/4 1/5 1/6 1/7 1/8 1/9)))
 
-         (is (thrown? #?(:cljs :default :clj Exception) (/ 1/2 nil)))
-         (is (thrown? #?(:cljs :default :clj Exception) (/ nil 1/2)))))
+         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (/ 1/2 nil)))
+         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (/ nil 1/2)))))
 
     (testing "inf-nan"
       (are [expected x y] (= expected (/ x y))

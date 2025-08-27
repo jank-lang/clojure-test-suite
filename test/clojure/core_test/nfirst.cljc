@@ -26,6 +26,11 @@
                (is (thrown? Exception (nfirst (range))))          ; infinite lazy seq
                (is (thrown? Exception (nfirst [:a :b :c])))
                (is (thrown? Exception (nfirst '(:a :b :c))))]
+		  :cljr
+		   [(is (thrown? Exception (nfirst (range 0 10))))
+               (is (thrown? Exception (nfirst (range))))          ; infinite lazy seq
+               (is (thrown? Exception (nfirst [:a :b :c])))
+               (is (thrown? Exception (nfirst '(:a :b :c))))]
               :cljs 
               [(is (thrown? js/Error (nfirst (range 0 10))))
                (is (thrown? js/Error (nfirst (range))))          ; infinite lazy seq

@@ -5,9 +5,9 @@
 (when-var-exists clojure.core/bit-flip
   (deftest test-bit-flip
     #?(:cljs (is (= 2 (bit-flip nil 1)))
-       :default (is (thrown? #?(:clj Exception) (bit-flip nil 1))))
+       :default (is (thrown? #?(:clj Exception :cljr Exception) (bit-flip nil 1))))
     #?(:cljs (is (= 0 (bit-flip 1 nil)))
-       :default (is (thrown? #?(:clj Exception) (bit-flip 1 nil))))
+       :default (is (thrown? #?(:clj Exception :cljr Exception) (bit-flip 1 nil))))
 
     (are [ex a b] (= ex (bit-flip a b))
       2r1111 2r1011 2

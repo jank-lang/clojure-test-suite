@@ -10,5 +10,6 @@
     ;; There is some arguably buggy behavior in JVM Clojure with not=
     ;; https://ask.clojure.org/index.php/14298/incorrect-result-when-evaluating-not-on-nans
     (testing "If ##NaNs are ="
-      #?(:clj (is (not (not= ##NaN ##NaN)))
+      #?(:clj  (is (not (not= ##NaN ##NaN)))
+	     :cljr (is (not (not= ##NaN ##NaN)))
          :cljs (is (not= ##NaN ##NaN))))))

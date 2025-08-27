@@ -22,7 +22,7 @@
     (is (doall (drop 1 #{:a :b :c})))
 
     ;; Negative tests
-    (is (thrown? #?(:cljs :default :clj Exception)
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
                  (doall (drop nil (range 0 10)))))
-    (is (thrown? #?(:cljs :default :clj Exception)
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
                  (into [] (drop nil) (range 0 10))))))

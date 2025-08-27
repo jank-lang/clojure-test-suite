@@ -75,7 +75,7 @@
 
       'abc*+!-_'?<>=/abc*+!-_'?<>= "abc*+!-_'?<>=" "abc*+!-_'?<>=")
 
-    (is (thrown? #?(:cljs :default :clj Exception) (symbol nil)))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (symbol nil)))
     (is (= 'abc (symbol nil "abc"))) ; if ns is nil, it just ignores it.
 
     ;; prints as 'abc/null but the null is really a nil. Since this is
@@ -92,7 +92,7 @@
          ;; (is (= :abc/abc (symbol :abc "abc"))) results in unreadable value
          (is (= 'abc/:abc (symbol "abc" :abc)))]
         :default
-        [(is (thrown? #?(:clj Exception) (symbol 'abc "abc")))
-         (is (thrown? #?(:clj Exception) (symbol "abc" 'abc)))
-         (is (thrown? #?(:clj Exception) (symbol :abc "abc")))
-         (is (thrown? #?(:clj Exception) (symbol "abc" :abc)))])))
+        [(is (thrown? #?(:clj Exception :cljr Exception) (symbol 'abc "abc")))
+         (is (thrown? #?(:clj Exception :cljr Exception) (symbol "abc" 'abc)))
+         (is (thrown? #?(:clj Exception :cljr Exception) (symbol :abc "abc")))
+         (is (thrown? #?(:clj Exception :cljr Exception) (symbol "abc" :abc)))])))

@@ -26,6 +26,15 @@
                    :key
                    0.0
                    1000))
+      #?(:cljr (are [x] (thrown? Exception (parse-uuid x))
+                   {}
+                   '()
+                   []
+                   #{}
+                   \a
+                   :key
+                   0.0
+                   1000))
       #?(:cljs (are [x] (thrown? js/Error (parse-uuid x))
                    {}
                    '()

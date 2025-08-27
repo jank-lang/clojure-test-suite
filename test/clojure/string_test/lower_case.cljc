@@ -5,7 +5,7 @@
 
 (when-var-exists str/lower-case
   (deftest test-lower-case
-    (is (thrown? #?(:cljs :default :clj Exception) (str/lower-case nil)))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (str/lower-case nil)))
     (is (= "" (str/lower-case "")))
     (is (= "֎" (str/lower-case "֎")))
     (is (= "asdf" (str/lower-case "AsdF")))

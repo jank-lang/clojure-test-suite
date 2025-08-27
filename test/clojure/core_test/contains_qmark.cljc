@@ -16,7 +16,8 @@
       (is (= true (contains? "abc" 2)))
       (is (= false (contains? "abc" 3)))
       #?(:cljs (is (= false (contains? "abc" "a")))
-         :clj  (is (thrown? Exception (contains? "abc" "a"))))
+         :clj  (is (thrown? Exception (contains? "abc" "a")))
+		 :cljr (is (thrown? Exception (contains? "abc" "a"))))
       ;; find by key
       (is (= true (contains? {:a 1 :b 1} :a)))
       (is (= false (contains? {:a 1 :b 1} :c)))

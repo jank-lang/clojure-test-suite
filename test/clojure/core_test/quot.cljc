@@ -101,9 +101,9 @@
          (is (NaN? (quot 1 ##NaN)))
          (is (NaN? (quot ##NaN 1)))]
         :default
-        [(is (thrown? #?(:cljs :default :clj Exception) (quot 10 0)))
-         (is (thrown? #?(:cljs :default :clj Exception) (quot ##Inf 1)))
-         (is (thrown? #?(:cljs :default :clj Exception) (quot ##-Inf 1)))
-         (is (thrown? #?(:cljs :default :clj Exception) (quot ##NaN 1)))
-         (is (thrown? #?(:cljs :default :clj Exception) (quot 1 ##NaN)))
-         (is (thrown? #?(:cljs :default :clj Exception) (quot ##NaN 1)))])))
+        [(is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot 10 0)))
+         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot ##Inf 1)))
+         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot ##-Inf 1)))
+         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot ##NaN 1)))
+         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot 1 ##NaN)))
+         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot ##NaN 1)))])))

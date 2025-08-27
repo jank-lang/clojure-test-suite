@@ -29,8 +29,8 @@
        (is (= input-hash-map (into (hash-map) (seq input-hash-map))))
        (is (= input-map (into {} (seq input-map))))))
    (testing "nonseqables"
-     (is (thrown? #?(:cljs :default :clj Exception) (seq 1)))
-     (is (thrown? #?(:cljs :default :clj Exception) (seq (fn [])))))
+     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (seq 1)))
+     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (seq (fn [])))))
    (testing "infinite sequences are produced by seq"
      (let [infinite-seq (seq (range))]
        (is (seq? infinite-seq))

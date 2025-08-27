@@ -42,13 +42,13 @@
     #?@(:cljs []
         :default
         [ ;; `int` throws outside the range of 32767 ... -32768.
-         (is (thrown? #?(:clj Exception) (int -2147483648.000001)))
-         (is (thrown? #?(:clj Exception) (int -2147483649)))
-         (is (thrown? #?(:clj Exception) (int 2147483648)))
-         (is (thrown? #?(:clj Exception) (int 2147483647.000001)))
+         (is (thrown? #?(:clj Exception :cljr Exception) (int -2147483648.000001)))
+         (is (thrown? #?(:clj Exception :cljr Exception) (int -2147483649)))
+         (is (thrown? #?(:clj Exception :cljr Exception) (int 2147483648)))
+         (is (thrown? #?(:clj Exception :cljr Exception) (int 2147483647.000001)))
 
          ;; Check handling of other types
-         (is (thrown? #?(:clj Exception) (int "0")))
-         (is (thrown? #?(:clj Exception) (int :0)))
-         (is (thrown? #?(:clj Exception) (int [0])))
-         (is (thrown? #?(:clj Exception) (int nil)))])))
+         (is (thrown? #?(:clj Exception :cljr Exception) (int "0")))
+         (is (thrown? #?(:clj Exception :cljr Exception) (int :0)))
+         (is (thrown? #?(:clj Exception :cljr Exception) (int [0])))
+         (is (thrown? #?(:clj Exception :cljr Exception) (int nil)))])))

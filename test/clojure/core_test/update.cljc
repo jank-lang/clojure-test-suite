@@ -84,7 +84,7 @@
        [[] 0  :f]               [nil]))
 
    (testing "Throws"
-     (are [in] (thrown? #?(:clj Exception :cljs js/Error) (apply update in))
+     (are [in] (thrown? #?(:clj Exception :cljr Exception :cljs js/Error) (apply update in))
        ;; Throw when settting index 1 when 0 doesn't exist
        [[]        1 identity]
        ;; Throw on Negative indices!
@@ -108,6 +108,8 @@
 
        ;; Laziness doesn't work on CLJS
        #?(:clj [(repeat 1) :k identity])
+	   #?(:cljr [(repeat 1) :k identity])
        ;; Throw when wrong number of indices are passed to the function
        ;; CLJS returns 1, and doesn't throw!
-       #?(:clj [{:k 1} :k identity 1 2 3 4])))))
+       #?(:clj [{:k 1} :k identity 1 2 3 4])
+	   #?(:cljr [{:k 1} :k identity 1 2 3 4])))))

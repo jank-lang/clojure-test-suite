@@ -36,6 +36,6 @@
          (is (not (pos? false)))        ; Prints warning
          (is (pos? true))]              ; Prints warning
         :default
-        [(is (thrown? #?(:clj Exception) (pos? nil)))
-         (is (thrown? #?(:clj Exception) (pos? false)))
-         (is (thrown? #?(:clj Exception) (pos? true)))])))
+        [(is (thrown? #?(:clj Exception :cljr Exception) (pos? nil)))
+         (is (thrown? #?(:clj Exception :cljr Exception) (pos? false)))
+         (is (thrown? #?(:clj Exception :cljr Exception) (pos? true)))])))

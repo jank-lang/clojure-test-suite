@@ -12,7 +12,7 @@
     (let [lazily-evaluated (partial inc 1 17)]
       ;; CLJS ignores extra parameters given to apply. E.g., (apply inc 1 17) => 2
       #?(:cljs (is (= 2 (lazily-evaluated)))
-         :default (is (thrown? #?(:cljs :default :clj Exception) (lazily-evaluated)))))
+         :default (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (lazily-evaluated)))))
     (let [variadic (partial test-fn 1 2 3)]
       (is (= [1 2 3 4]   (variadic 4)))
       (is (= [1 2 3 4 5] (variadic 4 5))))

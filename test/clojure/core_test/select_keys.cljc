@@ -18,6 +18,9 @@
       #?@(:cljs [(is (= {} (select-keys "" [:a])))
                  (is (= {} (select-keys 0 [:a])))
                  (is (thrown? js/Error (select-keys {} :a)))]
+		  :cljr [(is (= {} (select-keys "" [:a])))
+                 (is (= {}  (select-keys 0 [:a])))
+                 (is (thrown? Exception (select-keys {} :a)))]
           :clj  [(is (thrown? Exception (select-keys "" [:a])))
                  (is (thrown? Exception (select-keys 0 [:a])))
                  (is (thrown? Exception (select-keys {} :a)))]))))

@@ -14,7 +14,7 @@
     (is (= [] (into [] (take 5) nil)))
 
     ;; negative tests
-    (is (thrown? #?(:cljs :default :clj Exception)
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
                  (doall (take nil (range 0 10)))))
-    (is (thrown? #?(:cljs :default :clj Exception)
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
                  (into [] (take nil) (range 0 10))))))

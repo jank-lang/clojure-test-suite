@@ -24,10 +24,12 @@
 
     (testing "underflow"
       #?(:clj (is (thrown? Exception (dec Long/MIN_VALUE)))
+	     :cljr (is (thrown? Exception (dec Int64/MinValue)))
          :cljs (is (= (dec js/Number.MIN_SAFE_INTEGER) (- js/Number.MIN_SAFE_INTEGER 2)))
          :default (is false "TODO underflow")))
 
     (testing "dec-nil"
       ;; ClojureScript says (= -1 (dec nil)) because JavaScript casts null to 0
       #?(:clj (is (thrown? Exception (dec #_:clj-kondo/ignore nil)))
+	     :cljr (is (thrown? Exception (dec #_:clj-kondo/ignore nil)))
          :cljs (is (= -1 (dec #_:clj-kondo/ignore nil)))))))

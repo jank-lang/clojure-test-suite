@@ -18,4 +18,5 @@
       (is (= '([:b :c]) (vals {:a [:b :c]})))
       (is (= '((:c)) (vals {:a (vals {:b :c})})))
       #?@(:cljs [(is (thrown? js/Error (vals 0)))]
+	      :cljr [(is (thrown? Exception (vals 0)))]
           :clj  [(is (thrown? Exception (vals 0)))]))))

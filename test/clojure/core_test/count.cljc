@@ -23,7 +23,7 @@
       2 "ab")
 
     ;; Negative tests
-    (are [x] (thrown? #?(:cljs :default :clj Exception) (count x))
+    (are [x] (thrown? #?(:cljs :default :clj Exception :cljr Exception) (count x))
       1
       :a
       'a

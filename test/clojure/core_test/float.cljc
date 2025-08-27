@@ -33,6 +33,12 @@
          (is (= ##-Inf (float ##-Inf)))
          (is (= "0" (float "0")))
          (is (= :0 (float :0)))]
+		:cljr
+		[(is (thrown? Exception (float r/max-double)))
+                  (is (thrown? Exception (float ##Inf)))
+                  (is (thrown? Exception (float ##-Inf)))
+                  (is (= (float 0.0) (float "0")))
+                  (is (thrown? Exception(float :0)))]		
         :default [(is (thrown? #?(:clj Exception) (float r/max-double)))
                   (is (thrown? #?(:clj Exception) (float ##Inf)))
                   (is (thrown? #?(:clj Exception) (float ##-Inf)))
@@ -43,4 +49,9 @@
         [(is (instance? java.lang.Float (float 0)))
          (is (instance? java.lang.Float (float 0.0)))
          (is (instance? java.lang.Float (float 0N)))
-         (is (instance? java.lang.Float (float 0.0M)))])))
+         (is (instance? java.lang.Float (float 0.0M)))]
+       :cljr
+        [(is (instance? System.Single (float 0)))
+         (is (instance? System.Single (float 0.0)))
+         (is (instance? System.Single (float 0N)))
+         (is (instance? System.Single (float 0.0M)))])))

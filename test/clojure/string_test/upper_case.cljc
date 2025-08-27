@@ -5,7 +5,7 @@
 
 (when-var-exists str/upper-case
   (deftest test-upper-case
-    (is (thrown? #?(:cljs :default :clj Exception) (str/upper-case nil)))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (str/upper-case nil)))
     (is (= "" (str/upper-case "")))
     (is (= "֎" (str/upper-case "֎")))
     (is (= "ASDF" (str/upper-case "aSDf")))

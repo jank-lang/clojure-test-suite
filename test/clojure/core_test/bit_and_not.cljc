@@ -6,9 +6,9 @@
 (when-var-exists clojure.core/bit-and-not
   (deftest test-bit-and-not
     #?(:cljs (is (= 0 (bit-and-not nil 1)))
-       :default (is (thrown? #?(:clj Exception) (bit-and-not nil 1))))
+       :default (is (thrown? #?(:clj Exception :cljr Exception) (bit-and-not nil 1))))
     #?(:cljs (is (= 1 (bit-and-not 1 nil)))
-       :default (is (thrown? #?(:clj Exception) (bit-and-not 1 nil))))
+       :default (is (thrown? #?(:clj Exception :cljr Exception) (bit-and-not 1 nil))))
 
     (are [ex a b] (= ex (bit-and-not a b))
       0                        0                        0

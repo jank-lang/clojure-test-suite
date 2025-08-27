@@ -100,11 +100,11 @@
      (is (NaN? (rem 1 ##NaN)))
      (is (NaN? (rem ##NaN 1)))]
     :default
-    [(is (thrown? #?(:cljs :default :clj Exception) (rem 10 0)))
-     (is (thrown? #?(:cljs :default :clj Exception) (rem ##Inf 1)))
+    [(is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem 10 0)))
+     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem ##Inf 1)))
      (is (NaN? (rem 1 ##Inf)))
-     (is (thrown? #?(:cljs :default :clj Exception) (rem ##-Inf 1)))
+     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem ##-Inf 1)))
      (is (NaN? (rem 1 ##-Inf)))
-     (is (thrown? #?(:cljs :default :clj Exception) (rem ##NaN 1)))
-     (is (thrown? #?(:cljs :default :clj Exception) (rem 1 ##NaN)))
-     (is (thrown? #?(:cljs :default :clj Exception) (rem ##NaN 1)))])))
+     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem ##NaN 1)))
+     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem 1 ##NaN)))
+     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem ##NaN 1)))])))

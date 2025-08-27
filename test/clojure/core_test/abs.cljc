@@ -10,7 +10,7 @@
        -1             1
        1              1
        (inc r/min-int)      (- (inc r/min-int))
-       #?@(:clj [r/min-int r/min-int])  ; fixed int 2's complement oddity
+       #?@(:clj [r/min-int r/min-int])  ; fixed int 2's complement oddity, see below for :cljr
        -1.0           1.0
        -0.0           0.0
        ##-Inf         ##Inf
@@ -21,8 +21,9 @@
            :default
            [-1/5           1/5]))
      (is (NaN? (abs ##NaN)))
+	 #?(:cljr (is (thrown? System.OverflowException (abs r/min-int))))
      #?(:cljs (is (zero? (abs nil)))
-        :default (is (thrown? #?(:clj Exception) (abs nil)))))
+        :default (is (thrown? #?(:clj Exception :cljr Exception) (abs nil)))))
 
     (testing "unboxed"
       (let [a  42

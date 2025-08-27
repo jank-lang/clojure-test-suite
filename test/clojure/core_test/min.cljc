@@ -49,6 +49,6 @@
         (is (NaN? (min ##-Inf ##NaN ##Inf)))
         (is (NaN? (min ##NaN)))
 
-        (is (thrown? #?(:cljs :default :clj Exception) (min "x" "y")))
-        (is (thrown? #?(:cljs :default :clj Exception) (min nil 1)))
-        (is (thrown? #?(:cljs :default :clj Exception) (min 1 nil)))])))
+        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (min "x" "y")))
+        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (min nil 1)))
+        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (min 1 nil)))])))

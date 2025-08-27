@@ -13,10 +13,10 @@
     (is (nil? (nth nil 10)))
 
     ;; `nth` throws if out of range
-    (is (thrown? #?(:cljs :default, :clj Exception) (nth [0 1 2] -1)))
-    (is (thrown? #?(:cljs :default, :clj Exception) (nth [0 1 2] 10)))
-    (is (thrown? #?(:cljs :default, :clj Exception) (nth [0 1 2] nil)))
-    (is (thrown? #?(:cljs :default, :clj Exception) (nth nil nil)))
+    (is (thrown? #?(:cljs :default, :clj Exception :cljr Exception) (nth [0 1 2] -1)))
+    (is (thrown? #?(:cljs :default, :clj Exception :cljr Exception) (nth [0 1 2] 10)))
+    (is (thrown? #?(:cljs :default, :clj Exception :cljr Exception) (nth [0 1 2] nil)))
+    (is (thrown? #?(:cljs :default, :clj Exception :cljr Exception) (nth nil nil)))
 
     ;; `nth` accepts a default argument
     (is (= :default (nth nil 0 :default)))

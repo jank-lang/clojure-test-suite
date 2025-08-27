@@ -21,6 +21,9 @@
       #?@(:cljs [(is (= false (empty? \space)))
                  (is (thrown? js/Error (empty? 0)))
                  (is (thrown? js/Error (empty? 0.0)))]
+	      :cljr [(is (thrown? Exception (empty? 0)))
+                 (is (thrown? Exception (empty? 0.0)))
+                 (is (thrown? Exception (empty? \space)))]
           :clj  [(is (thrown? Exception (empty? 0)))
                  (is (thrown? Exception (empty? 0.0)))
                  (is (thrown? Exception (empty? \space)))]))))

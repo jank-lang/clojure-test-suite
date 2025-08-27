@@ -171,5 +171,5 @@
         'quote :quote-foo-result
         'foo :quote-foo-result)
 
-      (is (thrown? #?(:cljs :default, :clj Exception) (negative-tests ##NaN)))
-      (is (thrown? #?(:cljs :default, :clj Exception) (negative-tests :something-not-found))))))
+      (is (thrown? #?(:cljs :default, :clj Exception  :cljr Exception) (negative-tests ##NaN)))
+      (is (thrown? #?(:cljs :default, :clj Exception :cljr Exception) (negative-tests :something-not-found))))))

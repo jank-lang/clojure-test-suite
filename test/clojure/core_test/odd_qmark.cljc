@@ -18,7 +18,7 @@
         -120N false))
 
     (testing "invalid"
-      (are [x] (thrown? #?(:clj Exception :cljs js/Error) (odd? x))
+      (are [x] (thrown? #?(:clj Exception  :cljr Exception :cljs js/Error) (odd? x))
         #_:clj-kondo/ignore nil
         ##Inf
         ##-Inf

@@ -26,6 +26,11 @@
                (is (thrown? Exception (ffirst (range))))          ; infinite lazy seq
                (is (thrown? Exception (ffirst [:a :b :c])))
                (is (thrown? Exception (ffirst '(:a :b :c))))]
+		 :cljr 
+          [(is (thrown? Exception (ffirst (range 0 10))))
+               (is (thrown? Exception (ffirst (range))))          ; infinite lazy seq
+               (is (thrown? Exception (ffirst [:a :b :c])))
+               (is (thrown? Exception (ffirst '(:a :b :c))))]			   
               :cljs 
               [(is (thrown? js/Error (ffirst (range 0 10))))
                (is (thrown? js/Error (ffirst (range))))          ; infinite lazy seq

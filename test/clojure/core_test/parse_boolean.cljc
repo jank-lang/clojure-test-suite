@@ -36,6 +36,16 @@
                    '()
                    #{}
                    []))
+	     :cljr (are [x] (thrown? Exception (parse-boolean x))
+                   nil
+                   0
+                   0.0
+                   \a 
+                   :key
+                   {}
+                   '()
+                   #{}
+                   []))
       #?(:cljs (are [x] (thrown? js/Error (parse-boolean x))
                    nil
                    0

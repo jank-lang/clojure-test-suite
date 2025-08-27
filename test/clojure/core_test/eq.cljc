@@ -118,6 +118,17 @@
               ;; https://clojure.org/guides/equality notes that sometimes 
               ;; collections with ##NaN are eq
               (list ##NaN) (list ##NaN) true))
+     :cljr (testing "jvm"
+            (are [in ex eq?] (identical? eq? (eq in ex))
+              2 2.0 false
+              (float 0.1) (double 0.1) false
+              (float 0.5) (double 0.5) true
+              1M 1 false
+              ;; ratios do not read in CLJS
+              22/7 44/14 true
+              ;; https://clojure.org/guides/equality notes that sometimes 
+              ;; collections with ##NaN are eq
+              (list ##NaN) (list ##NaN) true))
 
      :cljs (testing "cljs"
              (are [in ex eq?] (identical? eq? (eq in ex))

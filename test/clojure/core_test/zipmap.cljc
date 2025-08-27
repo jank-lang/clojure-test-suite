@@ -28,5 +28,7 @@
      (are [in ex] (= (apply zipmap in) ex)
        [(range)  '("a" "b")]    {0 "a" 1 "b"}))
    (testing "Bad inputs"
-     #?(:clj (is (thrown? Exception (zipmap :not-seqable [1 2 3]))))
-     #?(:clj (is (thrown? Exception (zipmap 123          [1 2 3])))))))
+     #?(:clj  (is (thrown? Exception (zipmap :not-seqable [1 2 3])))
+	    :cljr (is (thrown? Exception (zipmap :not-seqable [1 2 3]))))
+     #?(:clj  (is (thrown? Exception (zipmap 123          [1 2 3])))
+	    :cljr (is (thrown? Exception (zipmap 123          [1 2 3])))))))

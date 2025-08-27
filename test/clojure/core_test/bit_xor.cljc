@@ -6,9 +6,9 @@
 (when-var-exists clojure.core/bit-xor
   (deftest test-bit-xor
     #?(:cljs (is (bit-xor nil 1))
-       :default (is (thrown? #?(:clj Exception) (bit-xor nil 1))))
+       :default (is (thrown? #?(:clj Exception :cljr Exception) (bit-xor nil 1))))
     #?(:cljs (is (bit-xor 1 nil))
-       :default (is (thrown? #?(:clj Exception) (bit-xor 1 nil))))
+       :default (is (thrown? #?(:clj Exception :cljr Exception) (bit-xor 1 nil))))
 
     (are [ex a b] (= ex (bit-xor a b))
       2r0101                   2r1100                   2r1001

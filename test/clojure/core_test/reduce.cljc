@@ -7,21 +7,27 @@
 (def interop
   {:int-new (fn [x]
               (#?(:clj Integer.
+			      :cljr identity
                   :cljs js/Number.) x))
 
    :Integer #?(:clj Integer/TYPE
+               :cljr System.Int32
                :cljs js/Number)
 
    :Long #?(:clj Long/TYPE
+            :cljr System.Int64
             :cljs js/Number)
 
    :Float #?(:clj Long/TYPE
+             :cljr System.Single
              :cljs js/Number)
 
    :Double #?(:clj Double/TYPE
+              :cljr System.Double
               :cljs js/Number)
 
    :Boolean #?(:clj Boolean/TYPE
+               :cljr System.Boolean
                :cljs js/Boolean)})
 
 
@@ -30,6 +36,7 @@
     (testing "common"
       (is (nil? (reduce nil nil nil)))
       (is (thrown? #?(:clj Exception
+	                  :cljr Exception
                       :cljs js/Error) (reduce nil nil)))
       (is (= 6 (reduce + 0 [1 2 3]))))
 

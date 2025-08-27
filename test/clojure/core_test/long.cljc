@@ -37,8 +37,8 @@
     #?@(:cljs []              ; In CLJS all numbers are really doubles
         :default
         ;; `long` throws outside the range of 9223372036854775807 ... -9223372036854775808
-        [(is (thrown? #?(:cljs :default :clj Exception) (long -9223372036854775809)))
-         (is (thrown? #?(:cljs :default :clj Exception) (long 9223372036854775808)))])
+        [(is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (long -9223372036854775809)))
+         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (long 9223372036854775808)))])
 
     ;; Check handling of other types
     #?@(:cljs
@@ -46,6 +46,11 @@
          (is (NaN? (long :0)))
          (is (NaN? (long [0])))
          (is (= 0 (long nil)))]         ; Hm. Interesting.
+        :cljr
+        [(is (= 0 (long "0")))
+         (is (thrown? Exception (long :0)))
+         (is (thrown? Exception (long [0])))
+         (is (thrown? Exception (long nil)))]		 
         :default
         [(is (thrown? Exception (long "0")))
          (is (thrown? Exception (long :0)))

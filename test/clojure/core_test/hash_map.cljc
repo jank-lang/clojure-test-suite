@@ -14,4 +14,5 @@
       (is (= {\a {}} (hash-map \a (hash-map))))
       (is (= {:a {:b {:c 1} :d 2}} (hash-map :a (hash-map :b (hash-map :c 1) :d 2))))
       #?@(:clj  [(is (thrown? Exception (hash-map :a)))]
+	      :cljr [(is (thrown? Exception (hash-map :a)))]
           :cljs [(is (thrown? js/Error (hash-map :a)))]))))

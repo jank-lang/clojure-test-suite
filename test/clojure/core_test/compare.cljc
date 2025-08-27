@@ -17,7 +17,7 @@
        neg? [0  2r01]
        pos?  [1  nil])
 
-     (is (thrown? #?(:cljs :default :clj Exception) (compare 1 []))))
+     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (compare 1 []))))
 
   (testing "lexical-types"
     (are [pred args] (pred (compare (first args) (second args)))
@@ -31,8 +31,8 @@
       neg? [:cat  :animal/cat]
       pos?  ['a    nil])
 
-    (is (thrown? #?(:cljs :default :clj Exception) (compare "a" [])))
-    (is (thrown? #?(:cljs :default :clj Exception) (compare "cat" '(\c \a \t)))))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception :cljr Exception) (compare "a" [])))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception :cljr Exception) (compare "cat" '(\c \a \t)))))
 
   (testing "collection-types"
     (are [pred args] (pred (compare (first args) (second args)))
@@ -52,13 +52,13 @@
       ;; zero?  ['()         '()]
       pos?  [[]          nil])
 
-    (is (thrown? #?(:cljs :default :clj Exception) (compare []  '())))
-    (is (thrown? #?(:cljs :default :clj Exception) (compare [1] [[]])))
-    (is (thrown? #?(:cljs :default :clj Exception) (compare []  {})))
-    (is (thrown? #?(:cljs :default :clj Exception) (compare []  #{})))
-    (is (thrown? #?(:cljs :default :clj Exception) (compare #{} (sorted-set))))
-    (is (thrown? #?(:cljs :default :clj Exception) (compare #{1} #{1})))
-    (is (thrown? #?(:cljs :default :clj Exception) (compare {1 2} {1 2})))
-    (is (thrown? #?(:cljs :default :clj Exception) (compare (range 5) (range 5))))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (compare []  '())))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (compare [1] [[]])))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (compare []  {})))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (compare []  #{})))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (compare #{} (sorted-set))))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (compare #{1} #{1})))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (compare {1 2} {1 2})))
+    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (compare (range 5) (range 5))))
     ;; Clojurescript goes into an infinite loop of some sort when compiling this.
-    #_(is (thrown? #?(:cljs :default :clj Exception) (compare (range 5) (range)))))))
+    #_(is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (compare (range 5) (range)))))))

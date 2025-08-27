@@ -11,7 +11,7 @@
     (is (int? (short 0)))
     #?@(:cljs []
         :default
-        [(is (instance? java.lang.Short (short 0)))])
+        [(is (instance? #?(:clj java.lang.Short :cljr System.Int16) (short 0)))])
 
     ;; Check conversions and rounding from other numeric types
     (are [expected x] (= expected (short x))
@@ -55,6 +55,18 @@
          (is (= :0 (short :0)))
          (is (= [0] (short [0])))
          (is (= nil (short nil)))]
+	    :cljr
+		[;; `short` throws outside the range of 32767 ... -32768.
+         (is (= (short -32768) (short -32768.000001)))
+         (is (thrown? Exception (short -32769)))
+         (is (thrown? Exception (short 32768)))
+         (is (= (short 32767) (short 32767.000001)))
+
+         ;; Check handling of other types
+         (is (= (short 0) (short "0")))
+         (is (thrown? Exception (short :0)))
+         (is (thrown? Exception (short [0])))
+         (is (thrown? Exception (short nil)))]		 
         :default
         [;; `short` throws outside the range of 32767 ... -32768.
          (is (thrown? Exception (short -32768.000001)))

@@ -20,5 +20,8 @@
       #?@(:clj 
           [(is (thrown? Exception (last \a)))
            (is (thrown? Exception (last 0)))]
+		  :cljr
+		  [(is (thrown? Exception (last \a)))
+           (is (thrown? Exception (last 0)))]
           :cljs 
           [(is (thrown? js/Error (last 0)))]))))

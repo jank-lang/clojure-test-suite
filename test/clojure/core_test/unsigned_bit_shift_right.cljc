@@ -5,9 +5,9 @@
 (when-var-exists clojure.core/unsigned-bit-shift-right
  (deftest test-unsigned-bit-shift-right
    #?(:cljs (is (= 0 (unsigned-bit-shift-right nil 1)))
-      :default (is (thrown? #?(:clj Exception) (unsigned-bit-shift-right nil 1))))
+      :default (is (thrown? #?(:clj Exception :cljr Exception) (unsigned-bit-shift-right nil 1))))
    #?(:cljs (is (= 1 (unsigned-bit-shift-right 1 nil)))
-      :default (is (thrown? #?(:clj Exception) (unsigned-bit-shift-right 1 nil))))
+      :default (is (thrown? #?(:clj Exception :cljr Exception) (unsigned-bit-shift-right 1 nil))))
 
    (are [ex a b] (= ex (unsigned-bit-shift-right a b))
      ;; Clojure JVM starts with a 64-bit -1 and ClojureScript starts
