@@ -17,7 +17,9 @@
                       (let [do-update (fn [x]
                                         (try
                                           (swap! x inc)
-                                          (catch #?(:cljs :default :default clojure.lang.ExceptionInfo) e
+                                          (catch #?(:cljs :default
+                                                    :clj clojure.lang.ExceptionInfo
+                                                    :cljr clojure.lang.ExceptionInfo) e
                                             (let [data (ex-data e)]
                                               (vswap! state conj data)))))]
                         (do-update a)
@@ -85,7 +87,9 @@
                            (let [do-update (fn [x]
                                              (try
                                                (alter-var-root x inc)
-                                               (catch #?(:cljs :default :default clojure.lang.ExceptionInfo) e
+                                               (catch #?(:cljs :default
+                                                         :clj clojure.lang.ExceptionInfo
+                                                         :cljr clojure.lang.ExceptionInfo) e
                                                  (let [{:keys [old] :as data} (ex-data e)]
                                                    (vswap! state conj data)))))]
                              (do-update #'testvar-a)
@@ -149,7 +153,9 @@
                update! (fn []
                          (try
                            (dosync (ref-set r (inc @r)))
-                           (catch #?(:cljs :default :default clojure.lang.ExceptionInfo) e
+                           (catch #?(:cljs :default
+                                     :clj clojure.lang.ExceptionInfo
+                                     :cljr clojure.lang.ExceptionInfo) e
                              (let [{:keys [old] :as data} (ex-data e)]
                                (vswap! state conj data)))))
                keyed (fn [k s] (filter #(= k (:key %)) s))]
@@ -208,8 +214,10 @@
 
     #?@(:cljs []
         :default
-        [(defn sleep [n] (#?(:cljr System.Threading.Thread/Sleep :default Thread/sleep) n))
-         
+        [(defn sleep [n] (#?(:cljr System.Threading.Thread/Sleep
+                             :clj Thread/sleep
+                             :cljr Thread/sleep) n))
+
          (testing "watch agent"
            (let [state (volatile! [])
                  tester1 (fn [key ref old new]

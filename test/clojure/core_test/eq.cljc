@@ -118,7 +118,7 @@
               ;; https://clojure.org/guides/equality notes that sometimes 
               ;; collections with ##NaN are eq
               (list ##NaN) (list ##NaN) true))
-     :cljr (testing "jvm"
+     :cljr (testing "clr"
             (are [in ex eq?] (identical? eq? (eq in ex))
               2 2.0 false
               (float 0.1) (double 0.1) false

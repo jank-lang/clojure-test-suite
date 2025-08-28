@@ -24,13 +24,13 @@
            nil   " true"
            nil   "tr ue"
            nil   "true "))
-    
+
     (testing "exceptions"
       #?(:clj (are [x] (thrown? Exception (parse-boolean x))
                    nil
                    0
                    0.0
-                   \a 
+                   \a
                    :key
                    {}
                    '()
@@ -40,7 +40,7 @@
                    nil
                    0
                    0.0
-                   \a 
+                   \a
                    :key
                    {}
                    '()
@@ -54,4 +54,4 @@
                    {}
                    '()
                    #{}
-                   [])))))
+                   []))))
