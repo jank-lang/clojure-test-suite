@@ -86,7 +86,7 @@
            ;; setup
            (add-tap tester-0)
            (tap> 0) ;; we check that this 0 isn't seen by the other tap fns
-           (await-tap) ;; we wait since add-tap above is async
+           (await-tap) ;; we wait since tap> above is async
            ;; end setup
            (is (nil? (add-tap tester-1)))
            (tap> 0)
