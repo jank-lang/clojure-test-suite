@@ -77,6 +77,8 @@
 
     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (symbol nil)))
     (is (= 'abc (symbol nil "abc"))) ; if ns is nil, it just ignores it.
+    (is (nil? (namespace (symbol nil "hi"))))
+    (is (= "" (namespace (symbol "" "hi"))))
 
     ;; prints as 'abc/null but the null is really a nil. Since this is
     ;; not readable via the standard Clojure reader, I'm not even sure
