@@ -40,6 +40,7 @@
            0    -1/10]))
 
     #?@(:cljs []
+        :bb []
         :default
         [ ;; `int` throws outside the range of 32767 ... -32768.
          (is (thrown? #?(:clj Exception :cljr Exception) (int -2147483648.000001)))

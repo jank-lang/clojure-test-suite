@@ -53,6 +53,7 @@
          (is (= :0 (byte :0)))
          (is (= [0] (byte [0])))
          (is (= nil (byte nil)))]
+        :bb [] ;; byte constructions goes via boxed argument
         :default
         [ ;; `byte` throws outside the range of 127 ... -128.
          (is (thrown? #?(:clj Exception :cljr Exception) (byte -128.000001)))

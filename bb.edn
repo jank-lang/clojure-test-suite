@@ -3,6 +3,12 @@
  :tasks
  {test-jvm {:doc "Runs JVM tests"
             :task (shell "lein test")}
+  test-bb {:doc "Runs bb tests"
+           :extra-deps {io.github.cognitect-labs/test-runner
+                        {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+           :extra-paths ["test"]
+           :task (exec 'cognitect.test-runner.api/test)
+           :exec-args {:patterns [".*"]}}
   test-cljs {:doc "Runs CLJS tests"
              :task (shell "npx shadow-cljs compile test")}
   new-test {:doc "Creates new test for the Clojure symbols named by <args>. Unqualified symbols assume clojure.core"

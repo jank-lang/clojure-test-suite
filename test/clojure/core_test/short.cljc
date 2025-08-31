@@ -55,8 +55,8 @@
          (is (= :0 (short :0)))
          (is (= [0] (short [0])))
          (is (= nil (short nil)))]
-	    :cljr
-		[;; `short` throws outside the range of 32767 ... -32768.
+	:cljr
+	[;; `short` throws outside the range of 32767 ... -32768.
          (is (= (short -32768) (short -32768.000001)))
          (is (thrown? Exception (short -32769)))
          (is (thrown? Exception (short 32768)))
@@ -67,12 +67,15 @@
          (is (thrown? Exception (short :0)))
          (is (thrown? Exception (short [0])))
          (is (thrown? Exception (short nil)))]		 
+
         :default
         [;; `short` throws outside the range of 32767 ... -32768.
-         (is (thrown? Exception (short -32768.000001)))
-         (is (thrown? Exception (short -32769)))
-         (is (thrown? Exception (short 32768)))
-         (is (thrown? Exception (short 32767.000001)))
+         #?@(:bb []
+             :clj
+             [(is (thrown? Exception (short -32768.000001)))
+              (is (thrown? Exception (short -32769)))
+              (is (thrown? Exception (short 32768)))
+              (is (thrown? Exception (short 32767.000001)))])
 
          ;; Check handling of other types
          (is (thrown? Exception (short "0")))
