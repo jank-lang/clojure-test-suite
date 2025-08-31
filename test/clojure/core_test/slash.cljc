@@ -159,8 +159,7 @@
          (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (/ 1/2 nil)))
          (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (/ nil 1/2)))))
 
-    ;; NOTE: bb might become compatible with these tests in next release
-    #?(:bb nil
+    #?(:bb nil ;; bb always uses boxed args, which always throws in JVM Clojure
        :default
        (testing "inf-nan"
          (are [expected x y] (= expected (/ x y))
