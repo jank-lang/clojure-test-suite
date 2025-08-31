@@ -28,6 +28,7 @@ jobs:
         with:
           cli: 1.12.0.1530
           lein: 2.11.2
+          bb: latest
 
       - name: Cache clojure dependencies
         uses: actions/cache@v4
@@ -59,3 +60,6 @@ jobs:
 
       - name: Run Clojure tests
         run: lein test
+
+      - name: Run babashka tests
+        run: bb test-bb
