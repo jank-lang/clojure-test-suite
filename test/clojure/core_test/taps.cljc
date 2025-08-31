@@ -77,12 +77,17 @@
            @p))
 
        (deftest tapping
-         (let [data-ref-1 (atom [])
+         (let [data-ref-0 (atom [])
+               data-ref-1 (atom [])
                data-ref-2 (atom [])
+               tester-0 (tap-tester data-ref-0)
                tester-1 (tap-tester data-ref-1)
                tester-2 (tap-tester data-ref-2)]
-
-           (tap> 0)
+           ;; setup
+           (add-tap tester-0)
+           (tap> 0) ;; we check that this 0 isn't seen by the other tap fns
+           (await-tap) ;; we wait since add-tap above is async
+           ;; end setup
            (is (nil? (add-tap tester-1)))
            (tap> 0)
            (tap> 1)

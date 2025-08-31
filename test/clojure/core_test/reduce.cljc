@@ -79,7 +79,8 @@
           (is (== 4950
                   (reduce + arange)
                   (reduce + avec)
-                  #?(:clj (.reduce ^IReduce avec +))
+                  #?(:bb 4950
+                     :clj (.reduce ^IReduce avec +))
                   (reduce + alist)
                   (reduce + obj-array)
                   (reduce + int-array)
@@ -91,7 +92,8 @@
           (is (== 4951
                   (reduce + 1 arange)
                   (reduce + 1 avec)
-                  #?(:clj (.reduce ^IReduce avec + 1))
+                  #?(:bb 4951
+                     :clj (.reduce ^IReduce avec + 1))
                   (reduce + 1 alist)
                   (reduce + 1 obj-array)
                   (reduce + 1 int-array)
