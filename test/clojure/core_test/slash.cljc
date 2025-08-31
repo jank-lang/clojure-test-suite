@@ -208,22 +208,20 @@
                 0.0 -1/2 ##-Inf]))
 
          ;; These all result in ##NaN, but we can't test for that with `=`.
-         #?(:bb nil
-            :default
-            (are [x y] (NaN? (/ x y))
-              ##NaN  0                        ; Note that this doesn't throw
-              0      ##NaN
-              ##NaN  0N
-              0N     ##NaN
-              ##NaN  1.0
-              1.0    ##NaN
-              ##NaN  1.0M
-              1.0M   ##NaN
-              #?@(:cljs []
-                  :default
-                  [##NaN  1/2
-                   1/2    ##NaN])
-              ##Inf  ##Inf
-              ##Inf  ##-Inf
-              ##-Inf ##Inf
-              ##-Inf ##-Inf))))))
+         (are [x y] (NaN? (/ x y))
+           ##NaN  0                        ; Note that this doesn't throw
+           0      ##NaN
+           ##NaN  0N
+           0N     ##NaN
+           ##NaN  1.0
+           1.0    ##NaN
+           ##NaN  1.0M
+           1.0M   ##NaN
+           #?@(:cljs []
+               :default
+               [##NaN  1/2
+                1/2    ##NaN])
+           ##Inf  ##Inf
+           ##Inf  ##-Inf
+           ##-Inf ##Inf
+           ##-Inf ##-Inf)))))
