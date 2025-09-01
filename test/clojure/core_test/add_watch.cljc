@@ -1,6 +1,6 @@
 (ns clojure.core-test.add-watch
   (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists sleep]]))
 
 (when-var-exists clojure.core/add-watch
   (deftest test-add-watch
@@ -214,11 +214,7 @@
 
     #?@(:cljs []
         :default
-        [(defn sleep [n] (#?(:cljr System.Threading.Thread/Sleep
-                             :clj Thread/sleep
-                             :cljr Thread/sleep) n))
-
-         (testing "watch agent"
+        [(testing "watch agent"
            (let [state (volatile! [])
                  tester1 (fn [key ref old new]
                            (when (not= old new)

@@ -17,3 +17,9 @@
      :default
      (and (integer? n)
           (not (int? n)))))
+
+(defn sleep [n]
+  (#?(:cljr System.Threading.Thread/Sleep
+      :clj Thread/sleep
+      :cljr Thread/sleep)
+   n))
