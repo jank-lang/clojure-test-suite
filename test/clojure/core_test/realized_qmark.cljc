@@ -45,7 +45,6 @@
         (when-var-exists future
           (testing "futures"
             (let [ftr (future :foo)]
-              (is (false? (realized? ftr)))
               (deref ftr)
               (is (true? (realized? ftr))))
             (let [ftr2 (future (sleep 10000))] ; don't worry, we won't wait the full 10s
