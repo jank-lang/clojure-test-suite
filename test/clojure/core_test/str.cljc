@@ -19,6 +19,17 @@
            "0"          (double 0.0)
            "1"          (double 1.0)
            "-1"         (double -1.0)]
+          :cljr
+          ["0"          0.0
+           "1"          1.0
+           "-1"         -1.0
+           "0"          0.00000
+           "0"          (float 0.0)
+           "1"          (float 1.0)
+           "-1"         (float -1.0)
+           "0"          (double 0.0)
+           "1"          (double 1.0)
+           "-1"         (double -1.0)]		   
           :default
           ["0.0"          0.0
            "1.0"          1.0
@@ -49,8 +60,8 @@
            "-1.0"         -1.0M])
       
       ""             nil
-      "true"         true
-      "false"        false
+      #?(:cljr "True" :default "true")     true
+      #?(:cljr "False" :default "false")   false
       "a string"     "a string"
       "0"            "0"
       "1"            "1"

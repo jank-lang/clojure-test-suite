@@ -11,7 +11,8 @@
     ;; predicate for it. Here, we just test whether it's a fixed-length
     ;; integer of some sort.
     (is (int? (int 0)))
-    #?(:clj (is (instance? java.lang.Integer (int 0))))
+    #?(:clj  (is (instance? java.lang.Integer (int 0)))
+	   :cljr (is (instance? System.Int32 (int 0))))
 
     ;; Check conversions and rounding from other numeric types
     (are [expected x] (= expected (int x))
@@ -40,16 +41,28 @@
            0    -1/10]))
 
     #?@(:cljs []
-        :bb []
-        :default
+        :bb []	
+	    :cljr
         [ ;; `int` throws outside the range of 32767 ... -32768.
-         (is (thrown? #?(:clj Exception :cljr Exception) (int -2147483648.000001)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (int -2147483649)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (int 2147483648)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (int 2147483647.000001)))
+         (is (thrown? Exception (int -2147483648.000001)))
+         (is (thrown? Exception (int -2147483649)))
+         (is (thrown? Exception (int 2147483648)))
+         (is (thrown? Exception (int 2147483647.000001)))
 
          ;; Check handling of other types
-         (is (thrown? #?(:clj Exception :cljr Exception) (int "0")))
-         (is (thrown? #?(:clj Exception :cljr Exception) (int :0)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (int [0])))
-         (is (thrown? #?(:clj Exception :cljr Exception) (int nil)))])))
+         (is (= 0 (int "0")))
+         (is (thrown? Exception (int :0)))
+         (is (thrown? Exception (int [0])))
+         (is (thrown? Exception (int nil)))]
+        :default
+        [ ;; `int` throws outside the range of 32767 ... -32768.
+         (is (thrown? Exception (int -2147483648.000001)))
+         (is (thrown? Exception (int -2147483649)))
+         (is (thrown? Exception (int 2147483648)))
+         (is (thrown?  Exception (int 2147483647.000001)))
+
+         ;; Check handling of other types
+         (is (thrown? Exception (int "0")))
+         (is (thrown? Exception (int :0)))
+         (is (thrown? Exception (int [0])))
+         (is (thrown? Exception (int nil)))])))
