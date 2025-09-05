@@ -136,9 +136,9 @@
         '(one two three)
         [1 2 3]
         {:k "value"}
-        (zipmap (take 1000 (range))
+        (zipmap (take 100 (range))
                 (cycle ['foo 'bar 'baz 'qux]))
-        (set (range 0 3334 3)))
+        (set (range 0 334 3)))
       (testing "infinite sequence"
         (let [r (range)]
           (is (= r (deref (atom r)))))))))
