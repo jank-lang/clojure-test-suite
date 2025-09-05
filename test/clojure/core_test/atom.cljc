@@ -124,7 +124,8 @@
         "string"
         1
         1.0
-        #?(:clj 111/7) ; ratios not supported in cljs
+        #?(:cljs "cljs is the only (?) Clojure dialect that doesn't support ratios"
+           :default 111/7)
         \newline
         nil
         true
