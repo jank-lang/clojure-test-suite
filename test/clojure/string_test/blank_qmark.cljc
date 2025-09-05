@@ -9,8 +9,8 @@
     (is (true? (str/blank? nil)))
     (is (false? (str/blank? "֎")))
     (testing "U+2007"
-      (is (#?(:cljs true? :cljr true :default false?) (str/blank? " ")))
-      (is (#?(:cljs true? :cljr true :default false?) (str/blank? "\u2007"))))
+      (is (#?(:cljs true? :cljr true? :default false?) (str/blank? " ")))   
+      (is (#?(:cljs true? :cljr true?  :default false?) (str/blank? "\u2007"))))
     (is (true? (str/blank? "  ")))
     (is (true? (str/blank? " \t ")))
     #?(:cljs (do (is (true? (str/blank? (symbol ""))))
