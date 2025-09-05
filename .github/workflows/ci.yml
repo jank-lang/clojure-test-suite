@@ -41,6 +41,14 @@ jobs:
           key: cljdeps-${{ env.CACHE_VERSION }}-${{ hashFiles('project.clj') }}-${{ hashFiles('deps.edn') }}-${{ hashFiles('bb.edn') }}
           restore-keys: cljdeps-${{ env.CACHE_VERSION }}-
 
+      - name: Prepare dotnet
+        uses: xt0rted/setup-dotnet@v1.5.0
+
+      - name: Install ClojureCLR
+        run: |
+          dotnet tool install --global Clojure.Main --version 1.12.0-alpha10
+          dotnet tool install --global Clojure.Cljr --version 0.1.0-alpha5
+
       - name: Prepare node
         uses: actions/setup-node@v4
         with:
@@ -60,6 +68,9 @@ jobs:
 
       - name: Run Clojure tests
         run: lein test
+
+      - name: Run ClojureCLR Tests
+        run: cljr -X:test-cljr
 
       - name: Run babashka tests
         run: bb test-bb
