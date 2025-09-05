@@ -1,7 +1,7 @@
 (ns clojure.core-test.atom
   (:require clojure.core
             [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists clojure.core/atom
   (deftest test-atom
@@ -27,12 +27,12 @@
         (is (= {:a "a"} (meta (atom nil :meta (array-map :a "a"))))))
       (when-var-exists clojure.core/hash-map
         (is (= {:a "a"} (meta (atom nil :meta (hash-map :a "a"))))))
-      (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
-                   (atom nil :meta 5)))
-      (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
-                   (atom nil :meta #{})))
-      (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
-                   (atom nil :meta (vector)))))
+      #?(:cljs (is (= 5 (meta (atom nil :meta 5))))
+         :clj (is (thrown? Exception (atom nil :meta 5))))
+      #?(:cljs (is (= #{} (meta (atom nil :meta #{}))))
+         :clj (is (thrown? Exception (atom nil :meta #{}))))
+      #?(:cljs (is (= [] (meta (atom nil :meta (vector)))))
+         :clj (is (thrown? Exception (atom nil :meta (vector))))))
 
     (testing "validator-fn"        
       ;; Docstring: "If the new state is unacceptable, the validate-fn should
@@ -70,15 +70,16 @@
           (is (= 3 (deref atm)))))
 
       (testing "always-falsey validator can't initialize atom"
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        ;; CLJS currently fails due to a bug https://clojure.atlassian.net/browse/CLJS-3447
+        (is (thrown? #?(:cljs :default, :default Exception)
                      (atom {} :validator (constantly nil))))
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default, :default Exception)
                      (atom {} :validator (constantly false))))
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
-                     (atom {} :validator (constantly (throw (ex-info "boom" {})))))))
+        (is (thrown? #?(:cljs :default, :default Exception)
+                     (atom {} :validator #(when true (throw (ex-info "boom" {})))))))
 
       (testing "conditional validators are obeyed at creation, swap! and reset!"
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default, :default Exception)
                      (atom #{} :validator (fn [v] (some string? v)))))
         (let [some-strings (atom #{"str"} :validator (fn [v] (some string? v)))]
           (is (= #{"str" :not-a-string} (swap! some-strings conj :not-a-string)))
