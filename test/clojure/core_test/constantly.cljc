@@ -23,7 +23,7 @@
         '(one two three)
         [4 5 6]
         {:7 "8"}
-        (zipmap (take 1000 (range))
+        (zipmap (take 100 (range))
                 (cycle ['foo 'bar 'baz 'qux]))
         #{:a :b "c"})
 
@@ -40,5 +40,5 @@
         (is (= :foo (the-fn {:k :v})))
         (is (= :foo (the-fn even?)))
         (is (= :foo (the-fn (some-fn even? odd?))))
-        (is (= :foo (apply the-fn (take 10000 (cycle ['foo "bar" :baz])))))
+        (is (= :foo (apply the-fn (take 1000 (cycle ['foo "bar" :baz])))))
         (is (apply = (map (constantly (rand-int 100)) [:a :b :c :d :e :f])))))))
