@@ -25,6 +25,7 @@
         (is (ifn? [:a :b]))
         (is (ifn? :keyword))
         (is (ifn? 'symbol))
+        (is (ifn? #'ifn?))
         (when-var-exists clojure.core/promise
           (is (ifn? (promise)))))
 
