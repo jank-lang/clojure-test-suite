@@ -13,7 +13,8 @@
         "abc"
         100000
         1.0
-        #?(:clj 2/3) ; ratio not supported in cljs
+        #?@(:cljs [] ; most Clojure dialects support ratios - not CLJS
+            :default [111/7])
         \return
         nil
         true
