@@ -1,1 +1,8 @@
-{:paths ["test"]}
+{:paths ["test"]
+ :aliases
+ {:test-cljr
+  {:extra-deps {io.github.clojure/clr.tools.reader {:git/tag "v1.5.0" :git/sha "46ce896"}
+                io.github.dmiller/test-runner {:git/sha "c055ea13d19c6a9b9632aa2370fcc2215c8043c3"}}
+   :exec-fn cognitect.test-runner.api/test
+   :exec-args {:dirs ["test"]
+               :patterns [".*"]}}}}
