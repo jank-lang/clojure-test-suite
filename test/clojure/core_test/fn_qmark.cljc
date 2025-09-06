@@ -5,9 +5,6 @@
 
 (defn foo [x] (str "hello " x))
 
-(when-var-exists clojure.core/defprotocol
-  (defprotocol Bar (bar [this a b] "bar docstring")))
-
 (when-var-exists clojure.core/fn?
   (deftest test-fn?
     (testing "`fn?`"
@@ -18,6 +15,10 @@
         (is (fn? #(str "hello " %)))
         (is (fn? (fn [x] (str "hello " x))))
         (is (fn? foo)))
+
+      ;; Note: we intentionally do not test multimethods or protocols, because
+      ;; behavior differs across dialects due to implementation decisions that
+      ;; don't matter for our purposes.
 
       ;; atomic values are not functions
       (is (not (fn? nil)))
@@ -30,14 +31,4 @@
       ;; implementing IFn is not the same as implementing Fn
       (is (not (fn? {:a :b})))
       (is (not (fn? #{:a :b :c})))
-      (is (not (fn? [:a :b]))))
-
-    (when-var-exists clojure.core/defmulti
-      (defmulti my-multi first)
-      (defmethod my-multi :foo [_]
-        :multi/foo)
-      ;; perhaps surprisingly
-      (is (not (fn? my-multi))))
-
-    (when-var-exists clojure.core/defprotocol
-      (is (fn? bar)))))
+      (is (not (fn? [:a :b]))))))
