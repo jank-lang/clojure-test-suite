@@ -27,12 +27,12 @@
         (is (= {:a "a"} (meta (atom nil :meta (array-map :a "a"))))))
       (when-var-exists clojure.core/hash-map
         (is (= {:a "a"} (meta (atom nil :meta (hash-map :a "a"))))))
-      #?(:cljs (is (= 5 (meta (atom nil :meta 5))))
-         :clj (is (thrown? Exception (atom nil :meta 5))))
-      #?(:cljs (is (= #{} (meta (atom nil :meta #{}))))
-         :clj (is (thrown? Exception (atom nil :meta #{}))))
-      #?(:cljs (is (= [] (meta (atom nil :meta (vector)))))
-         :clj (is (thrown? Exception (atom nil :meta (vector))))))
+      #?(:cljs (is (= 5 (meta (atom nil :meta 5)))),
+         :default (is (thrown? Exception (atom nil :meta 5))))
+      #?(:cljs (is (= #{} (meta (atom nil :meta #{})))),
+         :default (is (thrown? Exception (atom nil :meta #{}))))
+      #?(:cljs (is (= [] (meta (atom nil :meta (vector))))),
+         :default (is (thrown? Exception (atom nil :meta (vector))))))
 
     (testing "validator-fn"        
       ;; Docstring: "If the new state is unacceptable, the validate-fn should
