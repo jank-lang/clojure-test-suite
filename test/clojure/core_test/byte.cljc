@@ -1,6 +1,7 @@
 (ns clojure.core-test.byte
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is are]]
+            [clojure.core-test.portability
+             #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
 
 (when-var-exists clojure.core/byte
   (deftest test-byte
@@ -10,7 +11,7 @@
     ;; test whether it's a fixed-length integer of some sort.
     (is (int? (byte 0)))
     #?(:clj  (is (instance? java.lang.Byte (byte 0)))
-	   :cljr (is (instance? System.Byte (byte 0))))
+	     :cljr (is (instance? System.Byte (byte 0))))
 
     ;; Check conversions and rounding from other numeric types
 	;; In ClojureCLR, Byte is unsigned, so we have to wipe all tests of negative values
@@ -20,10 +21,10 @@
       127  127
       1    1N
       0    0N
-      #?@(:cljr [] :default [-1   -1N])
+      #?@(:cljr [] :default [-1 -1N])
       1    1.0M
       0    0.0M
-      #?@(:cljr [] :default [-1   -1.0M])
+      #?@(:cljr [] :default [-1 -1.0M])
       ;; Clojurescript `byte` is a "dummy cast" which doesn't do
       ;; anything (no-op). Thus, there is no conversion, no truncation
       ;; of decimal values, etc.
@@ -35,14 +36,14 @@
            -1.1   -1.1M]
           :default
           [1    1.1
-           #?@(:cljr [] :default [-1   -1.1])
+           #?@(:cljr [] :default [-1 -1.1])
            1    1.9
            1    3/2
-           #?@(:cljr [] :default  [-1   -3/2])
+           #?@(:cljr [] :default  [-1 -3/2])
            0    1/10
-           #?@(:cljr [] :default [0    -1/10])
+           #?@(:cljr [] :default [0 -1/10])
            1    1.1M
-           #?@(:cljr [] :default [-1   -1.1M])]))
+           #?@(:cljr [] :default [-1 -1.1M])]))
 
     #?@(:cljs
         [ ;; ClojureScript `byte` just returns its argument
