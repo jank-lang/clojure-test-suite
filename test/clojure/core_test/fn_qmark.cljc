@@ -20,15 +20,15 @@
       ;; behavior differs across dialects due to implementation decisions that
       ;; don't matter for our purposes.
 
-      ;; atomic values are not functions
-      (is (not (fn? nil)))
-      (is (not (fn? 12345678)))
-      (is (not (fn? "string")))
-      (is (not (fn? :keyword))) ; note: also IFn
-      (is (not (fn? 'symbol)))
-      (is (not (fn? \space)))
+      (testing "atomic values are not functions"
+        (is (not (fn? nil)))
+        (is (not (fn? 12345678)))
+        (is (not (fn? "string")))
+        (is (not (fn? :keyword))) ; note: also IFn
+        (is (not (fn? 'symbol)))
+        (is (not (fn? \space))))
 
-      ;; implementing IFn is not the same as implementing Fn
-      (is (not (fn? {:a :b})))
-      (is (not (fn? #{:a :b :c})))
-      (is (not (fn? [:a :b]))))))
+      (testing "implementing IFn is not the same as implementing Fn"
+        (is (not (fn? {:a :b})))
+        (is (not (fn? #{:a :b :c})))
+        (is (not (fn? [:a :b])))))))
