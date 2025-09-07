@@ -10,10 +10,10 @@
 (when-var-exists clojure.core/defmulti
   ;; This can't be inside `deftest` like `defn` because `defmulti` only returns
   ;; the var on the first invocation.
-  (var? (defmulti bar first)))
+  (defmulti bar first))
 
 (when-var-exists clojure.core/defprotocol
-  (var? (defprotocol MyProtocol)))
+  (defprotocol MyProtocol))
 
 (when-var-exists clojure.core/var?
   (deftest test-var?
