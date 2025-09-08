@@ -66,14 +66,23 @@
         (is (thrown? #?(:cljs :default, :clj Exception, :clr Exception)
                      (merge {} "str"))))
 
-      ;; Behavior for non-maps is undefined and intentionally not tested.
-      (comment
-        (merge '(1 2 3) 1)
-        (merge [1 2] 3 4 5)
-        (merge [] nil {} 1 {:a "c"})
-        (merge (first {:a "a"}) {:b "b"} {:c "c"})
-        (merge :foo)
-        (merge :foo :bar)
-        (merge {} (range))
-        (merge {} '(1 2))
-        (merge {} 1 2)))))
+      (testing "undefined `merge` behavior on non-maps"
+        ;; Behavior for non-map input is undefined. We intentionally do not test
+        ;; it closely.
+        (is (any? (merge '(1 2 3) 1)))
+        (is (any? (merge [1 2] 3 4 5)))
+        (is (any? (merge [] nil {} 1 {:a "c"})))
+        (is (any? (merge (first {:a "a"}) {:b "b"} {:c "c"})))
+        (is (any? (merge :foo)))
+        (is (thrown? #?(:cljs :default, :clj Exception, :clr Exception)
+                     (merge :foo :bar)))
+        (is (thrown? #?(:cljs :default, :clj Exception, :clr Exception)
+                     (merge 100 :foo)))
+        (is (thrown? #?(:cljs :default, :clj Exception, :clr Exception)
+                     (merge "str" :foo)))        
+        (is (thrown?  #?(:cljs :default, :clj Exception, :clr Exception)
+                      (merge nil (range))))
+        (is (thrown?  #?(:cljs :default, :clj Exception, :clr Exception)
+                      (merge {} '(1 2))))
+        (is (thrown?  #?(:cljs :default, :clj Exception, :clr Exception)
+                      (merge {} 1 2)))))))
