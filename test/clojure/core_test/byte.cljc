@@ -14,7 +14,8 @@
 	     :cljr (is (instance? System.Byte (byte 0))))
 
     ;; Check conversions and rounding from other numeric types
-	;; In ClojureCLR, Byte is unsigned, so we have to wipe all tests of negative values
+	  ;; In ClojureCLR, Byte is unsigned, so we have to wipe all tests
+    ;; of negative values
     (are [expected x] (= expected (byte x))
       #?@(:cljr [] :default [-128 -128])
       0    0
