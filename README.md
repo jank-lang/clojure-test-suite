@@ -3,7 +3,7 @@ This is a set of tests for Clojure's core standard library. Its purpose is not
 only to draw clear boundaries around Clojure JVM's behavior, but also to serve
 as a compliance suite for other Clojure dialects.
 
-Currently, this project is owned by jank, the native Clojure dialect. As we
+Currently, this project is owned by [`jank`](https://github.com/jank-lang/jank), the native Clojure dialect. As we
 build it up and prove jank's readiness, we also create value for the rest of the
 Clojure community. As it currently stands, jank isn't able to run `clojure.test`
 yet, so we're just focusing on building out the test cases for now.
@@ -109,9 +109,9 @@ The test file will look like the following:
 ```clojure
 (ns clojure.core-test.foo
   (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/foo
+(when-var-exists foo
   (deftest test-foo
     ;; `testing` sections are optional, depending on how you want to
     ;; structure your tests. If you have a lot of tests and they group
@@ -143,4 +143,4 @@ The complete set of conversions of characters to names is:
 - "<" -> "lt"
 - ">" -> "gt"
 - "=" -> "eq"
-- "%" -> "percent"))
+- "%" -> "percent"
