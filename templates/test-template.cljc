@@ -1,9 +1,9 @@
 (ns {{base-ns}}-test.{{ns-suffix}}
-  (:require {{base-ns}}
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require {% if not base-ns = "clojure.core" %}{{base-ns}}
+            {% endif %}[clojure.test :as t :refer [deftest testing is are]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists {{base-ns}}/{{sym-name}}
+(when-var-exists {% if not base-ns = "clojure.core" %}{{base-ns}}/{% endif %}{{sym-name}}
   (deftest test-{{sym-name}}
     ;; `testing` sections are optional, depending on how you want to
     ;; structure your tests. If you have a lot of tests and they group

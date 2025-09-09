@@ -1,6 +1,7 @@
 (ns clojure.core-test.byte
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is are]]
+            [clojure.core-test.portability
+             #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists clojure.core/byte
   (deftest test-byte
@@ -10,19 +11,21 @@
     ;; test whether it's a fixed-length integer of some sort.
     (is (int? (byte 0)))
     #?(:clj  (is (instance? java.lang.Byte (byte 0)))
-	   :cljr (is (instance? System.Byte (byte 0))))
+	     :cljr (is (instance? System.Byte (byte 0))))
 
     ;; Check conversions and rounding from other numeric types
+	  ;; In ClojureCLR, Byte is unsigned, so we have to wipe all tests
+    ;; of negative values
     (are [expected x] (= expected (byte x))
-      -128 -128
+      #?@(:cljr [] :default [-128 -128])
       0    0
       127  127
       1    1N
       0    0N
-      -1   -1N
+      #?@(:cljr [] :default [-1 -1N])
       1    1.0M
       0    0.0M
-      -1   -1.0M
+      #?@(:cljr [] :default [-1 -1.0M])
       ;; Clojurescript `byte` is a "dummy cast" which doesn't do
       ;; anything (no-op). Thus, there is no conversion, no truncation
       ;; of decimal values, etc.
@@ -34,14 +37,14 @@
            -1.1   -1.1M]
           :default
           [1    1.1
-           -1   -1.1
+           #?@(:cljr [] :default [-1 -1.1])
            1    1.9
            1    3/2
-           -1   -3/2
+           #?@(:cljr [] :default  [-1 -3/2])
            0    1/10
-           0    -1/10
+           #?@(:cljr [] :default [0 -1/10])
            1    1.1M
-           -1   -1.1M]))
+           #?@(:cljr [] :default [-1 -1.1M])]))
 
     #?@(:cljs
         [ ;; ClojureScript `byte` just returns its argument
@@ -53,15 +56,26 @@
          (is (= :0 (byte :0)))
          (is (= [0] (byte [0])))
          (is (= nil (byte nil)))]
-        :bb [] ;; byte constructions goes via boxed argument
+		:cljr
+		[ ;; `byte` throws outside the range of 127 ... -128.
+         (is (thrown? Exception (byte -128.000001)))
+         (is (thrown? Exception (byte -129)))
+         (is (= 128 (byte 128)))
+         (is (= 127(byte 127.000001)))
+         ;; Check handling of other types
+         (is (= 0 (byte "0")))
+         (is (thrown? Exception (byte :0)))
+         (is (thrown? Exception (byte [0])))
+         (is (thrown? Exception (byte nil)))]
+        :bb [] ;; byte constructions goes via boxed argument		 
         :default
         [ ;; `byte` throws outside the range of 127 ... -128.
-         (is (thrown? #?(:clj Exception :cljr Exception) (byte -128.000001)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (byte -129)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (byte 128)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (byte 127.000001)))
+         (is (thrown? Exception (byte -128.000001)))
+         (is (thrown? Exception (byte -129)))
+         (is (thrown? Exception (byte 128)))
+         (is (thrown? Exception (byte 127.000001)))
          ;; Check handling of other types
-         (is (thrown? #?(:clj Exception :cljr Exception) (byte "0")))
-         (is (thrown? #?(:clj Exception :cljr Exception) (byte :0)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (byte [0])))
-         (is (thrown? #?(:clj Exception :cljr Exception) (byte nil)))])))
+         (is (thrown? Exception (byte "0")))
+         (is (thrown? Exception (byte :0)))
+         (is (thrown? Exception (byte [0])))
+         (is (thrown? Exception (byte nil)))])))
