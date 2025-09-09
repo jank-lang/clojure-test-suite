@@ -23,14 +23,14 @@
            (is (vector? actual))
            (is (= (count x) (count actual))))))
     (testing "negative cases"
-      (is (thrown? Exception (shuffle 1)))
+      (is (thrown? #?(:cljs js/Error :default Exception) (shuffle 1)))
       #?@(:cljs
           [(is (= [] (shuffle nil)))
-           (is [] (shuffle {}))]
+           (is (= [] (shuffle {})))]
           :cljr
           [(is (thrown? Exception (shuffle nil)))
            (is (thrown? Exception (shuffle "abc")))
-           (is (= [](shuffle {})))]		   
+           (is (= [] (shuffle {})))]
           :default
           [(is (thrown? Exception (shuffle nil)))
            (is (thrown? Exception (shuffle "abc")))
