@@ -45,34 +45,36 @@
                                        {:b "b"}))))
 
       (testing "vectors in position 2+ are treated as map-entries, per `conj`"
-        (is (thrown? #?(:cljs :default, :clj java.lang.IllegalArgumentException, :clr Exception)
-                     (merge {} [])))
-        (is (thrown? #?(:cljs :default, :clj java.lang.IllegalArgumentException, :clr Exception)
-                     (merge {} [:foo])))
+        #?(:cljs    (is (thrown? js/Error (merge {} [])))
+           :clj     (is (thrown? java.lang.IllegalArgumentException (merge {} [])))
+           :default (is (thrown? Exception (merge {} []))))
+        #?(:cljs    (is (thrown? js/Error (merge {} [:foo])))
+           :clj     (is (thrown? java.lang.IllegalArgumentException (merge {} [:foo])))
+           :default (is (thrown? Exception (merge {} [:foo]))))
         (is (= {:foo "foo"} (merge {} [:foo "foo"])))
         (is (= {"x" 1} (merge {} ["x" 1])))
         (is (= {'x 10, 'y 10} (merge {'x 10} ['y 10])))
         (testing "In CLJS (unlike other dialects) vectors with >2 arguments are treated as map-entries (where the latter values are ignored)"
           #?(:cljs (is (= {:foo :bar} (merge {} [:foo :bar :baz]))),
-             :clj (is (thrown? java.lang.IllegalArgumentException (merge {} [:foo :bar :baz]))),
-             :clr (is (thrown? Exception (merge {} [:foo :bar :baz])))))
+             :clj  (is (thrown? java.lang.IllegalArgumentException (merge {} [:foo :bar :baz]))),
+             :clr  (is (thrown? Exception (merge {} [:foo :bar :baz])))))
 
         (is (= {:foo "foo", :bar "bar"} (merge {} [:foo "foo"] [:bar "bar"])))
         (is (= {'x 10, 'y 10, 'z 10} (merge {'x 10} ['y 10] ['z 10])))
         (testing "In CLJS (unlike other dialects) vectors with >2 arguments are treated as map-entries (where the latter values are ignored)"
           #?(:cljs (is (= {:foo :bar} (merge {} [:foo :bar :baz :bar]))),
-             :clj (is (thrown? java.lang.IllegalArgumentException (merge {} [:foo :bar :baz :bar]))),
-             :clr (is (thrown? Exception (merge {} [:foo :bar :baz :bar]))))))
+             :clj  (is (thrown? java.lang.IllegalArgumentException (merge {} [:foo :bar :baz :bar]))),
+             :clr  (is (thrown? Exception (merge {} [:foo :bar :baz :bar]))))))
 
       (testing "atomic values in position 2+ throw"
-        (is (thrown? #?(:cljs :default, :clj Exception, :clr Exception)
-                     (merge {} 1)))
-        (is (thrown? #?(:cljs :default, :clj Exception, :clr Exception)
-                     (merge {} 1 2)))
-        (is (thrown? #?(:cljs :default, :clj Exception, :clr Exception)
-                     (merge {} :foo)))
-        (is (thrown? #?(:cljs :default, :clj Exception, :clr Exception)
-                     (merge {} "str"))))
+        #?@(:cljs    [(is (thrown? js/Error (merge {} 1)))
+                      (is (thrown? js/Error (merge {} 1 2)))
+                      (is (thrown? js/Error (merge {} :foo)))
+                      (is (thrown? js/Error (merge {} "str")))]
+            :default [(is (thrown? Exception (merge {} 1)))
+                      (is (thrown? Exception (merge {} 1 2)))
+                      (is (thrown? Exception (merge {} :foo)))
+                      (is (thrown? Exception (merge {} "str")))]))
 
       (testing "undefined `merge` behavior on non-maps"
         ;; Behavior for non-map input is undefined. We intentionally do not test
@@ -83,15 +85,15 @@
         (is (any? (merge (first {:a "a"}) {:b "b"} {:c "c"})))
         (is (= [:foo] (merge [:foo])))
         (is (= :foo (merge :foo)))
-        (is (thrown? #?(:cljs :default, :clj Exception, :clr Exception)
-                     (merge :foo :bar)))
-        (is (thrown? #?(:cljs :default, :clj Exception, :clr Exception)
-                     (merge 100 :foo)))
-        (is (thrown? #?(:cljs :default, :clj Exception, :clr Exception)
-                     (merge "str" :foo)))        
-        (is (thrown?  #?(:cljs :default, :clj Exception, :clr Exception)
-                      (merge nil (range))))
-        (is (thrown?  #?(:cljs :default, :clj Exception, :clr Exception)
-                      (merge {} '(1 2))))
-        (is (thrown?  #?(:cljs :default, :clj Exception, :clr Exception)
-                      (merge {} 1 2)))))))
+        #?@(:cljs    [(is (thrown? js/Error (merge :foo :bar)))
+                      (is (thrown? js/Error (merge 100 :foo)))
+                      (is (thrown? js/Error (merge "str" :foo)))
+                      (is (thrown? js/Error (merge nil (range))))
+                      (is (thrown? js/Error (merge {} '(1 2))))
+                      (is (thrown? js/Error (merge {} 1 2)))]
+            :default [(is (thrown? Exception (merge :foo :bar)))
+                      (is (thrown? Exception (merge 100 :foo)))
+                      (is (thrown? Exception (merge "str" :foo)))
+                      (is (thrown? Exception (merge nil (range))))
+                      (is (thrown? Exception (merge {} '(1 2))))
+                      (is (thrown? Exception (merge {} 1 2)))])))))
