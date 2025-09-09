@@ -10,7 +10,7 @@
 
 	#?(:cljs (is (thrown? :default (str/ends-with? nil "")))
 	   :cljr (is (true? (str/ends-with? nil "")))
-	   :default (is (thrown? :default (str/ends-with? nil ""))))
+	   :default (is (thrown? Exception (str/ends-with? nil ""))))
 	   
     #?(:cljs (do (is (false? (str/ends-with? "ab" :b)))
                  (is (false? (str/ends-with? "ab" :a))))
