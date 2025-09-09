@@ -56,11 +56,11 @@ node target/js/node-tests.js
 
 ### Pre-requisites
 - [dotnet](https://dotnet.microsoft.com/en-us/download)
-- `ClojureCLR`: `dotnet tool install --global Clojure.Main --version 1.12.0-alpha10`
-- `cljr`: `dotnet tool install --global Clojure.Cljr --version 0.1.0-alpha5`
+- `ClojureCLR`: `dotnet tool install --global Clojure.Main --version 1.12.2`
+- `cljr`: `dotnet tool install --global Clojure.Cljr --version 0.1.0-alpha6`
 
 ```bash
-cljr -X:test-cljr
+cljr -X:test
 ```
 
 ### Automated test running during development
