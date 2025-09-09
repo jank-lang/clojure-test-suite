@@ -9,6 +9,10 @@
       (is (nil? (when false :foo)))
       (is (nil? (when ((constantly nil)) :foo)))
 
+      (testing "without a body, truth doesn't matter"
+        (is (nil? (when false)))
+        (is (nil? (when true))))
+
       (testing "things which are false in other languages but not false in Clojure"
         (is (= :foo (when 0 :foo)))
         (is (= :foo (when "" :foo)))
