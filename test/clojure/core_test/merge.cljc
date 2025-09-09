@@ -31,6 +31,14 @@
         (is (= {:x 1 :y 10 :z 100} (merge {:x 1 :y 5555}
                                           {:y 10 :z 100}))))
 
+      (testing "nested maps are replaced, not 'deep-merged'"
+        (is (= {:ceo {:name "Alice"},
+                :cto {:name "Brenda"}}
+               (merge {:ceo {:salary 1000000}} ; salary values are overwritten
+                      {:cto {:salary  500000}}
+                      {:ceo {:name "Alice"}}
+                      {:cto {:name "Brenda"}}))))
+
       (testing "map entries are accepted in position 2+, per `conj`"
         (is (= {:a "a", :b "b"} (merge {:a nil}
                                        (first {:a "a"})
