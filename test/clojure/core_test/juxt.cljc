@@ -34,9 +34,10 @@
               :k))))
 
     (testing "wrong-shape input is mostly accepted (and throws when invoked)"
-      (is (thrown? #?(:cljs :default, :clj java.lang.NullPointerException)
-                   ((juxt nil))))
-      (is (thrown? #?(:cljs :default, :clj Exception)
-                   ((juxt (range)))))
-      (is (thrown? #?(:cljs :default, :clj Exception)
-                   ((juxt 1)))))))
+      #?(:cljs (is (thrown? :default ((juxt nil))))
+         :clj  (is (thrown? java.lang.NullPointerException ((juxt nil))))
+         :clr  (is (thrown? System.NullReferenceException ((juxt nil)))
+      #?@(:cljs    [(is (thrown? :default ((juxt (range))))
+                    (is (thrown? :default ((juxt 1))))]
+          :default [(is (thrown? Exception ((juxt (range))))
+                    (is (thrown? Exception ((juxt 1))))])
