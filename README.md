@@ -30,9 +30,9 @@ the test suite whenever you save new changes.
 $ lein test-refresh
 ```
 
-## Running the clojurescript tests
+## Running the ClojureScript tests
 
-First, make sure you haev node 23 or greater.
+First, make sure you have node 23 or greater.
 
 Install the node dependencies:
 
@@ -50,17 +50,6 @@ Once tests are compiled they can be ran with:
 
 ```bash
 node target/js/node-tests.js
-```
-
-## Running the ClojureCLR tests
-
-### Pre-requisites
-- [dotnet](https://dotnet.microsoft.com/en-us/download)
-- `ClojureCLR`: `dotnet tool install --global Clojure.Main --version 1.12.2`
-- `cljr`: `dotnet tool install --global Clojure.Cljr --version 0.1.0-alpha6`
-
-```bash
-cljr -X:test
 ```
 
 ### Automated test running during development
@@ -84,6 +73,17 @@ separated.
 
 ```bash
 npx nodemon -w target/js taget/js/node-tests.js --test=clojure.core-test.int-questionmark
+```
+
+## Running the ClojureCLR tests
+
+### Pre-requisites
+- [dotnet](https://dotnet.microsoft.com/en-us/download)
+- `ClojureCLR`: `dotnet tool install --global Clojure.Main --version 1.12.2`
+- `cljr`: `dotnet tool install --global Clojure.Cljr --version 0.1.0-alpha6`
+
+```bash
+cljr -X:test
 ```
 
 ## Babashka Tasks
