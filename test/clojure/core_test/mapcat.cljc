@@ -1,6 +1,6 @@
 (ns clojure.core-test.mapcat
   (:require [clojure.test :as t :refer [deftest testing is]]
-            [clojure.core-test.portability :refer-macros [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 
 (when-var-exists mapcat
