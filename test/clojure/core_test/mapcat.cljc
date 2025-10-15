@@ -1,10 +1,10 @@
 (ns clojure.core-test.mapcat
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [deftest testing is]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 
 (when-var-exists mapcat
-  (deftest common-cases
+  (deftest test-mapcat
     (testing "nil input"
       (is (nil? (seq (mapcat identity nil)))))
     (testing "concatenation"
@@ -19,9 +19,6 @@
       (is (= [1 1 2 2 3 3] (transduce (mapcat #(repeat 2 %)) conj [] [1 2 3]))))
     (testing "into with transducer"
       (is (= [0 0 1 1 2 2] (into [] (mapcat #(repeat 2 %)) (range 3)))))
-    (testing "incorrect shape"
-      (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
-                   (mapcat identity 5))))
     (testing "infinite input laziness"
       (is (= [0 0 1 1 2]  (take 5  (mapcat #(repeat 2 %) (range))))))
     (testing "empty collection input"
@@ -33,7 +30,7 @@
     (testing "function returns a string (seqable)"
       (is (= [\h \i] (mapcat identity ["hi"]))))
     (testing "flatten key/value pairs"
-        (is (= [:a 1 :b 2 :c 3] (mapcat identity {:a 1 :b 2 :c 3}))))
+      (is (= [:a 1 :b 2 :c 3] (mapcat identity {:a 1 :b 2 :c 3}))))
     (testing "function returns nil"
       (is (= [] (mapcat (constantly nil) [1 2 3]))))
     (testing "two collections zipped, function applied to pairs"
@@ -46,9 +43,17 @@
       (is (= [1 3 5] (mapcat #(if (odd? %) [%] []) (range 1 6)))))
     (testing "function sometimes returns nil"
       (is (= [2 4] (mapcat #(if (even? %) [%] nil) (range 1 5)))))
+    (testing "multiple collections"
+      (is (= '(:a 1 :b 2 :c 3) (mapcat list [:a :b :c] [1 2 3]))))
+    (testing "incorrect shape"
+      (is (thrown? #?(:cljs :default :default Exception)
+                   (mapcat identity 5))))
     (testing "non-seqable second arg"
-      (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+      (is (thrown? #?(:cljs :default :default Exception)
                    (mapcat identity 5))))
     (testing "non-function first arg"
-      (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
-                   (mapcat 42 [1 2]))))))
+      (is (thrown? #?(:cljs :default :default Exception)
+                   (mapcat 42 [1 2]))))
+    (testing "non-concatable return value"
+      (is (thrown? #?(:cljs :default :default Exception)
+                   (mapcat identity (range 2)))))))
