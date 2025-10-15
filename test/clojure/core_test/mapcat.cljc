@@ -1,6 +1,6 @@
 (ns clojure.core-test.mapcat
   (:require [clojure.test :as t :refer [deftest testing is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability :refer-macros [when-var-exists]]))
 
 
 (when-var-exists mapcat
@@ -56,4 +56,7 @@
                    (mapcat 42 [1 2]))))
     (testing "non-concatable return value"
       (is (thrown? #?(:cljs :default :default Exception)
-                   (mapcat identity (range 2)))))))
+                   ;; we need to realize the lazy data structure
+                   ;; in order for `cljs` to throw on the result
+                   ;; hence `(into [])`
+                   (into [] (mapcat identity (range 2))))))))
