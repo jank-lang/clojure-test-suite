@@ -56,7 +56,4 @@
                    (mapcat 42 [1 2]))))
     (testing "non-concatable return value"
       (is (thrown? #?(:cljs :default :default Exception)
-                   ;; we need to realize the lazy data structure
-                   ;; in order for `cljs` to throw on the result
-                   ;; hence `(into [])`
-                   (into [] (mapcat identity (range 2))))))))
+                   (doall (mapcat identity (range 2))))))))
