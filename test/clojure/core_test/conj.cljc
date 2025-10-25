@@ -19,6 +19,8 @@
       (is (= {:a 0 :b 1} (conj {:a 0} [:b 1])))
       (is (= {:a 0 :b 1} (conj {:a 0} {:b 1})))
       (is (= #{1 #{2}} (conj #{1} #{2})))
+      (is (= {:a 1} (conj {:a 0} {:a 1})))
+      (is (= {:a 2} (conj {:a 0} {:a 1} {:a 2})))
       (is (= ["a" "b" "c" ["d" "e" "f"]] (conj ["a" "b" "c"] ["d" "e" "f"])))
 
       #?@(:cljs [(is (thrown? js/Error (conj \a \b)))
@@ -30,4 +32,8 @@
                     (is (thrown? Exception (conj \a \b)))
                     (is (thrown? Exception (conj 1 2)))
                     (is (thrown? Exception (conj :a :b)))
-                    (is (thrown? Exception (conj {:a 0} '(:b 1))))]))))
+                    (is (thrown? Exception (conj {:a 0} '(:b 1))))]))
+    
+    (when-var-exists clojure.core/first
+                     (testing "first"
+                       (is (= -1 (first (conj (range) -1))))))))
