@@ -5,6 +5,7 @@
 (when-var-exists conj
   (deftest test-conj
     (testing "common"
+      (is (= [] (conj)))
       (is (= nil (conj nil)))
       (is (= '(nil) (conj nil nil)))
       (is (= {} (conj {})))
