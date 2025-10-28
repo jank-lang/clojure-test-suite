@@ -1,0 +1,7 @@
+(testing "read from string" (is (= "hello" (with-in-str "hello" (read-line)))))
+(testing "multiple lines" (is (= "line1" (with-in-str "line1\nline2" (read-line)))))
+(testing "read multiple" (is (= ["a" "b"] (with-in-str "a\nb" [(read-line) (read-line)]))))
+(testing "empty" (is (nil? (with-in-str "" (read-line)))))
+(testing "read value" (is (= 42 (with-in-str "42" (read)))))
+(testing "restores *in*" (let [o *in*] (with-in-str "x" (read-line)) (is (= o *in*))))
+(testing "returns last" (is (= :r (with-in-str "x" :r))))
