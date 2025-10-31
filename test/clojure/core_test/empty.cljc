@@ -27,6 +27,11 @@
 		       :cljr [nil (new Object)]
                :clj  [nil (new Object)])))
 
+    (testing "meta preservation"
+      (let* [meta-data {:foo 42}
+             apply-meta #(-> % (with-meta meta-data) empty meta)]
+        (is (= meta-data (apply-meta {}) (apply-meta []) (apply-meta #{}) (apply-meta '())))))
+
     (when-var-exists clojure.core/defrecord
       (testing "record"
         (defrecord Record [field])
