@@ -103,7 +103,8 @@
          (is (thrown? #?(:cljr Exception) (keyword "abc" 'abc)))
          (is (thrown? #?(:cljr Exception) (keyword :abc "abc")))
          (is (thrown? #?(:cljr Exception) (keyword "abc" :abc)))]
-        :default ; + :jank
+        :jank []
+        :default
         ;; IMO, CLJS gets this right
         [(is (= :abc/abc (keyword 'abc "abc")))
          (is (= :abc/abc (keyword "abc" 'abc)))
