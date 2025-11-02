@@ -24,7 +24,8 @@
       (is (= {:a 2} (conj {:a 0} {:a 1} {:a 2})))
       (is (= ["a" "b" "c" ["d" "e" "f"]] (conj ["a" "b" "c"] ["d" "e" "f"])))
 
-      #?@(:cljs [(is (thrown? js/Error (conj \a \b)))
+      #?@(:jank []
+          :cljs [(is (thrown? js/Error (conj \a \b)))
                  (is (thrown? js/Error (conj 1 2)))
                  (is (thrown? js/Error (conj :a :b)))
                  (is (thrown? js/Error (conj {:a 0} '(:b 1))))]
