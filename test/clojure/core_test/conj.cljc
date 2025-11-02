@@ -34,6 +34,11 @@
                     (is (thrown? Exception (conj 1 2)))
                     (is (thrown? Exception (conj :a :b)))
                     (is (thrown? Exception (conj {:a 0} '(:b 1))))]))
+
+    (testing "meta preservation"
+      (let [meta-data {:foo 42}
+            apply-meta #(-> % (with-meta meta-data) (conj [:k :v]) meta)]
+        (is (= meta-data (apply-meta {}) (apply-meta []) (apply-meta #{}) (apply-meta '())))))
     
     (when-var-exists clojure.core/first
                      (testing "first"
