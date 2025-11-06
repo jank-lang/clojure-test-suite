@@ -1,5 +1,5 @@
 (ns clojure.core-test.val
-  (:require [clojure.test :as t :refer [deftest testing is]]
+  (:require [clojure.test :refer [deftest testing is are]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists val
@@ -15,23 +15,14 @@
       (is (= :b (val (first (hash-map :a :b)))))
       (is (= :b (val (first (array-map :a :b))))))
     (testing "`val` throws on lots of things"
-      #?@(:cljs    [(is (thrown? js/Error (val nil)))
-                    (is (thrown? js/Error (val 0)))
-                    (is (thrown? js/Error (val '())))
-                    (is (thrown? js/Error (val '(1 2))))
-                    (is (thrown? js/Error (val {})))
-                    (is (thrown? js/Error (val {1 2})))
-                    (is (thrown? js/Error (val [])))
-                    (is (thrown? js/Error (val [1 2])))
-                    (is (thrown? js/Error (val #{})))
-                    (is (thrown? js/Error (val #{1 2})))]
-          :default [(is (thrown? Exception (val nil)))
-                    (is (thrown? Exception (val 0)))
-                    (is (thrown? Exception (val '())))
-                    (is (thrown? Exception (val '(1 2))))
-                    (is (thrown? Exception (val {})))
-                    (is (thrown? Exception (val {1 2})))
-                    (is (thrown? Exception (val [])))
-                    (is (thrown? Exception (val [1 2])))
-                    (is (thrown? Exception (val #{})))
-                    (is (thrown? Exception (val #{1 2})))]))))
+      (are [arg] (thrown? #?(:cljs js/Error :default Exception) (val arg))
+                 nil
+                 0
+                 '()
+                 '(1 2)
+                 {}
+                 {1 2}
+                 []
+                 [1 2]
+                 #{}
+                 #{1 2}))))
