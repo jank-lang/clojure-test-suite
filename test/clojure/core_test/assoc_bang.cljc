@@ -1,5 +1,5 @@
 (ns clojure.core-test.assoc-bang
-  (:require [clojure.test :refer [deftest testing are]]
+  (:require [clojure.test :refer [are deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists assoc!
@@ -48,6 +48,12 @@
                       {:a 1} [:b 2 :c 3 :d]
                       [1] [0 1 1]
                       [1] [0 1 1 2 2]))
+
+    (testing "cannot assoc! transient after persistent! call"
+      (let [t (transient {:a 1}), _ (persistent! t)]
+        (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (assoc! t :b 2))))
+      (let [t (transient [1]), _ (persistent! t)]
+        (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (assoc! t 0 2)))))
 
     (testing "bad shape"
       (are [coll] (thrown? #?(:cljs js/Error :default Exception) (assoc! coll 1 3))
