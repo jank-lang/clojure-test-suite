@@ -32,6 +32,34 @@
            true 0.0M
            true 1.0M
            true -1.0M]
+          :jank
+          [false 0
+           false 1
+           false -1
+           false r/max-int
+           false r/min-int
+           true  0.0
+           true  1.0
+           true  -1.0
+           ;; Since currently jank doesn't support `float` (`jank::f32`) literal values only `double` (`jank::f64`)
+           ;; literal values, there is no difference in the implementation of `float` and `double`.
+           true (float 0.0)
+           true (float 1.0)
+           true (float -1.0)
+           true  (double 0.0)
+           true  (double 1.0)
+           true  (double -1.0)
+           true  r/max-double
+           true  r/min-double
+           true  ##Inf
+           true  ##-Inf
+           true  ##NaN
+           false 0N
+           false 1N
+           false -1N
+           false 0.0M
+           false 1.0M
+           false -1.0M]
           :default
           [false 0
            false 1
