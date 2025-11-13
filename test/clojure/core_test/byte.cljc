@@ -1,9 +1,9 @@
 (ns clojure.core-test.byte
-  (:require [clojure.test :as t :refer [deftest is are]]
+  (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.portability
              #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/byte
+(when-var-exists byte
   (deftest test-byte
     ;; There is no platform independent predicate to test for a
     ;; byte (e.g., `byte?`). In ClojureJVM, it's an instance of
@@ -11,10 +11,10 @@
     ;; test whether it's a fixed-length integer of some sort.
     (is (int? (byte 0)))
     #?(:clj  (is (instance? java.lang.Byte (byte 0)))
-	     :cljr (is (instance? System.Byte (byte 0))))
+       :cljr (is (instance? System.Byte (byte 0))))
 
     ;; Check conversions and rounding from other numeric types
-	  ;; In ClojureCLR, Byte is unsigned, so we have to wipe all tests
+    ;; In ClojureCLR, Byte is unsigned, so we have to wipe all tests
     ;; of negative values
     (are [expected x] (= expected (byte x))
       #?@(:cljr [] :default [-128 -128])
@@ -56,8 +56,8 @@
          (is (= :0 (byte :0)))
          (is (= [0] (byte [0])))
          (is (= nil (byte nil)))]
-		:cljr
-		[ ;; `byte` throws outside the range of 127 ... -128.
+        :cljr
+        [ ;; `byte` throws outside the range of 127 ... -128.
          (is (thrown? Exception (byte -128.000001)))
          (is (thrown? Exception (byte -129)))
          (is (= 128 (byte 128)))
@@ -67,7 +67,7 @@
          (is (thrown? Exception (byte :0)))
          (is (thrown? Exception (byte [0])))
          (is (thrown? Exception (byte nil)))]
-        :bb [] ;; byte constructions goes via boxed argument		 
+        :bb [] ;; byte constructions goes via boxed argument
         :default
         [ ;; `byte` throws outside the range of 127 ... -128.
          (is (thrown? Exception (byte -128.000001)))
