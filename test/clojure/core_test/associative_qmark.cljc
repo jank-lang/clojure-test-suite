@@ -1,5 +1,5 @@
 (ns clojure.core-test.associative-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
 
 (when-var-exists clojure.core/associative?

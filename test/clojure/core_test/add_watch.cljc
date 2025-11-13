@@ -1,5 +1,5 @@
 (ns clojure.core-test.add-watch
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [deftest testing is]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists sleep]]))
 
 (when-var-exists clojure.core/add-watch

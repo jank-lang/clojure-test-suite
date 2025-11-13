@@ -1,8 +1,8 @@
 (ns clojure.core-test.bigdec
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is are]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/bigdec
+(when-var-exists bigdec
   (deftest test-bigdec
     (are [expected x] (= expected (bigdec x))
       1M    1

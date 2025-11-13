@@ -1,5 +1,5 @@
 (ns clojure.core-test.abs
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest testing is]]
             [clojure.core-test.number-range :as r]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
 
@@ -21,7 +21,7 @@
            :default
            [-1/5           1/5]))
      (is (NaN? (abs ##NaN)))
-	 #?(:cljr (is (thrown? System.OverflowException (abs r/min-int))))
+	   #?(:cljr (is (thrown? System.OverflowException (abs r/min-int))))
      #?(:cljs (is (zero? (abs nil)))
         :default (is (thrown? #?(:clj Exception :cljr Exception) (abs nil)))))
 

@@ -1,9 +1,9 @@
 (ns clojure.core-test.bit-and-not
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/bit-and-not
+(when-var-exists bit-and-not
   (deftest test-bit-and-not
     #?(:cljs (is (= 0 (bit-and-not nil 1)))
        :default (is (thrown? #?(:clj Exception :cljr Exception) (bit-and-not nil 1))))
