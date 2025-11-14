@@ -1,12 +1,6 @@
 (ns clojure.core-test.eq
-  (:require [clojure.test :refer [deftest testing is are]]
+  (:require [clojure.test :refer [are deftest testing is]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
-
-;; Doesn't test (yet):
-;; * Java collections for JVM Clojure
-;; * clojure.lang.PersistentQueue
-;; * ##Inf and some other special forms
-;; * Records
 
 (defn tests [eq]
   (testing "two scalars"
