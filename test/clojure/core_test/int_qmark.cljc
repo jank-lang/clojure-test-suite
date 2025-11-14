@@ -1,9 +1,9 @@
 (ns clojure.core-test.int-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/int?
+(when-var-exists int?
  (deftest test-int?
    (are [expected x] (= expected (int? x))
      true  0
@@ -27,7 +27,7 @@
      #?@(:cljs [true] :default [false]) -1N
      #?@(:cljs []
          :default
-         [true  0/2                          ; perhaps surprising
+         [true  0/2
           false 1/2
           false -1/2])
      #?@(:cljs [true] :default [false]) 0.0M

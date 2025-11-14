@@ -29,6 +29,6 @@
            #?@(:cljs [true (js/Boolean true)
                       true (js/Boolean false)
                       true (js/Boolean "yes")]
-               :default [true (new Boolean "true")
-                         true (new Boolean "false")
-                         true (new Boolean "yes")])))))
+               :clj [true (new Boolean "true")
+                     true (new Boolean "false")
+                     true (new Boolean "yes")])))))

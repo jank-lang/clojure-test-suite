@@ -1,8 +1,8 @@
 (ns clojure.core-test.keyword
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/keyword
+(when-var-exists keyword
   (deftest test-keyword
     ;; "Symbols begin with a non-numeric character and can contain
     ;; alphanumeric characters and *, +, !, -, _, ', ?, <, > and =
@@ -81,32 +81,26 @@
     (is (nil? (namespace (keyword nil "hi"))))
     (is (= #?(:jank nil :default "") (namespace (keyword "" "hi"))))
     ;; But if name is nil, then maybe we throw or maybe we don't
-    #?(:cljs nil         ; CLJS creates a keyword that isn't
-                         ; readable (symbol part is null string: ":abc/")
-       :jank nil
+    #?(; CLJS creates a keyword that isn't
+       ; readable (symbol part is null string: ":abc/")
+       :cljs
+       #_{:clj-kondo/ignore [:unused-value]}
+       nil
+
+       :jank
+       nil
+
        :default
-       (is (thrown? #?(:clj Exception :cljr Exception) (keyword "abc" nil))))
+       (is (thrown? Exception (keyword "abc" nil))))
   
-    #?@(:clj
-        ;; In Clojure JVM, two arg version requires namespace and
-        ;; symbol to be a string, not a symbol or keyword like the one
-        ;; arg version.
-        [(is (thrown? #?(:clj Exception) (keyword 'abc "abc")))
-         (is (thrown? #?(:clj Exception) (keyword "abc" 'abc)))
-         (is (thrown? #?(:clj Exception) (keyword :abc "abc")))
-         (is (thrown? #?(:clj Exception) (keyword "abc" :abc)))]
-	   :cljr
-        ;; In Clojure JVM, two arg version requires namespace and
-        ;; symbol to be a string, not a symbol or keyword like the one
-        ;; arg version.
-        [(is (thrown? #?(:cljr Exception) (keyword 'abc "abc")))
-         (is (thrown? #?(:cljr Exception) (keyword "abc" 'abc)))
-         (is (thrown? #?(:cljr Exception) (keyword :abc "abc")))
-         (is (thrown? #?(:cljr Exception) (keyword "abc" :abc)))]
-        :jank []
-        :default
-        ;; IMO, CLJS gets this right
+    #?@(:jank []
+        :cljs
         [(is (= :abc/abc (keyword 'abc "abc")))
          (is (= :abc/abc (keyword "abc" 'abc)))
          (is (= :abc/abc (keyword :abc "abc")))
-         (is (= :abc/abc (keyword "abc" :abc)))])))
+         (is (= :abc/abc (keyword "abc" :abc)))]
+        :default
+        [(is (thrown? Exception (keyword 'abc "abc")))
+         (is (thrown? Exception (keyword "abc" 'abc)))
+         (is (thrown? Exception (keyword :abc "abc")))
+         (is (thrown? Exception (keyword "abc" :abc)))])))
