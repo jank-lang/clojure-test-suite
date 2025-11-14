@@ -1,8 +1,8 @@
 (ns clojure.core-test.counted-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/counted?
+(when-var-exists counted?
   (deftest test-counted?
     (testing "positive tests"
       (are [x] (counted? x)

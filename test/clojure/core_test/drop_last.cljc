@@ -1,8 +1,8 @@
 (ns clojure.core-test.drop-last
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/drop-last
+(when-var-exists drop-last
   (deftest test-drop-last
     ;; drop the last item
     (= (range 0 9) (drop-last (range 0 10)))
@@ -15,5 +15,5 @@
     ;; Negative tests
     ;; Note: `doall` is required to realize the lazy sequence and
     ;; force it to throw
-    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+    (is (thrown? #?(:cljs :default :default Exception)
                  (doall (drop-last nil (range 5)))))))
