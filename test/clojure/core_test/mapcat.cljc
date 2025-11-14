@@ -2,7 +2,6 @@
   (:require [clojure.test :as t :refer [deftest testing is]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-
 (when-var-exists mapcat
   (deftest test-mapcat
     (testing "nil input"
