@@ -1,14 +1,13 @@
 (ns clojure.core-test.ifn-qmark
-  (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest testing is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (defn foo [x] (str "hello " x))
 
-(when-var-exists clojure.core/defprotocol
+(when-var-exists defprotocol
   (defprotocol Bar (bar [this a b] "bar docstring")))
 
-(when-var-exists clojure.core/ifn?
+(when-var-exists ifn?
   (deftest test-ifn?
     (testing "`ifn?`"
       (testing "functions, functions from HOFs, transducers, #() reader macro, `fn`, `defn`"
@@ -26,7 +25,7 @@
         (is (ifn? :keyword))
         (is (ifn? 'symbol))
         (is (ifn? #'ifn?))
-        (when-var-exists clojure.core/promise
+        (when-var-exists promise
           (is (ifn? (promise)))))
 
       (testing "non-functions"
@@ -36,12 +35,13 @@
         (is (not (ifn? "string")))
         (is (not (ifn? \space)))))
 
-    (when-var-exists clojure.core/defmulti
+    (when-var-exists defmulti
       (testing "multimethods"
+        #_{:clj-kondo/ignore [:inline-def]}
         (defmulti my-multi first)
         (defmethod my-multi :foo [_] :multi/foo)
         (is (ifn? my-multi))))
 
-    (when-var-exists clojure.core/defprotocol
+    (when-var-exists defprotocol
       (testing "protocols"
         (is (ifn? bar))))))
