@@ -1,8 +1,8 @@
 (ns clojure.core-test.get
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/get
+(when-var-exists get
   (deftest test-get
     (let [arr (to-array [1 2])]
       ;; two-arg
@@ -27,7 +27,6 @@
       ;; three-arg
       (are [expected m key not-found] (= expected (get m key not-found))
         :not-found nil :a :not-found
-
         :not-found {} :a :not-found
         :not-found #{} :a :not-found
         :not-found [] 1 :not-found

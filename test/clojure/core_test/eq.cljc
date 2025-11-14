@@ -134,7 +134,7 @@
                (list ##NaN) (list ##NaN) false
                ##NaN ##NaN false))))
 
-(when-var-exists clojure.core/=
+(when-var-exists =
   (deftest test-eq
     (tests =)
     ;; This is to accomodate a not= JVM bug. See not_eq.cljc

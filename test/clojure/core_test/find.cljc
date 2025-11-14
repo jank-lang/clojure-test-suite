@@ -1,9 +1,9 @@
 (ns clojure.core-test.find
   (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.test :as t :refer [deftest testing is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/find
+(when-var-exists find
   (deftest test-find
     (testing "common"
       (is (= nil (find nil nil)))

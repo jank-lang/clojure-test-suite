@@ -1,11 +1,13 @@
 (ns clojure.core-test.false-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/false?
+(when-var-exists false?
  (deftest test-false?
    (are [expected x] (= expected (false? x))
+     true  false
+
      false 0
      false 1
      false -1
@@ -28,16 +30,11 @@
      false 0N
      false 1N
      false -1N
-     #?@(:cljs []
-         :default [false 0/2
-                   false 1/2
-                   false -1/2])
      false 0.0M
      false 1.0M
      false -1.0M
      false nil
      false true
-     true  false
      false "a string"
      false "0"
      false "1"
@@ -56,4 +53,8 @@
      false :0
      false :1
      false :-1
-     false 'a-sym)))
+     false 'a-sym
+     #?@(:cljs []
+         :default [false 0/2
+                   false 1/2
+                   false -1/2]))))
