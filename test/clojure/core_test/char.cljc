@@ -14,4 +14,4 @@
      )
 
    #?(:cljs nil :default (is (thrown? Exception (char -1))))
-   (is (thrown? #?(:cljs :default Exception) (char nil)))))
+   (is (thrown? #?(:cljs :default :default Exception) (char nil)))))
