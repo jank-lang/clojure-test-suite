@@ -23,8 +23,8 @@
                    #{}
                    :key
                    0.0
-                   1000))
-      #?(:default (are [x] (thrown? Exception (parse-uuid x))
+                   1000)
+         :default (are [x] (thrown? Exception (parse-uuid x))
                    {}
                    '()
                    []
