@@ -5,7 +5,7 @@
 (when-var-exists unsigned-bit-shift-right
  (deftest test-unsigned-bit-shift-right
    #?(:cljs (is (= 0 (unsigned-bit-shift-right nil 1)))
-      :default (is (thrown? #Exception (unsigned-bit-shift-right nil 1))))
+      :default (is (thrown? Exception (unsigned-bit-shift-right nil 1))))
    #?(:cljs (is (= 1 (unsigned-bit-shift-right 1 nil)))
       :default (is (thrown? Exception (unsigned-bit-shift-right 1 nil))))
 
