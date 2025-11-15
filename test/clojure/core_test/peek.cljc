@@ -1,8 +1,8 @@
 (ns clojure.core-test.peek
-  (:require [clojure.test :refer [deftest testing is are]]
+  (:require [clojure.test :refer [are deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/peek
+(when-var-exists peek
   (deftest test-peek
 
     (testing "list"
