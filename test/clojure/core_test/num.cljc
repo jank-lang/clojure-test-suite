@@ -1,8 +1,8 @@
 (ns clojure.core-test.num
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/num
+(when-var-exists num
  (deftest test-num
    #?@(:cljs []
        :clj
