@@ -1,9 +1,9 @@
 (ns clojure.core-test.taps
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [deftest is]]
             #?(:cljs [cljs.test :refer-macros [async]])
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/add-tap
+(when-var-exists add-tap
   #?(:cljs
      (do
        (defn tap-tester
