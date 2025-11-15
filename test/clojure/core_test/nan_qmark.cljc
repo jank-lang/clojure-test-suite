@@ -1,8 +1,8 @@
 (ns clojure.core-test.nan-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/NaN?
+(when-var-exists NaN?
  (deftest test-NaN?
    #?@(:cljs
        [(is (not (NaN? nil)))
@@ -24,4 +24,5 @@
      (double -1.0) false
      ##Inf         false
      ##-Inf        false
+
      ##NaN         true)))
