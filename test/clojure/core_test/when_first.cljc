@@ -20,4 +20,16 @@
                               (cons 1 (s))))
             s (seq-fn)]
         (is (= 1 (when-first [x s] x)))
-        (is (= @calls 1))))))
+        (is (= @calls 1))))
+    (testing "without a body, truth doesn't matter"
+      (is (nil? (when-first [x nil])))
+      (is (nil? (when-first [x [false]])))
+      (is (nil? (when-first [x [true]]))))
+    (testing "when has an implicit `do`"
+      (let [counter (atom 0)]
+        (is (= :bar (when-first [x (range 5)] 
+                   (swap! counter inc) 
+                   (swap! counter inc)
+                   (swap! counter inc)
+                   :bar)))
+        (is (= 3 @counter))))))
