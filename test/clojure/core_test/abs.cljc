@@ -17,7 +17,9 @@
        -123.456M       123.456M
        -123N           123N
 
-       #?@(:clj [r/min-int r/min-int])  ; fixed int 2's complement oddity, see below for :cljr
+       #?@(:cljr []
+           :clj [r/min-int r/min-int] ; fixed int 2's complement oddity, see below for :cljr
+           :default [r/min-int (* -1 r/min-int)])
        #?@(:cljs []
            :default
            [-1/5 1/5]))
