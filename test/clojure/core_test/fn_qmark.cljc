@@ -1,6 +1,6 @@
 (ns clojure.core-test.fn-qmark
   (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is]]
+            [clojure.test :as t :refer [deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (defn foo [x] (str "hello " x))

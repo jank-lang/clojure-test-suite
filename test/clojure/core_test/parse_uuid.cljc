@@ -1,6 +1,6 @@
 (ns clojure.core-test.parse-uuid
   (:require clojure.core
-            [clojure.test :as t :refer [are deftest testing is]]
+            [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists parse-uuid

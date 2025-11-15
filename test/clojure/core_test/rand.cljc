@@ -1,5 +1,5 @@
 (ns clojure.core-test.rand
-  (:require [clojure.test :as t :refer [deftest testing is]]
+  (:require [clojure.test :as t :refer [deftest is testing]]
             [clojure.core-test.portability :as p]))
 
 (p/when-var-exists rand

@@ -1,6 +1,6 @@
 (ns clojure.core-test.reduce
   (:require
-   [clojure.test :as t :refer [deftest testing is]]
+   [clojure.test :as t :refer [deftest is testing]]
    [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]])
   #?(:clj (:import (clojure.lang IReduce))))
 

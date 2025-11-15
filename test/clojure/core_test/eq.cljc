@@ -1,5 +1,5 @@
 (ns clojure.core-test.eq
-  (:require [clojure.test :refer [are deftest testing is]]
+  (:require [clojure.test :refer [are deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (defn tests [eq]
