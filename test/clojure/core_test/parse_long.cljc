@@ -39,8 +39,8 @@
                  #{}
                  :key
                  0.0
-                 1000))
-      #?(:default (are [x] (thrown? Exception (parse-long x))
+                 1000)
+         :default (are [x] (thrown? Exception (parse-long x))
                     {}
                     '()
                     []
