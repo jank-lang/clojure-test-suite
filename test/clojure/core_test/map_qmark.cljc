@@ -10,7 +10,7 @@
       true (array-map :a 1)
 
       false [1 2 3]
-      false(sorted-set :a)
+      false (sorted-set :a)
       false '(1 2 3)
       false (hash-set :a)
       false (seq [1 2 3])
