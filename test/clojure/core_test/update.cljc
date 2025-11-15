@@ -1,10 +1,8 @@
 (ns clojure.core-test.update
-  (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists
- clojure.core/update
+(when-var-exists update
  (deftest test-update
    (testing "maps"
      (are [in ex] (= (apply update in) ex)
@@ -51,11 +49,6 @@
        [nil    :k #{}]          {:k nil}
        [nil    :k {}]           {:k nil}
 
-       ;; CLJS can accept arbitrary arguments
-       ;; While CLJ will Throw (See last test case)
-       #?@(:cljs
-           ([{:k 1} :k inc 1 2 3 4] {:k 2}))
-
        ;; Update Vector inside Map
        [{:a [0 1 2], :b 4} :a conj 3] {:a [0 1 2 3], :b 4}))
 
@@ -81,10 +74,14 @@
        ;; Can work with non-functions
        [[] 0 #{}]               [nil]
        [[] 0  {}]               [nil]
-       [[] 0  :f]               [nil]))
+       [[] 0  :f]               [nil]
+
+       ;; CLJS can accept arbitrary arguments
+       ;; While other platforms will Throw (See last test case)
+       #?@(:cljs ([{:k 1} :k inc 1 2 3 4] {:k 2}))))
 
    (testing "Throws"
-     (are [in] (thrown? #?(:clj Exception :cljr Exception :cljs js/Error) (apply update in))
+     (are [in] (thrown? #?(:cljs js/Error :default Exception) (apply update in))
        ;; Throw when settting index 1 when 0 doesn't exist
        [[]        1 identity]
        ;; Throw on Negative indices!
@@ -107,9 +104,14 @@
        [{:k 5} :k ""]
 
        ;; Laziness doesn't work on CLJS
-       #?(:clj [(repeat 1) :k identity])
-	   #?(:cljr [(repeat 1) :k identity])
+       #?(:cljs
+          #_{:clj-kondo/ignore [:unused-value]}
+          nil
+
+          :default
+          [(repeat 1) :k identity])
+
+       ;; CLJS can accept arbitrary arguments
        ;; Throw when wrong number of indices are passed to the function
        ;; CLJS returns 1, and doesn't throw!
-       #?(:clj [{:k 1} :k identity 1 2 3 4])
-	   #?(:cljr [{:k 1} :k identity 1 2 3 4])))))
+       #?(:default [{:k 1} :k identity 1 2 3 4])))))
