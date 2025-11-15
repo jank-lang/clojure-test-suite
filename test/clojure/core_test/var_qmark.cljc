@@ -1,21 +1,20 @@
 (ns clojure.core-test.var-qmark
-  (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest testing is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (def foo :foo)
 
 (def ^:dynamic i-am-dynamic 3.14)
 
-(when-var-exists clojure.core/defmulti
+(when-var-exists defmulti
   ;; This can't be inside `deftest` like `defn` because `defmulti` only returns
   ;; the var on the first invocation.
   (defmulti bar first))
 
-(when-var-exists clojure.core/defprotocol
+(when-var-exists defprotocol
   (defprotocol MyProtocol))
 
-(when-var-exists clojure.core/var?
+(when-var-exists var?
   (deftest test-var?
     (testing "things which are vars"
       (are [v] (var? v)
@@ -25,15 +24,17 @@
         #'*assert*          ; dynamic
         #?@(; CLJS `def` doesn't necessarily evaluate to the value of the var:
             :cljs [],
-            :default [(def baz)])
+            :default [#_{:clj-kondo/ignore [:inline-def :uninitialized-var :clojure-lsp/unused-public-var]}
+                      (def baz)])
         #?@(; CLJS `defn` produces a non-var
             :cljs [],
-            :default [(defn qux [] nil)]))
+            :default [#_{:clj-kondo/ignore [:inline-def :uninitialized-var]}
+                      (defn qux [] nil)]))
 
-      (when-var-exists clojure.core/defmulti
+      (when-var-exists defmulti
         (is (var? #'bar)))
       
-      (when-var-exists clojure.core/defprotocol
+      (when-var-exists defprotocol
         (is (var? #'MyProtocol))))
 
     (testing "var-adjacent things"
