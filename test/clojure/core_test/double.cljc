@@ -20,7 +20,7 @@
    (is (NaN? (double ##NaN)))
 
    #?@(:cljs
-       ;; In cljs, `double` is just returns the argument unchanged
+       ;; In cljs, `double` just returns the argument unchanged
        [(is (= "0" (double "0")))
         (is (= :0 (double :0)))]
        :cljr
