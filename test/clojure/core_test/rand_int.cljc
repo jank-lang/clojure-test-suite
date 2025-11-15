@@ -1,13 +1,13 @@
 (ns clojure.core-test.rand-int
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [deftest is]]
             [clojure.core-test.portability :as p]))
 
-(p/when-var-exists clojure.core/rand-int
+(p/when-var-exists rand-int
   (deftest test-rand-int
     ;; Generally, we test that the numbers returned pass `int?` and
     ;; that they are not constant.
     (let [length 100
-          limit 2000000000              ; 2 billion
+          limit 2000000000
           x (repeatedly length #(rand-int limit))]
       (is (every? int? x))
       (is (every? pos? x))

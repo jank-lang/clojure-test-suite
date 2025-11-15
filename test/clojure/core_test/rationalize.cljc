@@ -1,8 +1,8 @@
 (ns clojure.core-test.rationalize
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/rationalize
+(when-var-exists rationalize
  (deftest test-rationalize
    (are [expected x] (let [x' (rationalize x)]
                        (and (= expected x')
@@ -20,8 +20,8 @@
      1                                  1.0M
      0                                  0.0M
      #?@(:cljs []
-	     :cljr
-		 [3/2                                1.5
+         :cljr
+         [3/2                                1.5
           2476979795053773/2251799813685248  1.1
           6004799503160661/18014398509481984 (/ 1.0 3.0)
           3/2                                1.5M

@@ -1,8 +1,9 @@
 (ns clojure.core-test.quot
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability :as p #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is]]
+            [clojure.core-test.portability :as p
+             #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/quot
+(when-var-exists quot
   (deftest test-quot
     (are [type-pred expected x y] (let [r (quot x y)]
                                     (and (type-pred r)
@@ -101,9 +102,9 @@
          (is (NaN? (quot 1 ##NaN)))
          (is (NaN? (quot ##NaN 1)))]
         :default
-        [(is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot 10 0)))
-         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot ##Inf 1)))
-         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot ##-Inf 1)))
-         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot ##NaN 1)))
-         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot 1 ##NaN)))
-         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (quot ##NaN 1)))])))
+        [(is (thrown? #?(:cljs :default :default Exception) (quot 10 0)))
+         (is (thrown? #?(:cljs :default :default Exception) (quot ##Inf 1)))
+         (is (thrown? #?(:cljs :default :default Exception) (quot ##-Inf 1)))
+         (is (thrown? #?(:cljs :default :default Exception) (quot ##NaN 1)))
+         (is (thrown? #?(:cljs :default :default Exception) (quot 1 ##NaN)))
+         (is (thrown? #?(:cljs :default :default Exception) (quot ##NaN 1)))])))

@@ -1,8 +1,8 @@
 (ns clojure.core-test.short
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/short
+(when-var-exists short
   (deftest test-short
     ;; There is no platform independent predicate to test for a
     ;; short (e.g., `short?`). In ClojureJVM, it's an instance of
@@ -24,7 +24,7 @@
       1    1.0M
       0    0.0M
       -1   -1.0M
-      #?@(:cljs                        ; short is a dummy cast in CLJS
+      #?@(:cljs ; short is a dummy cast in CLJS
           [1.1    1.1
            -1.1   -1.1
            1.9    1.9]
@@ -55,8 +55,8 @@
          (is (= :0 (short :0)))
          (is (= [0] (short [0])))
          (is (= nil (short nil)))]
-	:cljr
-	[;; `short` throws outside the range of 32767 ... -32768.
+        :cljr
+        [;; `short` throws outside the range of 32767 ... -32768.
          (is (= (short -32768) (short -32768.000001)))
          (is (thrown? Exception (short -32769)))
          (is (thrown? Exception (short 32768)))
@@ -66,7 +66,7 @@
          (is (= (short 0) (short "0")))
          (is (thrown? Exception (short :0)))
          (is (thrown? Exception (short [0])))
-         (is (thrown? Exception (short nil)))]		 
+         (is (thrown? Exception (short nil)))]
 
         :default
         [;; `short` throws outside the range of 32767 ... -32768.
