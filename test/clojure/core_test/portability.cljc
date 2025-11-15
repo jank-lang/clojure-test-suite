@@ -19,8 +19,8 @@
           (not (int? n)))))
 
 #_{:clj-kondo/ignore [:unused-binding]}
-(defn sleep [n]
+(defn sleep [ms]
   (#?(:cljr System.Threading.Thread/Sleep
       :clj Thread/sleep
-      :cljs #(js/setTimeout identity)
-   n)))
+      :cljs #(js/setTimeout identity %)
+   ms)))
