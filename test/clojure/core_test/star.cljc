@@ -1,9 +1,9 @@
 (ns clojure.core-test.star
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest testing is]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/*
+(when-var-exists *
   (deftest test-*
     (testing "common"
       (are [prod x y] (= prod (* x y) (* y x))
@@ -95,7 +95,10 @@
            (is (thrown? Exception (* (long (/ r/min-int 2)) 3)))
            (is (thrown? Exception (* 3 (long (/ r/min-int 2)))))]))
 
-    #?(:cljs nil
+    #?(:cljs
+       #_{:clj-kondo/ignore [:unused-value]}
+       nil
+
        :default
        (testing "rationals"
          (are [prod x y] (= prod (* x y) (* y x))
@@ -121,8 +124,8 @@
            -1/10 -1/2 1/5
            1/10  -1/2 -1/5)
 
-         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (* 1/2 nil)))
-         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (* nil 1/2)))))
+         (is (thrown? #?(:cljs :default :default Exception) (* 1/2 nil)))
+         (is (thrown? #?(:cljs :default :default Exception) (* nil 1/2)))))
 
     (testing "inf-nan"
       (testing "Multiplication with infinities"
@@ -159,7 +162,7 @@
       (testing "Multiplication resulting in ##NaN"
         (are [x y] (and (NaN? (* x y))
                         (NaN? (* y x)))
-          ##Inf 0                       ; Perhaps counter-intuitive
+          ##Inf 0 ; Perhaps counter-intuitive
           ##Inf 0N
           ##Inf 0.0
           ##NaN 1

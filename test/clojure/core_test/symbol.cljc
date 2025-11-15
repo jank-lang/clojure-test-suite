@@ -1,8 +1,8 @@
 (ns clojure.core-test.symbol
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/symbol
+(when-var-exists symbol
   (deftest test-symbol
     ;; "Symbols begin with a non-numeric character and can contain
     ;; alphanumeric characters and *, +, !, -, _, ', ?, <, > and =
@@ -75,7 +75,7 @@
 
       'abc*+!-_'?<>=/abc*+!-_'?<>= "abc*+!-_'?<>=" "abc*+!-_'?<>=")
 
-    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (symbol nil)))
+    (is (thrown? #?(:cljs :default :default Exception) (symbol nil)))
     (is (= 'abc (symbol nil "abc"))) ; if ns is nil, it just ignores it.
     (is (nil? (namespace (symbol nil "hi"))))
     (is (= "" (namespace (symbol "" "hi"))))
@@ -94,7 +94,7 @@
          ;; (is (= :abc/abc (symbol :abc "abc"))) results in unreadable value
          (is (= 'abc/:abc (symbol "abc" :abc)))]
         :default
-        [(is (thrown? #?(:clj Exception :cljr Exception) (symbol 'abc "abc")))
-         (is (thrown? #?(:clj Exception :cljr Exception) (symbol "abc" 'abc)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (symbol :abc "abc")))
-         (is (thrown? #?(:clj Exception :cljr Exception) (symbol "abc" :abc)))])))
+        [(is (thrown? Exception (symbol 'abc "abc")))
+         (is (thrown? Exception (symbol "abc" 'abc)))
+         (is (thrown? Exception (symbol :abc "abc")))
+         (is (thrown? Exception (symbol "abc" :abc)))])))

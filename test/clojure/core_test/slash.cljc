@@ -1,8 +1,8 @@
 (ns clojure.core-test.slash
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest testing is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core//
+(when-var-exists /
   (deftest test-slash
     (testing "common"
       (are [expected x y] (= expected (/ x y))
@@ -44,13 +44,13 @@
         5.0 15.0 3
         7.5 15.0 2
 
-        2.0 2.0M  1.0                  ; Unexpected downcast to double
+        2.0 2.0M  1.0 ; Unexpected downcast to double
         1.0 2.0M  2.0
         3.0 15.0M 5.0
         5.0 15.0M 3.0
         7.5 15.0M 2.0
 
-        2.0 2.0  1.0M                  ; Unexpected downcast to double
+        2.0 2.0  1.0M ; Unexpected downcast to double
         1.0 2.0  2.0M
         3.0 15.0 5.0M
         5.0 15.0 3.0M
@@ -114,7 +114,7 @@
 
       ;; Zero arg
       #?(:cljs nil
-         :default (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (/))))
+         :default (is (thrown? #?(:cljs :default :default Exception) (/))))
 
       ;; Single arg
       #?(:cljs (is (= 0.5 (/ 2)))
@@ -134,7 +134,10 @@
            (is (thrown? Exception (/ nil 1)))
            (is (thrown? Exception (/ 1 nil)))]))
 
-    #?(:cljs nil
+    #?(:cljs
+       #_{:clj-kondo/ignore [:unused-value]}
+       nil
+
        :default
        (testing "rationals"
          (are [expected x y] (= expected (/ x y))
@@ -156,8 +159,8 @@
          ;; Multi arg
          (is (= 362880N (/ 1/1 1/2 1/3 1/4 1/5 1/6 1/7 1/8 1/9)))
 
-         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (/ 1/2 nil)))
-         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (/ nil 1/2)))))
+         (is (thrown? #?(:cljs :default :default Exception) (/ 1/2 nil)))
+         (is (thrown? #?(:cljs :default :default Exception) (/ nil 1/2)))))
 
     #?(:bb nil ;; bb always uses boxed args, which always throws in JVM Clojure
        :default
@@ -165,20 +168,20 @@
          (are [expected x y] (= expected (/ x y))
            ##Inf  ##Inf  1
            ##-Inf ##-Inf 1
-           0.0    1      ##Inf             ; Note conversion to double
+           0.0    1      ##Inf ; Note conversion to double
            0.0    1      ##-Inf
            0.0    -1     ##Inf
            0.0    -1     ##-Inf
-           ##Inf  ##Inf  0             ; Surprisingly, these down't throw
+           ##Inf  ##Inf  0 ; Surprisingly, these down't throw
            ##-Inf ##-Inf 0
 
            ##Inf  ##Inf  1N
            ##-Inf ##-Inf 1N
-           0.0    1N     ##Inf             ; Note conversion to double
+           0.0    1N     ##Inf ; Note conversion to double
            0.0    1N     ##-Inf
            0.0    -1N    ##Inf
            0.0    -1N    ##-Inf
-           ##Inf  ##Inf  0N            ; Surprisingly, these down't throw
+           ##Inf  ##Inf  0N ; Surprisingly, these down't throw
            ##-Inf ##-Inf 0N
 
            ##Inf  ##Inf  1.0
@@ -187,16 +190,16 @@
            0.0    1.0    ##-Inf
            0.0    -1.0   ##Inf
            0.0    -1.0   ##-Inf
-           ##Inf  ##Inf  0.0           ; Surprisingly, these down't throw
+           ##Inf  ##Inf  0.0 ; Surprisingly, these down't throw
            ##-Inf ##-Inf 0.0
 
            ##Inf  ##Inf  1.0M
            ##-Inf ##-Inf 1.0M
-           0.0    1.0M    ##Inf            ; Note conversion back double
+           0.0    1.0M    ##Inf ; Note conversion back double
            0.0    1.0M    ##-Inf
            0.0    -1.0M   ##Inf
            0.0    -1.0M   ##-Inf
-           ##Inf  ##Inf  0.0M          ; Surprisingly, these down't throw
+           ##Inf  ##Inf  0.0M ; Surprisingly, these down't throw
            ##-Inf ##-Inf 0.0M
 
            #?@(:cljs []
@@ -208,7 +211,7 @@
 
          ;; These all result in ##NaN, but we can't test for that with `=`.
          (are [x y] (NaN? (/ x y))
-           ##NaN  0                        ; Note that this doesn't throw
+           ##NaN  0 ; Note that this doesn't throw
            0      ##NaN
            ##NaN  0N
            0N     ##NaN
@@ -216,11 +219,11 @@
            1.0    ##NaN
            ##NaN  1.0M
            1.0M   ##NaN
-           #?@(:cljs []
-               :default
-               [##NaN  1/2
-                1/2    ##NaN])
            ##Inf  ##Inf
            ##Inf  ##-Inf
            ##-Inf ##Inf
-           ##-Inf ##-Inf)))))
+           ##-Inf ##-Inf
+           #?@(:cljs []
+               :default
+               [##NaN  1/2
+                1/2    ##NaN]))))))
