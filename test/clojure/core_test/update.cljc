@@ -114,4 +114,9 @@
        ;; CLJS can accept arbitrary arguments
        ;; Throw when wrong number of indices are passed to the function
        ;; CLJS returns 1, and doesn't throw!
-       #?(:default [{:k 1} :k identity 1 2 3 4])))))
+       #?(:cljs
+	  #_{:clj-kondo/ignore [:unused-value]
+	  nil
+
+	  :default 
+	  [{:k 1} :k identity 1 2 3 4])))))
