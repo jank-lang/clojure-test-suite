@@ -30,6 +30,5 @@
 
     (testing "dec-nil"
       ;; ClojureScript says (= -1 (dec nil)) because JavaScript casts null to 0
-      #?(:clj (is (thrown? Exception (dec #_:clj-kondo/ignore nil)))
-         :cljr (is (thrown? Exception (dec #_:clj-kondo/ignore nil)))
-         :cljs (is (= -1 (dec #_:clj-kondo/ignore nil)))))))
+      #?(:cljs (is (= -1 (dec #_:clj-kondo/ignore nil)))
+         :default (is (thrown? Exception (dec #_:clj-kondo/ignore nil)))))))
