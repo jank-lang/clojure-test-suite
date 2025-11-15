@@ -1,8 +1,8 @@
 (ns clojure.core-test.add-watch
   (:require [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists sleep]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists sleep]]))
 
-(when-var-exists clojure.core/add-watch
+(when-var-exists add-watch
   (deftest test-add-watch
     (testing "watch atom"
       ;; checks atoms and interspersed multiple watches
@@ -73,7 +73,9 @@
 
     #?@(:cljs []
         :default
-        [(def testvar-a 0)
+        [#_{:clj-kondo/ignore [:inline-def]}
+         (def testvar-a 0)
+         #_{:clj-kondo/ignore [:inline-def]}
          (def testvar-b 10)
 
          (testing "watch var"
@@ -156,7 +158,7 @@
                            (catch #?(:cljs :default
                                      :clj clojure.lang.ExceptionInfo
                                      :cljr clojure.lang.ExceptionInfo) e
-                             (let [{:keys [old] :as data} (ex-data e)]
+                             (let [{:keys [_old] :as data} (ex-data e)]
                                (vswap! state conj data)))))
                keyed (fn [k s] (filter #(= k (:key %)) s))]
 
@@ -216,14 +218,14 @@
         :default
         [(testing "watch agent"
            (let [state (volatile! [])
-                 tester1 (fn [key ref old new]
+                 tester1 (fn [key _ref old new]
                            (when (not= old new)
                              (vswap! state conj {:key key :old old :new new :tester 1})))
-                 tester2 (fn [key ref old new]
+                 tester2 (fn [key _ref old new]
                            (when (not= old new)
                              (vswap! state conj {:key key :old old :new new :tester 2})))
                  agent-end (promise)
-                 err (fn [key ref old new]
+                 err (fn [key _ref old new]
                        (deliver agent-end :done)
                        (throw (ex-info "test" {:key key :old old :new new :tester :err})))
                  g (agent 20)
@@ -232,7 +234,7 @@
                              (vswap! state conj (ex-data e))
                              (restart-agent g :ready))
                            (send g inc))
-                 keyed (fn [k s] (set (filter #(= k (:key %)) s)))]
+                 _keyed (fn [k s] (set (filter #(= k (:key %)) s)))]
 
              ;; add a watch to the agent
              (is (= g (add-watch g :g tester1)))

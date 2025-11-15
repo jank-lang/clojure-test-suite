@@ -2,11 +2,13 @@
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/and
+(when-var-exists and
   (deftest test-and
     (testing "common"
       (is (= true (and)))
-      (are [x] (= x (and x))
+      (are [x] (= x
+                  #_{:clj-kondo/ignore [:single-logical-operand]}
+                  (and x))
         true
         false
         nil
@@ -33,4 +35,6 @@
         (is (= nil (and nil nil nil nil nil nil nil nil nil nil nil nil true)))))
 
    (testing "infinite-sequence"
-     (is (some? (and (range)))))))
+     (is (some?
+          #_{:clj-kondo/ignore [:single-logical-operand]}
+          (and (range)))))))
