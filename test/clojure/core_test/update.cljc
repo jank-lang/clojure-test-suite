@@ -115,7 +115,7 @@
        ;; Throw when wrong number of indices are passed to the function
        ;; CLJS returns 1, and doesn't throw!
        #?(:cljs
-	  #_{:clj-kondo/ignore [:unused-value]
+	  #_{:clj-kondo/ignore [:unused-value]}
 	  nil
 
 	  :default 
