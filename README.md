@@ -148,6 +148,7 @@ they are passed to the Babashka task.
 The complete set of conversions of characters to names is:
 - "*" -> "star"
 - "+" -> "plus
+- "-" -> "minus"
 - "!" -> "bang"
 - "'" -> "squote"
 - "?" -> "qmark"
