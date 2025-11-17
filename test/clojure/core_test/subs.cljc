@@ -1,8 +1,8 @@
 (ns clojure.core-test.subs
   (:require [clojure.test :as t :refer [deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/subs
+(when-var-exists subs
   (deftest test-subs
     (is (= "abcde" (subs "abcde" 0)))
     (is (= "abcde" (subs "abcde" 0 5)))
@@ -35,12 +35,12 @@
          (is (= "ab" (subs "abcde" nil 2)))
          (is (= "a" (subs "abcde" 1 nil)))]
         :default
-        [(is (thrown? #?(:clj Exception :cljr Exception) (subs "abcde" 2 1)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (subs "abcde" 1 6)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (subs "abcde" 1 200)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (subs "abcde" -1)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (subs "abcde" -1 3)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (subs "abcde" -1 -3)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (subs nil 1 2)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (subs "abcde" nil 2)))
-         (is (thrown? #?(:clj Exception :cljr Exception) (subs "abcde" 1 nil)))])))
+        [(is (thrown? Exception (subs "abcde" 2 1)))
+         (is (thrown? Exception (subs "abcde" 1 6)))
+         (is (thrown? Exception (subs "abcde" 1 200)))
+         (is (thrown? Exception (subs "abcde" -1)))
+         (is (thrown? Exception (subs "abcde" -1 3)))
+         (is (thrown? Exception (subs "abcde" -1 -3)))
+         (is (thrown? Exception (subs nil 1 2)))
+         (is (thrown? Exception (subs "abcde" nil 2)))
+         (is (thrown? Exception (subs "abcde" 1 nil)))])))

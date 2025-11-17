@@ -1,8 +1,8 @@
 (ns clojure.core-test.drop
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/drop
+(when-var-exists drop
   (deftest test-drop
     (is (= (range 1 10) (drop 1 (range 0 10))))
     (is (= (range 5 10) (drop 5 (range 0 10))))
@@ -22,7 +22,7 @@
     (is (doall (drop 1 #{:a :b :c})))
 
     ;; Negative tests
-    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+    (is (thrown? #?(:cljs :default :default Exception)
                  (doall (drop nil (range 0 10)))))
-    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+    (is (thrown? #?(:cljs :default :default Exception)
                  (into [] (drop nil) (range 0 10))))))

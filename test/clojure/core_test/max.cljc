@@ -1,8 +1,8 @@
 (ns clojure.core-test.max
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/max
+(when-var-exists max
  (deftest test-max
    (are [expected x y] (= expected (max x y) (max y x))
      2     1      2
@@ -12,12 +12,12 @@
      2.0   1.0    2.0
      2.0   1      2.0
      2     1.0    2
-     #?@(:cljs []
-         :default
-         [1     1/2    1])
      ##Inf 1      ##Inf
      1     1      ##-Inf
-     ##Inf ##-Inf ##Inf)
+     ##Inf ##-Inf ##Inf
+     #?@(:cljs []
+         :default
+         [1 1/2 1]))
 
    ;; Single arg just returns argument
    (is (= 1 (max 1)))
@@ -33,13 +33,13 @@
    #?@(:cljs
        ;; There are bugs here:
        ;; https://clojure.atlassian.net/browse/CLJS-3425
-       [(is (= 1 (max ##NaN 1)))        ; Bug
-        (is (NaN? (max 1 ##NaN)))       ; Works as in JVM
+       [(is (= 1 (max ##NaN 1))) ; Bug
+        (is (NaN? (max 1 ##NaN))) ; Works as in JVM
         (is (NaN? (max 1 2 3 4 ##NaN)))
-        (is (= ##Inf (max ##-Inf ##NaN ##Inf)))  ; Bug
+        (is (= ##Inf (max ##-Inf ##NaN ##Inf))) ; Bug
         (is (NaN? (max ##NaN)))
 
-        (is (= "y" (max "x" "y")))      ; In CLJS "x" and "y" are characters
+        (is (= "y" (max "x" "y"))) ; In CLJS "x" and "y" are characters
         (is (= 1 (max nil 1)))
         (is (= 1 (max 1 nil)))]
        :default

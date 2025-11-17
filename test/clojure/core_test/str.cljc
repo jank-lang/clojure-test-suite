@@ -1,8 +1,8 @@
 (ns clojure.core-test.str
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/str
+(when-var-exists str
   (deftest test-str
     (are [expected x] (= expected (str x))
       "0"            0
@@ -29,7 +29,7 @@
            "-1"         (float -1.0)
            "0"          (double 0.0)
            "1"          (double 1.0)
-           "-1"         (double -1.0)]		   
+           "-1"         (double -1.0)]
           :default
           ["0.0"          0.0
            "1.0"          1.0
@@ -52,12 +52,12 @@
            "1"          1.0M
            "-1"         -1.0M]
           :default
-          ["0"            0/2
-           "1/2"          1/2
-           "-1/2"         -1/2
-           "0.0"          0.0M
-           "1.0"          1.0M
-           "-1.0"         -1.0M])
+          ["0"          0/2
+           "1/2"        1/2
+           "-1/2"       -1/2
+           "0.0"        0.0M
+           "1.0"        1.0M
+           "-1.0"       -1.0M])
       
       ""             nil
       #?(:cljr "True" :default "true")     true

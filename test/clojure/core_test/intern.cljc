@@ -1,8 +1,8 @@
 (ns clojure.core-test.intern
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/intern
+(when-var-exists intern
  (deftest test-intern
    ;; Intern and bind
    (let [x-var (intern 'clojure.core-test.intern 'x 42)]
@@ -21,5 +21,5 @@
      (is (= 42 (var-get x-var))))
 
    ;; Trying to intern to an unknown namespace should throw
-   (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (intern 'unknown-namespace 'x)))
-   (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (intern 'unknonw-namespace 'x 42)))))
+   (is (thrown? #?(:cljs :default :default Exception) (intern 'unknown-namespace 'x)))
+   (is (thrown? #?(:cljs :default :default Exception) (intern 'unknown-namespace 'x 42)))))

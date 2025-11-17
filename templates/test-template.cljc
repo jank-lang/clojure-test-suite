@@ -1,6 +1,6 @@
 (ns {{base-ns}}-test.{{ns-suffix}}
   (:require {% if not base-ns = "clojure.core" %}{{base-ns}}
-            {% endif %}[clojure.test :as t :refer [deftest testing is are]]
+            {% endif %}[clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists {% if not base-ns = "clojure.core" %}{{base-ns}}/{% endif %}{{sym-name}}

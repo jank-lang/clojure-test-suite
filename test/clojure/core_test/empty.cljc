@@ -1,10 +1,9 @@
 (ns clojure.core-test.empty
-  (:require clojure.core
-            [clojure.core-test.number-range :as r]
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.core-test.number-range :as r]
+            [clojure.test :as t :refer [are deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/empty
+(when-var-exists empty
   (deftest test-empty
     (testing "common"
       (are [expected x] (= expected (empty x))
@@ -24,7 +23,7 @@
            nil r/max-int
            nil r/min-int
            #?@(:cljs [nil (js/Date)]
-		       :cljr [nil (new Object)]
+               :cljr [nil (new Object)]
                :clj  [nil (new Object)])))
 
     (testing "meta preservation"
@@ -32,14 +31,14 @@
             apply-meta #(-> % (with-meta meta-data) empty meta)]
         (is (= meta-data (apply-meta {}) (apply-meta []) (apply-meta #{}) (apply-meta '())))))
 
-    (when-var-exists clojure.core/defrecord
+    (when-var-exists defrecord
       (testing "record"
         (defrecord Record [field])
         #?@(:cljs [(is (= nil (empty (->Record ""))))]
-		    :cljr  [(is (thrown? InvalidOperationException (empty (->Record ""))))]
+            :cljr  [(is (thrown? InvalidOperationException (empty (->Record ""))))]
             :clj  [(is (thrown? UnsupportedOperationException (empty (->Record ""))))])))
 
-    (when-var-exists clojure.core/deftype
+    (when-var-exists deftype
       (testing "datatype"
         (deftype MyType [field])
         (is (= nil (empty (->MyType ""))))))))

@@ -1,5 +1,5 @@
 (ns clojure.core-test.rseq
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists rseq
@@ -24,6 +24,6 @@
                     (is (thrown? Exception (rseq 0.0)))
                     (is (thrown? Exception (rseq {:a :b})))]))
     
-    (when-var-exists clojure.core/sorted-map
+    (when-var-exists sorted-map
                      (testing "sorted-map"
                        (is (= '([:c 2] [:b 1] [:a 0]) (rseq (sorted-map :a 0, :b 1, :c 2))))))))

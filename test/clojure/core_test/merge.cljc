@@ -1,8 +1,8 @@
 (ns clojure.core-test.merge
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/merge
+(when-var-exists merge
   (deftest test-merge
     (testing "`merge`"
       (testing "`nil` and empty map behavior"
@@ -62,9 +62,9 @@
         (is (= {:foo "foo", :bar "bar"} (merge {} [:foo "foo"] [:bar "bar"])))
         (is (= {'x 10, 'y 10, 'z 10} (merge {'x 10} ['y 10] ['z 10])))
         (testing "In CLJS (unlike other dialects) vectors with >2 arguments are treated as map-entries (where the latter values are ignored)"
-          #?(:cljs (is (= {:foo :bar} (merge {} [:foo :bar :baz :bar]))),
-             :clj  (is (thrown? java.lang.IllegalArgumentException (merge {} [:foo :bar :baz :bar]))),
-             :clr  (is (thrown? Exception (merge {} [:foo :bar :baz :bar]))))))
+          #?(:cljs    (is (= {:foo :bar} (merge {} [:foo :bar :baz :bar]))),
+             :clj     (is (thrown? java.lang.IllegalArgumentException (merge {} [:foo :bar :baz :bar]))),
+             :default (is (thrown? Exception (merge {} [:foo :bar :baz :bar]))))))
 
       (testing "atomic values in position 2+ throw"
         #?@(:cljs    [(is (thrown? js/Error (merge {} 1)))

@@ -1,9 +1,9 @@
 (ns clojure.core-test.not-empty
   (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.test :as t :refer [deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/not-empty
+(when-var-exists not-empty
   (deftest test-not-empty
     (testing "common"
       (is (= nil (not-empty {})))
@@ -19,9 +19,6 @@
       #?@(:cljs [(is (= "a" (not-empty \a)))
                  (is (thrown? js/Error (not-empty 0)))
                  (is (thrown? js/Error (not-empty 0.0)))]
-		 :cljr  [(is (thrown? Exception (not-empty \a)))
-                 (is (thrown? Exception (not-empty 0)))
-                 (is (thrown? Exception (not-empty 0.0)))]				 
-          :clj  [(is (thrown? Exception (not-empty \a)))
-                 (is (thrown? Exception (not-empty 0)))
-                 (is (thrown? Exception (not-empty 0.0)))]))))
+          :default [(is (thrown? Exception (not-empty \a)))
+                    (is (thrown? Exception (not-empty 0)))
+                    (is (thrown? Exception (not-empty 0.0)))]))))

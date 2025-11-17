@@ -1,9 +1,9 @@
 (ns clojure.core-test.ratio-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/ratio?
+(when-var-exists ratio?
  (deftest test-ratio?
    (are [expected x] (= expected (ratio? x))
      false 0
@@ -22,11 +22,6 @@
      false 0N
      false 1N
      false -1N
-     #?@(:cljs []
-         :default
-         [false 0/2                          ; perhaps surprising
-          true  1/2
-          true  -1/2])
      false 0.0M
      false 1.0M
      false -1.0M
@@ -47,4 +42,11 @@
      false :0
      false :1
      false :-1
-     false 'a-sym)))
+     false 'a-sym
+
+     #?@(:cljs []
+         :default
+         [false 0/2 ; perhaps surprising
+          true  1/2
+          true  -1/2
+          true  (/ 1 2 3)]))))

@@ -1,8 +1,9 @@
 (ns clojure.core-test.rem
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability :as p #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is]]
+            [clojure.core-test.portability :as p
+             #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/rem
+(when-var-exists rem
  (deftest test-rem
    (are [type-pred expected x y] (let [r (rem x y)]
                                    (and (type-pred r)
@@ -100,11 +101,11 @@
      (is (NaN? (rem 1 ##NaN)))
      (is (NaN? (rem ##NaN 1)))]
     :default
-    [(is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem 10 0)))
-     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem ##Inf 1)))
+    [(is (thrown? #?(:cljs :default :default Exception) (rem 10 0)))
+     (is (thrown? #?(:cljs :default :default Exception) (rem ##Inf 1)))
      (is (NaN? (rem 1 ##Inf)))
-     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem ##-Inf 1)))
+     (is (thrown? #?(:cljs :default :default Exception) (rem ##-Inf 1)))
      (is (NaN? (rem 1 ##-Inf)))
-     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem ##NaN 1)))
-     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem 1 ##NaN)))
-     (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (rem ##NaN 1)))])))
+     (is (thrown? #?(:cljs :default :default Exception) (rem ##NaN 1)))
+     (is (thrown? #?(:cljs :default :default Exception) (rem 1 ##NaN)))
+     (is (thrown? #?(:cljs :default :default Exception) (rem ##NaN 1)))])))

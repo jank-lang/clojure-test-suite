@@ -1,9 +1,9 @@
 (ns clojure.core-test.rational-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/rational?
+(when-var-exists rational?
  (deftest test-rational?
    (are [expected x] (= expected (rational? x))
      true  0
@@ -11,6 +11,13 @@
      true  -1
      true  r/max-int
      true  r/min-int
+     true  0N
+     true  1N
+     true  -1N
+     true  0.0M ; perhaps surprising
+     true  1.0M ; perhaps surprising
+     true  -1.0M ; perhaps surprising
+
      false 0.0
      false 1.0
      false -1.0
@@ -19,17 +26,6 @@
      false ##Inf
      false ##-Inf
      false ##NaN
-     true  0N
-     true  1N
-     true  -1N
-     #?@(:cljs []
-         :default
-         [true  0/2                          ; perhaps surprising
-          true  1/2
-          true  -1/2])
-     true  0.0M                         ; perhaps surprising
-     true  1.0M                         ; perhaps surprising
-     true  -1.0M                        ; perhaps surprising
      false nil
      false true
      false false
@@ -47,4 +43,10 @@
      false :0
      false :1
      false :-1
-     false 'a-sym)))
+     false 'a-sym
+
+     #?@(:cljs []
+         :default
+         [true  0/2 ; perhaps surprising
+          true  1/2
+          true  -1/2]))))

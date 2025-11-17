@@ -1,8 +1,8 @@
 (ns clojure.core-test.butlast
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/butlast
+(when-var-exists butlast
   (deftest test-butlast
     (are [expected x] (= expected (butlast x))
       nil (range 1)

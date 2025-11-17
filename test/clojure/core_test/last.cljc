@@ -1,9 +1,9 @@
 (ns clojure.core-test.last
   (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.test :as t :refer [deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/last
+(when-var-exists last
   (deftest test-last
     (testing "common"
       (is (= 9 (last (range 0 10))))
@@ -17,11 +17,8 @@
       (is (= nil (last nil))))
 
     (testing "exceptions"
-      #?@(:clj 
+      #?@(:cljs
+          [(is (thrown? js/Error (last 0)))]
+          :default
           [(is (thrown? Exception (last \a)))
-           (is (thrown? Exception (last 0)))]
-		  :cljr
-		  [(is (thrown? Exception (last \a)))
-           (is (thrown? Exception (last 0)))]
-          :cljs 
-          [(is (thrown? js/Error (last 0)))]))))
+           (is (thrown? Exception (last 0)))]))))

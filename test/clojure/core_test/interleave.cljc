@@ -1,14 +1,14 @@
 (ns clojure.core-test.interleave
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists
- clojure.core/interleave
+ interleave
  (deftest test-interleave
    (testing "common cases"
      (are [in ex] (= (apply interleave in) ex)
        [[1 2 3]]                  [1 2 3]
-       [[1 2 3]  ["a" "b" "c"]]   [1 "a" 2 "b" 3 "c"]
+       [[1 2 3] ["a" "b" "c"]]    [1 "a" 2 "b" 3 "c"]
        [[1 2 3]
         ["a" "b" "c"]
         [\a \b \c]]               [1 "a" \a 2 "b" \b 3 "c" \c]

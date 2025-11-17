@@ -1,10 +1,10 @@
 (ns clojure.core-test.boolean-qmark
   (:require clojure.core
             [clojure.core-test.number-range :as r]
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.test :as t :refer [are deftest testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/boolean?
+(when-var-exists boolean?
   (deftest test-boolean?
     (testing "common"
       (are [expected x] (= expected (boolean? x))

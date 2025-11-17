@@ -1,8 +1,8 @@
 (ns clojure.core-test.even-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/even?
+(when-var-exists even?
   (deftest test-even?
     (testing "common"
       (are [in ex] (= (even? in) ex)
@@ -18,13 +18,14 @@
         -120N true))
 
     (testing "invalid"
-      (are [x] (thrown? #?(:cljs :default :clj Exception :cljr Exception) (even? x))
-        #_:clj-kondo/ignore nil
+      (are [x] (thrown? #?(:cljs :default :default Exception) (even? x))
+        #_:clj-kondo/ignore
+        nil
         ##Inf
         ##-Inf
         ##NaN
         1.5
+        0.2M
         #?@(:cljs []
             :default
-            [1/2])
-        0.2M))))
+            [1/2])))))

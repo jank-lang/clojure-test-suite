@@ -1,5 +1,5 @@
 (ns clojure.core-test.conj
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists conj
@@ -41,6 +41,6 @@
             apply-meta #(-> % (with-meta meta-data) (conj [:k :v]) meta)]
         (is (= meta-data (apply-meta {}) (apply-meta []) (apply-meta #{}) (apply-meta '())))))
     
-    (when-var-exists clojure.core/first
-                     (testing "first"
-                       (is (= -1 (first (conj (range) -1))))))))
+    (when-var-exists first
+      (testing "first"
+        (is (= -1 (first (conj (range) -1))))))))

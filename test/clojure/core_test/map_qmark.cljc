@@ -1,16 +1,17 @@
 (ns clojure.core-test.map-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/map?
+(when-var-exists map?
   (deftest test-map?
     (are [expected x] (= expected (map? x))
-      false [1 2 3]
       true (sorted-map :a 1)
-      false(sorted-set :a)
-      false '(1 2 3)
       true (hash-map :a 1)
       true (array-map :a 1)
+
+      false [1 2 3]
+      false (sorted-set :a)
+      false '(1 2 3)
       false (hash-set :a)
       false (seq [1 2 3])
       false (seq (sorted-map :a 1))

@@ -1,8 +1,8 @@
 (ns clojure.core-test.sort
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/sort
+(when-var-exists sort
   (deftest test-sort
     (testing "common cases -- unary"
       (are [expected x] (= expected (sort x))

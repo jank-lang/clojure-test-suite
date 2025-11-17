@@ -18,8 +18,8 @@
      (and (integer? n)
           (not (int? n)))))
 
-(defn sleep [n]
+(defn sleep [ms]
   (#?(:cljr System.Threading.Thread/Sleep
-      :clj Thread/sleep
-      :cljr Thread/sleep)
-   n))
+      :cljs #(js/setTimeout identity %)
+      :clj Thread/sleep)
+   ms))

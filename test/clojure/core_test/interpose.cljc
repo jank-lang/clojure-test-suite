@@ -1,9 +1,9 @@
 (ns clojure.core-test.interpose
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists
- clojure.core/interpose
+ interpose
  (deftest test-interpose
    (testing "common cases"
      (is (fn? (interpose "a")))

@@ -1,5 +1,5 @@
 (ns clojure.core-test.assoc-bang
-  (:require [clojure.test :refer [deftest testing are]]
+  (:require [clojure.test :refer [are deftest testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists assoc!

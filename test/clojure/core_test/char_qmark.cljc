@@ -1,9 +1,9 @@
 (ns clojure.core-test.char-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/char?
+(when-var-exists char?
   (deftest test-char?
     (are [expected x] (= expected (char? x))
       false 0
@@ -28,7 +28,7 @@
       false 0N
       false 1N
       false -1N
-      #?@(:cljs []                      ; cljs doesn't have ratios
+      #?@(:cljs [] ; cljs doesn't have ratios
           :default
           [false 0/2
            false 1/2
@@ -40,7 +40,7 @@
       false true
       false false
       false "a string"
-      #?@(:cljs                         ; In cljs, chars are single char strings
+      #?@(:cljs ; In cljs, chars are single element strings
           [true "0"
            true "1"]
           :default

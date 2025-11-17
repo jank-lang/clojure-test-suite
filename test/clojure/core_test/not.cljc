@@ -1,15 +1,16 @@
 (ns clojure.core-test.not
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/not
+(when-var-exists not
   (deftest test-not
     (testing "common"
       (are [given expected] (= expected (not given))
         nil                    true
-        true                   false
         false                  true
+        true                   false
         #?(:clj (Object.)
+           :cljr (Object.)
            :cljs #js {}
            :default :anything) false))
 

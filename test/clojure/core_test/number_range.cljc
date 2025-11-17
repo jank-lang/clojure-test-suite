@@ -15,8 +15,6 @@
 (def ^:const all-ones-int #?(:cljs 0xFFFFFFFF
                              :default -1))
 
-(def ^:const all-zeros 0)
-
 (def ^:const full-width-checker-pos #?(:cljs 0x55555555
                                        :default 0x5555555555555555))
 
@@ -29,7 +27,7 @@
                            :default 1.7976931348623157e+308))
 
 (def ^:const min-double #?(:clj Double/MIN_VALUE
-                           :cljr Double/Epsilon       ; NOTE: definitely not Double/MinValue -- ouch!
+                           :cljr Double/Epsilon ; NOTE: definitely not Double/MinValue -- ouch!
                            :cljs js/Number.MIN_VALUE
                            :default 4.9e-324))
 

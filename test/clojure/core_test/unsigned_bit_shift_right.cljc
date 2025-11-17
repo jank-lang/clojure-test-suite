@@ -1,13 +1,13 @@
 (ns clojure.core-test.unsigned-bit-shift-right
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/unsigned-bit-shift-right
+(when-var-exists unsigned-bit-shift-right
  (deftest test-unsigned-bit-shift-right
    #?(:cljs (is (= 0 (unsigned-bit-shift-right nil 1)))
-      :default (is (thrown? #?(:clj Exception :cljr Exception) (unsigned-bit-shift-right nil 1))))
+      :default (is (thrown? Exception (unsigned-bit-shift-right nil 1))))
    #?(:cljs (is (= 1 (unsigned-bit-shift-right 1 nil)))
-      :default (is (thrown? #?(:clj Exception :cljr Exception) (unsigned-bit-shift-right 1 nil))))
+      :default (is (thrown? Exception (unsigned-bit-shift-right 1 nil))))
 
    (are [ex a b] (= ex (unsigned-bit-shift-right a b))
      ;; Clojure JVM starts with a 64-bit -1 and ClojureScript starts

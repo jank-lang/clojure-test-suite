@@ -1,9 +1,9 @@
 (ns clojure.core-test.parse-long
   (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.test :as t :refer [are deftest testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/parse-long
+(when-var-exists parse-long
   (deftest test-parse-long
     (testing "common"
       (are [expected x] (= expected (parse-long x))
@@ -28,33 +28,24 @@
            12                 "+12"
            -1000              "-1000"
            -100000000000      "-100000000000"
-           #?@(:clj  [999999999999999999 "999999999999999999"]
-               :cljs [nil                "999999999999999999"
-                      999999999999999    "999999999999999"])))
+           #?@(:cljs [nil                "999999999999999999"
+                      999999999999999    "999999999999999"]
+               :default [999999999999999999 "999999999999999999"])))
     (testing "exceptions"
-      #?(:clj (are [x] (thrown? Exception (parse-long x))
-                   {}
-                   '()
-                   []
-                   #{}
-                   \a
-                   :key
-                   0.0
-                   1000))
-      #?(:cljr (are [x] (thrown? Exception (parse-long x))
-                   {}
-                   '()
-                   []
-                   #{}
-                   \a
-                   :key
-                   0.0
-                   1000))				   
       #?(:cljs (are [x] (thrown? js/Error (parse-long x))
-                   {}
-                   '()
-                   []
-                   #{}
-                   :key
-                   0.0
-                   1000)))))
+                 {}
+                 '()
+                 []
+                 #{}
+                 :key
+                 0.0
+                 1000)
+         :default (are [x] (thrown? Exception (parse-long x))
+                    {}
+                    '()
+                    []
+                    #{}
+                    \a
+                    :key
+                    0.0
+                    1000)))))

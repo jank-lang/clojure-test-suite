@@ -1,12 +1,6 @@
 (ns clojure.core-test.eq
-  (:require [clojure.test :refer [deftest testing is are]]
+  (:require [clojure.test :refer [are deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
-
-;; Doesn't test (yet):
-;; * Java collections for JVM Clojure
-;; * clojure.lang.PersistentQueue
-;; * ##Inf and some other special forms
-;; * Records
 
 (defn tests [eq]
   (testing "two scalars"
@@ -140,7 +134,7 @@
                (list ##NaN) (list ##NaN) false
                ##NaN ##NaN false))))
 
-(when-var-exists clojure.core/=
+(when-var-exists =
   (deftest test-eq
     (tests =)
     ;; This is to accomodate a not= JVM bug. See not_eq.cljc

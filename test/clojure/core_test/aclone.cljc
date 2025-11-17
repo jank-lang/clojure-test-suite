@@ -1,8 +1,8 @@
 (ns clojure.core-test.aclone
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/aclone
+(when-var-exists aclone
   (defn clone-test
     [a b]
     (aset a 0 1)

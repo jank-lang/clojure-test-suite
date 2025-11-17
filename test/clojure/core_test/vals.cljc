@@ -1,9 +1,8 @@
 (ns clojure.core-test.vals
-  (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/vals
+(when-var-exists vals
   (deftest test-vals
     (testing "common"
       (is (= nil (vals nil)))
@@ -18,5 +17,4 @@
       (is (= '([:b :c]) (vals {:a [:b :c]})))
       (is (= '((:c)) (vals {:a (vals {:b :c})})))
       #?@(:cljs [(is (thrown? js/Error (vals 0)))]
-	      :cljr [(is (thrown? Exception (vals 0)))]
-          :clj  [(is (thrown? Exception (vals 0)))]))))
+          :default [(is (thrown? Exception (vals 0)))]))))

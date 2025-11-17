@@ -1,8 +1,8 @@
 (ns clojure.core-test.some-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/some?
+(when-var-exists some?
   (deftest test-some?
     (testing "common"
       (are [given expected] (= expected (some? given))

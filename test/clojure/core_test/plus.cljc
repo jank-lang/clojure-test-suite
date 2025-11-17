@@ -1,9 +1,10 @@
+#_{:clj-kondo/ignore [:unused-namespace]}
 (ns clojure.core-test.plus
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/+
+(when-var-exists +
   (deftest test-+
     (testing "common"
       (are [sum x y] (and (= sum (+ x y))
@@ -99,7 +100,10 @@
            (is (instance? clojure.lang.BigInt (+ 1N 5)))
            (is (instance? clojure.lang.BigInt (+ 1N 5N)))]))
 
-    #?(:cljs nil
+    #?(:cljs
+       #_{:clj-kondo/ignore [:unused-value]}
+       nil
+
        :default
        (testing "rationals"
          (are [sum x y] (and (= sum (+ x y))

@@ -1,8 +1,8 @@
 (ns clojure.core-test.case
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/case
+(when-var-exists case
 
   ;; Note that this eclectic group of test value types tests the :hashes path in Clojure
   (defn positive-tests
@@ -18,13 +18,13 @@
       #?@(:cljs []
           :default
           [1/2 :ratio-result])
-      \a :character-result              ; CLJS reader will convert \a to "a"
+      \a :character-result ; CLJS reader will convert \a to "a"
       true :boolean-true-result
       false :boolean-false-result
       nil :nil-result
       ##Inf :inf-result
       ##-Inf :negative-inf-result
-      #?(:cljs ('(list of syms))        ; CLJS wants to eval the inner list, even though it shouldn't
+      #?(:cljs ('(list of syms)) ; CLJS wants to eval the inner list, even though it shouldn't
          :default ((list of syms))) :list-of-syms-result ; if you need to match a list, wrap it in another list
       [:vec :of :kws] :vec-of-kws-result
       {:a :map :of :kws} :map-of-kws-result
@@ -74,7 +74,7 @@
         'sym :sym-result
         :kw :kw-result
         "string" :string-result
-        #?@(:cljs                     ; everything is a double in CLJS
+        #?@(:cljs ; all numbers are double-precision floating point in CLJS
             [1 :integer-result
              1.0 :integer-result
              1N :integer-result
@@ -111,7 +111,7 @@
         #?@(:cljs []
             :default
             [1/2 :ratio-result])
-        \a :character-result      ; CLJS reader will convert \a to "a"
+        \a :character-result ; CLJS reader will convert \a to "a"
         #?@(:cljs ["a" :character-result] :default []) ; CLJS matches this to `\a`
         true :boolean-true-result
         false :boolean-false-result
@@ -171,5 +171,5 @@
         'quote :quote-foo-result
         'foo :quote-foo-result)
 
-      (is (thrown? #?(:cljs :default, :clj Exception  :cljr Exception) (negative-tests ##NaN)))
-      (is (thrown? #?(:cljs :default, :clj Exception :cljr Exception) (negative-tests :something-not-found))))))
+      (is (thrown? #?(:cljs :default :default Exception) (negative-tests ##NaN)))
+      (is (thrown? #?(:cljs :default :default Exception) (negative-tests :something-not-found))))))

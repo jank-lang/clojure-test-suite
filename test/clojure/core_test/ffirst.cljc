@@ -1,9 +1,9 @@
 (ns clojure.core-test.ffirst
   (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.test :as t :refer [deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/ffirst
+(when-var-exists ffirst
   (deftest test-ffirst
     (testing "common"
       (is (= nil (ffirst '())))
@@ -21,18 +21,13 @@
       (is (= \a (ffirst #{"abcd"}))))
 
     (testing "exceptions"
-      #?@(:clj 
+      #?@(:cljs
+          [(is (thrown? js/Error (ffirst (range 0 10))))
+           (is (thrown? js/Error (ffirst (range)))) ; infinite lazy seq
+           (is (thrown? js/Error (ffirst [:a :b :c])))
+           (is (thrown? js/Error (ffirst '(:a :b :c))))]
+          :default
           [(is (thrown? Exception (ffirst (range 0 10))))
-               (is (thrown? Exception (ffirst (range))))          ; infinite lazy seq
-               (is (thrown? Exception (ffirst [:a :b :c])))
-               (is (thrown? Exception (ffirst '(:a :b :c))))]
-		 :cljr 
-          [(is (thrown? Exception (ffirst (range 0 10))))
-               (is (thrown? Exception (ffirst (range))))          ; infinite lazy seq
-               (is (thrown? Exception (ffirst [:a :b :c])))
-               (is (thrown? Exception (ffirst '(:a :b :c))))]			   
-              :cljs 
-              [(is (thrown? js/Error (ffirst (range 0 10))))
-               (is (thrown? js/Error (ffirst (range))))          ; infinite lazy seq
-               (is (thrown? js/Error (ffirst [:a :b :c])))
-               (is (thrown? js/Error (ffirst '(:a :b :c))))]))))
+           (is (thrown? Exception (ffirst (range)))) ; infinite lazy seq
+           (is (thrown? Exception (ffirst [:a :b :c])))
+           (is (thrown? Exception (ffirst '(:a :b :c))))]))))

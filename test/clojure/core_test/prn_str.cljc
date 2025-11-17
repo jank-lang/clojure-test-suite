@@ -1,8 +1,8 @@
 (ns clojure.core-test.prn-str
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/prn-str
+(when-var-exists prn-str
  (deftest test-prn-str
    (let [nl (prn-str)]
      ;; `nl` grabs the platform specific newline without calling out to

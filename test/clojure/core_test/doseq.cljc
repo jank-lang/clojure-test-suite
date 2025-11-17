@@ -1,5 +1,5 @@
 (ns clojure.core-test.doseq
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 
@@ -13,14 +13,14 @@
         (is (= [1 2 3] @acc))))
     (testing "nil input: body not executed; result nil"
       (let [acc (atom :unchanged)]
-        (is (nil? (doseq [x nil] (reset! acc :changed))))
+        (is (nil? (doseq [_ nil] (reset! acc :changed))))
         (is (= :unchanged @acc))))
     (testing "empty input: body not executed; result nil"
      (let [acc (atom 0)]
-       (is (nil? (doseq [x [] y [1 2 3]] (swap! acc + y))))
+       (is (nil? (doseq [_ [] y [1 2 3]] (swap! acc + y))))
        (is (= 0 @acc)))
      (let [acc (atom 0)]
-       (is (nil? (doseq [x []] (swap! acc inc))))
+       (is (nil? (doseq [_ []] (swap! acc inc))))
        (is (= 0 @acc))))
     (testing "nested bindings iterate like a nested loop (leftmost outermost)"
       (let [acc (atom [])]

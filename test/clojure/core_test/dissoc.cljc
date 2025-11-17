@@ -1,5 +1,5 @@
 (ns clojure.core-test.dissoc
-  (:require [clojure.test :refer [deftest testing is are]]
+  (:require [clojure.test :refer [are deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists dissoc

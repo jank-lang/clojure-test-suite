@@ -1,13 +1,13 @@
 (ns clojure.core-test.reduce
   (:require
-   [clojure.test :as t :refer [deftest testing is are]]
-   [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]])
+   [clojure.test :as t :refer [deftest is testing]]
+   [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]])
   #?(:clj (:import (clojure.lang IReduce))))
 
 (def interop
   {:int-new (fn [x]
               (#?(:clj Integer.
-			      :cljr identity
+                  :cljr identity
                   :cljs js/Number.) x))
 
    :Integer #?(:clj Integer/TYPE
@@ -35,9 +35,9 @@
   (deftest test-reduce
     (testing "common"
       (is (nil? (reduce nil nil nil)))
-      (is (thrown? #?(:clj Exception
-	                  :cljr Exception
-                      :cljs js/Error) (reduce nil nil)))
+      (is (thrown? #?(:cljs js/Error
+                      :default Exception)
+                   (reduce nil nil)))
       (is (= 6 (reduce + 0 [1 2 3]))))
 
     (testing "val is not supplied"
@@ -63,8 +63,6 @@
 
     (testing "reduction by type"
       (let [int-new (interop :int-new)
-            char-new (interop :char-new)
-            byte-new (interop :byte-new)
             arange (range 1 100) ;; enough to cross nodes
             avec (into [] arange)
             alist (into () arange)

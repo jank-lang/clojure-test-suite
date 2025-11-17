@@ -1,13 +1,13 @@
 (ns clojure.core-test.get-in
-  (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/get-in
+(when-var-exists get-in
   (deftest test-get-in
     (testing "common"
       (is (= nil (get-in nil nil)))
       (is (= nil (get-in nil nil "not found")))
+
       ;; maps
       (is (= {} (get-in {} nil)))
       (is (= {} (get-in {} nil "not found")))
@@ -25,6 +25,7 @@
       (is (= :d (get-in {:a {:b {:c :d} :e (range)}} [:a :b :c])))
       (is (= nil (get-in {:a {:b {:c :d}}} [:a :b :c :d])))
       (is (= :d (get-in {:a {:b {:c :d} :e (range)}} [:a :b :c :d] :d)))
+
       ;; vectors
       (is (= 0 (get-in [[0 1 2]
                         [3 4 5]

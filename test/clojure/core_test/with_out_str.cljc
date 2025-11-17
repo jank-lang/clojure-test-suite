@@ -11,13 +11,13 @@
      (let [nl (System/getProperty "line.separator")]
        (.replace s "\n" nl))
      :cljr
-     (let [nl Environment/NewLine] ;;; (System/getProperty "line.separator")]
-       (.Replace ^String s "\n" nl)) ;;; .replace, add type hint
+     (let [nl Environment/NewLine]
+       (.Replace ^String s "\n" nl))
      :default
      s))
 
 
-(when-var-exists clojure.core/with-out-str
+(when-var-exists with-out-str
   (deftest test-with-out-str
     (is (= (platform-newlines
             (str "some sample :text here" \newline

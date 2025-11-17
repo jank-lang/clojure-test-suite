@@ -1,8 +1,8 @@
 (ns clojure.core-test.sorted-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/sorted?
+(when-var-exists sorted?
   (deftest test-sorted?
     ;; Note that `sorted?` tests whether the collection is a sorted
     ;; collection, not whether the elements of any arbitrary
@@ -25,7 +25,7 @@
         (sort (range 10 0 -1)) ; the items are sorted, but it's not a sorted collection
         (seq (sorted-map)) ; seqs, even over sorted collections are not sorted
         (seq (sorted-set))
-        1                               ; primitives are not sorted
+        1 ; primitives are not sorted
         1N
         1.0
         1.0M

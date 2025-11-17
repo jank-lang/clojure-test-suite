@@ -1,8 +1,8 @@
 (ns clojure.core-test.sequential-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/sequential?
+(when-var-exists sequential?
   (deftest test-sequential?
     (are [expected x] (= expected (sequential? x))
       ;; lists, vectors, and seqs are sequential

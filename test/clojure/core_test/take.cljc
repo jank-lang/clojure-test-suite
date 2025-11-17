@@ -1,8 +1,8 @@
 (ns clojure.core-test.take
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/take
+(when-var-exists take
   (deftest test-take
     (is (= (range 0 5) (take 5 (range 0 10))))
     (is (= (range 0 5) (take 5 (range)))) ; Infinite `range` lazy seq
@@ -14,7 +14,7 @@
     (is (= [] (into [] (take 5) nil)))
 
     ;; negative tests
-    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+    (is (thrown? #?(:cljs :default :default Exception)
                  (doall (take nil (range 0 10)))))
-    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+    (is (thrown? #?(:cljs :default :default Exception)
                  (into [] (take nil) (range 0 10))))))

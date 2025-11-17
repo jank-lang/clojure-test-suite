@@ -1,8 +1,8 @@
 (ns clojure.core-test.pr-str
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/pr-str
+(when-var-exists pr-str
  (deftest test-pr-str
    (is (= "\"a\" \"string\"" (pr-str "a" "string")))
    ;; Slight differences in the way that CLJS handles characters and

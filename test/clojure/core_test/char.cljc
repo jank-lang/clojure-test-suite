@@ -1,8 +1,8 @@
 (ns clojure.core-test.char
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/char
+(when-var-exists char
  (deftest test-char
    (are [expected x] (= expected (char x))
      ;; Assumes ASCII / Unicode
@@ -13,5 +13,5 @@
      ;; TODO: Add Unicode tests
      )
 
-   #?(:cljs nil :default (is (thrown? #?(:clj Exception :cljr Exception) (char -1))))
-   (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (char nil)))))
+   #?(:cljs nil :default (is (thrown? Exception (char -1))))
+   (is (thrown? #?(:cljs :default :default Exception) (char nil)))))

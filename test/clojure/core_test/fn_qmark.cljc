@@ -1,11 +1,11 @@
 (ns clojure.core-test.fn-qmark
   (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.test :as t :refer [deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (defn foo [x] (str "hello " x))
 
-(when-var-exists clojure.core/fn?
+(when-var-exists fn?
   (deftest test-fn?
     (testing "`fn?`"
       (testing "functions, functions from HOFs, transducers, #() reader macro, `fn`, `defn`"

@@ -1,8 +1,8 @@
 (ns clojure.core-test.rand
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [deftest is testing]]
             [clojure.core-test.portability :as p]))
 
-(p/when-var-exists clojure.core/rand
+(p/when-var-exists rand
   (deftest test-rand
     ;; Generally, we test that the numbers returned pass `double?` and
     ;; that they are not constant.

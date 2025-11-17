@@ -1,9 +1,10 @@
 (ns clojure.core-test.mod
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]
-            [clojure.core-test.portability :as p]))
+  (:require [clojure.test :as t :refer [are deftest is]]
+            [clojure.core-test.portability
+             #?(:cljs :refer-macros :default :refer) [when-var-exists]
+             :as p]))
 
-(when-var-exists clojure.core/mod
+(when-var-exists mod
   (deftest test-mod
     (are [type-pred expected x y] (let [r (mod x y)]
                                     (and (type-pred r)

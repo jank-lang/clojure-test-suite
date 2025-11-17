@@ -1,7 +1,6 @@
 (ns clojure.core-test.realized-qmark
-  (:require clojure.core
-            [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists sleep]]))
+  (:require [clojure.test :as t :refer [deftest is testing]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists sleep]]))
 
 ;; You realize the sun doesn't go down
 ;; It's just an illusion caused by the world spinning 'round
@@ -9,16 +8,16 @@
 ;;
 ;; --The Flaming Lips
 
-(when-var-exists clojure.core/realized?
+(when-var-exists realized?
   (deftest test-realized?
     (testing "`realized?`"
 
       ;;; Common cases
 
       (testing "What happens when the input is nil?"
-        (is (thrown?  #?(:cljs :default
-                         :clj java.lang.NullPointerException
-                         :cljr Exception)
+        (is (thrown?  #?(:cljs    :default
+                         :clj     java.lang.NullPointerException
+                         :default Exception)
                       (realized? nil))))
 
       (testing "What happens if it's given all valid inputs?"
@@ -79,35 +78,35 @@
       (testing "Special case inputs"
         ;; the deref'd value is not a valid input
         (when-var-exists delay
-          (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+          (is (thrown? #?(:cljs :default :default Exception)
                        (realized? (deref (delay :delay))))))
         (when-var-exists future
-          (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+          (is (thrown? #?(:cljs :default :default Exception)
                        (realized? (deref (future :future)))))))
 
       ;;; Edge cases
 
       (testing "What happens when the input is an incorrect shape?"
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default :default Exception)
                      (realized? 1)))
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default :default Exception)
                      (realized? :foo)))
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default :default Exception)
                      (realized? "foo")))
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default :default Exception)
                      (realized? \f)))
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default :default Exception)
                      (realized? 'foo)))
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default :default Exception)
                      (realized? ##NaN)))
 
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default :default Exception)
                      (realized? '())))
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default :default Exception)
                      (realized? '(:foo :bar :baz))))
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default :default Exception)
                      (realized? [])))
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default :default Exception)
                      (realized? {})))
-        (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+        (is (thrown? #?(:cljs :default :default Exception)
                      (realized? #{})))))))

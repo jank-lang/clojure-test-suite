@@ -1,9 +1,9 @@
 (ns clojure.core-test.plus-squote
-  (:require [clojure.test :as t :refer [deftest testing is are]]
+  (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/+'
+(when-var-exists +'
   (deftest test-+'
     (are [sum addend summand] (= sum (+' addend summand))
       0 0 0

@@ -1,8 +1,8 @@
 (ns clojure.core-test.int
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [are deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/int
+(when-var-exists int
   (deftest test-int
     ;; There is no platform independent predicate to test specifically
     ;; for an int. While `int?` exists, it returns true for any
@@ -12,7 +12,7 @@
     ;; integer of some sort.
     (is (int? (int 0)))
     #?(:clj  (is (instance? java.lang.Integer (int 0)))
-	   :cljr (is (instance? System.Int32 (int 0))))
+       :cljr (is (instance? System.Int32 (int 0))))
 
     ;; Check conversions and rounding from other numeric types
     (are [expected x] (= expected (int x))
@@ -30,10 +30,7 @@
       1    1.9
       1    1.1M
       -1   -1.1M
-      #?@(:cljs []                      ; The CLSJ compiler barfs on
-                                        ; these for some unknown
-                                        ; reason. Interestingly, they
-                                        ; work in a CLJS REPL.
+      #?@(:cljs []
           :default
           [1    3/2
            -1   -3/2
@@ -41,8 +38,8 @@
            0    -1/10]))
 
     #?@(:cljs []
-        :bb []	
-	    :cljr
+        :bb []
+        :cljr
         [ ;; `int` throws outside the range of 32767 ... -32768.
          (is (thrown? Exception (int -2147483648.000001)))
          (is (thrown? Exception (int -2147483649)))

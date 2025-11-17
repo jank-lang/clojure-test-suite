@@ -1,8 +1,8 @@
 (ns clojure.core-test.identical-qmark
-  (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+  (:require [clojure.test :as t :refer [deftest is]]
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists clojure.core/identical?
+(when-var-exists identical?
  (deftest test-identical?
    ;; objects that are the same object are identical
    (let [x (hash-map)
