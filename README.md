@@ -148,7 +148,6 @@ they are passed to the Babashka task.
 The complete set of conversions of characters to names is:
 - "*" -> "star"
 - "+" -> "plus
-- "-" -> "minus"
 - "!" -> "bang"
 - "'" -> "squote"
 - "?" -> "qmark"
@@ -156,3 +155,5 @@ The complete set of conversions of characters to names is:
 - ">" -> "gt"
 - "=" -> "eq"
 - "%" -> "percent"
+- "-" conversion has conditional logic, if the symbol starts with -, we use
+  "minus" else if the symbol contains within a -, we use "_".
