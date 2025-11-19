@@ -30,4 +30,8 @@
                                      (swap! counter inc)
                                      (swap! counter inc)
                                      :bar)))
-                       (is (= 3 @counter))))))
+                       (is (= 3 @counter))))
+                   (testing "when-let accepts exactly two"
+                     (is (thrown? Exception
+                                  (macroexpand
+                                    '(when-let [x (range 5) y (range 5)])))))))
