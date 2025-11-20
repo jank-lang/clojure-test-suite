@@ -23,6 +23,7 @@
        ;; In cljs, `double` is just returns the argument unchanged (dummy fn)
        [(is (= "0" (double "0")))
         (is (= :0 (double :0)))]
+       :jank []
 	   :cljr
        [(is (= 0.0 (double "0")))
         (is (thrown? Exception (double :0)))]
