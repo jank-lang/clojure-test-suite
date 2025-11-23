@@ -73,7 +73,7 @@
 
     #?@(:cljs []
         :default
-         (def testvar-a 0)
+        [(def testvar-a 0)
          (def testvar-b 10)
 
          (testing "watch var"
@@ -139,7 +139,7 @@
                (is (contains? (set (keyed :e @state))
                               {:key :e :ref #'testvar-a :old 4 :new 5 :tester :err}))
                (is (contains? (set (keyed :e @state))
-                              {:key :e :ref #'testvar-b :old 14 :new 15 :tester :err}))))))
+                              {:key :e :ref #'testvar-b :old 14 :new 15 :tester :err})))))])
 
     #?(:cljs nil
        :default
