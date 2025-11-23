@@ -6,8 +6,11 @@
   (deftest test-derive
 
     (testing "derive tag parent"
-      (are [tag parent] (and (nil? (derive tag parent))
-                             (isa? tag parent))
+      (are [tag parent] (let [success (and (nil? (derive tag parent))
+                                           (isa? tag parent))]
+                          ; cleanup global hierarchy not to interfere with other tests
+                          (underive tag parent)
+                          success)
                         ::rect ::shape
                         'n/a 'n/b
                         #?(:cljs js/String :default String) ::object))
