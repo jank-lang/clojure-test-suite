@@ -19,7 +19,7 @@
 
     (testing "invalid"
       (are [x] (thrown? #?(:cljs js/Error :default Exception) (odd? x))
-        #_:clj-kondo/ignore nil
+        nil
         ##Inf
         ##-Inf
         ##NaN

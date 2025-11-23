@@ -37,7 +37,6 @@
 
     (when-var-exists defmulti
       (testing "multimethods"
-        #_{:clj-kondo/ignore [:inline-def]}
         (defmulti my-multi first)
         (defmethod my-multi :foo [_] :multi/foo)
         (is (ifn? my-multi))))

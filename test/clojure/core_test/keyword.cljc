@@ -84,7 +84,6 @@
     #?(; CLJS creates a keyword that isn't
        ; readable (symbol part is null string: ":abc/")
        :cljs
-       #_{:clj-kondo/ignore [:unused-value]}
        nil
 
        :jank

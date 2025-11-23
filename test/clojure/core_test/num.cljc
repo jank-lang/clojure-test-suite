@@ -1,4 +1,3 @@
-#_{:clj-kondo/ignore [:unused-referred-var]}
 (ns clojure.core-test.num
   (:require [clojure.test :as t :refer [deftest is]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
@@ -23,5 +22,5 @@
           (is (instance? System.Int64 (num x))))
         ;; `BigInt` and `BigDecimal` are always boxed and `num` just returns them as-is.
         (is (instance? clojure.lang.BigInt (num 1N)))
-        (is (instance? clojure.lang.BigDecimal (num 1.0M)))]		
+        (is (instance? clojure.lang.BigDecimal (num 1.0M)))]
        :default (is false "TODO test num"))))

@@ -1,4 +1,3 @@
-#_{:clj-kondo/ignore [:unused-namespace]}
 (ns clojure.core-test.minus
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.number-range :as r]
@@ -70,7 +69,7 @@
 
       ;; Zero arg
       #?(:cljs nil
-         :default (is (thrown? #?(:cljs :default :clj Exception  :cljr Exception) (-))))
+         :default (is (thrown? #?(:cljs :default :default Exception) (-))))
 
       ;; Single arg
       (is (= -3 (- 3)))
@@ -106,7 +105,6 @@
 
 
     #?(:cljs
-       #_{:clj-kondo/ignore [:unused-value]}
        nil ; CLJS doesn't support ratios
 
        :default

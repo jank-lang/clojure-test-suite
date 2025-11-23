@@ -96,7 +96,6 @@
            (is (thrown? Exception (* 3 (long (/ r/min-int 2)))))]))
 
     #?(:cljs
-       #_{:clj-kondo/ignore [:unused-value]}
        nil
 
        :default

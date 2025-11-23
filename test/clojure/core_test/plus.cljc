@@ -1,4 +1,3 @@
-#_{:clj-kondo/ignore [:unused-namespace]}
 (ns clojure.core-test.plus
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.number-range :as r]
@@ -101,7 +100,6 @@
            (is (instance? clojure.lang.BigInt (+ 1N 5N)))]))
 
     #?(:cljs
-       #_{:clj-kondo/ignore [:unused-value]}
        nil
 
        :default

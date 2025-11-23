@@ -135,7 +135,6 @@
            (is (thrown? Exception (/ 1 nil)))]))
 
     #?(:cljs
-       #_{:clj-kondo/ignore [:unused-value]}
        nil
 
        :default

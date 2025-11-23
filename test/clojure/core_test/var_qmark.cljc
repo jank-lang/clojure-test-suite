@@ -24,12 +24,10 @@
         #'*assert*          ; dynamic
         #?@(; CLJS `def` doesn't necessarily evaluate to the value of the var:
             :cljs [],
-            :default [#_{:clj-kondo/ignore [:inline-def :uninitialized-var :clojure-lsp/unused-public-var]}
-                      (def baz)])
+            :default [(def baz)])
         #?@(; CLJS `defn` produces a non-var
             :cljs [],
-            :default [#_{:clj-kondo/ignore [:inline-def :uninitialized-var]}
-                      (defn qux [] nil)]))
+            :default [(defn qux [] nil)]))
 
       (when-var-exists defmulti
         (is (var? #'bar)))

@@ -7,7 +7,6 @@
     (testing "common"
       (is (= true (and)))
       (are [x] (= x
-                  #_{:clj-kondo/ignore [:single-logical-operand]}
                   (and x))
         true
         false
@@ -36,5 +35,4 @@
 
    (testing "infinite-sequence"
      (is (some?
-          #_{:clj-kondo/ignore [:single-logical-operand]}
           (and (range)))))))

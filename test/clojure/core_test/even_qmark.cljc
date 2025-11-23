@@ -19,7 +19,6 @@
 
     (testing "invalid"
       (are [x] (thrown? #?(:cljs :default :default Exception) (even? x))
-        #_:clj-kondo/ignore
         nil
         ##Inf
         ##-Inf

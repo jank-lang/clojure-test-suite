@@ -49,12 +49,10 @@
                            {:key :key2 :ref watchable :old 1 :new 2 :watcher :watcher2}}))))
 
     #?(:cljs
-       #_{:clj-kondo/ignore [:unused-value]}
        nil
 
        :default
        (testing "remove watch vars"
-         #_{:clj-kondo/ignore [:inline-def]}
          (def watchable 0)
 
          (let [messages (volatile! #{})
@@ -100,7 +98,6 @@
                               {:key :key2 :ref #'watchable :old 1 :new 2 :watcher :watcher2}})))))
 
     #?(:cljs
-       #_{:clj-kondo/ignore [:unused-value]}
        nil
 
        :default
@@ -147,7 +144,6 @@
                               {:key :key2 :ref watchable :old 1 :new 2 :watcher :watcher2}})))))
 
     #?(:cljs
-       #_{:clj-kondo/ignore [:unused-value]}
        nil
 
        :default

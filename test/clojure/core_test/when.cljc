@@ -9,7 +9,6 @@
       (is (nil? (when false :foo)))
       (is (nil? (when ((constantly nil)) :foo)))
 
-      #_{:clj-kondo/ignore [:missing-body-in-when]}
       (testing "without a body, truth doesn't matter"
         (is (nil? (when false)))
         (is (nil? (when true))))
@@ -30,7 +29,6 @@
 
     (testing "`when` has implicit `do`"
       (is (= :bar
-             #_{:clj-kondo/ignore [:unused-value]}
              (when true :foo :bar)))
       (let [foo (atom 0)]
         (is (= :bar (when true

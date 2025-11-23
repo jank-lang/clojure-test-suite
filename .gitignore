@@ -11,8 +11,10 @@ pom.xml.asc
 /.prepl-port
 .hgignore
 .hg/
-/.clj-kondo
-/.lsp
+/.clj-kondo/*
+!/.clj-kondo/config.edn
+/.lsp/*
+!/.lsp/config.edn
 *~
 .*.swp
 /node_modules

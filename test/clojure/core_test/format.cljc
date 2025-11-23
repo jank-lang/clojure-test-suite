@@ -1,4 +1,3 @@
-#_{:clj-kondo/ignore [:unused-referred-var]}
 (ns clojure.core-test.format
   (:require [clojure.test :as t :refer [deftest is]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))

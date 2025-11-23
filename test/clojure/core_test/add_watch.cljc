@@ -73,9 +73,7 @@
 
     #?@(:cljs []
         :default
-        [#_{:clj-kondo/ignore [:inline-def]}
          (def testvar-a 0)
-         #_{:clj-kondo/ignore [:inline-def]}
          (def testvar-b 10)
 
          (testing "watch var"
