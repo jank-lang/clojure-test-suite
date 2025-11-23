@@ -27,13 +27,6 @@
                     {:a 4 :b 215}])
   
   (deftest test-sort-by
-
-    ;; We're not testing `compare` so keep it simple
-    ;; (sort ...) = (sort-by identity ...)
-
-    ;; comparator defaults to compare
-    ;; must implement java.util.Comparator
-
     (testing "sort-by artity-2"
       (testing "key-fn is `identity`"
         (are [expected x] (= expected (sort x) (sort-by identity x))
