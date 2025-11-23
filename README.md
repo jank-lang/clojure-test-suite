@@ -155,3 +155,4 @@ The complete set of conversions of characters to names is:
 - ">" -> "gt"
 - "=" -> "eq"
 - "%" -> "percent"
+- "-" -> "minus" when at the start of a word, otherwise "_"
