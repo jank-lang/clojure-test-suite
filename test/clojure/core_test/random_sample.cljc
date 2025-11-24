@@ -56,6 +56,7 @@
         (is (every? (comp nil? seq) (repeatedly draws #(random-sample -1 nil))))
         (is (every? (comp nil? seq) (repeatedly draws #(transduce (random-sample -1) conj [] nil))))
         
-        (is (thrown? #?(:cljs :default :default Exception) (seq (random-sample nil coll))))
+        #?(:cljs (is (nil? (seq (random-sample nil coll))))
+           :default (is (thrown? Exception (seq (random-sample nil coll)))))
         (is (thrown? #?(:cljs :default :default Exception) (seq (random-sample 0.5 42))))
         (is (thrown? #?(:cljs :default :default Exception) (seq (random-sample 0.5 :foo))))))))
