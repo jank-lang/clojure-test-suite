@@ -42,8 +42,8 @@
         (is (every? #(= % coll) (repeatedly draws #(random-sample 1 coll))))
         (is (every? #(= % coll) (repeatedly draws #(transduce (random-sample 1) conj [] coll))))
         ;; if input collection is empty, then the result is always empty
-        (is (every? (comp nil? seq) (repeatedly draws #(random-sample 0 []))))
-        (is (every? (comp nil? seq) (repeatedly draws #(transduce (random-sample 0) conj [] [])))))
+        (is (every? (comp nil? seq) (repeatedly draws #(random-sample 1 []))))
+        (is (every? (comp nil? seq) (repeatedly draws #(transduce (random-sample 1) conj [] [])))))
 
       (testing "negative tests"
         ;; if probablity is < 0, always empty
