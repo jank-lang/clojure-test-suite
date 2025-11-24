@@ -92,6 +92,14 @@
            (is (= true (< "1" "2")))
            (is (= false (< "foo" "bar")))
            (is (= false (< :foo :bar)))]
+          :cljr
+          [(is (thrown? Exception (< nil 1)))
+           (is (thrown? Exception (< 1 nil)))
+           (is (thrown? Exception (< nil 1 2)))
+           (is (thrown? Exception (< 1 2 nil)))
+           (is (= true (< "1" "2")))
+           (is (thrown? Exception (< "foo" "bar")))
+           (is (thrown? Exception (< :foo :bar)))]
           :default
           [(is (thrown? Exception (< nil 1)))
            (is (thrown? Exception (< 1 nil)))
