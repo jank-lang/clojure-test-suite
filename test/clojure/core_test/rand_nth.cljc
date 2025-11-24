@@ -8,9 +8,14 @@
     ;; verify that the results are not constant and are within range
     ;; of the items in the collection. Note that we do NOT validate
     ;; the quality of the randomness in any way.
-    (let [draws 100
-          nitems 10000
-          coll (doall (range nitems)) ; just need unique items in the coll
-          samples (repeatedly draws #(rand-nth coll))]
-      (is (> (count (set samples)) 1))  ; unlikely to be constant
-      (is (every? #(< -1 % nitems) samples))))) ; in-range?
+    (testing "basic case"
+      (let [draws 100
+            nitems 10000
+            coll (doall (range nitems)) ; just need unique items in the coll
+            samples (repeatedly draws #(rand-nth coll))]
+        (is (> (count (set samples)) 1)) ; unlikely to be constant
+        (is (every? #(< -1 % nitems) samples)))) ; in-range?
+
+    (testing "negative cases"
+      (is (nil? (rand-nth nil)))
+      (is (thrown? #?(:cljs :default :default Exception) (rand-nth 1))))))
