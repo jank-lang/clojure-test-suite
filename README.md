@@ -79,7 +79,7 @@ npx nodemon -w target/js taget/js/node-tests.js --test=clojure.core-test.int-que
 
 ### Pre-requisites
 - [dotnet](https://dotnet.microsoft.com/en-us/download)
-- `ClojureCLR`: `dotnet tool install --global Clojure.Main --version 1.12.2`
+- `ClojureCLR`: `dotnet tool install --global Clojure.Main --version 1.12.3-alpha4`
 - `cljr`: `dotnet tool install --global Clojure.Cljr --version 0.1.0-alpha6`
 
 ```bash
