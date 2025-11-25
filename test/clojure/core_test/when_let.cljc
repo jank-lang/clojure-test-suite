@@ -31,8 +31,8 @@
                                      (swap! counter inc)
                                      :bar)))
                        (is (= 3 @counter))))
-                   #?(:cljs nil
-                      :bb nil
+                   #?(:cljs nil ; Skipped due to ClojureScript's atypical macro expansion.
+                      :bb nil ; Skipped because of Babashka issue https://github.com/babashka/babashka/issues/1894
                       :default (testing "when-let accepts exactly two"
                                  (is (thrown? Exception
                                               (macroexpand
