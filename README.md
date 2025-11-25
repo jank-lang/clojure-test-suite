@@ -20,14 +20,14 @@ Note: You can also run tests with Babashka tasks. See below.
 For a one-off run, you can use the following:
 
 ```bash
-$ lein test
+lein test
 ```
 
 However, during development, you can use `test-refresh` to automatically re-run
 the test suite whenever you save new changes.
 
 ```bash
-$ lein test-refresh
+lein test-refresh
 ```
 
 ## Running the ClojureScript tests
