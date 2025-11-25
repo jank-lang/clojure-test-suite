@@ -46,7 +46,7 @@ jobs:
 
       - name: Install ClojureCLR
         run: |
-          dotnet tool install --global Clojure.Main --version 1.12.2
+          dotnet tool install --global Clojure.Main --version 1.12.3-alpha4
           dotnet tool install --global Clojure.Cljr --version 0.1.0-alpha6
 
       - name: Prepare node
