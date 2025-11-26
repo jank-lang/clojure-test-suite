@@ -19,10 +19,10 @@
 
    (deftype Checker []
      IChecker
-     (isLong [this ^long l] true)
-     (isLong [this ^Object l] false)
-     (isDouble [this ^double d] true)
-     (isDouble [this ^Object d] false))))
+     (isLong [_this ^long _l] true)
+     (isLong [_this ^Object _l] false)
+     (isDouble [_this ^double _d] true)
+     (isDouble [_this ^Object _d] false))))
 
 (when-var-exists num
  (deftest test-num
