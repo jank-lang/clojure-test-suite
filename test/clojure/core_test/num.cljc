@@ -59,7 +59,7 @@
                   ##Inf))
    (testing "exceptions thrown"
      ;; [[num]] is a true no-op in `cljr`, equivalent to [[identity]]
-     #?@(:cljs
+     #?(:cljs
          nil
 
          :cljr
@@ -76,8 +76,8 @@
            \a
            ""
            "1"
-           #""
-           'a)
+           'a
+           #"")
 
          :default
          (are [x] (thrown? Exception (num x))
@@ -92,5 +92,5 @@
            \a
            ""
            "1"
-           #""
-           'a))))))
+           'a
+           #""))))))
