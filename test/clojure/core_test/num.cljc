@@ -55,6 +55,7 @@
                   (long 1)
                   (float 1.0)
                   (double 1.0)
+                  nil
                   ##NaN
                   ##Inf))
    (testing "exceptions thrown"
@@ -71,7 +72,6 @@
            #{}
            []
            '()
-           nil
            \1
            \a
            ""
@@ -87,7 +87,6 @@
            #{}
            []
            '()
-           nil
            \1
            \a
            ""
