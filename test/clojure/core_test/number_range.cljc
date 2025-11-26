@@ -1,7 +1,5 @@
 (ns clojure.core-test.number-range)
 
-#?(:jank (cpp/raw "#include <limits>"))
-
 (def ^:const max-int #?(:clj Long/MAX_VALUE
                         :cljr Int64/MaxValue
                         :cljs js/Number.MAX_SAFE_INTEGER
