@@ -43,10 +43,12 @@
         (is (instance? java.math.BigDecimal (num 1.0M)))]
        :cljr [(is (= ##NaN (num ##NaN)))
               (is (NaN? (num ##NaN)))
+              (is (= (byte 1) (num (byte 1))))
+              (is (= System.UInt64 (type (num (byte 1)))))
               (are [n] (and (= n (num n))
                             (= (type (num n)) System.Int64))
                 (short 1)
-                (byte 1))
+                (int 1))
               (are [n] (and (= n (num n))
                                (= (type n) (type (num n))))
                    0
@@ -78,7 +80,8 @@
                    nil
                    ##Inf)])
    (testing "exceptions thrown"
-     ;; [[num]] is a true no-op in `cljr`, equivalent to [[identity]]
+     ;; [[num]] is *almost* a true no-op in `cljr`, equivalent to [[identity]],
+     ;; except that it will upcast to System.Int64/System.UInt64
      #?@(:cljs
          []
 
