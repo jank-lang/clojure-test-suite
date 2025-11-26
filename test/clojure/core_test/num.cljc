@@ -41,8 +41,28 @@
         ;; `BigInt` and `BigDecimal` are always boxed and `num` just returns them as-is.
         (is (instance? clojure.lang.BigInt (num 1N)))
         (is (instance? java.math.BigDecimal (num 1.0M)))]
+       :cljr [(is (= ##NaN (num ##NaN)))
+              (is (NaN? (num ##NaN)))
+              (are [n] (and (= n (num n))
+                            (= (type (num n)) System.Int64))
+                (short 1)
+                (byte 1))
+              (are [n] (and (= n (num n))
+                               (= (type n) (type (num n))))
+                   0
+                   0.1
+                   1/2
+                   1N
+                   1.0M
+                   (long 1)
+                   (float 1.0)
+                   (double 1.0)
+                   nil
+                   ##Inf)]
        ;; By default assume that other platforms are no-ops for numeric inputs
-       :default [(are [n] (and (= n (num n))
+       :default [(is (= ##NaN (num ##NaN)))
+                 (is (NaN? (num ##NaN)))
+                 (are [n] (and (= n (num n))
                                (= (type n) (type (num n))))
                    0
                    0.1
@@ -56,17 +76,15 @@
                    (float 1.0)
                    (double 1.0)
                    nil
-                   ##NaN
                    ##Inf)])
    (testing "exceptions thrown"
      ;; [[num]] is a true no-op in `cljr`, equivalent to [[identity]]
-     #?(:cljs
-         nil
+     #?@(:cljs
+         []
 
          :cljr
-         (are [x] (and (= x (num x))
-                       (= (type x) (type (num x))))
-           (fn [])
+         [(are [x] (and (= x (num x))
+                        (= (type x) (type (num x))))
            f
            {}
            #{}
@@ -78,18 +96,19 @@
            "1"
            'a
            #"")
+          (is (fn? (num (fn []))))]
 
          :default
-         (are [x] (thrown? Exception (num x))
-           (fn [])
-           f
-           {}
-           #{}
-           []
-           '()
-           \1
-           \a
-           ""
-           "1"
-           'a
-           #""))))))
+         [(are [x] (thrown? Exception (num x))
+            (fn [])
+            f
+            {}
+            #{}
+            []
+            '()
+            \1
+            \a
+            ""
+            "1"
+            'a
+            #"")])))))
