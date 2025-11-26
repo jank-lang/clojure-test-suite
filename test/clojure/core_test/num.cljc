@@ -27,7 +27,28 @@
 (when-var-exists num
  (deftest test-num
    (testing "positive cases"
-   #?@(:cljs []
+   #?@(:bb
+       [(is (= ##NaN (num ##NaN)))
+        (is (NaN? (num ##NaN)))
+        (are [n] (and (= n (num n))
+                      (= (type n) (type (num n))))
+          0
+          0.1
+          1/2
+          1N
+          1.0M
+          (short 1)
+          (byte 1)
+          (int 1)
+          (long 1)
+          (float 1.0)
+          (double 1.0)
+          nil
+          ##Inf)]
+
+       :cljs
+       []
+
        :clj
        [(testing "longs"
           (let [l       (long 1)
@@ -44,6 +65,7 @@
         ;; `BigInt` and `BigDecimal` are always boxed and `num` just returns them as-is.
         (is (instance? clojure.lang.BigInt (num 1N)))
         (is (instance? java.math.BigDecimal (num 1.0M)))]
+
        :cljr [(is (NaN? (num ##NaN)))
               (is (= (byte 1) (num (byte 1))))
               (is (= System.UInt64 (type (num (byte 1)))))
@@ -63,6 +85,7 @@
                    (double 1.0)
                    nil
                    ##Inf)]
+
        ;; By default assume that other platforms are no-ops for numeric inputs
        :default [(is (= ##NaN (num ##NaN)))
                  (is (NaN? (num ##NaN)))
