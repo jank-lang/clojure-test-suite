@@ -1,7 +1,7 @@
 (ns clojure.core-test.num
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]])
-  (:import #?(:cljr [Assigner AssignObject])))
+            [clojure.core-test.portability
+             #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (defn f [])
 
