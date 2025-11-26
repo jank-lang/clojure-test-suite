@@ -41,8 +41,7 @@
         ;; `BigInt` and `BigDecimal` are always boxed and `num` just returns them as-is.
         (is (instance? clojure.lang.BigInt (num 1N)))
         (is (instance? java.math.BigDecimal (num 1.0M)))]
-       :cljr [(is (= ##NaN (num ##NaN)))
-              (is (NaN? (num ##NaN)))
+       :cljr [(is (NaN? (num ##NaN)))
               (is (= (byte 1) (num (byte 1))))
               (is (= System.UInt64 (type (num (byte 1)))))
               (are [n] (and (= n (num n))
