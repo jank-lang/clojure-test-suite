@@ -5,7 +5,10 @@
 
 (defn f [])
 
-#?(:clj
+#?(:bb
+   nil
+
+   :clj
    (do
     (definterface IChecker
       (isLong [^long l])
