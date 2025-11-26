@@ -28,8 +28,7 @@
  (deftest test-num
    (testing "positive cases"
    #?@(:bb
-       [(is (= ##NaN (num ##NaN)))
-        (is (NaN? (num ##NaN)))
+       [(is (NaN? (num ##NaN)))
         (are [n] (and (= n (num n))
                       (= (type n) (type (num n))))
           0
@@ -87,8 +86,7 @@
                    ##Inf)]
 
        ;; By default assume that other platforms are no-ops for numeric inputs
-       :default [(is (= ##NaN (num ##NaN)))
-                 (is (NaN? (num ##NaN)))
+       :default [(is (NaN? (num ##NaN)))
                  (are [n] (and (= n (num n))
                                (= (type n) (type (num n))))
                    0
