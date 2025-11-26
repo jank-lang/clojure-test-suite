@@ -42,22 +42,22 @@
         (is (instance? clojure.lang.BigInt (num 1N)))
         (is (instance? java.math.BigDecimal (num 1.0M)))]
        ;; By default assume that other platforms are no-ops for numeric inputs
-       :default (are [n] (and (= n (num n))
-                              (= (type n) (type (num n))))
-                  0
-                  0.1
-                  1/2
-                  1N
-                  1.0M
-                  (short 1)
-                  (byte 1)
-                  (int 1)
-                  (long 1)
-                  (float 1.0)
-                  (double 1.0)
-                  nil
-                  ##NaN
-                  ##Inf))
+       :default [(are [n] (and (= n (num n))
+                               (= (type n) (type (num n))))
+                   0
+                   0.1
+                   1/2
+                   1N
+                   1.0M
+                   (short 1)
+                   (byte 1)
+                   (int 1)
+                   (long 1)
+                   (float 1.0)
+                   (double 1.0)
+                   nil
+                   ##NaN
+                   ##Inf)])
    (testing "exceptions thrown"
      ;; [[num]] is a true no-op in `cljr`, equivalent to [[identity]]
      #?(:cljs
