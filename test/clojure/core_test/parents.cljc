@@ -2,10 +2,9 @@
   (:require [clojure.test :refer [are deftest is testing use-fixtures]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-(when-var-exists
-  parents
+(when-var-exists parents
 
-  ; Some types for testing parents by type
+  ; Some custom types for testing parents by type inheritance
   (defprotocol TestParentsProtocol)
   (defrecord TestParentsRecord [] TestParentsProtocol)
   (deftype TestParentsType [] TestParentsProtocol)
@@ -62,13 +61,13 @@
                      (https://github.com/babashka/babashka/issues/1893)"
            :default (is (contains? (parents TestParentsRecord) ::record))))
 
-      #?(:cljs    "cljs doesn't report parents by type inheritance (https://ask.clojure.org/index.php/14764/)"
+      #?(:cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
          :default (testing "returns parents by type inheritance when tag is a class"
                     (is (contains? (parents String) Object))
                     (is (nil? (parents Object)))))
 
       #?(:bb      "bb doesn't report parents by type inheritance for custom types"
-         :cljs    "cljs doesn't report parents by type inheritance (https://ask.clojure.org/index.php/14764/)"
+         :cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
          :default (testing "returns parents by type inheritance when tag is a custom type"
                     (is (contains? (parents TestParentsType) clojure.core_test.parents.TestParentsProtocol))
                     (is (contains? (parents TestParentsRecord) clojure.core_test.parents.TestParentsProtocol))
@@ -120,7 +119,7 @@
                               #{} datatypes ::b
                               #{} datatypes ::a))
 
-      #?(:cljs    "cljs doesn't report parents by type inheritance (https://ask.clojure.org/index.php/14764/)"
+      #?(:cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
          :default (testing "returns parents by type inheritance when tag is a class, whether the tag is in h or not"
                     (are [h] (contains? (parents h String) Object)
                              ; tag in h
@@ -130,8 +129,8 @@
                              datatypes)))
 
       #?(:bb      "bb doesn't report parents by type inheritance for custom types"
-         :cljs    "cljs doesn't report parents by type inheritance (https://ask.clojure.org/index.php/14764/)"
-         :default (testing "returns parents by type when tag is a custom type, whether the tag is in h or not"
+         :cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
+         :default (testing "returns parents by type inheritance when tag is a custom type, whether the tag is in h or not"
                     (are [h tag] (contains? (parents h tag) clojure.core_test.parents.TestParentsProtocol)
                                  ; tag in h
                                  datatypes TestParentsType
