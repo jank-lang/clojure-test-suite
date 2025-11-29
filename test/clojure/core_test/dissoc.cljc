@@ -36,16 +36,11 @@
 
     (testing "records"
       (let [r (TestDissocRecord. 1 2 nil)]
-        (are [expected keys] #?(; bb preserves the record type even if a basis fields is dissociated
-                                ; https://github.com/babashka/babashka/issues/1886
-                                :bb      (= expected (into {} (apply dissoc r keys)))
-                                ; other implementations return a map
-                                :default (= expected (apply dissoc r keys)))
+        (are [expected keys] (= expected (apply dissoc r keys))
                              {:b 2 :c nil} [:a]
                              {:b 2 :c nil} [:a :d]
-                             {} [:a :b :c])
-        ; all implementations preserve the record type if no basis field is dissociated
-        (is (= r (dissoc r :d)))))
+                             {} [:a :b :c]
+                             r [:d])))
 
     (testing "bad shape"
       (are [m keys] (thrown? #?(:cljs js/Error :default Exception) (apply dissoc m keys))
