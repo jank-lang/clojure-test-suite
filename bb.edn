@@ -1,4 +1,4 @@
-{:min-bb-version "0.4.0"
+{:min-bb-version "1.12.210"
  :paths ["bb"]
  :tasks
  {test-jvm {:doc "Runs JVM tests"
