@@ -9,7 +9,7 @@
                         {:a 4 :b 7}
                         {:a 3 :b 8}])
 
-  ;; Data to test stable sorting
+  ;; Data for stable sorting
   (def stable-data [{:a 1 :b 11}
                     {:a 1 :b 21}
                     {:a 1 :b 39}
