@@ -37,7 +37,9 @@
    (is (NaN? (max ##NaN)))
 
    #?@(:cljs
-       [(is (= "y" (max "x" "y"))) ; In CLJS "x" and "y" are characters
+       [; https://ask.clojure.org/index.php/14847
+        ; not expected to work on non-number, currently takes the first NaN (as per js/isNaN) as max
+        (is (= "x" (max "x" "y")))
         (is (= 1 (max nil 1)))
         (is (= 1 (max 1 nil)))]
        :default
