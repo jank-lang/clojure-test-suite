@@ -1,5 +1,5 @@
 (ns clojure.core-test.min
-  (:require [clojure.test :as t :refer [are deftest is]]
+  (:require [clojure.test :refer [are deftest is]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists min
@@ -30,25 +30,17 @@
    (is (= ##-Inf (min 1 2 3 4 5 ##-Inf)))
    (is (= 1 (min 1 2 3 4 5 ##Inf)))
 
-   #?@(:cljs
-       ;; There are bugs here:
-       ;; https://clojure.atlassian.net/browse/CLJS-3425
-       [(is (= 1 (min ##NaN 1))) ; Bug
-        (is (NaN? (min 1 ##NaN)))
-        (is (NaN? (min 1 2 3 4 ##NaN)))
-        (is (= ##Inf (min ##-Inf ##NaN ##Inf))) ; Bug
-        (is (NaN? (min ##NaN)))
+    (is (NaN? (min ##NaN 1)))
+    (is (NaN? (min 1 ##NaN)))
+    (is (NaN? (min 1 2 3 4 ##NaN)))
+    (is (NaN? (min ##-Inf ##NaN ##Inf)))
+    (is (NaN? (min ##NaN)))
 
-        (is (= "x" (min "x" "y")))
-        (is (nil? (min nil 1))) ; nil acts like zero
-        (is (nil? (min 1 nil)))]
-       :default
-       [(is (NaN? (min ##NaN 1)))
-        (is (NaN? (min 1 ##NaN)))
-        (is (NaN? (min 1 2 3 4 ##NaN)))
-        (is (NaN? (min ##-Inf ##NaN ##Inf)))
-        (is (NaN? (min ##NaN)))
-
-        (is (thrown? #?(:cljs :default :default Exception) (min "x" "y")))
-        (is (thrown? #?(:cljs :default :default Exception) (min nil 1)))
-        (is (thrown? #?(:cljs :default :default Exception) (min 1 nil)))])))
+    #?@(:cljs
+        [(is (= "x" (min "x" "y")))
+         (is (nil? (min nil 1)))                            ; nil acts like zero
+         (is (nil? (min 1 nil)))]
+        :default
+        [(is (thrown? Exception (min "x" "y")))
+         (is (thrown? Exception (min nil 1)))
+         (is (thrown? Exception (min 1 nil)))])))
