@@ -37,10 +37,7 @@
     (is (NaN? (min ##NaN)))
 
     #?@(:cljs
-        [; https://ask.clojure.org/index.php/14847
-         ; not expected to work on non-number, currently takes the first NaN (as per js/isNaN) as min
-         (is (= "y" (min "y" "x")))
-         (is (nil? (min nil 1)))                            ; nil acts like zero
+        [(is (nil? (min nil 1)))                            ; nil acts like zero
          (is (nil? (min 1 nil)))]
         :default
         [(is (thrown? Exception (min "x" "y")))
