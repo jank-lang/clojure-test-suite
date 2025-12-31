@@ -13,7 +13,7 @@
                           success)
                         ::rect ::shape
                         'n/a 'n/b
-                        #?(:cljs js/String :default String) ::object))
+                        #?(:cljs js/String :lpy python/str :default String) ::object))
 
     (testing "derive h tag parent"
       (are [expected h tag parent] (= expected (derive h tag parent))
@@ -32,9 +32,9 @@
                                     :descendants {'n/b #{'n/a}}
                                     :parents     {'n/a #{'n/b}}} (make-hierarchy) 'n/a 'n/b
 
-                                   {:ancestors   {#?(:cljs js/String :default String) #{::object}}
-                                    :descendants {::object #{#?(:cljs js/String :default String)}}
-                                    :parents     {#?(:cljs js/String :default String) #{::object}}} (make-hierarchy) #?(:cljs js/String :default String) ::object
+                                   {:ancestors   {#?(:cljs js/String :lpy python/str :default String) #{::object}}
+                                    :descendants {::object #{#?(:cljs js/String :lpy python/str :default String)}}
+                                    :parents     {#?(:cljs js/String :lpy python/str :default String) #{::object}}} (make-hierarchy) #?(:cljs js/String :lpy python/str :default String) ::object
 
                                    {:ancestors   {::rect #{::shape}, ::square #{::rect ::shape}}
                                     :descendants {::rect #{::square}, ::shape #{::rect ::square}}
@@ -49,7 +49,7 @@
                                     :parents     {::rect #{::shape}}} {:parents {} :descendants {} :ancestors {}} ::rect ::shape))
 
     (testing "cyclic derivation"
-      (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (derive ::a ::a)))
+      (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (derive ::a ::a)))
       (let [h (-> (make-hierarchy) (derive ::a ::b) (derive ::b ::c))]
         (is (thrown? #?(:cljs js/Error :default Exception) (derive h ::c ::a)))))
 
@@ -63,22 +63,22 @@
       #?(:bb      "bb allows non-namespaced tags"           ; https://github.com/babashka/babashka/issues/1890
          :cljs    "cljs allows non-namespaced tags"         ; https://ask.clojure.org/index.php/14759/derive-tag-parent-accepts-namespaced-keyword-symbol-parent
          :default (testing "non-namespaced tag"
-                    (are [tag parent] (thrown? #?(:cljr Exception :default Error) (derive tag parent))
+                    (are [tag parent] (thrown? #?(:cljr Exception :lpy Exception :default Error) (derive tag parent))
                                       :a ::b
                                       'a 'n/b)))
 
       #?(:bb      "bb allows non-namespaced parents"        ; https://github.com/babashka/babashka/issues/1890
          :default (testing "non-namespaced parent"
-                    (are [tag parent] (thrown? #?(:cljs js/Error :cljr Exception :default Error) (derive tag parent))
+                    (are [tag parent] (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (derive tag parent))
                                       :a :b
                                       ::a :b
                                       'a 'b
                                       'n/a 'b
-                                      #?(:cljs js/String :default String) :b)))
+                                      #?(:cljs js/String :lpy python/str :default String) :b)))
 
       (testing "more invalid parents"
         (are [tag parent] (thrown? #?(:cljs js/Error :bb Error :default Exception) (derive tag parent))
-                          ::tag #?(:cljs js/String :default String)
+                          ::tag #?(:cljs js/String :lpy python/str :default String)
                           ::tag 42
                           ::tag "parent"))
 

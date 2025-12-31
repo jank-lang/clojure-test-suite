@@ -30,7 +30,7 @@
     #?@(:cljs []
         :jank []
         :default
-        [(is (instance? clojure.lang.BigInt (bigint 0)))
-         (is (instance? clojure.lang.BigInt (bigint 0.0)))
-         (is (instance? clojure.lang.BigInt (inc' r/max-int)))
-         (is (instance? clojure.lang.BigInt (dec' r/min-int)))])))
+        [(is (instance? #?(:lpy python/int :default clojure.lang.BigInt) (bigint 0)))
+         (is (instance? #?(:lpy python/int :default clojure.lang.BigInt) (bigint 0.0)))
+         (is (instance? #?(:lpy python/int :default clojure.lang.BigInt) (inc' r/max-int)))
+         (is (instance? #?(:lpy python/int :default clojure.lang.BigInt) (dec' r/min-int)))])))

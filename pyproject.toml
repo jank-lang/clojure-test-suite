@@ -7,7 +7,7 @@ license = {text = "MPL 2.0"}
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "basilisp[pytest] @ file:///Users/christopher/Projects/basilisp"
+   "basilisp[pytest] @ git+https://github.com/basilisp-lang/basilisp@fix/test-runner-suffix"
 ]
 
 [tool.poetry.dependencies]

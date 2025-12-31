@@ -66,7 +66,7 @@
        (defn tap-tester
          [atom-ref]
          (fn [x]
-           (if (instance? clojure.lang.IPending x)
+           (if (instance? #?(:lpy basilisp.lang.interfaces/IPending :default clojure.lang.IPending) x)
              (deliver x nil)
              (swap! atom-ref conj x))))
 

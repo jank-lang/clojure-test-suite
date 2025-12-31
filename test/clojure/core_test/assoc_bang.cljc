@@ -51,9 +51,9 @@
 
     (testing "cannot assoc! transient after persistent! call"
       (let [t (transient {:a 1}), _ (persistent! t)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (assoc! t :b 2))))
+        (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (assoc! t :b 2))))
       (let [t (transient [1]), _ (persistent! t)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (assoc! t 0 2)))))
+        (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (assoc! t 0 2)))))
 
     (testing "bad shape"
       (are [coll] (thrown? #?(:cljs js/Error :default Exception) (assoc! coll 1 3))

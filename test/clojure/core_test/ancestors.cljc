@@ -5,8 +5,8 @@
 (when-var-exists ancestors
 
   ; Some classes for testing ancestors by type inheritance
-  (def AncestorT #?(:cljs js/Object :default Object))
-  (def ChildT #?(:cljs :default :default clojure.lang.PersistentHashSet))
+  (def AncestorT #?(:cljs js/Object :lpy python/object :default Object))
+  (def ChildT #?(:cljs :default :lpy basilisp.lang.set/PersistentSet :default clojure.lang.PersistentHashSet))
 
   ; Some custom types for testing ancestors by type inheritance
   (defprotocol TestAncestorsProtocol)
@@ -76,9 +76,9 @@
       #?(:bb      "bb doesn't report ancestors by type inheritance for custom types"
          :cljs    "cljs doesn't report ancestors by type inheritance yet (CLJS-3464)"
          :default (testing "returns ancestors by type inheritance when tag is a custom type"
-                    (is (contains? (ancestors TestAncestorsType) clojure.core_test.ancestors.TestAncestorsProtocol))
-                    (is (contains? (ancestors TestAncestorsRecord) clojure.core_test.ancestors.TestAncestorsProtocol))
-                    (is (contains? (ancestors TestAncestorsRecord) clojure.lang.Associative))
+                    (is (contains? (ancestors TestAncestorsType) #?(:lpy TestAncestorsProtocol :default clojure.core_test.ancestors.TestAncestorsProtocol)))
+                    (is (contains? (ancestors TestAncestorsRecord) #?(:lpy TestAncestorsProtocol :default clojure.core_test.ancestors.TestAncestorsProtocol)))
+                    (is (contains? (ancestors TestAncestorsRecord) #?(:lpy basilisp.lang.interfaces/IAssociative :default clojure.lang.Associative)))
                     (is (nil? (ancestors TestAncestorsProtocol)))))
 
       (testing "does not throw on invalid tag"
@@ -140,8 +140,8 @@
          :cljs    "cljs doesn't report ancestors by type inheritance yet (CLJS-3464)"
          :default (testing "returns ancestors by type inheritance when tag is a custom type, whether the tag is in h or not"
                     (are [h tag] (let [actual-ancestors (ancestors h tag)]
-                                   (and (contains? actual-ancestors clojure.core_test.ancestors.TestAncestorsProtocol)
-                                        (contains? actual-ancestors clojure.lang.Associative)))
+                                   (and (contains? actual-ancestors #?(:lpy TestAncestorsProtocol :default clojure.core_test.ancestors.TestAncestorsProtocol))
+                                        (contains? actual-ancestors #?(:lpy basilisp.lang.interfaces/IAssociative :default clojure.lang.Associative))))
                                  ; tag in h
                                  datatypes TestAncestorsRecord
                                  ; tag not in h

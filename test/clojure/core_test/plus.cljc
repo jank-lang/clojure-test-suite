@@ -1,7 +1,7 @@
 (ns clojure.core-test.plus
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists big-int?]]))
 
 (when-var-exists +
   (deftest test-+
@@ -89,15 +89,15 @@
            (is (thrown? Exception (+ nil 1.0)))
            (is (thrown? Exception (+ r/max-int 1)))
            (is (thrown? Exception (+ r/min-int -1)))
-           (is (instance? clojure.lang.BigInt (+ 0 1N)))
-           (is (instance? clojure.lang.BigInt (+ 0N 1)))
-           (is (instance? clojure.lang.BigInt (+ 0N 1N)))
-           (is (instance? clojure.lang.BigInt (+ 1N 1)))
-           (is (instance? clojure.lang.BigInt (+ 1 1N)))
-           (is (instance? clojure.lang.BigInt (+ 1N 1N)))
-           (is (instance? clojure.lang.BigInt (+ 1 5N)))
-           (is (instance? clojure.lang.BigInt (+ 1N 5)))
-           (is (instance? clojure.lang.BigInt (+ 1N 5N)))]))
+           (is (big-int? (+ 0 1N)))
+           (is (big-int? (+ 0N 1)))
+           (is (big-int? (+ 0N 1N)))
+           (is (big-int? (+ 1N 1)))
+           (is (big-int? (+ 1 1N)))
+           (is (big-int? (+ 1N 1N)))
+           (is (big-int? (+ 1 5N)))
+           (is (big-int? (+ 1N 5)))
+           (is (big-int? (+ 1N 5N)))]))
 
     #?(:cljs
        nil
@@ -140,8 +140,8 @@
            ;; This case is pretty safe.
            1.5 1.0 1/2)
 
-         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (+ 1/2 nil)))
-         (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (+ nil 1/2)))
+         (is (thrown? #?(:cljs :default :default Exception) (+ 1/2 nil)))
+         (is (thrown? #?(:cljs :default :default Exception) (+ nil 1/2)))
 
          #?@(:cljs nil
              :default
@@ -151,10 +151,10 @@
               (is (= (- r/max-double) (+ (- r/max-double) -1/2)))
               (is (= 0.5 (+ r/min-double 1/2)))
               (is (= -0.5 (+ r/min-double -1/2)))
-              (is (instance? clojure.lang.Ratio (+ 0 1/3)))
-              (is (instance? clojure.lang.Ratio (+ 0N 1/3)))
-              (is (instance? clojure.lang.Ratio (+ 1 1/3)))
-              (is (instance? clojure.lang.Ratio (+ 1N 1/3)))
+              (is (ratio? (+ 0 1/3)))
+              (is (ratio? (+ 0N 1/3)))
+              (is (ratio? (+ 1 1/3)))
+              (is (ratio? (+ 1N 1/3)))
               ;; Note that we use `double?` here because JVM Clojure uses
               ;; java.lang.Double instead of clojure.lang.Double and we'd
               ;; like to keep this test as generic as possible.

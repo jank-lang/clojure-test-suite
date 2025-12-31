@@ -19,7 +19,7 @@
 
     (testing "cannot disj! transient after persistent! call"
       (let [t (transient #{1 2 3}), _ (persistent! t)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (disj! t 1)))))
+        (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (disj! t 1)))))
 
     (testing "bad shape"
       (are [set keys] (thrown? #?(:cljs js/Error :default Exception) (apply disj! set keys))
