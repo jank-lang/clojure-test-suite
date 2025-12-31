@@ -22,3 +22,6 @@ pom.xml.asc
 /.cpcache
 .idea
 *.iml
+__pycache__/
+.python-version
+poetry.lock
