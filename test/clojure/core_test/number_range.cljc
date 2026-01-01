@@ -1,4 +1,6 @@
-(ns clojure.core-test.number-range)
+(ns clojure.core-test.number-range
+  #?@(:lpy [(:import sys)]
+      :default []))
 
 ;; TODO jank support blocked on https://github.com/jank-lang/jank/issues/195
 
@@ -24,10 +26,12 @@
 (def ^:const max-double #?(:clj Double/MAX_VALUE
                            :cljr Double/MaxValue
                            :cljs js/Number.MAX_VALUE
+                           :lpy (.-max sys/float-info)
                            :default 1.7976931348623157e+308))
 
 (def ^:const min-double #?(:clj Double/MIN_VALUE
                            :cljr Double/Epsilon ; NOTE: definitely not Double/MinValue -- ouch!
                            :cljs js/Number.MIN_VALUE
+                           :lpy (.-min sys/float_info)
                            :default 4.9e-324))
 
