@@ -11,6 +11,11 @@
            :exec-args {:patterns [".*"]}}
   test-cljs {:doc "Runs CLJS tests"
              :task (shell "npx shadow-cljs compile test")}
+  test-lpy {:doc  "Run Basilisp tests"
+            :task (shell
+                   {:extra-env {"BASILISP_TEST_PATH"         "./test"
+                                "BASILISP_TEST_FILE_PATTERN" "'.*\\.(lpy|cljc)'"}}
+                   "basilisp test -p test -- --continue-on-collection-errors")}
   new-test {:doc "Creates new test for the Clojure symbols named by <args>. Unqualified symbols assume clojure.core"
             :requires ([new-test])
             :task (new-test/new-test *command-line-args*)}
