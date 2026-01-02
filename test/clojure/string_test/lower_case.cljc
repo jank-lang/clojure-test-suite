@@ -5,7 +5,7 @@
 
 (when-var-exists str/lower-case
   (deftest test-lower-case
-    (is (thrown? #?(:cljs :default :lpy Exception) (str/lower-case nil)))
+    (is (thrown? #?(:cljs :default :default Exception) (str/lower-case nil)))
     (is (= "" (str/lower-case "")))
     (is (= "֎" (str/lower-case "֎")))
     (is (= "asdf" (str/lower-case "AsdF")))
@@ -13,12 +13,30 @@
     (let [s "ASDF"]
       (is (= "asdf" (str/lower-case "ASDF")))
       (is (= "ASDF" s) "original string mutated"))
-    #?(:cljs (is (thrown? :default (str/lower-case :ASDF)))
-	     :cljr (is (thrown? Exception (str/lower-case :ASDF)))
-       :default (is (= ":asdf" (str/lower-case :ASDF))))
-    #?(:cljs (is (thrown? :default (str/lower-case :ASDF/ASDF)))
-	     :cljr (is (thrown? Exception (str/lower-case :ASDF/ASDF)))
-       :default (is (= ":asdf/asdf" (str/lower-case :ASDF/ASDF))))
-    #?(:cljs (is (thrown? :default (str/lower-case 'ASDF)))
-	     :cljr (is (thrown? Exception (str/lower-case 'ASDF)))
-       :default (is (= "asdf" (str/lower-case 'ASDF))))))
+    #?(:cljs
+       (are [v] (thrown? :default (str/upper-case v))
+         :ASDF
+         :ASDF/ASDF
+         'ASDF
+         'ASDF/ASDF)
+
+       :cljr
+       (are [v] (thrown? Exception (str/upper-case v))
+         :ASDF
+         :ASDF/ASDF
+         'ASDF
+         'ASDF/ASDF)
+
+       :lpy
+       (are [v] (thrown? Exception (str/upper-case v))
+         :ASDF
+         :ASDF/ASDF
+         'ASDF
+         'ASDF/ASDF)
+
+       :default
+       (are [expected v] (= expected (str/upper-case v))
+         ":asdf"      :ASDF
+         ":asdf/asdf" :ASDF/ASDF
+         "asdf"       'ASDF
+         "asdf/asdf"  'ASDF/ASDF))))
