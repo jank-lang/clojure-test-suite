@@ -47,6 +47,7 @@
       '= :=
       'abc*+!-_'?<>= "abc*+!-_'?<>="
       #?(:cljs 'cljs.core/+
+         :lpy 'basilisp.core/+
          :default 'clojure.core/+) #'+)
 
     (are [expected ns name] (= expected (symbol ns name))

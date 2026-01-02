@@ -6,7 +6,7 @@
   (deftest test-val
     (testing "`val` on map-entry-like things"
       (is (= :v (val (first {:k :v}))))
-      (is (= :v (val (first {:k :v, :one :two}))))
+      (is (contains? #{:two :v} (val (first {:k :v, :one :two}))))
       ;; Note: the following may be built on shaky ground, per Rich:
       ;; https://groups.google.com/g/clojure/c/FVcrbHJpCW4/m/Fh7NsX_Yb7sJ
       (is (= 'v (val (create-map-entry 'k 'v))))

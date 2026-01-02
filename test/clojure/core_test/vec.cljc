@@ -22,6 +22,7 @@
                            [\a \b \c] "abc"))
 
     #?(:cljr    "cljr does not alias array"
+       :lpy     "Basilisp does not alias array"
        :default (testing "array aliasing"
                   (let [arr (to-array [1 2 3]), v (vec arr)]
                     (is (= [1 2 3] v))
