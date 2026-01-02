@@ -14,28 +14,28 @@
       (is (= "asdf" (str/lower-case "ASDF")))
       (is (= "ASDF" s) "original string mutated"))
     #?(:cljs
-       (are [v] (thrown? :default (str/upper-case v))
+       (are [v] (thrown? :default (str/lower-case v))
          :ASDF
          :ASDF/ASDF
          'ASDF
          'ASDF/ASDF)
 
        :cljr
-       (are [v] (thrown? Exception (str/upper-case v))
+       (are [v] (thrown? Exception (str/lower-case v))
          :ASDF
          :ASDF/ASDF
          'ASDF
          'ASDF/ASDF)
 
        :lpy
-       (are [v] (thrown? Exception (str/upper-case v))
+       (are [v] (thrown? Exception (str/lower-case v))
          :ASDF
          :ASDF/ASDF
          'ASDF
          'ASDF/ASDF)
 
        :default
-       (are [expected v] (= expected (str/upper-case v))
+       (are [expected v] (= expected (str/lower-case v))
          ":asdf"      :ASDF
          ":asdf/asdf" :ASDF/ASDF
          "asdf"       'ASDF
