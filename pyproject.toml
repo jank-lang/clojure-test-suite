@@ -3,16 +3,16 @@ name = "clojure-test-suite"
 version = "0.1.0"
 description = "Dialect-independent tests for clojure.core, focused on locking down how Clojure JVM behaves so that other dialects to reach parity."
 authors = []
-license = {text = "MPL 2.0"}
+license = "MPL-2.0"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
    "basilisp[pytest] @ git+https://github.com/basilisp-lang/basilisp@fix/test-runner-suffix"
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.10,<4.0"
+[tool.setuptools]
+packages = []
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
