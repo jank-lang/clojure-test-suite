@@ -7,7 +7,7 @@
     ;; "Symbols begin with a non-numeric character and can contain
     ;; alphanumeric characters and *, +, !, -, _, ', ?, <, > and =
     ;; (other characters may be allowed eventually)."
-    ;; 
+    ;;
     ;; "Keywords are like symbols, except: * They can and must begin with a colon, e.g. :fred."
     ;;
     ;; (see http://clojure.org/reader for details)
@@ -16,7 +16,7 @@
     ;; keyword does not validate input strings for ns and name, and may
     ;; return improper keywords with undefined behavior for non-conformant
     ;; ns and name.
-  
+
     (are [expected name] (= expected (keyword name))
       :abc "abc"
       :abc 'abc
@@ -53,7 +53,7 @@
     (are [expected ns name] (= expected (keyword ns name))
       :abc/abc     "abc"     "abc"
       :abc.def/abc "abc.def" "abc"
-    
+
       :*/abc "*" "abc"
       :+/abc "+" "abc"
       :!/abc "!" "abc"
@@ -75,7 +75,7 @@
       :abc.def/= "abc.def" "="
 
       :abc*+!-_'?<>=/abc*+!-_'?<>= "abc*+!-_'?<>=" "abc*+!-_'?<>=")
-  
+
     (is (nil? (keyword nil)))     ; (keyword nil) => nil, surprisingly
     (is (= :abc (keyword nil "abc"))) ; If ns is nil, we just ignore it.
     (is (nil? (namespace (keyword nil "hi"))))
@@ -91,7 +91,7 @@
 
        :default
        (is (thrown? Exception (keyword "abc" nil))))
-  
+
     #?@(:jank []
         :cljs
         [(is (= :abc/abc (keyword 'abc "abc")))

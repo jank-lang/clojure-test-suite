@@ -27,6 +27,7 @@
       #?(:clj (is (thrown? Exception (inc Long/MAX_VALUE)))
          :cljr (is (thrown? Exception (inc Int64/MaxValue)))
          :cljs (is (= (inc js/Number.MAX_SAFE_INTEGER) (+ 2 js/Number.MAX_SAFE_INTEGER)))
+         :lpy nil  ; Python integers cannot overflow
          :default (is false "overflow untested")))
 
     (testing "inc-nil"

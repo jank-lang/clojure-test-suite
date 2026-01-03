@@ -36,11 +36,11 @@
       (is (= 9 (get-in [[0 1 2]
                         [3 4 5]
                         [6 7 (range)]] [2 3] 9)))
-      
-      ;; maps and vector mix 
+
+      ;; maps and vector mix
       (is (= "x" (get-in {:id 1
                           :matrix [[0 1 2]
                                    [3 4 {:var "x"}]
                                    [6 7 8]]}
-                         
+
                          [:matrix 1 2 :var] "y"))))))
