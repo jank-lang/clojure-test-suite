@@ -79,6 +79,16 @@
            (is (thrown? Exception (* nil 1)))])
 
       #?@(:cljs []
+          :lpy
+          [(is (big-int? (* 0 1N)))
+           (is (big-int? (* 0N 1)))
+           (is (big-int? (* 0N 1N)))
+           (is (big-int? (* 1N 1)))
+           (is (big-int? (* 1 1N)))
+           (is (big-int? (* 1N 1N)))
+           (is (big-int? (* 1 5N)))
+           (is (big-int? (* 1N 5)))
+           (is (big-int? (* 1N 5N)))]
           :default
           [(is (big-int? (* 0 1N)))
            (is (big-int? (* 0N 1)))
@@ -147,10 +157,12 @@
           ##-Inf ##Inf  ##-Inf
           ##-Inf ##-Inf ##Inf
           ##Inf  ##-Inf ##-Inf
-          ##Inf  ##Inf  r/max-int
-          ##-Inf ##Inf  r/min-int
-          ##Inf  ##Inf  r/max-double
-          ##Inf  ##Inf  r/min-double
+          #?@(:lpy []
+              :default
+              [##Inf  ##Inf  r/max-int
+               ##-Inf ##Inf  r/min-int
+               ##Inf  ##Inf  r/max-double
+               ##Inf  ##Inf  r/min-double])
           #?@(:cljs []
               :default
               [##Inf  ##Inf  1/2
