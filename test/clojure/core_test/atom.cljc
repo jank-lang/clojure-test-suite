@@ -28,13 +28,16 @@
       (when-var-exists clojure.core/hash-map
         (is (= {:a "a"} (meta (atom nil :meta (hash-map :a "a"))))))
       #?(:cljs (is (= 5 (meta (atom nil :meta 5)))),
+         :lpy (is (= 5 (meta (atom nil :meta 5)))),
          :default (is (thrown? Exception (atom nil :meta 5))))
       #?(:cljs (is (= #{} (meta (atom nil :meta #{})))),
+         :lpy (is (= #{} (meta (atom nil :meta #{})))),
          :default (is (thrown? Exception (atom nil :meta #{}))))
       #?(:cljs (is (= [] (meta (atom nil :meta (vector))))),
+         :lpy (is (= [] (meta (atom nil :meta (vector))))),
          :default (is (thrown? Exception (atom nil :meta (vector))))))
 
-    (testing "validator-fn"        
+    (testing "validator-fn"
       ;; Docstring: "If the new state is unacceptable, the validate-fn should
       ;; return false or throw an exception." Read this as _logical_ false,
       ;; including `nil` as well as `false`:
@@ -90,23 +93,23 @@
            :default (is (thrown? Exception (atom #{} :validator (fn [v] (some string? v))))))
         (let [some-strings (atom #{"str"} :validator (fn [v] (some string? v)))]
           (is (= #{"str" :not-a-string} (swap! some-strings conj :not-a-string)))
-          (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+          (is (thrown? #?(:cljs :default :default Exception)
                        (swap! some-strings disj "str")))
           (is (= #{"str"} (swap! some-strings disj :not-a-string)))
-          (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+          (is (thrown? #?(:cljs :default :default Exception)
                        (reset! some-strings #{})))
-          (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+          (is (thrown? #?(:cljs :default :default Exception)
                        (reset! some-strings :neither-string-nor-set)))
           (is (= #{"str"} (deref some-strings)))
           (is (= #{"some other string"} (reset! some-strings #{"some other string"})))
           (is (= #{"some other string"} (deref some-strings))))
-        
+
         (let [all-strings (atom #{} :validator (fn [v] (every? string? v)))]
           (is (= #{"str"} (swap! all-strings conj "str")))
           (is (= #{} (swap! all-strings disj "str")))
-          (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+          (is (thrown? #?(:cljs :default :default Exception)
                        (reset! all-strings :neither-string-nor-set)))
-          (is (thrown? #?(:cljs :default :clj Exception :cljr Exception)
+          (is (thrown? #?(:cljs :default :default Exception)
                        (reset! all-strings #{:not-a-string})))
           (is (= #{"new string"} (reset! all-strings #{"new string"})))
           (is (= #{"new string"} (deref all-strings))))))
