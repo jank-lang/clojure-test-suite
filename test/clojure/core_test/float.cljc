@@ -24,6 +24,7 @@
       ;; float doesn't do anything, whereas in Clojure JVM it rounds
       ;; down to zero.
       #?@(:cljs [r/min-double r/min-double]
+          :lpy []
           :default [(float 0.0) r/min-double]))
     (is (NaN? (float ##NaN)))
 
@@ -39,6 +40,12 @@
          (is (thrown? Exception (float ##-Inf)))
          (is (= (float 0.0) (float "0")))
          (is (thrown? Exception(float :0)))]
+        :lpy
+        [(is (= r/max-double (float r/max-double)))
+         (is (= ##Inf (float ##Inf)))
+         (is (= ##-Inf (float ##-Inf)))
+         (is (= 0.0 (float "0")))
+         (is (thrown? Exception (float :0)))]
         :default
         [(is (thrown? Exception (float r/max-double)))
          (is (thrown? Exception (float ##Inf)))
