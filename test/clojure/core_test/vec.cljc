@@ -19,7 +19,9 @@
                            #?@(:lpy [] :default [[1 2 3] (sorted-set 1 2 3)])
                            [1 2 3] (range 1 4)
                            [[:a 1] [:b 2]] {:a 1 :b 2}
-                           [\a \b \c] "abc"))
+                           [\a \b \c] "abc")
+
+      (is (contains? #{[[:a 1] [:b 2]] [[:b 2] [:a 1]]} (vec {:a 1 :b 2}))))
 
     #?(:cljr    "cljr does not alias array"
        :lpy     "Basilisp does not alias array"

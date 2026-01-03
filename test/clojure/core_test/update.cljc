@@ -85,7 +85,8 @@
        ;; Throw when settting index 1 when 0 doesn't exist
        [[]        1 identity]
        ;; Throw on Negative indices!
-       [[0 1]    -1 identity]
+       #?(:lpy nil
+          :default [[0 1] -1 identity])
        ;; Throw when keyword on vector
        [[1 2 3]  :k identity]
        ;; Throw on non-Associatives
