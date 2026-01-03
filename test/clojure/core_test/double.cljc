@@ -26,6 +26,9 @@
        :cljr
        [(is (= 0.0 (double "0")))
         (is (thrown? Exception (double :0)))]
+       :lpy
+       [(is (= 0.0 (double "0")))
+        (is (thrown? Exception (double :0)))]
        :default
        [(is (thrown? Exception (double "0")))
         (is (thrown? Exception (double :0)))])
