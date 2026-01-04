@@ -64,6 +64,9 @@
         #?@(:cljs
             [(is (thrown? js/Error (descendants TestDescendantsProtocol)))
              (is (thrown? js/Error (descendants js/Object)))]
+            :lpy
+            [(is (nil? (descendants TestDescendantsProtocol)))
+             (is (thrown? Exception (descendants python/object)))]
             :default
             [(is (nil? (descendants TestDescendantsProtocol)))
              (is (thrown? Exception (descendants Object)))]))
@@ -110,9 +113,10 @@
 
       (testing "cannot get descendants by type inheritance, whether the tag is in h or not"
         (are [h] #?(:cljs    (thrown? js/Error (descendants h js/Object))
+                    :lpy     (thrown? Exception (descendants h python/object))
                     :default (thrown? Exception (descendants h Object)))
                  ; tag in h
-                 (derive (make-hierarchy) #?(:cljs js/Object :default Object) ::object)
+                 (derive (make-hierarchy) #?(:cljs js/Object :lpy python/object :default Object) ::object)
                  ; tag not in h
                  diamond
                  datatypes))

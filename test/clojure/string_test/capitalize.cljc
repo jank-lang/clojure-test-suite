@@ -5,7 +5,7 @@
 
 (when-var-exists str/capitalize
   (deftest test-capitalize
-    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (str/capitalize nil)))
+    (is (thrown? #?(:cljs :default :default Exception) (str/capitalize nil)))
     #?(:cljs (do (is (thrown? :default (str/capitalize 1)))
                  (is (thrown? :default (str/capitalize 'a)))
                  (is (thrown? :default (str/capitalize 'a/a)))
@@ -14,7 +14,11 @@
        :cljr (do (is (thrown? Exception (str/capitalize 1)))
                  (is (thrown? Exception (str/capitalize 'Asdf)))
                  (is (thrown? Exception (str/capitalize 'asDf/aSdf)))
-                 (is (thrown? Exception (str/capitalize :asDf/aSdf))))				 
+                 (is (thrown? Exception (str/capitalize :asDf/aSdf))))
+       :lpy (do (is (thrown? Exception (str/capitalize 1)))
+                (is (thrown? Exception (str/capitalize 'Asdf)))
+                (is (thrown? Exception (str/capitalize 'asDf/aSdf)))
+                (is (thrown? Exception (str/capitalize :asDf/aSdf))))
        :default (do (is (= "1" (str/capitalize 1)))
                     (is (= "Asdf" (str/capitalize 'Asdf)))
                     (is (= "Asdf/asdf" (str/capitalize 'asDf/aSdf)))

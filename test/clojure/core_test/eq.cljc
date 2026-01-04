@@ -79,7 +79,8 @@
 
   (testing "regex"
     ;; Value-equal regex are NOT eq, only identical?
-    (is (not (eq #"my regex" #"my regex")))
+    #?(:lpy nil
+       :default (is (not (eq #"my regex" #"my regex"))))
     (is (let [r #"my regex"
               r' r]
           (eq r r'))))

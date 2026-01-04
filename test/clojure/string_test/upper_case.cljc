@@ -5,7 +5,7 @@
 
 (when-var-exists str/upper-case
   (deftest test-upper-case
-    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (str/upper-case nil)))
+    (is (thrown? #?(:cljs :default :default Exception) (str/upper-case nil)))
     (is (= "" (str/upper-case "")))
     (is (= "֎" (str/upper-case "֎")))
     (is (= "ASDF" (str/upper-case "aSDf")))
@@ -13,15 +13,30 @@
     (let [s "asdf"]
       (is (= "ASDF" (str/upper-case "asdf")))
       (is (= "asdf" s) "original string mutated"))
-    #?(:cljs (is (thrown? :default (str/upper-case :asdf)))
-	   :cljr (is (thrown? Exception (str/upper-case :asdf)))
-       :default (is (= ":ASDF" (str/upper-case :asdf))))
-    #?(:cljs (is (thrown? :default (str/upper-case :asdf/asdf)))
-	   :cljr (is (thrown? Exception (str/upper-case :asdf/asdf)))
-       :default (is (= ":ASDF/ASDF" (str/upper-case :asdf/asdf))))
-    #?(:cljs (is (thrown? :default (str/upper-case 'asdf)))
-	   :cljr (is (thrown? Exception (str/upper-case 'asdf)))
-       :default (is (= "ASDF" (str/upper-case 'asdf))))
-    #?(:cljs (is (thrown? :default (str/upper-case 'asdf/asdf)))
-	   :cljr (is (thrown? Exception (str/upper-case 'asdf/asdf)))
-       :default (is (= "ASDF/ASDF" (str/upper-case 'asdf/asdf))))))
+    #?(:cljs
+       (are [v] (thrown? :default (str/upper-case v))
+         :asdf
+         :asdf/asdf
+         'asdf
+         'asdf/asdf)
+
+       :cljr
+       (are [v] (thrown? Exception (str/upper-case v))
+         :asdf
+         :asdf/asdf
+         'asdf
+         'asdf/asdf)
+
+       :lpy
+       (are [v] (thrown? Exception (str/upper-case v))
+         :asdf
+         :asdf/asdf
+         'asdf
+         'asdf/asdf)
+
+       :default
+       (are [expected v] (= expected (str/upper-case v))
+         ":ASDF"      :asdf
+         ":ASDF/ASDF" :asdf/asdf
+         "ASDF"       'asdf
+         "ASDF/ASDF"  'asdf/asdf))))

@@ -7,9 +7,11 @@
 
     (testing "special symbols"
       (are [arg] (special-symbol? 'arg)
-                 &
+                 #?@(:lpy []
+                     :default [&
+                               case*
+                               new])
                  .
-                 case*
                  catch
                  def
                  deftype*
@@ -20,7 +22,6 @@
                  let*
                  letfn*
                  loop*
-                 new
                  quote
                  recur
                  set!

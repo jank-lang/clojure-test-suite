@@ -34,6 +34,15 @@
                  '()
                  #{}
                  [])
+         :lpy (are [x] (thrown? Exception (parse-boolean x))
+                nil
+                0
+                0.0
+                :key
+                {}
+                '()
+                #{}
+                [])
          :default (are [x] (thrown? Exception (parse-boolean x))
                     nil
                     0

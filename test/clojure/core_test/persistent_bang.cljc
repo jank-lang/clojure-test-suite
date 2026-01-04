@@ -25,7 +25,7 @@
 
     (testing "calling persistent! a second time throws"
       (let [coll (transient {}), _ (persistent! coll)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (persistent! coll)))))
+        (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (persistent! coll)))))
 
     (testing "bad shape"
       (are [coll] (thrown? #?(:cljs js/Error :default Exception) (persistent! coll))

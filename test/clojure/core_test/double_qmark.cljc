@@ -31,6 +31,10 @@
              [true (float 0.0)
               true (float 1.0)
               true (float -1.0)]
+             :lpy
+             [true (float 0.0)
+              true (float 1.0)
+              true (float -1.0)]
              :default
              [false (float 0.0) ; surprising since (float? (double 0.0)) = true
               false (float 1.0) ; surprising since (float? (double 1.0)) = true
