@@ -47,7 +47,7 @@
                 true -1N]
          :default [false -1.0
                    false -1.0M
-                   false -1N
+                   #?(:lpy true :default false) -1N
                    false 0/2
                    false 1/2
                    false -1/2]))))
