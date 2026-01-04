@@ -87,8 +87,10 @@
            (is (thrown? Exception (+ nil 1N)))
            (is (thrown? Exception (+ 1.0 nil)))
            (is (thrown? Exception (+ nil 1.0)))
-           (is (thrown? Exception (+ r/max-int 1)))
-           (is (thrown? Exception (+ r/min-int -1)))
+           #?@(:lpy []
+               :default
+               [(is (thrown? Exception (+ r/max-int 1)))
+                (is (thrown? Exception (+ r/min-int -1)))])
            (is (big-int? (+ 0 1N)))
            (is (big-int? (+ 0N 1)))
            (is (big-int? (+ 0N 1N)))

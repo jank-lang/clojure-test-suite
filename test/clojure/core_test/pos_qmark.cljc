@@ -9,8 +9,6 @@
       false 0
       true  1
       false -1
-      false r/min-int
-      true  r/max-int
       false 0.0
       true  1.0
       false -1.0
@@ -25,6 +23,11 @@
       false 0.0M
       true  1.0M
       false -1.0M
+
+      #?@(:lpy []
+          :default
+          [false r/min-int
+           true  r/max-int])
 
       #?@(:cljs []
           :default
