@@ -25,3 +25,4 @@ pom.xml.asc
 __pycache__/
 .python-version
 poetry.lock
+*.egg-info/
