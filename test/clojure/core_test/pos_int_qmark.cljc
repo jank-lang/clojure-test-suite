@@ -47,7 +47,7 @@
       #?@(:cljs [true 1.0
                  true 1.0M]
           :default [false 1.0
-                    false 1N
+                    #?(:lpy true :default false) 1N
                     false 0/2
                     false 1/2
                     false -1/2
