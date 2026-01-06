@@ -6,15 +6,15 @@
   (deftest test-reversible?
     (are [expected x] (= expected (reversible? x))
       true [1 2 3]
-      true (sorted-map :a 1)
-      true (sorted-set :a)
+
+      #?@(:lpy []
+          :default
+          [true (sorted-map :a 1)
+           true (sorted-set :a)])
 
       false '(1 2 3)
       false (hash-map :a 1)
-      false (array-map :a 1)
       false (hash-set :a)
-      false (seq (sorted-map :a 1))
-      false (seq (sorted-set :a))
       false (range 0 10)
       false (range)
       false nil
@@ -27,4 +27,10 @@
       false "a string"
       false \a
       false (object-array 3)
-      #?(:cljs true :default false) (seq [1 2 3]))))
+      #?(:cljs true :default false) (seq [1 2 3])
+
+      #?@(:lpy []
+          :default
+          [false (array-map :a 1)
+           false (seq (sorted-map :a 1))
+           false (seq (sorted-set :a))]))))

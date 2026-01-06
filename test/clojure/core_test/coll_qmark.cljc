@@ -6,17 +6,21 @@
   (deftest test-coll?
     (are [expected x] (= expected (coll? x))
       true [1 2 3]
-      true (sorted-map :a 1)
-      true (sorted-set :a)
       true '(1 2 3)
       true (hash-map :a 1)
-      true (array-map :a 1)
       true (hash-set :a)
       true (seq [1 2 3])
-      true (seq (sorted-map :a 1))
-      true (seq (sorted-set :a))
       true (range 0 10)
       true (range)
+
+      #?@(:lpy []
+          :default
+          [true (sorted-map :a 1)
+           true (sorted-set :a)
+           true (array-map :a 1)
+           true (seq (sorted-map :a 1))
+           true (seq (sorted-set :a))])
+
       false nil
       false 1
       false 1N

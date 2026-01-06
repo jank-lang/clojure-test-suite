@@ -57,7 +57,8 @@
     (is (thrown? #?(:cljs :default :default Exception) (compare [1] [[]])))
     (is (thrown? #?(:cljs :default :default Exception) (compare []  {})))
     (is (thrown? #?(:cljs :default :default Exception) (compare []  #{})))
-    (is (thrown? #?(:cljs :default :default Exception) (compare #{} (sorted-set))))
+    (when-var-exists sorted-set
+      (is (thrown? #?(:cljs :default :default Exception) (compare #{} (sorted-set)))))
     (is (thrown? #?(:cljs :default :default Exception) (compare #{1} #{1})))
     (is (thrown? #?(:cljs :default :default Exception) (compare {1 2} {1 2})))
     (is (thrown? #?(:cljs :default :default Exception) (compare (range 5) (range 5))))
