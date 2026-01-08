@@ -29,4 +29,4 @@
       false 1.0M
       false :a-keyword
       false 'a-sym
-      #?(:cljs true :default false) \a)))
+      #?(:cljs true :lpy true :default false) \a)))

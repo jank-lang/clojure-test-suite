@@ -79,7 +79,8 @@
               (is (thrown? Exception (short 32767.000001)))])
 
          ;; Check handling of other types
-         (is (thrown? Exception (short "0")))
+         #?(:lpy (is (= 0 (short "0")))
+            :default (is (thrown? Exception (short "0"))))
          (is (thrown? Exception (short :0)))
          (is (thrown? Exception (short [0])))
          (is (thrown? Exception (short nil)))])))

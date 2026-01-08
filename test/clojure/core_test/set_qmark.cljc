@@ -9,7 +9,6 @@
       true (hash-set :a)
 
       false [1 2 3]
-      false (sorted-map :a 1)
       false '(1 2 3)
       false (hash-map :a 1)
       false (seq [1 2 3])
@@ -27,5 +26,6 @@
       false (object-array 3)
       #?@(:lpy []
           :default [false (array-map :a 1)
+                    false (sorted-map :a 1)
                     false (seq (sorted-map :a 1))
                     false (seq (sorted-set :a))]))))

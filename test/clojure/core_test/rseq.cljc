@@ -23,7 +23,7 @@
                     (is (thrown? Exception (rseq 0)))
                     (is (thrown? Exception (rseq 0.0)))
                     (is (thrown? Exception (rseq {:a :b})))]))
-    
+
     (when-var-exists sorted-map
                      (testing "sorted-map"
                        (is (= '([:c 2] [:b 1] [:a 0]) (rseq (sorted-map :a 0, :b 1, :c 2))))))))
