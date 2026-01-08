@@ -39,6 +39,10 @@
         [(is (not (pos? nil)))
          (is (not (pos? false))) ; Prints warning
          (is (pos? true))] ; Prints warning
+        :lpy
+        [(is (thrown? Exception (pos? nil)))
+         (is (not (pos? false)))
+         (is (pos? true))]
         :default
         [(is (thrown? Exception (pos? nil)))
          (is (thrown? Exception (pos? false)))
