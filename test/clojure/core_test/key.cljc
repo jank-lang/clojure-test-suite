@@ -1,6 +1,6 @@
 (ns clojure.core-test.key
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists create-map-entry]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists key
   (deftest test-key
@@ -10,7 +10,9 @@
       (is (contains? #{:k :one} (key (first {:k :v, :one :two}))))
       ;; Note: the following may be built on shaky ground, per Rich:
       ;; https://groups.google.com/g/clojure/c/FVcrbHJpCW4/m/Fh7NsX_Yb7sJ
-      (is (= 'k (key (create-map-entry 'k 'v))))
+      (is (= 'k (key #?(:cljs    (cljs.core/MapEntry. 'k 'v nil)
+                        :lpy     (map-entry 'k 'v)
+                        :default (clojure.lang.MapEntry/create 'k 'v)))))
       #?@(:lpy []
           :default
           [(is (= :a (key (first (sorted-map :a :b)))))

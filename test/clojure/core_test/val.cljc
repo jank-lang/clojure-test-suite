@@ -1,6 +1,6 @@
 (ns clojure.core-test.val
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists create-map-entry]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists val
   (deftest test-val
@@ -9,7 +9,9 @@
       (is (contains? #{:two :v} (val (first {:k :v, :one :two}))))
       ;; Note: the following may be built on shaky ground, per Rich:
       ;; https://groups.google.com/g/clojure/c/FVcrbHJpCW4/m/Fh7NsX_Yb7sJ
-      (is (= 'v (val (create-map-entry 'k 'v))))
+      (is (= 'v (val #?(:cljs    (cljs.core/MapEntry. 'k 'v nil)
+                        :lpy     (map-entry 'k 'v)
+                        :default (clojure.lang.MapEntry/create 'k 'v)))))
       (is (= :b (val (first (hash-map :a :b)))))
       #?@(:lpy []
           :default

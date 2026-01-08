@@ -20,13 +20,6 @@
      (and (integer? n)
           (not (int? n)))))
 
-(defn create-map-entry
-  "Create a new map entry value in a platform agnostic way."
-  [k v]
-  #?(:cljs    (cljs.core/MapEntry. k v nil)
-     :lpy     (map-entry k v)
-     :default (clojure.lang.MapEntry/create k v)))
-
 (defn sleep [ms]
   (#?(:cljr System.Threading.Thread/Sleep
       :cljs #(js/setTimeout identity %)
