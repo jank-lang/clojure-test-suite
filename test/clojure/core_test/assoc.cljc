@@ -41,9 +41,10 @@
       (testing "vectors - out-of-bounds indices"
         ;; Basilisp vectors support indices 1 greater than the current
         ;; max index and negative indices.
-        (are [expected vec ivs] (= expected (apply assoc vec ivs))
-          [0 1 -1] [0 1 2] [-1 -1]
-          [1 3 5]  [1 2]   [-1 3 2 5])
+        #?(:lpy
+           (are [expected vec ivs] (= expected (apply assoc vec ivs))
+             [0 1 -1] [0 1 2] [-1 -1]
+             [1 3 5]  [1 2]   [-1 3 2 5]))
 
         (are [vec ivs] (thrown? #?(:cljs js/Error :default Exception) (apply assoc vec ivs))
                        [] [-1 0]
