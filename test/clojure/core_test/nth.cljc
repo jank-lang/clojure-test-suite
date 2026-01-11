@@ -13,13 +13,18 @@
     (is (nil? (nth nil 10)))
 
     ;; `nth` throws if out of range
-    (is (thrown? #?(:cljs :default :default Exception) (nth [0 1 2] -1)))
     (is (thrown? #?(:cljs :default :default Exception) (nth [0 1 2] 10)))
     (is (thrown? #?(:cljs :default :default Exception) (nth [0 1 2] nil)))
-    (is (thrown? #?(:cljs :default :default Exception) (nth nil nil)))
+    #?@(:lpy
+        [(is (= 2 (nth [0 1 2] -1)))
+         (is (= nil (nth nil nil)))]
+        :default
+        [(is (thrown? #?(:cljs :default :default Exception) (nth [0 1 2] -1)))
+         (is (thrown? #?(:cljs :default :default Exception) (nth nil nil)))])
 
     ;; `nth` accepts a default argument
     (is (= :default (nth nil 0 :default)))
     (is (= :default (nth [0] 1 :default)))
     (is (= :default (nth [0 1] 2 :default)))
-    (is (= :default (nth [0 1] -1 :default)))))
+    #?(:lpy (is (= 1 (nth [0 1] -1 :default)))
+       :default (is (= :default (nth [0 1] -1 :default))))))

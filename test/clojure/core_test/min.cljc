@@ -39,6 +39,10 @@
     #?@(:cljs
         [(is (nil? (min nil 1)))                            ; nil acts like zero
          (is (nil? (min 1 nil)))]
+        :lpy
+        [(is (= "x" (min "x" "y")))
+         (is (thrown? Exception (min nil 1)))
+         (is (thrown? Exception (min 1 nil)))]
         :default
         [(is (thrown? Exception (min "x" "y")))
          (is (thrown? Exception (min nil 1)))

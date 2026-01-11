@@ -43,6 +43,14 @@
                  :key
                  0.0
                  1000)
+         :lpy (are [x] (thrown? Exception (parse-double x))
+                {}
+                '()
+                []
+                #{}
+                :key
+                0.0
+                1000)
          :default (are [x] (thrown? Exception (parse-double x))
                     {}
                     '()

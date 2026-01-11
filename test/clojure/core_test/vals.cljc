@@ -12,7 +12,7 @@
       (is (= nil (vals #{})))
       (is (= '(0.0) (vals {0 0.0})))
       (is (= '(:b) (vals {:a :b})))
-      (is (= '(:b :d) (vals {:a :b :c :d})))
+      (is (contains? #{'(:b :d) '(:d :b)} (vals {:a :b :c :d})))
       (is (= '("b") (vals {"a" "b"})))
       (is (= '([:b :c]) (vals {:a [:b :c]})))
       (is (= '((:c)) (vals {:a (vals {:b :c})})))

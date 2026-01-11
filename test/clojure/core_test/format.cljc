@@ -16,5 +16,8 @@
 
  (deftest test-format
    #?@(:cljs [] ; CLJS doesn't have `format`
+       :lpy
+       [(is (= "test" (format "test")))
+        (is (= "1" (format "%s" 1)))]
        :default
        [(is (= "test" (format "test")))])))

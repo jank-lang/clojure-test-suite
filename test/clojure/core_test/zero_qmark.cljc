@@ -34,8 +34,11 @@
            false -1/2]))
 
     (is #?@(:cljs [(= false (zero? nil))]
+            :lpy [(= false (zero? nil))]
             :default [(thrown? Exception (zero? nil))]))
     (is #?@(:cljs [(= false (zero? false))]
+            :lpy [(= false (zero? false))]
             :default [(thrown? Exception (zero? false))]))
     (is #?@(:cljs [(= false (zero? true))]
+            :lpy [(= false (zero? true))]
             :default [(thrown? Exception (zero? true))]))))

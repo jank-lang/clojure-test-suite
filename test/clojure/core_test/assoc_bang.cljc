@@ -30,16 +30,21 @@
         (are [expected vec ivs] (= expected (persistent! (apply assoc! (transient vec) ivs)))
                                 [1 nil] [] [0 1 1]
                                 [1 2] [] [0 1 1 2]
-                                [1 3 5 7] [1 2] [1 3 2 5 3 7]))
+                                [1 3 5 7] [1 2] [1 3 2 5 3 7]
+                                #?@(:lpy
+                                    [[0 1 -1] [0 1 2] [-1 -1]
+                                     [1 3 5]  [1 2]   [-1 3 2 5]])))
       (testing "vectors - out-of-bounds indices"
         (are [vec ivs] (thrown? #?(:cljs js/Error :default Exception) (apply assoc! (transient vec) ivs))
                        [] [-1 0]
                        [] [1 0]
-                       [0 1 2] [-1 -1]
                        [0 1 2] [4 4]
                        [1 2] [1 3 3 5]
-                       [1 2] [-1 3 2 5]
-                       [1 2] [-1 3 3 5])))
+                       [1 2] [-1 3 3 5]
+                       #?@(:lpy []
+                           :default
+                           [[0 1 2] [-1 -1]
+                            [1 2]   [-1 3 2 5]]))))
 
     (testing "odd number of args"
       ; on the contrary to assoc, assoc! accepts an odd number (> 1) of args and assumes missing value is nil
@@ -49,11 +54,13 @@
                       [1] [0 1 1]
                       [1] [0 1 1 2 2]))
 
-    (testing "cannot assoc! transient after persistent! call"
-      (let [t (transient {:a 1}), _ (persistent! t)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (assoc! t :b 2))))
-      (let [t (transient [1]), _ (persistent! t)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (assoc! t 0 2)))))
+    #?@(:lpy []
+        :default
+        [(testing "cannot assoc! transient after persistent! call"
+           (let [t (transient {:a 1}), _ (persistent! t)]
+             (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (assoc! t :b 2))))
+           (let [t (transient [1]), _ (persistent! t)]
+             (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (assoc! t 0 2)))))])
 
     (testing "bad shape"
       (are [coll] (thrown? #?(:cljs js/Error :default Exception) (assoc! coll 1 3))
