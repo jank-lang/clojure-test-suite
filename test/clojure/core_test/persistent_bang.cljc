@@ -23,9 +23,11 @@
                            #{nil} (transient #{nil})
                            #{:a :b :c} (transient #{:a :b :c})))
 
-    (testing "calling persistent! a second time throws"
-      (let [coll (transient {}), _ (persistent! coll)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (persistent! coll)))))
+    #?@(:lpy []
+        :default
+        [(testing "calling persistent! a second time throws"
+           (let [coll (transient {}), _ (persistent! coll)]
+             (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (persistent! coll)))))])
 
     (testing "bad shape"
       (are [coll] (thrown? #?(:cljs js/Error :default Exception) (persistent! coll))

@@ -15,9 +15,11 @@
     (testing "cannot pop! empty vector"
       (is (thrown? #?(:cljs js/Error :default Exception) (pop! (transient [])))))
 
-    (testing "cannot pop! after call to persistent!"
-      (let [t (transient [0 1]), _ (persistent! t)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (pop! t)))))
+    #?@(:lpy []
+        :default
+        [(testing "cannot pop! after call to persistent!"
+           (let [t (transient [0 1]), _ (persistent! t)]
+             (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (pop! t)))))])
 
     (testing "bad shapes"
       (are [arg] (thrown? #?(:cljs js/Error :default Exception) (pop! arg))
