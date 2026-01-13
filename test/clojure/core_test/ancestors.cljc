@@ -29,9 +29,11 @@
     (doseq [[tag parent] global-hierarchy]
       (underive tag parent)))
 
-  (defn with-global-hierarchy [tests]
+  ;; Basilisp does not support clojure.test style fixtures right now
+  ;; https://github.com/basilisp-lang/basilisp/issues/1306
+  (defn with-global-hierarchy [#?@(:lpy [] :default [tests])]
     (register-global-hierarchy)
-    (tests)
+    #?(:lpy (yield) :default (tests))
     (unregister-global-hierarchy))
 
   (use-fixtures :once with-global-hierarchy)
@@ -76,8 +78,8 @@
       #?(:bb      "bb doesn't report ancestors by type inheritance for custom types"
          :cljs    "cljs doesn't report ancestors by type inheritance yet (CLJS-3464)"
          :default (testing "returns ancestors by type inheritance when tag is a custom type"
-                    (is (contains? (ancestors TestAncestorsType) #?(:lpy TestAncestorsProtocol :default clojure.core_test.ancestors.TestAncestorsProtocol)))
-                    (is (contains? (ancestors TestAncestorsRecord) #?(:lpy TestAncestorsProtocol :default clojure.core_test.ancestors.TestAncestorsProtocol)))
+                    (is (contains? (ancestors TestAncestorsType) #?(:lpy (:interface TestAncestorsProtocol) :default clojure.core_test.ancestors.TestAncestorsProtocol)))
+                    (is (contains? (ancestors TestAncestorsRecord) #?(:lpy (:interface TestAncestorsProtocol) :default clojure.core_test.ancestors.TestAncestorsProtocol)))
                     (is (contains? (ancestors TestAncestorsRecord) #?(:lpy basilisp.lang.interfaces/IAssociative :default clojure.lang.Associative)))
                     (is (nil? (ancestors TestAncestorsProtocol)))))
 
@@ -140,7 +142,7 @@
          :cljs    "cljs doesn't report ancestors by type inheritance yet (CLJS-3464)"
          :default (testing "returns ancestors by type inheritance when tag is a custom type, whether the tag is in h or not"
                     (are [h tag] (let [actual-ancestors (ancestors h tag)]
-                                   (and (contains? actual-ancestors #?(:lpy TestAncestorsProtocol :default clojure.core_test.ancestors.TestAncestorsProtocol))
+                                   (and (contains? actual-ancestors #?(:lpy (:interface TestAncestorsProtocol) :default clojure.core_test.ancestors.TestAncestorsProtocol))
                                         (contains? actual-ancestors #?(:lpy basilisp.lang.interfaces/IAssociative :default clojure.lang.Associative))))
                                  ; tag in h
                                  datatypes TestAncestorsRecord

@@ -25,9 +25,11 @@
     (doseq [[tag parent] global-hierarchy]
       (underive tag parent)))
 
-  (defn with-global-hierarchy [tests]
+  ;; Basilisp does not support clojure.test style fixtures right now
+  ;; https://github.com/basilisp-lang/basilisp/issues/1306
+  (defn with-global-hierarchy [#?@(:lpy [] :default [tests])]
     (register-global-hierarchy)
-    (tests)
+    #?(:lpy (yield) :default (tests))
     (unregister-global-hierarchy))
 
   (use-fixtures :once with-global-hierarchy)

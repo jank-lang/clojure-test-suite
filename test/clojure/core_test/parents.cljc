@@ -24,9 +24,11 @@
     (doseq [[tag parent] global-hierarchy]
       (underive tag parent)))
 
-  (defn with-global-hierarchy [tests]
+  ;; Basilisp does not support clojure.test style fixtures right now
+  ;; https://github.com/basilisp-lang/basilisp/issues/1306
+  (defn with-global-hierarchy [#?@(:lpy [] :default [tests])]
     (register-global-hierarchy)
-    (tests)
+    #?(:lpy (yield) :default (tests))
     (unregister-global-hierarchy))
 
   (use-fixtures :once with-global-hierarchy)
@@ -72,8 +74,8 @@
       #?(:bb      "bb doesn't report parents by type inheritance for custom types"
          :cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
          :default (testing "returns parents by type inheritance when tag is a custom type"
-                    (is (contains? (parents TestParentsType) #?(:lpy TestParentsProtocol :default clojure.core_test.parents.TestParentsProtocol)))
-                    (is (contains? (parents TestParentsRecord) #?(:lpy TestParentsProtocol :default clojure.core_test.parents.TestParentsProtocol)))
+                    (is (contains? (parents TestParentsType) #?(:lpy (:interface TestParentsProtocol) :default clojure.core_test.parents.TestParentsProtocol)))
+                    (is (contains? (parents TestParentsRecord) #?(:lpy (:interface TestParentsProtocol) :default clojure.core_test.parents.TestParentsProtocol)))
                     (is (nil? (parents TestParentsProtocol)))))
 
       (testing "does not throw on invalid tag"
@@ -141,7 +143,7 @@
       #?(:bb      "bb doesn't report parents by type inheritance for custom types"
          :cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
          :default (testing "returns parents by type inheritance when tag is a custom type, whether the tag is in h or not"
-                    (are [h tag] (contains? (parents h tag) #?(:lpy TestParentsProtocol :default clojure.core_test.parents.TestParentsProtocol))
+                    (are [h tag] (contains? (parents h tag) #?(:lpy (:interface TestParentsProtocol) :default clojure.core_test.parents.TestParentsProtocol))
                                  ; tag in h
                                  datatypes TestParentsType
                                  datatypes TestParentsRecord
