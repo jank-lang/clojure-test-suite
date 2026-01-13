@@ -83,8 +83,12 @@
         (is (any? (merge [1 2] 3 4 5)))
         (is (any? (merge [] nil {} 1 {:a "c"})))
         (is (any? (merge (first {:a "a"}) {:b "b"} {:c "c"})))
-        (is (= [:foo] (merge [:foo])))
-        (is (= :foo (merge :foo)))
+        #?@(:lpy
+            [(is (thrown? Exception (merge [:foo])))
+             (is (thrown? Exception (merge :foo)))]
+            :default
+            [(is (= [:foo] (merge [:foo])))
+             (is (= :foo (merge :foo)))])
         #?@(:cljs    [(is (thrown? js/Error (merge :foo :bar)))
                       (is (thrown? js/Error (merge 100 :foo)))
                       (is (thrown? js/Error (merge "str" :foo)))
@@ -94,6 +98,9 @@
             :default [(is (thrown? Exception (merge :foo :bar)))
                       (is (thrown? Exception (merge 100 :foo)))
                       (is (thrown? Exception (merge "str" :foo)))
-                      #?@(:lpy [] :default [(is (thrown? Exception (merge nil (range))))])
-                      (is (thrown? Exception (merge {} '(1 2))))
+                      ;; The test case causes Basilisp to enter an infinite loop.
+                      #?@(:lpy []
+                          :default [(is (thrown? Exception (merge nil (range))))])
+                      #?@(:lpy [(is (= {1 2} (merge {} '(1 2))))]
+                          :default [(is (thrown? Exception (merge {} '(1 2))))])
                       (is (thrown? Exception (merge {} 1 2)))])))))

@@ -18,6 +18,7 @@
       (is (= [1 1 2 2 3 3] (transduce (mapcat #(repeat 2 %)) conj [] [1 2 3]))))
     (testing "into with transducer"
       (is (= [0 0 1 1 2 2] (into [] (mapcat #(repeat 2 %)) (range 3)))))
+    ;; The test case below causes Basilisp to enter an infinite loop.
     #?@(:lpy []
         :default
         [(testing "infinite input laziness"
@@ -39,6 +40,7 @@
       (is (= [2 2 4 4 6 6] (mapcat (fn [x y] [(* 2 x) (* 2 y)]) [1 2 3] [1 2 3]))))
     (testing "one collection shorter than the other"
       (is (= [2 4] (mapcat (fn [x y] [(* x y)]) [1 2] [2 2 2]))))
+    ;; The test case below causes Basilisp to enter an infinite loop.
     #?@(:lpy []
         :default
         [(testing "works lazily on infinite input"
