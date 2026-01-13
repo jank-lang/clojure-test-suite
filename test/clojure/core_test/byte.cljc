@@ -68,6 +68,17 @@
          (is (thrown? Exception (byte [0])))
          (is (thrown? Exception (byte nil)))]
         :bb [] ;; byte constructions goes via boxed argument
+        :lpy
+        [ ;; `byte` throws outside the range of 127 ... -128.
+         (is (= -128 (byte -128.000001)))
+         (is (thrown? Exception (byte -129)))
+         (is (thrown? Exception (byte 128)))
+         (is (= 127 (byte 127.000001)))
+         ;; Check handling of other types
+         (is (= 0 (byte "0")))
+         (is (thrown? Exception (byte :0)))
+         (is (thrown? Exception (byte [0])))
+         (is (thrown? Exception (byte nil)))]
         :default
         [ ;; `byte` throws outside the range of 127 ... -128.
          (is (thrown? Exception (byte -128.000001)))
