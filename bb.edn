@@ -15,7 +15,7 @@
             :task (shell
                    {:extra-env {"BASILISP_TEST_PATH"         "./test"
                                 "BASILISP_TEST_FILE_PATTERN" ".*\\.(lpy|cljc)"}}
-                   "basilisp test -p test")}
+                   "basilisp test -p test -- -n auto")}
   new-test {:doc "Creates new test for the Clojure symbols named by <args>. Unqualified symbols assume clojure.core"
             :requires ([new-test])
             :task (new-test/new-test *command-line-args*)}
