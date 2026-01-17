@@ -7,7 +7,8 @@ license = "MPL-2.0"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-   "basilisp[pytest] @ git+https://github.com/basilisp-lang/basilisp@fix/test-runner-suffix"
+   "basilisp[pytest] @ git+https://github.com/basilisp-lang/basilisp@fix/test-runner-suffix",
+   "pytest-xdist"
 ]
 
 [tool.setuptools]
