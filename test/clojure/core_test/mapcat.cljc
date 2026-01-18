@@ -19,6 +19,7 @@
     (testing "into with transducer"
       (is (= [0 0 1 1 2 2] (into [] (mapcat #(repeat 2 %)) (range 3)))))
     ;; The test case below causes Basilisp to enter an infinite loop.
+    ;; https://github.com/basilisp-lang/basilisp/issues/1300
     #?@(:lpy []
         :default
         [(testing "infinite input laziness"
@@ -41,6 +42,7 @@
     (testing "one collection shorter than the other"
       (is (= [2 4] (mapcat (fn [x y] [(* x y)]) [1 2] [2 2 2]))))
     ;; The test case below causes Basilisp to enter an infinite loop.
+    ;; https://github.com/basilisp-lang/basilisp/issues/1300
     #?@(:lpy []
         :default
         [(testing "works lazily on infinite input"

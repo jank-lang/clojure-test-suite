@@ -98,9 +98,7 @@
             :default [(is (thrown? Exception (merge :foo :bar)))
                       (is (thrown? Exception (merge 100 :foo)))
                       (is (thrown? Exception (merge "str" :foo)))
-                      ;; The test case causes Basilisp to enter an infinite loop.
-                      #?@(:lpy []
-                          :default [(is (thrown? Exception (merge nil (range))))])
+                      (is (thrown? Exception (merge nil (range))))
                       #?@(:lpy [(is (= {1 2} (merge {} '(1 2))))]
                           :default [(is (thrown? Exception (merge {} '(1 2))))])
                       (is (thrown? Exception (merge {} 1 2)))])))))
