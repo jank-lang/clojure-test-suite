@@ -19,6 +19,9 @@
       #?@(:cljs [(is (= #{\space} (set \space)))
                  (is (thrown? js/Error (set 1)))
                  (is (thrown? js/Error (set :a)))]
+          :lpy [(is (= #{\space} (set \space)))
+                (is (thrown? Exception (set 1)))
+                (is (thrown? Exception (set :a)))]
           :default  [(is (thrown? Exception (set 1)))
                      (is (thrown? Exception (set \space)))
                      (is (thrown? Exception (set :a)))]))))

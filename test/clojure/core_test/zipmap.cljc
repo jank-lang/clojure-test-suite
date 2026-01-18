@@ -8,10 +8,12 @@
      (are [in ex] (= (apply zipmap in) ex)
        [[1 2 3]  ["a" "b" "c"]]   {1 "a" 2 "b" 3 "c"}
        [#{1}     #{"a"}]          {1 "a"}
-       [(sorted-set 1 2 3)
-        (sorted-set "a" "b" "c")] {1 "a" 2 "b" 3 "c"}
-       [(sorted-map :a 1 :b 2)
-        ["a" "b"]]                {[:a 1] "a" [:b 2] "b"}
+       #?@(:lpy []
+           :default
+           [[(sorted-set 1 2 3)
+             (sorted-set "a" "b" "c")] {1 "a" 2 "b" 3 "c"}
+            [(sorted-map :a 1 :b 2)
+             ["a" "b"]]                {[:a 1] "a" [:b 2] "b"}])
        ['(1 2 3) '("a" "b" "c")]  {1 "a" 2 "b" 3 "c"}
        ["123"    "abc"]           {\1 \a \2 \b \3 \c}
        [[:a]     [nil]]           {:a nil}

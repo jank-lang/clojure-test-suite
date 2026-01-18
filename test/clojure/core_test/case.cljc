@@ -67,7 +67,7 @@
       ##NaN :nan-result
       ;; empty default clause, so will throw if no matches
       ))
-  
+
   (deftest test-case
     (testing "positive test cases"
       (are [x expected] (= expected (positive-tests x))
@@ -79,6 +79,26 @@
              1.0 :integer-result
              1N :integer-result
              1.0M :integer-result
+             2 :big-integer-result
+             2N :big-integer-result
+             2.0 :big-integer-result
+             2.0M :big-integer-result
+             3 :double-result
+             3N :double-result
+             3.0 :double-result
+             3.0M :double-result
+             4 :big-decimal-result
+             4N :big-decimal-result
+             4.0 :big-decimal-result
+             4.0M :big-decimal-result]
+            ;; In Python, 1 and True share the same hash value, so it is not
+            ;; possible to distinguish between them in a map. The "winning"
+            ;; value is always the value which is inserted into the map last.
+            :lpy
+            [1 :boolean-true-result
+             1.0 :boolean-true-result
+             1N :boolean-true-result
+             1.0M :boolean-true-result
              2 :big-integer-result
              2N :big-integer-result
              2.0 :big-integer-result
@@ -158,7 +178,7 @@
         :nine :eight-nine
         :ten :default
         :negative-one :default))
-    
+
     (testing "negative test cases"
       (are [x expected] (= expected (negative-tests x))
         'range :bad-range-result

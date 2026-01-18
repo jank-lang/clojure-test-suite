@@ -32,6 +32,10 @@
           [(is (thrown? Exception (shuffle nil)))
            (is (thrown? Exception (shuffle "abc")))
            (is (= [] (shuffle {})))]
+          :lpy
+          [(is (thrown? Exception (shuffle nil)))
+           (is (= #{"a" "b" "c"} (set (shuffle "abc"))))
+           (is (= [] (shuffle {})))]
           :default
           [(is (thrown? Exception (shuffle nil)))
            (is (thrown? Exception (shuffle "abc")))

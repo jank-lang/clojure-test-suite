@@ -136,3 +136,26 @@ jobs:
 
       - name: Run ClojureCLR Tests
         run: cljr -X:test
+
+  test-basilisp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install pip and dependencies
+        run: |
+          pip install -U pip
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install .
+
+      - name: Run tests
+        run: |
+          source .venv/bin/activate
+          BASILISP_TEST_PATH="$(pwd)/test" \
+            BASILISP_TEST_FILE_PATTERN='.*\.(lpy|cljc)' \
+            basilisp test -p test -- -n auto

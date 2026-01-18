@@ -54,6 +54,11 @@
            true \1
            true \A
            true \space]
+          :lpy
+          [true \0
+           true \1
+           true \A
+           true \space]
           :default
           [false \0
            false \1

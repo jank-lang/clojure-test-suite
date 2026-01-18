@@ -58,7 +58,7 @@
            "0.0"        0.0M
            "1.0"        1.0M
            "-1.0"       -1.0M])
-      
+
       ""             nil
       #?(:cljr "True" :default "true")     true
       #?(:cljr "False" :default "false")   false

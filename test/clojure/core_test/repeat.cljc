@@ -29,6 +29,7 @@
 
       (testing "n not being a number"
         (are [n x] #?(:cljs    (= [] (repeat n x))
+                      :lpy     (thrown? Exception (vec (repeat n x)))
                       :default (thrown? Exception (repeat n x)))
                    nil nil
                    "a" :a

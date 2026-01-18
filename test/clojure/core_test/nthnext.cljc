@@ -16,7 +16,7 @@
     (is (= (range 3) (nthnext (range 3) -1)))
 
     (is (nil? (nthnext nil nil))) ; Surprising
-    
+
     ;; Negative tests
     #?@(:cljs
         ;; CLJS does some nil punning to 0
