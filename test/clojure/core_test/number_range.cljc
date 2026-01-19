@@ -10,7 +10,7 @@
                         :cljr Int64/MinValue
                         :cljs js/Number.MIN_SAFE_INTEGER
                         :jank (cpp/value "std::numeric_limits<jank::i64>::min()")
-                        :default 0x8000000000000000))
+                        :default -0x8000000000000000))
 
 (def ^:const all-ones-int #?(:cljs 0xFFFFFFFF
                              :default -1))
