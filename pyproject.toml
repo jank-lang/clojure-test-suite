@@ -1,7 +1,7 @@
 [project]
 name = "clojure-test-suite"
 version = "0.1.0"
-description = "Dialect-independent tests for clojure.core, focused on locking down how Clojure JVM behaves so that other dialects to reach parity."
+description = "Dialect-independent tests for clojure.core, focused on locking down how Clojure JVM behaves to help other dialects reach parity."
 authors = []
 license = "MPL-2.0"
 readme = "README.md"
