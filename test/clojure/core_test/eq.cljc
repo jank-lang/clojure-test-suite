@@ -80,8 +80,9 @@
       [1 '(2 3 [4])] (list 1 [2 3 '(4)])))
 
   (testing "regex"
-    ;; Value-equal regex are NOT eq, only identical?
-    #?(:lpy nil
+    ;; Basilisp regex patterns compare equal and identical?
+    #?(:lpy (is (eq #"my regex" #"my regex"))
+       ;; Value-equal regex are NOT eq, only identical?
        :default (is (not (eq #"my regex" #"my regex"))))
     (is (let [r #"my regex"
               r' r]
