@@ -22,9 +22,10 @@
       (float -1.0) -1.0M
       ;; Since CLJS numbers are all doubles, casting r/min-double to a
       ;; float doesn't do anything, whereas in Clojure JVM it rounds
-      ;; down to zero.
+      ;; down to zero. All floating point numbers in Basilisp are doubles,
+      ;; so float returns the same value here.
       #?@(:cljs [r/min-double r/min-double]
-          :lpy []
+          :lpy [r/min-double r/min-double]
           :default [(float 0.0) r/min-double]))
     (is (NaN? (float ##NaN)))
 

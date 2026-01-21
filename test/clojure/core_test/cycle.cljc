@@ -13,8 +13,11 @@
         3 '(1 2 3) [1 2 3]
         7 '(1 2 3) [1 2 3 1 2 3 1]
         3 (range) [0 1 2]
+        ;; Basilisp does not currently implement sorted collections.
         #?@(:lpy [] :default [7 (sorted-set 1 2 3) [1 2 3 1 2 3 1]]))
 
+      ;; Map iteration order in Basilisp is not guaranteed. This is effectively
+      ;; the same test, only accounting for both potential iteration orders.
       #?(:lpy (is (contains? #{[[:a 1] [:b 2] [:a 1]]
                                [[:b 2] [:a 1] [:b 2]]}
                              (vec (take 3 (cycle {:a 1 :b 2})))))

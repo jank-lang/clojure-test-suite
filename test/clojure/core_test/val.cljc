@@ -13,10 +13,10 @@
                         :lpy     (map-entry 'k 'v)
                         :default (clojure.lang.MapEntry/create 'k 'v)))))
       (is (= :b (val (first (hash-map :a :b)))))
-      #?@(:lpy []
-          :default
-          [(is (= :b (val (first (sorted-map :a :b)))))
-           (is (= :b (val (first (array-map :a :b)))))]))
+      (when-var-exists sorted-map
+        (is (= :b (val (first (sorted-map :a :b))))))
+      (when-var-exists array-map
+        (is (= :b (val (first (array-map :a :b)))))))
     (testing "`val` throws on lots of things"
       (are [arg] (thrown? #?(:cljs js/Error :default Exception) (val arg))
                  nil

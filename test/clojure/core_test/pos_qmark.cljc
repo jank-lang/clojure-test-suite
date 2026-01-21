@@ -24,6 +24,7 @@
       true  1.0M
       false -1.0M
 
+      ;; Python VMs integer types are arbitrary precision and have no min or max.
       #?@(:lpy []
           :default
           [false r/min-int

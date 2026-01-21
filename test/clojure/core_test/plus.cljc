@@ -87,6 +87,8 @@
            (is (thrown? Exception (+ nil 1N)))
            (is (thrown? Exception (+ 1.0 nil)))
            (is (thrown? Exception (+ nil 1.0)))
+           ;; Python VMs integer types are arbitrary precision and have no min or max
+           ;; and arithmetic operations between integers cannot overflow or underflow.
            #?@(:lpy []
                :default
                [(is (thrown? Exception (+ r/max-int 1)))

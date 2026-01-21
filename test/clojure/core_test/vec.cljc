@@ -16,6 +16,7 @@
                            [nil nil nil] '(nil nil nil)
                            [1 2 3] '(1 2 3)
                            [1 2 3] [1 2 3]
+                           ;; Basilisp does not currently implement sorted collections.
                            #?@(:lpy [] :default [[1 2 3] (sorted-set 1 2 3)])
                            [1 2 3] (range 1 4)
                            [\a \b \c] "abc")

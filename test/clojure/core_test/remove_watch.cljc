@@ -100,6 +100,7 @@
     #?(:cljs
        nil
 
+       ;; Basilisp does not implement refs.
        :lpy
        nil
 
@@ -149,6 +150,7 @@
     #?(:cljs
        nil
 
+       ;; Basilisp does not implement agents.
        :lpy
        nil
 

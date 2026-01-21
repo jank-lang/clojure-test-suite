@@ -7,6 +7,7 @@
 
     (testing "special symbols"
       (are [arg] (special-symbol? 'arg)
+                 ;; Basilisp does not recognize these as special symbols.
                  #?@(:lpy []
                      :default [&
                                case*

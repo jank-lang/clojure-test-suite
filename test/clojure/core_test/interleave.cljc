@@ -13,6 +13,7 @@
         ["a" "b" "c"]
         [\a \b \c]]               [1 "a" \a 2 "b" \b 3 "c" \c]
        [#{1}     #{"a"}]          [1 "a"]
+       ;; Basilisp does not currently implement sorted collections.
        #?@(:lpy []
            :default
            [[(sorted-set 1 2 3)

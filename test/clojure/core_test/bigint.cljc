@@ -24,8 +24,10 @@
            0N  0/12
            -1N -12/12]))
 
-    ;; Validate that we correctly promote from int to bigint with `inc'` and `dec'`.
+    ;; Python VMs integer types are arbitrary precision and have no min or max, so
+    ;; promotion is not relevant.
     #?@(:lpy []
+        ;; Validate that we correctly promote from int to bigint with `inc'` and `dec'`.
         :default
         [(is (= 9223372036854775808N (inc (bigint r/max-int)) (inc' r/max-int)))
          (is (= -9223372036854775809N (dec (bigint r/min-int)) (dec' r/min-int)))])

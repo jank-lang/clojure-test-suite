@@ -11,6 +11,7 @@
       true (range)
       true (rseq [1 2 3])
 
+      ;; Basilisp does not currently implement sorted collections.
       #?@(:lpy []
           :default
           [true (seq (sorted-map :a 1))
@@ -30,6 +31,7 @@
       false \a
       false (object-array 3)
 
+      ;; Basilisp does not currently implement sorted collections or array-map.
       #?@(:lpy []
           :default
           [false (sorted-map :a 1)

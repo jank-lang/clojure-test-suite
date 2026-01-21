@@ -11,10 +11,11 @@
      '(:a :b :c :d) '(:a :b :c :d)
      '() nil
      nil nil
+     ;; Basilisp does not currently implement sorted collections.
      #?@(:lpy [] :default [(sorted-set 3.0 1.0 -2.5 4.0) '(-2.5 1.0 3.0 4.0)])
      (range 5 10) '(5 6 7 8 9)
      #?@(:cljs [(int-array 3) '(nil nil nil)]
-         :lpy []
+         :lpy [(int-array 3) '(nil nil nil)]
          :default [(int-array 3) '(0 0 0)]))
    (testing "sets and maps"
      (let [input #{440M 55000M 80000}
@@ -22,10 +23,12 @@
            input-map {:a {:b "4"}
                       :c 800
                       nil 40}
+           ;; Basilisp does not currently implement sorted collections.
            #?@(:lpy [] :default [input-sorted-map (into (sorted-map) input-map)])
            input-hash-map (into (hash-map) input-map)]
        (is (= input (into #{} (seq input))))
        (is (= input-hash (into (hash-set) (seq input))))
+       ;; Basilisp does not currently implement sorted collections.
        #?(:lpy nil :default (is (= input-sorted-map (into (sorted-map) (seq input-sorted-map)))))
        (is (= input-hash-map (into (hash-map) (seq input-hash-map))))
        (is (= input-map (into {} (seq input-map))))))

@@ -5,6 +5,7 @@
 (when-var-exists set?
   (deftest test-set?
     (are [expected x] (= expected (set? x))
+      ;; Basilisp does not currently implement sorted collections.
       #?@(:lpy [] :default [true (sorted-set :a)])
       true (hash-set :a)
 
@@ -24,6 +25,8 @@
       false "a string"
       false \a
       false (object-array 3)
+
+      ;; Basilisp does not currently implement sorted collections or array-map.
       #?@(:lpy []
           :default [false (array-map :a 1)
                     false (sorted-map :a 1)

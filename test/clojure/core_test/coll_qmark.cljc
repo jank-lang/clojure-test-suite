@@ -13,6 +13,7 @@
       true (range 0 10)
       true (range)
 
+      ;; Basilisp does not currently implement sorted collections or array-map.
       #?@(:lpy []
           :default
           [true (sorted-map :a 1)

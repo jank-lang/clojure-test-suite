@@ -13,11 +13,11 @@
       (is (= 'k (key #?(:cljs    (cljs.core/MapEntry. 'k 'v nil)
                         :lpy     (map-entry 'k 'v)
                         :default (clojure.lang.MapEntry/create 'k 'v)))))
-      #?@(:lpy []
-          :default
-          [(is (= :a (key (first (sorted-map :a :b)))))
-           (is (= :a (key (first (hash-map :a :b)))))
-           (is (= :a (key (first (array-map :a :b)))))]))
+      (when-var-exists sorted-map
+        (is (= :a (key (first (sorted-map :a :b))))))
+      (is (= :a (key (first (hash-map :a :b)))))
+      (when-var-exists array-map
+        (is (= :a (key (first (array-map :a :b)))))))
     (testing "`key` throws on lots of things"
       (are [arg] (thrown? #?(:cljs js/Error :default Exception) (key arg))
                  nil

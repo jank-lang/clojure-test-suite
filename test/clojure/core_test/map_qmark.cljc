@@ -7,6 +7,7 @@
     (are [expected x] (= expected (map? x))
       true (hash-map :a 1)
 
+      ;; Basilisp does not currently implement sorted collections or array-map.
       #?@(:lpy []
           :default
           [true (array-map :a 1)
@@ -29,6 +30,7 @@
       false \a
       false (object-array 3)
 
+      ;; Basilisp does not currently implement sorted collections or array-map.
       #?@(:lpy []
           :default
           [false (sorted-set :a)

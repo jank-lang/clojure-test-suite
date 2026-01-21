@@ -64,6 +64,7 @@
       [\a ##NaN] [\a ##NaN]
       #{1.0 2.0 ##NaN} #{1.0 2.0 ##NaN}))
 
+  ;; Basilisp does not currently implemented sorted collections.
   #?(:lpy nil
      :default
      (testing "sorted collections"

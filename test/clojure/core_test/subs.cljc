@@ -35,6 +35,8 @@
          (is (= "ab" (subs "abcde" nil 2)))
          (is (= "a" (subs "abcde" 1 nil)))]
         :lpy
+        ;; Directly delegate to Python's slicing syntax.
+        ;; s[2:1] just returns an empty string, rather than throwing an exception.
         [(is (= "" (subs "abcde" 2 1)))
          (is (= "bcde" (subs "abcde" 1 6)))
          (is (= "bcde" (subs "abcde" 1 200)))

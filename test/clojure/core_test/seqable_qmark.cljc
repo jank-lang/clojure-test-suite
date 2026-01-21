@@ -16,6 +16,7 @@
       true "a string"
       true (object-array 3)
 
+      ;; Basilisp does not currently implement sorted collections or array-map.
       #?@(:lpy []
           :default [true (sorted-map :a 1)
                     true (sorted-set :a)

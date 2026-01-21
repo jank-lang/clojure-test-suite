@@ -10,6 +10,7 @@
      (are [in ex] (= (apply interpose in) ex)
        ["a" [1 2 3]]              [1 "a" 2 "a" 3]
        [#{1} #{"a"}]              ["a"]
+       ;; Basilisp does not currently implement sorted collections.
        #?@(:lpy []
            :default
            [[(sorted-set 1 2 3)

@@ -24,6 +24,7 @@
       false \a
       false (object-array 3)
 
+      ;; Basilisp does not currently implement sorted collections or array-map.
       #?@(:lpy []
           :default
           [false (sorted-map :a 1)
