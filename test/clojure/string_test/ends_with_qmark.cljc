@@ -36,9 +36,9 @@
 		   (is (thrown? Exception (str/ends-with? :ab "b")))]
 		  :default
       [(is (true? (str/ends-with? 'ab "b")))
-		   (is (false? (str/ends-with? 'ab "a")))
+       (is (false? (str/ends-with? 'ab "a")))
        (is (true? (str/ends-with? :ab "b")))
-		   (is (false? (str/ends-with? :ab "a")))])
+       (is (false? (str/ends-with? :ab "a")))])
 
     (is (false? (str/ends-with? "" "a")))
     (is (true? (str/ends-with? "a-test" "")))

@@ -29,7 +29,7 @@
           [(is (thrown? js/Error (fnext 0)))]
           :lpy
           [(is (thrown? Exception (fnext 0)))
-           (is (= nil (fnext \a )))]
+           (is (= nil (fnext \a)))]
           :default
           [(is (thrown? Exception (fnext 0)))
-           (is (thrown? Exception (fnext \a )))]))))
+           (is (thrown? Exception (fnext \a)))]))))

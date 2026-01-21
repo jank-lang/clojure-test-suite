@@ -23,7 +23,7 @@
     #?@(:lpy []
         :default
         [(testing "infinite input laziness"
-           (is (= [0 0 1 1 2]  (take 5  (mapcat #(repeat 2 %) (range))))))])
+           (is (= [0 0 1 1 2]  (take 5 (mapcat #(repeat 2 %) (range))))))])
     (testing "empty collection input"
       (is (= [] (mapcat identity []))))
     (testing "single element producing empty sequence"
