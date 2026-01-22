@@ -1,5 +1,5 @@
 (ns clojure.core-test.cycle
-  (:require [clojure.test :refer [deftest testing are]]
+  (:require [clojure.test :refer [deftest testing are is]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists cycle
@@ -7,14 +7,21 @@
 
     (testing "nominal cases"
       (are [n coll expected] (= expected (take n (cycle coll)))
-                             1 nil []
-                             1 '() []
-                             1 '(1 2 3) [1]
-                             3 '(1 2 3) [1 2 3]
-                             7 '(1 2 3) [1 2 3 1 2 3 1]
-                             3 (range) [0 1 2]
-                             7 (sorted-set 1 2 3) [1 2 3 1 2 3 1]
-                             3 {:a 1 :b 2} [[:a 1] [:b 2] [:a 1]]))
+        1 nil []
+        1 '() []
+        1 '(1 2 3) [1]
+        3 '(1 2 3) [1 2 3]
+        7 '(1 2 3) [1 2 3 1 2 3 1]
+        3 (range) [0 1 2]
+        ;; Basilisp does not currently implement sorted collections.
+        #?@(:lpy [] :default [7 (sorted-set 1 2 3) [1 2 3 1 2 3 1]]))
+
+      ;; Map iteration order in Basilisp is not guaranteed. This is effectively
+      ;; the same test, only accounting for both potential iteration orders.
+      #?(:lpy (is (contains? #{[[:a 1] [:b 2] [:a 1]]
+                               [[:b 2] [:a 1] [:b 2]]}
+                             (vec (take 3 (cycle {:a 1 :b 2})))))
+         :default (is (= [[:a 1] [:b 2] [:a 1]] (take 3 (cycle {:a 1 :b 2}))))))
 
     (testing "bad shape"
       (are [coll] (thrown? #?(:cljs js/Error :default Exception) (cycle coll))

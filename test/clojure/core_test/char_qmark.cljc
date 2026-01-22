@@ -43,6 +43,9 @@
       #?@(:cljs ; In cljs, chars are single element strings
           [true "0"
            true "1"]
+          :lpy
+          [true "0"
+           true "1"]
           :default
           [false "0"
            false "1"])

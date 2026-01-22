@@ -10,9 +10,13 @@
         (is (= 2 (numerator 2/3)))
         (is (= 3 (numerator 3/4)))])
 
-   (is (thrown? #?(:cljs :default :default Exception) (numerator 1)))
+   #?@(:lpy
+       [(is (= 1 (numerator 1)))
+        (is (= 1 (numerator 1N)))]
+       :default
+       [(is (thrown? #?(:cljs :default :default Exception) (numerator 1)))
+        (is (thrown? #?(:cljs :default :default Exception) (numerator 1N)))])
    (is (thrown? #?(:cljs :default :default Exception) (numerator 1.0)))
-   (is (thrown? #?(:cljs :default :default Exception) (numerator 1N)))
    (is (thrown? #?(:cljs :default :default Exception) (numerator 1.0M)))
    (is (thrown? #?(:cljs :default :default Exception) (numerator ##Inf)))
    (is (thrown? #?(:cljs :default :default Exception) (numerator ##NaN)))

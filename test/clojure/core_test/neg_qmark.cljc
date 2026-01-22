@@ -8,14 +8,14 @@
     (are [expected x] (= expected (neg? x))
       true  -1.0
       true  -1
-      true  r/min-int
+      #?@(:lpy [] :default [true  r/min-int])
       true  ##-Inf
       true  -1N
       true  -1.0M
 
       false 0
       false 1
-      false r/max-int
+      #?@(:lpy [] :default [false r/max-int])
       false 0.0
       false 1.0
       false r/min-double
@@ -36,6 +36,10 @@
         [(is (not (neg? nil)))
          (is (not (neg? false))) ; Prints warning
          (is (not (neg? true)))] ; Prints warning
+        :lpy
+        [(is (thrown? Exception (neg? nil)))
+         (is (not (neg? false)))
+         (is (not (neg? true)))]
         :default
         [(is (thrown? Exception (neg? nil)))
          (is (thrown? Exception (neg? false)))

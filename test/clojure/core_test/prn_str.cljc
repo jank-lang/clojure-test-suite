@@ -11,6 +11,9 @@
      ;; whether the newline sequence itself is correct, only that
      ;; `prn-str` adds it to the end of the string.
      (is (= (str "\"a\" \"string\"" nl) (prn-str "a" "string")))
+     ;; Basilisp does not have character types, but will print floats
+     ;; with trailing decimal place.
      (is (= #?(:cljs (str "nil \"a\" \"string\" \"A\" \" \" 1 17 [:a :b] {:c :d} #{:e}" nl)
+               :lpy (str "nil \"a\" \"string\" \"A\" \" \" 1 17.0 [:a :b] {:c :d} #{:e}" nl)
                :default (str "nil \"a\" \"string\" \\A \\space 1 17.0 [:a :b] {:c :d} #{:e}" nl))
             (prn-str nil "a" "string" \A \space 1 17.0 [:a :b] {:c :d} #{:e}))))))

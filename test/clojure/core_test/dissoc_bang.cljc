@@ -22,7 +22,7 @@
 
     (testing "cannot dissoc! transient after persistent! call"
       (let [t (transient {:a 1}), _ (persistent! t)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (dissoc! t :a)))))
+        (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (dissoc! t :a)))))
 
     (testing "bad shape"
       (are [m keys] (thrown? #?(:cljs js/Error :default Exception) (apply dissoc! m keys))

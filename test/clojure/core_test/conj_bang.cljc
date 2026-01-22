@@ -58,20 +58,27 @@
                                #{1 #{2}} (transient #{1}) #{2}
                                #{1 2 3 4} (conj! (transient #{1 2}) 3) 4)))
 
-    (testing "cannot conj! after call to persistent!"
-      (let [coll (transient []), _ (persistent! coll)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (conj! coll 0)))))
+    ;; Basilisp does not prevent continuing to use transient vectors after persistent! call
+    #?@(:lpy []
+        :default
+        [(testing "cannot conj! after call to persistent!"
+           (let [coll (transient []), _ (persistent! coll)]
+             (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (conj! coll 0)))))])
 
     (testing "bad shapes"
-      (are [coll x] (thrown? #?(:cljs js/Error :default Exception) (conj! coll x))
-                    (transient {}) '(:a 1)
-                    (transient {}) #{:a 1}
-                    (transient {}) (range 2)
-                    [] 1
-                    {} {:a 1}
-                    '() true
-                    #{} :k
-                    "abc" \d
-                    true false
-                    1 -1
-                    (range 3) -1))))
+      (are [coll x] (thrown? #?(:cljs js/Error :lpy Exception :default Exception) (conj! coll x))
+        ;; Basilisp is fairly liberal with its coercion to map entry, meaning
+        ;; that many two element sequences can be conj'ed to a map.
+        #?@(:lpy []
+            :default
+            [(transient {}) '(:a 1)
+             (transient {}) #{:a 1}
+             (transient {}) (range 2)])
+        [] 1
+        {} {:a 1}
+        '() true
+        #{} :k
+        "abc" \d
+        true false
+        1 -1
+        (range 3) -1))))

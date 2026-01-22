@@ -9,8 +9,6 @@
       false 0
       true  1
       false -1
-      false r/min-int
-      true  r/max-int
       false 0.0
       true  1.0
       false -1.0
@@ -26,6 +24,12 @@
       true  1.0M
       false -1.0M
 
+      ;; Python VMs integer types are arbitrary precision and have no min or max.
+      #?@(:lpy []
+          :default
+          [false r/min-int
+           true  r/max-int])
+
       #?@(:cljs []
           :default
           [false 0/2
@@ -36,6 +40,10 @@
         [(is (not (pos? nil)))
          (is (not (pos? false))) ; Prints warning
          (is (pos? true))] ; Prints warning
+        :lpy
+        [(is (thrown? Exception (pos? nil)))
+         (is (not (pos? false)))
+         (is (pos? true))]
         :default
         [(is (thrown? Exception (pos? nil)))
          (is (thrown? Exception (pos? false)))

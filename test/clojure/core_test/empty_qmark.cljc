@@ -21,6 +21,9 @@
       #?@(:cljs [(is (= false (empty? \space)))
                  (is (thrown? js/Error (empty? 0)))
                  (is (thrown? js/Error (empty? 0.0)))]
+          :lpy [(is (= false (empty? \space)))
+                (is (thrown? Exception (empty? 0)))
+                (is (thrown? Exception (empty? 0.0)))]
           :default [(is (thrown? Exception (empty? 0)))
                     (is (thrown? Exception (empty? 0.0)))
                     (is (thrown? Exception (empty? \space)))]))))

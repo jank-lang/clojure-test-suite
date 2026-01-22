@@ -54,7 +54,7 @@
         true -1.0 0
         true 0N 1.0M
         true -1N 0.0M)
-      
+
       #?(:cljs nil
          :default
          (testing "Rationals"
@@ -100,6 +100,14 @@
            (is (= true (< "1" "2")))
            (is (thrown? Exception (< "foo" "bar")))
            (is (thrown? Exception (< :foo :bar)))]
+          :lpy
+          [(is (thrown? Exception (< nil 1)))
+           (is (thrown? Exception (< 1 nil)))
+           (is (thrown? Exception (< nil 1 2)))
+           (is (thrown? Exception (< 1 2 nil)))
+           (is (= true (< "1" "2")))
+           (is (= false (< "foo" "bar")))
+           (is (= false (< :foo :bar)))]
           :default
           [(is (thrown? Exception (< nil 1)))
            (is (thrown? Exception (< 1 nil)))

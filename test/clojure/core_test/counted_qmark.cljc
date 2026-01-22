@@ -7,13 +7,17 @@
     (testing "positive tests"
       (are [x] (counted? x)
         [1 2 3]
-        '(1 2 3)                        ; surprising for traditional Lispers
+        ;; Basilisp lists are actually not counted.
+        #?(:lpy [] :default ['(1 2 3)])                        ; surprising for traditional Lispers
         #{1 2 3}
         #?@(:cljs [nil] :default [])    ; CLJS nil is `counted?`
-        (array-map :a 1 :b 2 :c 3)
         (hash-map :a 1 :b 2 :c 3)
-        (sorted-map :a 1 :b 2 :c 3)
-        (sorted-set 1 2 3)))
+        ;; Basilisp does not currently implement sorted collections.
+        #?@(:lpy []
+            :default
+            [(array-map :a 1 :b 2 :c 3)
+             (sorted-map :a 1 :b 2 :c 3)
+             (sorted-set 1 2 3)])))
     (testing "negative tests"
       (are [x] (not (counted? x))
         1

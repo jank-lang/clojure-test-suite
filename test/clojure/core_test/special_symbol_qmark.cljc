@@ -7,9 +7,12 @@
 
     (testing "special symbols"
       (are [arg] (special-symbol? 'arg)
-                 &
+                 ;; Basilisp does not recognize these as special symbols.
+                 #?@(:lpy []
+                     :default [&
+                               case*
+                               new])
                  .
-                 case*
                  catch
                  def
                  deftype*
@@ -20,7 +23,6 @@
                  let*
                  letfn*
                  loop*
-                 new
                  quote
                  recur
                  set!

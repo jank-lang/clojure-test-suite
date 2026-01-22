@@ -19,9 +19,10 @@
                                 {:a 1 :b 2} {} [:a 1 :b 2]
                                 {:a 1 :b 3} {} [:a 1 :b 2 :b 3]
                                 {:a 1 :b 3 :c 5 :d 7} {:a 1 :b 2} [:b 3 :c 5 :d 7]))
-      (testing "maps - sorted type preservation"
-        (is (sorted? (assoc (sorted-map) :a 1 :b 2)))
-        (is (sorted? (assoc (sorted-map :a 1 :b 2) :b 3)))))
+      (when-var-exists sorted-map
+        (testing "maps - sorted type preservation"
+          (is (sorted? (assoc (sorted-map) :a 1 :b 2)))
+          (is (sorted? (assoc (sorted-map :a 1 :b 2) :b 3))))))
 
     (testing "vectors"
       (testing "vectors - single value"
@@ -37,14 +38,24 @@
                                 [1 2] [] [0 1 1 2]
                                 [1 3 5 7] [1 2] [1 3 2 5 3 7]))
       (testing "vectors - out-of-bounds indices"
+        ;; Basilisp vectors support indices 1 greater than the current max index
+        ;; and negative indices. Negative indices count backwards from the final
+        ;; element: -1 is the last element, -2 is the second-to-last, etc.
+        #?(:lpy
+           (are [expected vec ivs] (= expected (apply assoc vec ivs))
+             [0 1 -1] [0 1 2] [-1 -1]
+             [1 3 5]  [1 2]   [-1 3 2 5]))
+
         (are [vec ivs] (thrown? #?(:cljs js/Error :default Exception) (apply assoc vec ivs))
                        [] [-1 0]
                        [] [1 0]
-                       [0 1 2] [-1 -1]
                        [0 1 2] [4 4]
                        [1 2] [1 3 3 5]
-                       [1 2] [-1 3 2 5]
-                       [1 2] [-1 3 3 5])))
+                       [1 2] [-1 3 3 5]
+                       #?@(:lpy []
+                           :default
+                           [[0 1 2] [-1 -1]
+                            [1 2]   [-1 3 2 5]]))))
 
     (testing "meta preservation"
       (let [test-meta {:me "ta"}

@@ -1,7 +1,7 @@
 (ns clojure.core-test.star
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists big-int?]]))
 
 (when-var-exists *
   (deftest test-*
@@ -79,16 +79,26 @@
            (is (thrown? Exception (* nil 1)))])
 
       #?@(:cljs []
+          :lpy
+          [(is (big-int? (* 0 1N)))
+           (is (big-int? (* 0N 1)))
+           (is (big-int? (* 0N 1N)))
+           (is (big-int? (* 1N 1)))
+           (is (big-int? (* 1 1N)))
+           (is (big-int? (* 1N 1N)))
+           (is (big-int? (* 1 5N)))
+           (is (big-int? (* 1N 5)))
+           (is (big-int? (* 1N 5N)))]
           :default
-          [(is (instance? clojure.lang.BigInt (* 0 1N)))
-           (is (instance? clojure.lang.BigInt (* 0N 1)))
-           (is (instance? clojure.lang.BigInt (* 0N 1N)))
-           (is (instance? clojure.lang.BigInt (* 1N 1)))
-           (is (instance? clojure.lang.BigInt (* 1 1N)))
-           (is (instance? clojure.lang.BigInt (* 1N 1N)))
-           (is (instance? clojure.lang.BigInt (* 1 5N)))
-           (is (instance? clojure.lang.BigInt (* 1N 5)))
-           (is (instance? clojure.lang.BigInt (* 1N 5N)))
+          [(is (big-int? (* 0 1N)))
+           (is (big-int? (* 0N 1)))
+           (is (big-int? (* 0N 1N)))
+           (is (big-int? (* 1N 1)))
+           (is (big-int? (* 1 1N)))
+           (is (big-int? (* 1N 1N)))
+           (is (big-int? (* 1 5N)))
+           (is (big-int? (* 1N 5)))
+           (is (big-int? (* 1N 5N)))
 
            (is (thrown? Exception (* -1 r/min-int)))
            (is (thrown? Exception (* r/min-int -1)))
@@ -147,10 +157,12 @@
           ##-Inf ##Inf  ##-Inf
           ##-Inf ##-Inf ##Inf
           ##Inf  ##-Inf ##-Inf
-          ##Inf  ##Inf  r/max-int
-          ##-Inf ##Inf  r/min-int
-          ##Inf  ##Inf  r/max-double
-          ##Inf  ##Inf  r/min-double
+          #?@(:lpy []
+              :default
+              [##Inf  ##Inf  r/max-int
+               ##-Inf ##Inf  r/min-int
+               ##Inf  ##Inf  r/max-double
+               ##Inf  ##Inf  r/min-double])
           #?@(:cljs []
               :default
               [##Inf  ##Inf  1/2

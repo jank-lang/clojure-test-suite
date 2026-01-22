@@ -9,6 +9,7 @@
       (is (= false (contains? {} nil)))
       (is (= false (contains? [] nil)))
       #?(:cljs (is (= false (contains? "abc" "a")))
+         :lpy (is (= true (contains? "abc" "a")))
          :default (is (thrown? Exception (contains? "abc" "a"))))
 
       ;; find by index

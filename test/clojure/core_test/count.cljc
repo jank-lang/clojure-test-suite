@@ -27,4 +27,4 @@
       1
       :a
       'a
-      #?@(:cljs [] :default [\a]))))
+      #?@(:cljs [] :lpy [] :default [\a]))))

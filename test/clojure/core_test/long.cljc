@@ -36,6 +36,7 @@
            0    -1/10]))
 
     #?@(:cljs [] ; In CLJS all numbers are double-precision floating point
+        :lpy [] ; Python VMs integer types are arbitrary precision and have no min or max
         :default
         ;; `long` throws outside the range of 9223372036854775807 ... -9223372036854775808
         [(is (thrown? #?(:cljs :default :default Exception) (long -9223372036854775809)))
@@ -51,7 +52,12 @@
         [(is (= 0 (long "0")))
          (is (thrown? Exception (long :0)))
          (is (thrown? Exception (long [0])))
-         (is (thrown? Exception (long nil)))]		 
+         (is (thrown? Exception (long nil)))]
+        :lpy
+        [(is (= 0 (long "0")))
+         (is (thrown? Exception (long :0)))
+         (is (thrown? Exception (long [0])))
+         (is (thrown? Exception (long nil)))]
         :default
         [(is (thrown? Exception (long "0")))
          (is (thrown? Exception (long :0)))

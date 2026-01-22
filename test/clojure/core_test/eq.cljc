@@ -64,12 +64,15 @@
       [\a ##NaN] [\a ##NaN]
       #{1.0 2.0 ##NaN} #{1.0 2.0 ##NaN}))
 
-  (testing "sorted collections"
-    (are [in ex] (eq in ex)
-      {:b 14 :c 15 :a 13} (sorted-map :a 13 :b 14 :c 15)
-      (sorted-map-by < 13 :a 14 :b 15 :c) (sorted-map-by > 13 :a 14 :b 15 :c)
-      #{6 4 2} (sorted-set 4 2 6)
-      (sorted-set-by > 4 2 6) (sorted-set-by < 4 2 6)))
+  ;; Basilisp does not currently implemented sorted collections.
+  #?(:lpy nil
+     :default
+     (testing "sorted collections"
+       (are [in ex] (eq in ex)
+         {:b 14 :c 15 :a 13} (sorted-map :a 13 :b 14 :c 15)
+         (sorted-map-by < 13 :a 14 :b 15 :c) (sorted-map-by > 13 :a 14 :b 15 :c)
+         #{6 4 2} (sorted-set 4 2 6)
+         (sorted-set-by > 4 2 6) (sorted-set-by < 4 2 6))))
 
   (testing "nested collections"
     (are [in ex] (eq in ex)
@@ -78,8 +81,10 @@
       [1 '(2 3 [4])] (list 1 [2 3 '(4)])))
 
   (testing "regex"
-    ;; Value-equal regex are NOT eq, only identical?
-    (is (not (eq #"my regex" #"my regex")))
+    ;; Basilisp regex patterns compare equal and identical?
+    #?(:lpy (is (eq #"my regex" #"my regex"))
+       ;; Value-equal regex are NOT eq, only identical?
+       :default (is (not (eq #"my regex" #"my regex"))))
     (is (let [r #"my regex"
               r' r]
           (eq r r'))))

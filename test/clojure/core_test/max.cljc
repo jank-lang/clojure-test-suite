@@ -39,6 +39,10 @@
     #?@(:cljs
         [(is (= 1 (max nil 1)))
          (is (= 1 (max 1 nil)))]
+        :lpy
+        [(is (= "y" (max "x" "y")))
+         (is (thrown? Exception (max nil 1)))
+         (is (thrown? Exception (max 1 nil)))]
         :default
         [(is (thrown? Exception (max "x" "y")))
          (is (thrown? Exception (max nil 1)))

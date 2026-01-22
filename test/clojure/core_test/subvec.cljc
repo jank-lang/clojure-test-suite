@@ -22,11 +22,13 @@
     (testing "borderline indices"
       (testing "NaN and floats"
         (are [expected vec start end] (= expected (subvec vec start end))
-                                      [] [0 1 2] ##NaN ##NaN
-                                      [0 1 2] [0 1 2] ##NaN 3
-                                      [] [0 1 2] 0 ##NaN
-                                      [0 1 2] [0 1 2] -0 3
-                                      [2] [0 1 2] 2.72 3.14))
+          #?@(:lpy []
+              :default
+              [[] [0 1 2] ##NaN ##NaN
+               [0 1 2] [0 1 2] ##NaN 3
+               [] [0 1 2] 0 ##NaN])
+          [0 1 2] [0 1 2] -0 3
+          [2] [0 1 2] 2.72 3.14))
       (testing "ratios"
         #?(:cljs    "cljs doesn't have ratio"
            :default (is (= [0] (subvec [0 1 2] 1/2 4/3)))))
@@ -43,18 +45,20 @@
                 [] [0 1 2 3] 0 ##Inf))))
 
     (testing "out-of-bounds"
+      #?(:lpy (is (= [] (subvec [0 1 2 3] -1 3))))
       (are [vec start end] (thrown? #?(:cljs js/Error :default Exception) (subvec vec start end))
-                           [0 1 2 3] -1 3
-                           [0 1 2 3] 1 5
-                           [0 1 2 3] 3 2
-                           [] 0 1))
+        #?@(:lpy [] :default [[0 1 2 3] -1 3])
+        [0 1 2 3] 1 5
+        [0 1 2 3] 3 2
+        [] 0 1))
 
     (testing "bad shapes"
       (testing "nil args"
+        #?(:lpy (is (= [1 2] (subvec [0 1 2] 1 nil))))
         (are [vec start end] (thrown? #?(:cljs js/Error :default Exception) (subvec vec start end))
                              nil 0 0
                              [] nil 0
-                             [0 1 2] 1 nil))
+                             #?@(:lpy [] :default [[0 1 2] 1 nil])))
       (testing "not a vector"
         (are [vec start end] (thrown? #?(:cljs js/Error :default Exception) (subvec vec start end))
                              '(0 1 2) 0 2

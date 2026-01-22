@@ -16,8 +16,9 @@
                                #{[3 3]} #{[1 1] 2 [3 3]} [[1 1] 2]
                                #{:a :b} #{:a :b :c} [:c]
                                #{true nil} #{true false nil} [false]))
-    (testing "sorted preservation"
-      (is (sorted? (disj (sorted-set 1 2 3) 1 2 3))))
+    (when-var-exists sorted-set
+      (testing "sorted preservation"
+        (is (sorted? (disj (sorted-set 1 2 3) 1 2 3)))))
     (testing "meta preservation"
       (let [test-meta {:me "ta"}
             with-test-meta #(with-meta % test-meta)

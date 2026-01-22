@@ -7,17 +7,18 @@
     (are [expected x] (= expected (seq? x))
       true '(1 2 3)
       true (seq [1 2 3])
-      true (seq (sorted-map :a 1))
-      true (seq (sorted-set :a))
       true (range 0 10)
       true (range)
       true (rseq [1 2 3])
 
+      ;; Basilisp does not currently implement sorted collections.
+      #?@(:lpy []
+          :default
+          [true (seq (sorted-map :a 1))
+           true (seq (sorted-set :a))])
+
       false [1 2 3]
-      false (sorted-map :a 1)
-      false (sorted-set :a)
       false (hash-map :a 1)
-      false (array-map :a 1)
       false (hash-set :a)
       false nil
       false 1
@@ -28,4 +29,11 @@
       false 'a-sym
       false "a string"
       false \a
-      false (object-array 3))))
+      false (object-array 3)
+
+      ;; Basilisp does not currently implement sorted collections or array-map.
+      #?@(:lpy []
+          :default
+          [false (sorted-map :a 1)
+           false (sorted-set :a)
+           false (array-map :a 1)]))))

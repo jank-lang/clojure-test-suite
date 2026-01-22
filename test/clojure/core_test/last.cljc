@@ -19,6 +19,9 @@
     (testing "exceptions"
       #?@(:cljs
           [(is (thrown? js/Error (last 0)))]
+          :lpy
+          [(is (= \a (last \a)))
+           (is (thrown? Exception (last 0)))]
           :default
           [(is (thrown? Exception (last \a)))
            (is (thrown? Exception (last 0)))]))))

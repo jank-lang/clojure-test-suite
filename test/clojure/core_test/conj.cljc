@@ -34,13 +34,17 @@
                     (is (thrown? Exception (conj \a \b)))
                     (is (thrown? Exception (conj 1 2)))
                     (is (thrown? Exception (conj :a :b)))
-                    (is (thrown? Exception (conj {:a 0} '(:b 1))))]))
+                    ;; Basilisp is fairly liberal with its coercion to map entry,
+                    ;; meaning that many two element sequences can be conj'ed to
+                    ;; a map.
+                    #?@(:lpy [(is (= {:a 0 :b 1} (conj {:a 0} '(:b 1))))]
+                        :default [(is (thrown? Exception (conj {:a 0} '(:b 1))))])]))
 
     (testing "meta preservation"
       (let [meta-data {:foo 42}
             apply-meta #(-> % (with-meta meta-data) (conj [:k :v]) meta)]
         (is (= meta-data (apply-meta {}) (apply-meta []) (apply-meta #{}) (apply-meta '())))))
-    
+
     (when-var-exists first
       (testing "first"
         (is (= -1 (first (conj (range) -1))))))))

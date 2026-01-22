@@ -34,6 +34,18 @@
          (is (thrown? :default (subs nil 1 2)))
          (is (= "ab" (subs "abcde" nil 2)))
          (is (= "a" (subs "abcde" 1 nil)))]
+        :lpy
+        ;; Directly delegate to Python's slicing syntax.
+        ;; s[2:1] just returns an empty string, rather than throwing an exception.
+        [(is (= "" (subs "abcde" 2 1)))
+         (is (= "bcde" (subs "abcde" 1 6)))
+         (is (= "bcde" (subs "abcde" 1 200)))
+         (is (= "e" (subs "abcde" -1)))
+         (is (= "" (subs "abcde" -1 3)))
+         (is (= "" (subs "abcde" -1 -3)))
+         (is (thrown? Exception (subs nil 1 2)))
+         (is (= "ab" (subs "abcde" nil 2)))
+         (is (= "bcde" (subs "abcde" 1 nil)))]
         :default
         [(is (thrown? Exception (subs "abcde" 2 1)))
          (is (thrown? Exception (subs "abcde" 1 6)))

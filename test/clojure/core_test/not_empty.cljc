@@ -19,6 +19,9 @@
       #?@(:cljs [(is (= "a" (not-empty \a)))
                  (is (thrown? js/Error (not-empty 0)))
                  (is (thrown? js/Error (not-empty 0.0)))]
+          :lpy [(is (= "a" (not-empty \a)))
+                (is (thrown? Exception (not-empty 0)))
+                (is (thrown? Exception (not-empty 0.0)))]
           :default [(is (thrown? Exception (not-empty \a)))
                     (is (thrown? Exception (not-empty 0)))
                     (is (thrown? Exception (not-empty 0.0)))]))))

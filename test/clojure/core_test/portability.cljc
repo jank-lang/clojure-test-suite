@@ -1,4 +1,5 @@
-(ns clojure.core-test.portability)
+(ns clojure.core-test.portability
+  #?(:lpy (:import time)))
 
 (defmacro when-var-exists [var-sym & body]
   (let [cljs? (some? (:ns &env))
@@ -14,6 +15,7 @@
   ;; In CLJS, all numbers are really doubles and integer? and int?
   ;; return true if the fractional part of the double is zero
   #?(:cljs (integer? n)
+     :lpy (integer? n)
      :default
      (and (integer? n)
           (not (int? n)))))
@@ -21,5 +23,6 @@
 (defn sleep [ms]
   (#?(:cljr System.Threading.Thread/Sleep
       :cljs #(js/setTimeout identity %)
-      :clj Thread/sleep)
+      :clj Thread/sleep
+      :lpy time/sleep)
    ms))

@@ -100,6 +100,10 @@
     #?(:cljs
        nil
 
+       ;; Basilisp does not implement refs.
+       :lpy
+       nil
+
        :default
        (testing "remove watch refs"
          (let [messages (volatile! #{})
@@ -146,8 +150,12 @@
     #?(:cljs
        nil
 
+       ;; Basilisp does not implement agents.
+       :lpy
+       nil
+
        :default
-       (testing "remove watch refs"
+       (testing "remove watch agents"
          (let [messages (volatile! #{})
                watcher1 (fn [key ref old new]
                           ;; `await` does a `send` on the agent, so

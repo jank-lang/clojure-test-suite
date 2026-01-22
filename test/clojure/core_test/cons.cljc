@@ -10,9 +10,16 @@
                             1 [2 3] [1 2 3]
                             1 '(2 3) [1 2 3]
                             \1 "23" [\1 \2 \3]
-                            1 (sorted-set 1 2 3) [1 1 2 3]
-                            1 {:2 2 :3 3} [1 [:2 2] [:3 3]]
-                            [0 1] '(2 3) [[0 1] 2 3]))
+                            ;; Basilisp does not implement sorted-set.
+                            #?@(:lpy [] :default [1 (sorted-set 1 2 3) [1 1 2 3]])
+                            ;; This works in Basilisp but order is not consistent, so
+                            ;; another test below handles the potential ordering issues.
+                            #?@(:lpy [] :default [1 {:2 2 :3 3} [1 [:2 2] [:3 3]]])
+                            [0 1] '(2 3) [[0 1] 2 3])
+
+      ;; This is a duplicate of a test above intended to address inconsistent iteration
+      ;; order for map types.
+      #?(:lpy (is (contains? #{[1 [:2 2] [:3 3]] [1 [:3 3] [:2 2]]} (cons 1 {:2 2 :3 3})))))
 
     (testing "infinite seqs"
       (is (= -1 (first (cons -1 (range))))))

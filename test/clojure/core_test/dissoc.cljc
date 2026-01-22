@@ -25,8 +25,9 @@
                              {} {nil nil} [nil]
                              {} {nil nil} [nil nil]))
 
-    (testing "sorted preservation"
-      (is (sorted? (dissoc (sorted-map :a 1 :b 2) :a))))
+    (when-var-exists sorted-map
+      (testing "sorted preservation"
+        (is (sorted? (dissoc (sorted-map :a 1 :b 2) :a)))))
 
     (testing "meta preservation"
       (let [test-meta {:me "ta"}

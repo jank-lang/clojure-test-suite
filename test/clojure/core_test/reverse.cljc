@@ -16,6 +16,9 @@
       #?@(:cljs [(is (= '(\a) (reverse \a)))
                  (is (thrown? js/Error (reverse 0)))
                  (is (thrown? js/Error (reverse 0.0)))]
+          :lpy [(is (= '(\a) (reverse \a)))
+                (is (thrown? Exception (reverse 0)))
+                (is (thrown? Exception (reverse 0.0)))]
           :default [(is (thrown? Exception (reverse \a)))
                     (is (thrown? Exception (reverse 0)))
                     (is (thrown? Exception (reverse 0.0)))]))))

@@ -7,11 +7,11 @@
  (deftest test-neg-int?
    (are [expected x] (= expected (neg-int? x))
      true  -1
-     true  r/min-int
+     #?@(:lpy [] :default [true  r/min-int])
 
      false 0
      false 1
-     false r/max-int
+     #?@(:lpy [] :default [false r/max-int])
      false 0.0
      false 1.0
      false r/max-double
@@ -47,7 +47,7 @@
                 true -1N]
          :default [false -1.0
                    false -1.0M
-                   false -1N
+                   #?(:lpy true :default false) -1N
                    false 0/2
                    false 1/2
                    false -1/2]))))
