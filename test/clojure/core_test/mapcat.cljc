@@ -18,13 +18,8 @@
       (is (= [1 1 2 2 3 3] (transduce (mapcat #(repeat 2 %)) conj [] [1 2 3]))))
     (testing "into with transducer"
       (is (= [0 0 1 1 2 2] (into [] (mapcat #(repeat 2 %)) (range 3)))))
-    ;; The test case below causes Basilisp to enter an infinite loop.
-    ;; https://github.com/jank-lang/clojure-test-suite/issues/844
-    ;; https://github.com/basilisp-lang/basilisp/issues/1300
-    #?@(:lpy []
-        :default
-        [(testing "infinite input laziness"
-           (is (= [0 0 1 1 2]  (take 5 (mapcat #(repeat 2 %) (range))))))])
+    (testing "infinite input laziness"
+      (is (= [0 0 1 1 2]  (take 5 (mapcat #(repeat 2 %) (range))))))
     (testing "empty collection input"
       (is (= [] (mapcat identity []))))
     (testing "single element producing empty sequence"
@@ -42,13 +37,8 @@
       (is (= [2 2 4 4 6 6] (mapcat (fn [x y] [(* 2 x) (* 2 y)]) [1 2 3] [1 2 3]))))
     (testing "one collection shorter than the other"
       (is (= [2 4] (mapcat (fn [x y] [(* x y)]) [1 2] [2 2 2]))))
-    ;; The test case below causes Basilisp to enter an infinite loop.
-    ;; https://github.com/jank-lang/clojure-test-suite/issues/844
-    ;; https://github.com/basilisp-lang/basilisp/issues/1300
-    #?@(:lpy []
-        :default
-        [(testing "works lazily on infinite input"
-           (is (= [0 1 2 3 4 5] (->> (mapcat (fn [x] [x]) (range)) (take 6)))))])
+    (testing "works lazily on infinite input"
+      (is (= [0 1 2 3 4 5] (->> (mapcat (fn [x] [x]) (range)) (take 6)))))
     (testing "function sometimes returns []"
       (is (= [1 3 5] (mapcat #(if (odd? %) [%] []) (range 1 6)))))
     (testing "function sometimes returns nil"
