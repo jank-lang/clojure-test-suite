@@ -105,7 +105,10 @@ jobs:
         with:
           cli: 1.12.0.1530
           lein: 2.11.2
-          bb: latest
+
+      # Use dev build because it contains a fix not yet in a release
+      - name: Install babashka dev build
+        run: bash <(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install) --dev-build --dir /tmp
 
       - name: Cache clojure dependencies
         uses: actions/cache@v4
@@ -119,7 +122,7 @@ jobs:
           restore-keys: cljdeps-${{ env.CACHE_VERSION }}-
 
       - name: Run babashka tests
-        run: bb test-bb
+        run: /tmp/bb test-bb
 
   test-clr:
     runs-on: ubuntu-latest
