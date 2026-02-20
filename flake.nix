@@ -17,7 +17,7 @@
           pkgs.clojure
           pkgs.clojure-lsp
           pkgs.leiningen
-          pkgs.temurin-jre-bin-17
+          pkgs.temurin-jre-bin-21
           pkgs.nodejs_23
         ];
       };
