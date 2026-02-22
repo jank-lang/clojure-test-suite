@@ -11,6 +11,8 @@
                      (is (nil? (when-let [x nil] x))))
                    (testing "basic single-binding tests using seqs"
                      (is (= '(0 1 2 3 4) (when-let [x (range 5)] x))))
+                   (testing "unlike, when-some, we're looking for not-nil specifically, so false evaluates"
+                     (is (nil? (when-let [x false] x))))
                    (testing "seq is only called once"
                      (let [calls (atom 0)
                            seq-fn (fn s [] (lazy-seq
