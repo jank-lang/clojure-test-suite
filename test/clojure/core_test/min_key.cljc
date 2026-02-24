@@ -43,12 +43,25 @@
         ##-Inf identity [##-Inf ##Inf]
         1 identity [1 ##Inf]
         ##-Inf identity [1 ##-Inf]
-        1 identity [##NaN 1]
-        ##NaN identity [1 ##NaN]
+        #?@(:lpy
+            [##NaN identity [##NaN 1]
+             1 identity [1 ##NaN]]
+            :default
+            [1 identity [##NaN 1]
+             ##NaN identity [1 ##NaN]])
         ;; testing every permutation of -Inf, 1, and NaN
-        ##-Inf identity [##NaN ##-Inf 1]
-        ##-Inf identity [##NaN 1 ##-Inf]
-        #?@(:cljs
+        #?@(:lpy
+            [##NaN identity [##NaN ##-Inf 1]
+             ##NaN identity [##NaN 1 ##-Inf]]
+            :default
+            [##-Inf identity [##NaN ##-Inf 1]
+             ##-Inf identity [##NaN 1 ##-Inf]])
+        #?@(:lpy
+            [##-Inf identity [##-Inf 1 ##NaN]
+             ##-Inf identity [##-Inf ##NaN 1]
+             ##-Inf identity [1 ##-Inf ##NaN]
+             ##-Inf identity [1 ##NaN ##-Inf]]
+            :cljs
             [##NaN identity [##-Inf 1 ##NaN]
              1 identity [##-Inf ##NaN 1]
              ##NaN identity [1 ##-Inf ##NaN]
@@ -81,7 +94,14 @@
         "c" count ["a" "bb" "c"]
         "a" (constantly 5) [nil 1 {:k 2} [3] '(4) #{5} "a"]
         {:val 2} :val [{:val 2} {:val 3} {:val 4}]
-        #?@(:cljs
+        #?@(:lpy
+            ["x" identity ["x" "y"]
+             "x" identity ["y" "x" "z"]
+             [1] identity [[1] [2]]
+             [1] identity [[2] [1] [3]]
+             #{1} identity [#{1} #{2}]
+             #{2} identity [#{2} #{1} #{3}]]
+            :cljs
             ["x" identity ["x" "y"]
              "x" identity ["y" "x" "z"]
              [1] identity [[1] [2]]
@@ -98,6 +118,9 @@
         nil [1 2]
         nil [2 1 3]
         #?@(:cljs []
+            :lpy
+            [identity [{:val 1} {:val 2}]
+             identity [{:val 2} {:val 1} {:val 3}]]
             :default
             [identity ["x" "y"]
              identity ["y" "x" "z"]
