@@ -2,12 +2,21 @@
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
-;; to help with nan testing
-(defn =-or-NaN? [x y]
-  (or (= x y)
-      (and (NaN? x) (NaN? y))))
 
 (when-var-exists min-key
+  (defn my-abs [x]
+    (if (< x 0)
+      (- x)
+      x))
+
+  (defn my-sqr [x]
+    (* x x))
+
+  ;; to help with nan testing
+  (defn =-or-NaN? [x y]
+    (or (= x y)
+        (and (NaN? x) (NaN? y))))
+
   (deftest test-min-key
     ;; adapted from `min.cljc`
     (testing "numeric ordering"
@@ -63,8 +72,8 @@
         1  identity [5 4 3 2 1]
         1  identity [1 2 3 4 1]
         ##-Inf identity [1 2 3 4 5 ##-Inf]
-        -1 Math/abs [-3 -1 2]
-        -1 #(Math/pow %1 2) [-3 -1 2 4]))
+        -1 my-abs [-3 -1 2]
+        -1 my-sqr [-3 -1 2 4]))
 
     (testing "multiple types"
       (are [expected f col] (= expected (apply min-key f col))
