@@ -43,18 +43,16 @@
         ##-Inf identity [##-Inf ##Inf]
         1 identity [1 ##Inf]
         ##-Inf identity [1 ##-Inf]
-        #?@(:lpy
-            [##NaN identity [##NaN 1]
-             1 identity [1 ##NaN]]
-            :default
-            [1 identity [##NaN 1]
-             ##NaN identity [1 ##NaN]])
         ;; testing every permutation of -Inf, 1, and NaN
         #?@(:lpy
-            [##NaN identity [##NaN ##-Inf 1]
+            [##NaN identity [##NaN 1]
+             1 identity [1 ##NaN]
+             ##NaN identity [##NaN ##-Inf 1]
              ##NaN identity [##NaN 1 ##-Inf]]
             :default
-            [##-Inf identity [##NaN ##-Inf 1]
+            [1 identity [##NaN 1]
+             ##NaN identity [1 ##NaN]
+             ##-Inf identity [##NaN ##-Inf 1]
              ##-Inf identity [##NaN 1 ##-Inf]])
         #?@(:lpy
             [##-Inf identity [##-Inf 1 ##NaN]
