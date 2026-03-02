@@ -1,5 +1,7 @@
 (ns clojure.core-test.portability
-  #?(:lpy (:import time)))
+  #?(:lpy (:import time))
+  (:require #?(:cljs [cljs.test :as t]
+               :default [clojure.test :as t])))
 
 (defmacro when-var-exists [var-sym & body]
   (let [cljs? (some? (:ns &env))
@@ -26,3 +28,19 @@
       :clj Thread/sleep
       :lpy time/sleep)
    ms))
+
+(defmacro throws?
+  [form]
+  `(try (do ~form)
+        (t/do-report {:type :fail :message nil
+                      :expected '~form :actual nil})
+        (catch #?(:jank cpp/jank.runtime.object_ref
+                  :cljs js/Error
+                  :default Exception) e#
+          (t/do-report {:type :pass :message nil
+                        :expected '~form :actual e#})
+          e#)
+        #?(:jank (catch cpp/std.exception e#
+                   (t/do-report {:type :pass :message nil
+                                 :expected '~form :actual (cpp/.what e#)})))))
+
