@@ -1,5 +1,7 @@
 (ns clojure.core-test.portability
-  #?(:lpy (:import time)))
+  #?(:lpy (:import time))
+  (:require #?(:cljs [cljs.test :as t]
+               :default [clojure.test :as t])))
 
 (defmacro when-var-exists [var-sym & body]
   (let [cljs? (some? (:ns &env))
@@ -26,3 +28,33 @@
       :clj Thread/sleep
       :lpy time/sleep)
    ms))
+
+(defmacro thrown?
+  [form]
+  `(let [report-success# #?(:lpy (fn [_])
+                            :cljs t/report
+                            :default t/do-report)
+         report-failure# #?(:lpy (partial vswap! t/*test-failures* conj)
+                            :cljs t/report
+                            :default t/do-report)
+         success-opts# (fn [~'error]
+                         {:type :pass :message nil
+                          :expected '~form :actual ~'error})
+         failure-opts# {:type #?(:lpy :failure
+                                 :default :fail)
+                        :message nil
+                        :expected '~form
+                        :actual nil}]
+     (try
+       (do ~form)
+       (report-failure# failure-opts#)
+       (catch #?(:jank ~'jank.runtime.object_ref
+                 ; This is a hack to determine if we're running this macro for Clojure or
+                 ; ClojureScript. There doesn't seem to be an official way to check this.
+                 :clj ~(if (-> &env :ns some?) 'js/Error 'Throwable)
+                 :default ~'Exception) e#
+         (report-success# (success-opts# e#))
+         e#)
+       #?(:jank (catch ~'std.exception e#
+                  (report-success# (success-opts# (~'.what e#))))))))
+
