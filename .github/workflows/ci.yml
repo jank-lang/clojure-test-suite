@@ -149,6 +149,13 @@ jobs:
         with:
           python-version: "3.13"
 
+      - name: Cache Python dependencies
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: basilisp-${{ env.CACHE_VERSION }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: basilisp-${{ env.CACHE_VERSION }}-
+
       - name: Install pip and dependencies
         run: |
           pip install -U pip
