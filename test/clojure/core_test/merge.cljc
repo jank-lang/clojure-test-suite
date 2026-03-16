@@ -1,6 +1,6 @@
 (ns clojure.core-test.merge
   (:require [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists merge
   (deftest test-merge
@@ -45,36 +45,36 @@
                                        {:b "b"}))))
 
       (testing "vectors in position 2+ are treated as map-entries, per `conj`"
-        #?(:cljs    (is (thrown? js/Error (merge {} [])))
-           :clj     (is (thrown? java.lang.IllegalArgumentException (merge {} [])))
-           :default (is (thrown? Exception (merge {} []))))
-        #?(:cljs    (is (thrown? js/Error (merge {} [:foo])))
-           :clj     (is (thrown? java.lang.IllegalArgumentException (merge {} [:foo])))
-           :default (is (thrown? Exception (merge {} [:foo]))))
+        #?(:cljs    (is (p/thrown? (merge {} [])))
+           :clj     (is (p/thrown? (merge {} [])))
+           :default (is (p/thrown? (merge {} []))))
+        #?(:cljs    (is (p/thrown? (merge {} [:foo])))
+           :clj     (is (p/thrown? (merge {} [:foo])))
+           :default (is (p/thrown? (merge {} [:foo]))))
         (is (= {:foo "foo"} (merge {} [:foo "foo"])))
         (is (= {"x" 1} (merge {} ["x" 1])))
         (is (= {'x 10, 'y 10} (merge {'x 10} ['y 10])))
         (testing "In CLJS (unlike other dialects) vectors with >2 arguments are treated as map-entries (where the latter values are ignored)"
           #?(:cljs (is (= {:foo :bar} (merge {} [:foo :bar :baz]))),
-             :clj  (is (thrown? java.lang.IllegalArgumentException (merge {} [:foo :bar :baz]))),
-             :clr  (is (thrown? Exception (merge {} [:foo :bar :baz])))))
+             :clj  (is (p/thrown? (merge {} [:foo :bar :baz]))),
+             :clr  (is (p/thrown? (merge {} [:foo :bar :baz])))))
 
         (is (= {:foo "foo", :bar "bar"} (merge {} [:foo "foo"] [:bar "bar"])))
         (is (= {'x 10, 'y 10, 'z 10} (merge {'x 10} ['y 10] ['z 10])))
         (testing "In CLJS (unlike other dialects) vectors with >2 arguments are treated as map-entries (where the latter values are ignored)"
           #?(:cljs    (is (= {:foo :bar} (merge {} [:foo :bar :baz :bar]))),
-             :clj     (is (thrown? java.lang.IllegalArgumentException (merge {} [:foo :bar :baz :bar]))),
-             :default (is (thrown? Exception (merge {} [:foo :bar :baz :bar]))))))
+             :clj     (is (p/thrown? (merge {} [:foo :bar :baz :bar]))),
+             :default (is (p/thrown? (merge {} [:foo :bar :baz :bar]))))))
 
       (testing "atomic values in position 2+ throw"
-        #?@(:cljs    [(is (thrown? js/Error (merge {} 1)))
-                      (is (thrown? js/Error (merge {} 1 2)))
-                      (is (thrown? js/Error (merge {} :foo)))
-                      (is (thrown? js/Error (merge {} "str")))]
-            :default [(is (thrown? Exception (merge {} 1)))
-                      (is (thrown? Exception (merge {} 1 2)))
-                      (is (thrown? Exception (merge {} :foo)))
-                      (is (thrown? Exception (merge {} "str")))]))
+        #?@(:cljs    [(is (p/thrown? (merge {} 1)))
+                      (is (p/thrown? (merge {} 1 2)))
+                      (is (p/thrown? (merge {} :foo)))
+                      (is (p/thrown? (merge {} "str")))]
+            :default [(is (p/thrown? (merge {} 1)))
+                      (is (p/thrown? (merge {} 1 2)))
+                      (is (p/thrown? (merge {} :foo)))
+                      (is (p/thrown? (merge {} "str")))]))
 
       (testing "undefined `merge` behavior on non-maps"
         ;; Behavior for non-map input is undefined. We intentionally do not test
@@ -84,21 +84,21 @@
         (is (any? (merge [] nil {} 1 {:a "c"})))
         (is (any? (merge (first {:a "a"}) {:b "b"} {:c "c"})))
         #?@(:lpy
-            [(is (thrown? Exception (merge [:foo])))
-             (is (thrown? Exception (merge :foo)))]
+            [(is (p/thrown? (merge [:foo])))
+             (is (p/thrown? (merge :foo)))]
             :default
             [(is (= [:foo] (merge [:foo])))
              (is (= :foo (merge :foo)))])
-        #?@(:cljs    [(is (thrown? js/Error (merge :foo :bar)))
-                      (is (thrown? js/Error (merge 100 :foo)))
-                      (is (thrown? js/Error (merge "str" :foo)))
-                      (is (thrown? js/Error (merge nil (range))))
-                      (is (thrown? js/Error (merge {} '(1 2))))
-                      (is (thrown? js/Error (merge {} 1 2)))]
-            :default [(is (thrown? Exception (merge :foo :bar)))
-                      (is (thrown? Exception (merge 100 :foo)))
-                      (is (thrown? Exception (merge "str" :foo)))
-                      (is (thrown? Exception (merge nil (range))))
+        #?@(:cljs    [(is (p/thrown? (merge :foo :bar)))
+                      (is (p/thrown? (merge 100 :foo)))
+                      (is (p/thrown? (merge "str" :foo)))
+                      (is (p/thrown? (merge nil (range))))
+                      (is (p/thrown? (merge {} '(1 2))))
+                      (is (p/thrown? (merge {} 1 2)))]
+            :default [(is (p/thrown? (merge :foo :bar)))
+                      (is (p/thrown? (merge 100 :foo)))
+                      (is (p/thrown? (merge "str" :foo)))
+                      (is (p/thrown? (merge nil (range))))
                       #?@(:lpy [(is (= {1 2} (merge {} '(1 2))))]
-                          :default [(is (thrown? Exception (merge {} '(1 2))))])
-                      (is (thrown? Exception (merge {} 1 2)))])))))
+                          :default [(is (p/thrown? (merge {} '(1 2))))])
+                      (is (p/thrown? (merge {} 1 2)))])))))

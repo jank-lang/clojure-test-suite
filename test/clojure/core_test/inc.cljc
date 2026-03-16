@@ -1,6 +1,6 @@
 (ns clojure.core-test.inc
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists inc
   (deftest test-inc
@@ -24,8 +24,8 @@
       (is (NaN? (inc ##NaN))))
 
     (testing "overflow"
-      #?(:clj (is (thrown? Exception (inc Long/MAX_VALUE)))
-         :cljr (is (thrown? Exception (inc Int64/MaxValue)))
+      #?(:clj (is (p/thrown? (inc Long/MAX_VALUE)))
+         :cljr (is (p/thrown? (inc Int64/MaxValue)))
          :cljs (is (= (inc js/Number.MAX_SAFE_INTEGER) (+ 2 js/Number.MAX_SAFE_INTEGER)))
          :lpy nil  ; Python integers cannot overflow
          :default (is false "overflow untested")))
@@ -34,4 +34,4 @@
       ;; ClojureScript says (= 1 (inc nil)) because JavaScript casts null to 0
       ;; https://clojuredocs.org/clojure.core/inc#example-6156a59ee4b0b1e3652d754f
       #?(:cljs (is (= 1 (inc nil)))
-         :default (is (thrown? Exception (inc nil)))))))
+         :default (is (p/thrown? (inc nil)))))))

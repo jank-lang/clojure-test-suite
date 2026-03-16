@@ -1,6 +1,6 @@
 (ns clojure.core-test.some-fn
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists some-fn
   (deftest test-some-fn
@@ -24,12 +24,12 @@
 
     (testing "bad shape"
       #?(:cljs    (is (= nil ((#'some-fn))))
-         :default (is (thrown? Exception (some-fn))))
+         :default (is (p/thrown? (some-fn))))
       (are [pred] (= true (fn? (some-fn pred)))
                   "not a fn"
                   42
                   3.14)
-      (are [pred] (thrown? #?(:cljs js/Error :default Exception) ((some-fn pred) nil))
+      (are [pred] (p/thrown? ((some-fn pred) nil))
                   "not a fn"
                   42
                   3.14))))

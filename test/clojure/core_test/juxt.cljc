@@ -1,6 +1,6 @@
 (ns clojure.core-test.juxt
   (:require [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists juxt
   (deftest test-juxt
@@ -34,10 +34,10 @@
               :k))))
 
     (testing "wrong-shape input is mostly accepted (and throws when invoked)"
-      #?(:cljs (is (thrown? :default ((juxt nil))))
-         :clj  (is (thrown? java.lang.NullPointerException ((juxt nil))))
-         :clr  (is (thrown? System.NullReferenceException ((juxt nil)))))
-      #?@(:cljs    [(is (thrown? :default ((juxt (range)))))
-                    (is (thrown? :default ((juxt 1))))]
-          :default [(is (thrown? Exception ((juxt (range)))))
-                    (is (thrown? Exception ((juxt 1))))]))))
+      #?(:cljs (is (p/thrown? ((juxt nil))))
+         :clj  (is (p/thrown? ((juxt nil))))
+         :clr  (is (p/thrown? ((juxt nil)))))
+      #?@(:cljs    [(is (p/thrown? ((juxt (range)))))
+                    (is (p/thrown? ((juxt 1))))]
+          :default [(is (p/thrown? ((juxt (range)))))
+                    (is (p/thrown? ((juxt 1))))]))))

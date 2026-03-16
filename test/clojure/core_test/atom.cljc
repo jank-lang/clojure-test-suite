@@ -1,7 +1,7 @@
 (ns clojure.core-test.atom
   (:require clojure.core
             [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists clojure.core/atom
   (deftest test-atom
@@ -29,13 +29,13 @@
         (is (= {:a "a"} (meta (atom nil :meta (hash-map :a "a"))))))
       #?(:cljs (is (= 5 (meta (atom nil :meta 5)))),
          :lpy (is (= 5 (meta (atom nil :meta 5)))),
-         :default (is (thrown? Exception (atom nil :meta 5))))
+         :default (is (p/thrown? (atom nil :meta 5))))
       #?(:cljs (is (= #{} (meta (atom nil :meta #{})))),
          :lpy (is (= #{} (meta (atom nil :meta #{})))),
-         :default (is (thrown? Exception (atom nil :meta #{}))))
+         :default (is (p/thrown? (atom nil :meta #{}))))
       #?(:cljs (is (= [] (meta (atom nil :meta (vector))))),
          :lpy (is (= [] (meta (atom nil :meta (vector))))),
-         :default (is (thrown? Exception (atom nil :meta (vector))))))
+         :default (is (p/thrown? (atom nil :meta (vector))))))
 
     (testing "validator-fn"
       ;; Docstring: "If the new state is unacceptable, the validate-fn should
@@ -76,30 +76,27 @@
         #?(:cljs (testing "Broken but current behavior due to CLJS-3447"
                    ;; FIXME when https://clojure.atlassian.net/browse/CLJS-3447 is fixed
                    (is (= {} (deref (atom {} :validator (constantly nil)))))),
-           :default (is (thrown? Exception (atom {} :validator (constantly nil)))))
+           :default (is (p/thrown? (atom {} :validator (constantly nil)))))
         #?(:cljs (testing "Broken but current behavior due to CLJS-3447"
                    ;; FIXME when https://clojure.atlassian.net/browse/CLJS-3447 is fixed
                    (is (= {} (deref (atom {} :validator (constantly false)))))),
-           :default (is (thrown? Exception (atom {} :validator (constantly false)))))
+           :default (is (p/thrown? (atom {} :validator (constantly false)))))
         #?(:cljs (testing "Broken but current behavior due to CLJS-3447"
                    ;; FIXME when https://clojure.atlassian.net/browse/CLJS-3447 is fixed
                    (is (= {} (deref (atom {} :validator #(when true (throw (ex-info "boom" {})))))))),
-           :default (is (thrown? Exception (atom {} :validator #(when true (throw (ex-info "boom" {}))))))))
+           :default (is (p/thrown? (atom {} :validator #(when true (throw (ex-info "boom" {}))))))))
 
       (testing "conditional validators are obeyed at creation, swap! and reset!"
         #?(:cljs (testing "Broken but current behavior due to CLJS-3447"
                    ;; FIXME when https://clojure.atlassian.net/browse/CLJS-3447 is fixed
                    (is (= #{} (deref (atom #{} :validator (fn [v] (some string? v))))))),
-           :default (is (thrown? Exception (atom #{} :validator (fn [v] (some string? v))))))
+           :default (is (p/thrown? (atom #{} :validator (fn [v] (some string? v))))))
         (let [some-strings (atom #{"str"} :validator (fn [v] (some string? v)))]
           (is (= #{"str" :not-a-string} (swap! some-strings conj :not-a-string)))
-          (is (thrown? #?(:cljs :default :default Exception)
-                       (swap! some-strings disj "str")))
+          (is (p/thrown? (swap! some-strings disj "str")))
           (is (= #{"str"} (swap! some-strings disj :not-a-string)))
-          (is (thrown? #?(:cljs :default :default Exception)
-                       (reset! some-strings #{})))
-          (is (thrown? #?(:cljs :default :default Exception)
-                       (reset! some-strings :neither-string-nor-set)))
+          (is (p/thrown? (reset! some-strings #{})))
+          (is (p/thrown? (reset! some-strings :neither-string-nor-set)))
           (is (= #{"str"} (deref some-strings)))
           (is (= #{"some other string"} (reset! some-strings #{"some other string"})))
           (is (= #{"some other string"} (deref some-strings))))
@@ -107,10 +104,8 @@
         (let [all-strings (atom #{} :validator (fn [v] (every? string? v)))]
           (is (= #{"str"} (swap! all-strings conj "str")))
           (is (= #{} (swap! all-strings disj "str")))
-          (is (thrown? #?(:cljs :default :default Exception)
-                       (reset! all-strings :neither-string-nor-set)))
-          (is (thrown? #?(:cljs :default :default Exception)
-                       (reset! all-strings #{:not-a-string})))
+          (is (p/thrown? (reset! all-strings :neither-string-nor-set)))
+          (is (p/thrown? (reset! all-strings #{:not-a-string})))
           (is (= #{"new string"} (reset! all-strings #{"new string"})))
           (is (= #{"new string"} (deref all-strings))))))
 

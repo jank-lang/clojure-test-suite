@@ -1,6 +1,6 @@
 (ns clojure.core-test.assoc
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists assoc
   (deftest test-assoc
@@ -46,7 +46,7 @@
              [0 1 -1] [0 1 2] [-1 -1]
              [1 3 5]  [1 2]   [-1 3 2 5]))
 
-        (are [vec ivs] (thrown? #?(:cljs js/Error :default Exception) (apply assoc vec ivs))
+        (are [vec ivs] (p/thrown? (apply assoc vec ivs))
                        [] [-1 0]
                        [] [1 0]
                        [0 1 2] [4 4]
@@ -72,7 +72,7 @@
         (are [coll kvs] #?(; cljs seems to tolerate odd number of args and assume that missing value is nil
                            :cljs    (= (apply assoc coll (conj kvs nil)) (apply assoc coll kvs))
                            ; other implementations throw
-                           :default (thrown? Exception (apply assoc coll kvs)))
+                           :default (p/thrown? (apply assoc coll kvs)))
                         {:a 1} [:b]
                         {:a 1} [:b 2 :c]
                         {:a 1} [:b 2 :c 3 :d]
@@ -80,7 +80,7 @@
                         [1] [0 1 1]
                         [1] [0 1 1 2 2]))
       (testing "bad shape - not a map nor a vector"
-        (are [coll] (thrown? #?(:cljs js/Error :default Exception) (assoc coll 1 3))
+        (are [coll] (p/thrown? (assoc coll 1 3))
                     '(0 1 2)
                     #{0 1 2}
                     true

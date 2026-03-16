@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [clojure.test :as t :refer [deftest testing is]]
             [clojure.core-test.portability
-             #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+             #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists str/blank?
   (deftest test-blank?
@@ -16,15 +16,15 @@
     (is (true? (str/blank? " \t ")))
     #?(:cljs (do (is (true? (str/blank? (symbol ""))))
                  (is (false? (str/blank? 'a))))
-       :default (is (thrown? Exception (str/blank? (symbol "")))))
+       :default (is (p/thrown? (str/blank? (symbol "")))))
     #?(:cljs (do (is (false? (str/blank? (keyword ""))))
                  (is (false? (str/blank? :a))))
-       :default (is (thrown? Exception (str/blank? (keyword "")))))
+       :default (is (p/thrown? (str/blank? (keyword "")))))
     #?(:cljs (is (false? (str/blank? 1)))
-       :default (is (thrown? Exception (str/blank? 1))))
+       :default (is (p/thrown? (str/blank? 1))))
     #?(:cljs (do (is (true? (str/blank? \space)))
                  (is (false? (str/blank? \a))))
        :lpy (is (true? (str/blank? \space)))
-       :default (is (thrown? Exception (str/blank? \space))))
+       :default (is (p/thrown? (str/blank? \space))))
     (is (false? (str/blank? "nil")))
     (is (false? (str/blank? " as df ")))))

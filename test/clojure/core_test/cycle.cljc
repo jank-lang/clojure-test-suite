@@ -1,6 +1,6 @@
 (ns clojure.core-test.cycle
   (:require [clojure.test :refer [deftest testing are is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists cycle
   (deftest test-cycle
@@ -24,7 +24,7 @@
          :default (is (= [[:a 1] [:b 2] [:a 1]] (take 3 (cycle {:a 1 :b 2}))))))
 
     (testing "bad shape"
-      (are [coll] (thrown? #?(:cljs js/Error :default Exception) (cycle coll))
+      (are [coll] (p/thrown? (cycle coll))
                   :k
                   42
                   3.14))))

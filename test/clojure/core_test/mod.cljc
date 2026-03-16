@@ -108,11 +108,11 @@
          (is (NaN? (mod 1 ##NaN)))
          (is (NaN? (mod ##NaN 1)))]
         :default
-        [(is (thrown? Exception (mod 10 0)))
-         (is (thrown? Exception (mod ##Inf 1)))
+        [(is (p/thrown? (mod 10 0)))
+         (is (p/thrown? (mod ##Inf 1)))
          (is (NaN? (mod 1 ##Inf)))
-         (is (thrown? Exception (mod ##-Inf 1)))
+         (is (p/thrown? (mod ##-Inf 1)))
          (is (NaN? (mod 1 ##-Inf)))
-         (is (thrown? Exception (mod ##NaN 1)))
-         (is (thrown? Exception (mod 1 ##NaN)))
-         (is (thrown? Exception (mod ##NaN 1)))])))
+         (is (p/thrown? (mod ##NaN 1)))
+         (is (p/thrown? (mod 1 ##NaN)))
+         (is (p/thrown? (mod ##NaN 1)))])))

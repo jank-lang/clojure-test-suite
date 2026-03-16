@@ -1,6 +1,6 @@
 (ns clojure.core-test.keyword
   (:require [clojure.test :as t :refer [are deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists keyword
   (deftest test-keyword
@@ -90,7 +90,7 @@
        nil
 
        :default
-       (is (thrown? Exception (keyword "abc" nil))))
+       (is (p/thrown? (keyword "abc" nil))))
 
     #?@(:jank []
         :cljs
@@ -99,7 +99,7 @@
          (is (= :abc/abc (keyword :abc "abc")))
          (is (= :abc/abc (keyword "abc" :abc)))]
         :default
-        [(is (thrown? Exception (keyword 'abc "abc")))
-         (is (thrown? Exception (keyword "abc" 'abc)))
-         (is (thrown? Exception (keyword :abc "abc")))
-         (is (thrown? Exception (keyword "abc" :abc)))])))
+        [(is (p/thrown? (keyword 'abc "abc")))
+         (is (p/thrown? (keyword "abc" 'abc)))
+         (is (p/thrown? (keyword :abc "abc")))
+         (is (p/thrown? (keyword "abc" :abc)))])))

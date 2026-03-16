@@ -1,6 +1,6 @@
 (ns clojure.core-test.keys
   (:require [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists keys
   (deftest test-keys
@@ -17,5 +17,5 @@
       (is (= '("a") (keys {"a" :b})))
       (is (= '([:a :b]) (keys {[:a :b] :c})))
       (is (= '((:a)) (keys {(keys {:a :b}) :c})))
-      #?@(:cljs [(is (thrown? js/Error (keys 0)))]
-          :default [(is (thrown? Exception (keys 0)))]))))
+      #?@(:cljs [(is (p/thrown? (keys 0)))]
+          :default [(is (p/thrown? (keys 0)))]))))

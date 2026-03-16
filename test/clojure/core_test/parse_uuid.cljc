@@ -1,7 +1,7 @@
 (ns clojure.core-test.parse-uuid
   (:require clojure.core
             [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists parse-uuid
   (deftest test-parse-uuid
@@ -22,7 +22,7 @@
                         #uuid "00000012-0034-0056-0078-000000000009" "12-34-56-78-9"
                         #uuid "00000005-0004-0003-0002-009000000001" "5-4-3-DEADBEEF0002-9000000001"))
     (testing "exceptions"
-      #?(:cljs (are [x] (thrown? js/Error (parse-uuid x))
+      #?(:cljs (are [x] (p/thrown? (parse-uuid x))
                    {}
                    '()
                    []
@@ -30,7 +30,7 @@
                    :key
                    0.0
                    1000)
-         :lpy (are [x] (thrown? Exception (parse-uuid x))
+         :lpy (are [x] (p/thrown? (parse-uuid x))
                 {}
                 '()
                 []
@@ -38,7 +38,7 @@
                 :key
                 0.0
                 1000)
-         :default (are [x] (thrown? Exception (parse-uuid x))
+         :default (are [x] (p/thrown? (parse-uuid x))
                    {}
                    '()
                    []

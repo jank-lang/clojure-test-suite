@@ -1,6 +1,6 @@
 (ns clojure.core-test.seq
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists seq
  (deftest test-seq
@@ -33,8 +33,8 @@
        (is (= input-hash-map (into (hash-map) (seq input-hash-map))))
        (is (= input-map (into {} (seq input-map))))))
    (testing "nonseqables"
-     (is (thrown? #?(:cljs :default :default Exception) (seq 1)))
-     (is (thrown? #?(:cljs :default :default Exception) (seq (fn [])))))
+     (is (p/thrown? (seq 1)))
+     (is (p/thrown? (seq (fn [])))))
    (testing "infinite sequences are produced by seq"
      (let [infinite-seq (seq (range))]
        (is (seq? infinite-seq))

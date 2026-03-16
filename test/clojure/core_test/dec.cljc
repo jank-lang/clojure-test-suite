@@ -1,6 +1,6 @@
 (ns clojure.core-test.dec
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists dec
   (deftest test-dec
@@ -23,8 +23,8 @@
       (is (NaN? (dec ##NaN))))
 
     (testing "underflow"
-      #?(:clj (is (thrown? Exception (dec Long/MIN_VALUE)))
-         :cljr (is (thrown? Exception (dec Int64/MinValue)))
+      #?(:clj (is (p/thrown? (dec Long/MIN_VALUE)))
+         :cljr (is (p/thrown? (dec Int64/MinValue)))
          :cljs (is (= (dec js/Number.MIN_SAFE_INTEGER) (- js/Number.MIN_SAFE_INTEGER 2)))
          :lpy []  ; Python integers cannot underflow
          :default (is false "TODO underflow")))
@@ -32,4 +32,4 @@
     (testing "dec-nil"
       ;; ClojureScript says (= -1 (dec nil)) because JavaScript casts null to 0
       #?(:cljs (is (= -1 (dec nil)))
-         :default (is (thrown? Exception (dec nil)))))))
+         :default (is (p/thrown? (dec nil)))))))

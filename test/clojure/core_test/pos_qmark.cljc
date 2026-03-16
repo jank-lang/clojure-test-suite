@@ -1,7 +1,7 @@
 (ns clojure.core-test.pos-qmark
   (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists pos?
   (deftest test-pos?
@@ -41,10 +41,10 @@
          (is (not (pos? false))) ; Prints warning
          (is (pos? true))] ; Prints warning
         :lpy
-        [(is (thrown? Exception (pos? nil)))
+        [(is (p/thrown? (pos? nil)))
          (is (not (pos? false)))
          (is (pos? true))]
         :default
-        [(is (thrown? Exception (pos? nil)))
-         (is (thrown? Exception (pos? false)))
-         (is (thrown? Exception (pos? true)))])))
+        [(is (p/thrown? (pos? nil)))
+         (is (p/thrown? (pos? false)))
+         (is (p/thrown? (pos? true)))])))

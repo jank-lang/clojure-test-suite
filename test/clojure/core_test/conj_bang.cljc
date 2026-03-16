@@ -1,6 +1,6 @@
 (ns clojure.core-test.conj-bang
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists conj!
   (deftest test-conj!
@@ -63,10 +63,10 @@
         :default
         [(testing "cannot conj! after call to persistent!"
            (let [coll (transient []), _ (persistent! coll)]
-             (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (conj! coll 0)))))])
+             (is (p/thrown? (conj! coll 0)))))])
 
     (testing "bad shapes"
-      (are [coll x] (thrown? #?(:cljs js/Error :lpy Exception :default Exception) (conj! coll x))
+      (are [coll x] (p/thrown? (conj! coll x))
         ;; Basilisp is fairly liberal with its coercion to map entry, meaning
         ;; that many two element sequences can be conj'ed to a map.
         #?@(:lpy []

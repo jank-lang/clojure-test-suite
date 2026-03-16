@@ -1,6 +1,6 @@
 (ns clojure.core-test.subvec
   (:require [clojure.test :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists subvec
   (deftest test-subvec
@@ -46,7 +46,7 @@
 
     (testing "out-of-bounds"
       #?(:lpy (is (= [] (subvec [0 1 2 3] -1 3))))
-      (are [vec start end] (thrown? #?(:cljs js/Error :default Exception) (subvec vec start end))
+      (are [vec start end] (p/thrown? (subvec vec start end))
         #?@(:lpy [] :default [[0 1 2 3] -1 3])
         [0 1 2 3] 1 5
         [0 1 2 3] 3 2
@@ -55,12 +55,12 @@
     (testing "bad shapes"
       (testing "nil args"
         #?(:lpy (is (= [1 2] (subvec [0 1 2] 1 nil))))
-        (are [vec start end] (thrown? #?(:cljs js/Error :default Exception) (subvec vec start end))
+        (are [vec start end] (p/thrown? (subvec vec start end))
                              nil 0 0
                              [] nil 0
                              #?@(:lpy [] :default [[0 1 2] 1 nil])))
       (testing "not a vector"
-        (are [vec start end] (thrown? #?(:cljs js/Error :default Exception) (subvec vec start end))
+        (are [vec start end] (p/thrown? (subvec vec start end))
                              '(0 1 2) 0 2
                              #{0 1 2} 0 2
                              {:a 0 :b 1} 0 2
@@ -69,7 +69,7 @@
                              (transient [0 1 2]) 0 2))
       (testing "indices that cannot be cast to numbers"
         #?(:cljs    "cljs can actually cast these to numbers"
-           :default (are [vec start end] (thrown? Exception (subvec vec start end))
+           :default (are [vec start end] (p/thrown? (subvec vec start end))
                                          [0 1 2] :a 2
                                          [0 1 2] 1 :b
                                          [0 1 2] 'c 'd

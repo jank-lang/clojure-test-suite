@@ -1,6 +1,6 @@
 (ns clojure.core-test.max
   (:require [clojure.test :refer [are deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists max
   (deftest test-max
@@ -41,9 +41,9 @@
          (is (= 1 (max 1 nil)))]
         :lpy
         [(is (= "y" (max "x" "y")))
-         (is (thrown? Exception (max nil 1)))
-         (is (thrown? Exception (max 1 nil)))]
+         (is (p/thrown? (max nil 1)))
+         (is (p/thrown? (max 1 nil)))]
         :default
-        [(is (thrown? Exception (max "x" "y")))
-         (is (thrown? Exception (max nil 1)))
-         (is (thrown? Exception (max 1 nil)))])))
+        [(is (p/thrown? (max "x" "y")))
+         (is (p/thrown? (max nil 1)))
+         (is (p/thrown? (max 1 nil)))])))

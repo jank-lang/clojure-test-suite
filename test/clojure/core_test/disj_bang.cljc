@@ -1,6 +1,6 @@
 (ns clojure.core-test.disj-bang
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists disj!
   (deftest test-disj!
@@ -19,10 +19,10 @@
 
     (testing "cannot disj! transient after persistent! call"
       (let [t (transient #{1 2 3}), _ (persistent! t)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (disj! t 1)))))
+        (is (p/thrown? (disj! t 1)))))
 
     (testing "bad shape"
-      (are [set keys] (thrown? #?(:cljs js/Error :default Exception) (apply disj! set keys))
+      (are [set keys] (p/thrown? (apply disj! set keys))
                       nil [nil]
                       #{} [nil]
                       '(1) [1]

@@ -1,6 +1,6 @@
 (ns clojure.core-test.name
   (:require [clojure.test :as t :refer [are deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists name
  (deftest test-name
@@ -13,4 +13,4 @@
      "abc*+!-_'?<>=" :abc/abc*+!-_'?<>=
      "abc*+!-_'?<>=" 'abc/abc*+!-_'?<>=)
 
-   (is (thrown? #?(:cljs :default :default Exception) (name nil)))))
+   (is (p/thrown? (name nil)))))

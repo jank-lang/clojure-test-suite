@@ -1,6 +1,6 @@
 (ns clojure.core-test.slash
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists /
   (deftest test-slash
@@ -114,7 +114,7 @@
 
       ;; Zero arg
       #?(:cljs nil
-         :default (is (thrown? #?(:cljs :default :default Exception) (/))))
+         :default (is (p/thrown? (/))))
 
       ;; Single arg
       #?(:cljs (is (= 0.5 (/ 2)))
@@ -130,9 +130,9 @@
            (is (= 0 (/ nil 1)))
            (is (= ##Inf (/ 1 nil)))]
           :default
-          [(is (thrown? Exception (/ 1 0)))
-           (is (thrown? Exception (/ nil 1)))
-           (is (thrown? Exception (/ 1 nil)))]))
+          [(is (p/thrown? (/ 1 0)))
+           (is (p/thrown? (/ nil 1)))
+           (is (p/thrown? (/ 1 nil)))]))
 
     #?(:cljs
        nil
@@ -158,8 +158,8 @@
          ;; Multi arg
          (is (= 362880N (/ 1/1 1/2 1/3 1/4 1/5 1/6 1/7 1/8 1/9)))
 
-         (is (thrown? #?(:cljs :default :default Exception) (/ 1/2 nil)))
-         (is (thrown? #?(:cljs :default :default Exception) (/ nil 1/2)))))
+         (is (p/thrown? (/ 1/2 nil)))
+         (is (p/thrown? (/ nil 1/2)))))
 
     #?(:bb nil ;; bb always uses boxed args, which always throws in JVM Clojure
        :default

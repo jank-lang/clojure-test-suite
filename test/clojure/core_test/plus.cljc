@@ -1,7 +1,7 @@
 (ns clojure.core-test.plus
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists big-int?]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists big-int?] :as p]))
 
 (when-var-exists +
   (deftest test-+
@@ -81,18 +81,18 @@
            (is (= 1 (+ 1.0 nil)))
            (is (= 1 (+ nil 1.0)))]
           :default
-          [(is (thrown? Exception (+ 1 nil)))
-           (is (thrown? Exception (+ nil 1)))
-           (is (thrown? Exception (+ 1N nil)))
-           (is (thrown? Exception (+ nil 1N)))
-           (is (thrown? Exception (+ 1.0 nil)))
-           (is (thrown? Exception (+ nil 1.0)))
+          [(is (p/thrown? (+ 1 nil)))
+           (is (p/thrown? (+ nil 1)))
+           (is (p/thrown? (+ 1N nil)))
+           (is (p/thrown? (+ nil 1N)))
+           (is (p/thrown? (+ 1.0 nil)))
+           (is (p/thrown? (+ nil 1.0)))
            ;; Python VMs integer types are arbitrary precision and have no min or max
            ;; and arithmetic operations between integers cannot overflow or underflow.
            #?@(:lpy []
                :default
-               [(is (thrown? Exception (+ r/max-int 1)))
-                (is (thrown? Exception (+ r/min-int -1)))])
+               [(is (p/thrown? (+ r/max-int 1)))
+                (is (p/thrown? (+ r/min-int -1)))])
            (is (big-int? (+ 0 1N)))
            (is (big-int? (+ 0N 1)))
            (is (big-int? (+ 0N 1N)))
@@ -144,8 +144,8 @@
            ;; This case is pretty safe.
            1.5 1.0 1/2)
 
-         (is (thrown? #?(:cljs :default :default Exception) (+ 1/2 nil)))
-         (is (thrown? #?(:cljs :default :default Exception) (+ nil 1/2)))
+         (is (p/thrown? (+ 1/2 nil)))
+         (is (p/thrown? (+ nil 1/2)))
 
          #?@(:cljs nil
              :default
@@ -197,5 +197,5 @@
           [(is (NaN? (+ ##NaN nil)))
            (is (= ##Inf (+ ##Inf nil)))]
           :default
-          [(is (thrown? Exception (+ ##NaN nil)))
-           (is (thrown? Exception (+ ##Inf nil)))]))))
+          [(is (p/thrown? (+ ##NaN nil)))
+           (is (p/thrown? (+ ##Inf nil)))]))))

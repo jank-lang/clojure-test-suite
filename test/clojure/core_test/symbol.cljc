@@ -1,6 +1,6 @@
 (ns clojure.core-test.symbol
   (:require [clojure.test :as t :refer [are deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists symbol
   (deftest test-symbol
@@ -76,7 +76,7 @@
 
       'abc*+!-_'?<>=/abc*+!-_'?<>= "abc*+!-_'?<>=" "abc*+!-_'?<>=")
 
-    (is (thrown? #?(:cljs :default :default Exception) (symbol nil)))
+    (is (p/thrown? (symbol nil)))
     (is (= 'abc (symbol nil "abc"))) ; if ns is nil, it just ignores it.
     (is (nil? (namespace (symbol nil "hi"))))
     (is (= "" (namespace (symbol "" "hi"))))
@@ -95,7 +95,7 @@
          ;; (is (= :abc/abc (symbol :abc "abc"))) results in unreadable value
          (is (= 'abc/:abc (symbol "abc" :abc)))]
         :default
-        [(is (thrown? Exception (symbol 'abc "abc")))
-         (is (thrown? Exception (symbol "abc" 'abc)))
-         (is (thrown? Exception (symbol :abc "abc")))
-         (is (thrown? Exception (symbol "abc" :abc)))])))
+        [(is (p/thrown? (symbol 'abc "abc")))
+         (is (p/thrown? (symbol "abc" 'abc)))
+         (is (p/thrown? (symbol :abc "abc")))
+         (is (p/thrown? (symbol "abc" :abc)))])))

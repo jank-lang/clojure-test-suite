@@ -1,6 +1,6 @@
 (ns clojure.core-test.pop-bang
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists pop!
   (deftest test-pop!
@@ -13,17 +13,17 @@
                           [:c :b] [:c :b :a]))
 
     (testing "cannot pop! empty vector"
-      (is (thrown? #?(:cljs js/Error :default Exception) (pop! (transient [])))))
+      (is (p/thrown? (pop! (transient [])))))
 
     ;; Basilisp does not prevent continuing to use transient vectors after persistent! call
     #?@(:lpy []
         :default
         [(testing "cannot pop! after call to persistent!"
            (let [t (transient [0 1]), _ (persistent! t)]
-             (is (thrown? #?(:cljs js/Error :cljr Exception :default Error) (pop! t)))))])
+             (is (p/thrown? (pop! t)))))])
 
     (testing "bad shapes"
-      (are [arg] (thrown? #?(:cljs js/Error :default Exception) (pop! arg))
+      (are [arg] (p/thrown? (pop! arg))
                  (transient {:a 0})
                  (transient #{0})
                  [0]

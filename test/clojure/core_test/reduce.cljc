@@ -1,7 +1,7 @@
 (ns clojure.core-test.reduce
   (:require
    [clojure.test :as t :refer [deftest is testing]]
-   [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]])
+   [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p])
   #?(:clj (:import (clojure.lang IReduce))))
 
 (def interop
@@ -41,9 +41,7 @@
   (deftest test-reduce
     (testing "common"
       (is (nil? (reduce nil nil nil)))
-      (is (thrown? #?(:cljs js/Error
-                      :default Exception)
-                   (reduce nil nil)))
+      (is (p/thrown? (reduce nil nil)))
       (is (= 6 (reduce + 0 [1 2 3]))))
 
     (testing "val is not supplied"

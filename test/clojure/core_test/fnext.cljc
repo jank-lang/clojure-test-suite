@@ -1,7 +1,7 @@
 (ns clojure.core-test.fnext
   (:require clojure.core
             [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists fnext
   (deftest test-fnext
@@ -26,10 +26,10 @@
 
     (testing "exceptions"
       #?@(:cljs
-          [(is (thrown? js/Error (fnext 0)))]
+          [(is (p/thrown? (fnext 0)))]
           :lpy
-          [(is (thrown? Exception (fnext 0)))
+          [(is (p/thrown? (fnext 0)))
            (is (= nil (fnext \a)))]
           :default
-          [(is (thrown? Exception (fnext 0)))
-           (is (thrown? Exception (fnext \a)))]))))
+          [(is (p/thrown? (fnext 0)))
+           (is (p/thrown? (fnext \a)))]))))

@@ -1,6 +1,6 @@
 (ns clojure.core-test.disj
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists disj
   (deftest test-disj
@@ -25,7 +25,7 @@
             with-test-meta? #(= test-meta (meta %))]
         (is (with-test-meta? (disj (with-test-meta #{1 2 3}) 1 2 3)))))
     (testing "bad shape"
-      (are [set keys] (thrown? #?(:cljs js/Error :default Exception) (apply disj set keys))
+      (are [set keys] (p/thrown? (apply disj set keys))
                       '(1) [1]
                       [1] [1]
                       {:a 1} [:a]

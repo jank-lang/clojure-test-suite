@@ -1,6 +1,6 @@
 (ns clojure.core-test.nth
   (:require [clojure.test :as t :refer [deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists nth
   (deftest test-nth
@@ -13,14 +13,14 @@
     (is (nil? (nth nil 10)))
 
     ;; `nth` throws if out of range
-    (is (thrown? #?(:cljs :default :default Exception) (nth [0 1 2] 10)))
-    (is (thrown? #?(:cljs :default :default Exception) (nth [0 1 2] nil)))
+    (is (p/thrown? (nth [0 1 2] 10)))
+    (is (p/thrown? (nth [0 1 2] nil)))
     #?@(:lpy
         [(is (= 2 (nth [0 1 2] -1)))
          (is (= nil (nth nil nil)))]
         :default
-        [(is (thrown? #?(:cljs :default :default Exception) (nth [0 1 2] -1)))
-         (is (thrown? #?(:cljs :default :default Exception) (nth nil nil)))])
+        [(is (p/thrown? (nth [0 1 2] -1)))
+         (is (p/thrown? (nth nil nil)))])
 
     ;; `nth` accepts a default argument
     (is (= :default (nth nil 0 :default)))

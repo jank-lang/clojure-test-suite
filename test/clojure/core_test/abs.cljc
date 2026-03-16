@@ -1,7 +1,7 @@
 (ns clojure.core-test.abs
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists abs
   (deftest test-abs
@@ -28,9 +28,9 @@
            :default
            [-1/5 1/5]))
      (is (NaN? (abs ##NaN)))
-     #?(:cljr (is (thrown? System.OverflowException (abs r/min-int))))
+     #?(:cljr (is (p/thrown? (abs r/min-int))))
      #?(:cljs (is (zero? (abs nil)))
-        :default (is (thrown? Exception (abs nil)))))
+        :default (is (p/thrown? (abs nil)))))
 
     (testing "unboxed"
       (let [a  42

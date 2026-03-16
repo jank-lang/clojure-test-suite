@@ -1,6 +1,6 @@
 (ns clojure.core-test.rand-nth
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists rand-nth
   (deftest test-rand-nth
@@ -18,4 +18,4 @@
 
     (testing "negative cases"
       (is (nil? (rand-nth nil)))
-      (is (thrown? #?(:cljs :default :default Exception) (rand-nth 1))))))
+      (is (p/thrown? (rand-nth 1))))))

@@ -1,6 +1,6 @@
 (ns clojure.core-test.persistent-bang
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists persistent!
   (deftest test-persistent!
@@ -27,10 +27,10 @@
         :default
         [(testing "calling persistent! a second time throws"
            (let [coll (transient {}), _ (persistent! coll)]
-             (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (persistent! coll)))))])
+             (is (p/thrown? (persistent! coll)))))])
 
     (testing "bad shape"
-      (are [coll] (thrown? #?(:cljs js/Error :default Exception) (persistent! coll))
+      (are [coll] (p/thrown? (persistent! coll))
                   nil
                   {:a 1 :b 2}
                   [1 2 3]

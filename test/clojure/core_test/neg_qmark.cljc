@@ -1,7 +1,7 @@
 (ns clojure.core-test.neg-qmark
   (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists neg?
   (deftest test-neg?
@@ -37,10 +37,10 @@
          (is (not (neg? false))) ; Prints warning
          (is (not (neg? true)))] ; Prints warning
         :lpy
-        [(is (thrown? Exception (neg? nil)))
+        [(is (p/thrown? (neg? nil)))
          (is (not (neg? false)))
          (is (not (neg? true)))]
         :default
-        [(is (thrown? Exception (neg? nil)))
-         (is (thrown? Exception (neg? false)))
-         (is (thrown? Exception (neg? true)))])))
+        [(is (p/thrown? (neg? nil)))
+         (is (p/thrown? (neg? false)))
+         (is (p/thrown? (neg? true)))])))

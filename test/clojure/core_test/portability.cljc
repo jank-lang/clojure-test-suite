@@ -52,6 +52,7 @@
                  ; This is a hack to determine if we're running this macro for Clojure or
                  ; ClojureScript. There doesn't seem to be an official way to check this.
                  :clj ~(if (-> &env :ns some?) 'js/Error 'Throwable)
+                 :lpy ~'BaseException
                  :default ~'Exception) e#
          (report-success# (success-opts# e#))
          e#)

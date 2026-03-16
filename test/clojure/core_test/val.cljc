@@ -1,6 +1,6 @@
 (ns clojure.core-test.val
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists val
   (deftest test-val
@@ -18,7 +18,7 @@
       (when-var-exists array-map
         (is (= :b (val (first (array-map :a :b)))))))
     (testing "`val` throws on lots of things"
-      (are [arg] (thrown? #?(:cljs js/Error :default Exception) (val arg))
+      (are [arg] (p/thrown? (val arg))
                  nil
                  0
                  '()

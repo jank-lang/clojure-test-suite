@@ -1,6 +1,6 @@
 (ns clojure.core-test.vec
   (:require [clojure.test :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists vec
   (deftest test-vec
@@ -32,7 +32,7 @@
                     (is (= [-1 2 3] v)))))
 
     (testing "bad shape"
-      (are [arg] (thrown? #?(:cljs js/Error :default Exception) (vec arg))
+      (are [arg] (p/thrown? (vec arg))
                  42
                  3.14
                  true

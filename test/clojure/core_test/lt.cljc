@@ -1,6 +1,6 @@
 (ns clojure.core-test.lt
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists <
   (deftest test-<
@@ -93,26 +93,26 @@
            (is (= false (< "foo" "bar")))
            (is (= false (< :foo :bar)))]
           :cljr
-          [(is (thrown? Exception (< nil 1)))
-           (is (thrown? Exception (< 1 nil)))
-           (is (thrown? Exception (< nil 1 2)))
-           (is (thrown? Exception (< 1 2 nil)))
+          [(is (p/thrown? (< nil 1)))
+           (is (p/thrown? (< 1 nil)))
+           (is (p/thrown? (< nil 1 2)))
+           (is (p/thrown? (< 1 2 nil)))
            (is (= true (< "1" "2")))
-           (is (thrown? Exception (< "foo" "bar")))
-           (is (thrown? Exception (< :foo :bar)))]
+           (is (p/thrown? (< "foo" "bar")))
+           (is (p/thrown? (< :foo :bar)))]
           :lpy
-          [(is (thrown? Exception (< nil 1)))
-           (is (thrown? Exception (< 1 nil)))
-           (is (thrown? Exception (< nil 1 2)))
-           (is (thrown? Exception (< 1 2 nil)))
+          [(is (p/thrown? (< nil 1)))
+           (is (p/thrown? (< 1 nil)))
+           (is (p/thrown? (< nil 1 2)))
+           (is (p/thrown? (< 1 2 nil)))
            (is (= true (< "1" "2")))
            (is (= false (< "foo" "bar")))
            (is (= false (< :foo :bar)))]
           :default
-          [(is (thrown? Exception (< nil 1)))
-           (is (thrown? Exception (< 1 nil)))
-           (is (thrown? Exception (< nil 1 2)))
-           (is (thrown? Exception (< 1 2 nil)))
-           (is (thrown? Exception (< "1" "2")))
-           (is (thrown? Exception (< "foo" "bar")))
-           (is (thrown? Exception (< :foo :bar)))]))))
+          [(is (p/thrown? (< nil 1)))
+           (is (p/thrown? (< 1 nil)))
+           (is (p/thrown? (< nil 1 2)))
+           (is (p/thrown? (< 1 2 nil)))
+           (is (p/thrown? (< "1" "2")))
+           (is (p/thrown? (< "foo" "bar")))
+           (is (p/thrown? (< :foo :bar)))]))))

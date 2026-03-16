@@ -1,7 +1,7 @@
 (ns clojure.core-test.num
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.portability
-             #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+             #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (defn f [])
 
@@ -125,7 +125,7 @@
             (is (fn? (num (fn []))))]
 
            :default
-           [(are [x] (thrown? Exception (num x))
+           [(are [x] (p/thrown? (num x))
               (fn [])
               f
               {}

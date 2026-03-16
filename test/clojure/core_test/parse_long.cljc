@@ -1,7 +1,7 @@
 (ns clojure.core-test.parse-long
   (:require clojure.core
             [clojure.test :as t :refer [are deftest testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists parse-long
   (deftest test-parse-long
@@ -32,7 +32,7 @@
                       999999999999999    "999999999999999"]
                :default [999999999999999999 "999999999999999999"])))
     (testing "exceptions"
-      #?(:cljs (are [x] (thrown? js/Error (parse-long x))
+      #?(:cljs (are [x] (p/thrown? (parse-long x))
                  {}
                  '()
                  []
@@ -40,7 +40,7 @@
                  :key
                  0.0
                  1000)
-         :lpy (are [x] (thrown? Exception (parse-long x))
+         :lpy (are [x] (p/thrown? (parse-long x))
                 {}
                 '()
                 []
@@ -48,7 +48,7 @@
                 :key
                 0.0
                 1000)
-         :default (are [x] (thrown? Exception (parse-long x))
+         :default (are [x] (p/thrown? (parse-long x))
                     {}
                     '()
                     []

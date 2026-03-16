@@ -1,6 +1,6 @@
 (ns clojure.core-test.namespace
   (:require [clojure.test :as t :refer [are deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists namespace
  (deftest test-namespace
@@ -11,4 +11,4 @@
      nil            :abc
      nil            'abc)
 
-   (is (thrown? #?(:cljs :default :default Exception) (namespace nil)))))
+   (is (p/thrown? (namespace nil)))))
