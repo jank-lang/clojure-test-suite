@@ -13,48 +13,45 @@
     
     (testing "support read-only interface"
       (testing "for transient vector"
-        (are [op] (let [avec [1 2 3]]
-                    (= (op avec) (op (transient avec))))
-                  #(nth % 1)
-                  #(get % 1)
-                  #(contains? % 1)
-                  #(% 1)
-                  count))
+        (let [avec [1 2 3]]
+          (is (= (nth avec 1) (nth (transient avec) 1)))
+          (is (= (get avec 1) (get (transient avec) 1)))
+          (is (= (contains? avec 1) (contains? (transient avec) 1)))
+          (is (= (avec 1) ((transient avec) 1)))
+          (is (= (count avec) (count (transient avec))))))
       
       (testing "for transient map"
-        (are [op] (let [amap {:x 1 :y -1}]
-                    (= (op amap) (op (transient amap))))
-                  #(get % :x)
-                  #(contains? % :x)
-                  #(:x %)
-                  #(% :x)
-                  count))
+        (let [amap {:x 1 :y -1}]
+          (is (= (get amap :x) (get (transient amap) :x)))
+          (is (= (contains? amap :x) (contains? (transient amap) :x)))
+          (is (= (:x amap) (:x (transient amap))))
+          (is (= (amap :x) ((transient amap) :x)))
+          (is (= (count amap) (count (transient amap))))))
       
       (testing "for transient set"
-        (are [op] (let [aset {42 "life"}]
-                    (= (op aset) (op (transient aset))))
-                  #(get % 42)
-                  #(contains? % 42)
-                  #(% 42)
-                  count)))
+        (let [someset #{42 "life"}]
+          (is (= (get someset 42) (get (transient someset) 42))) 
+          (is (= (contains? someset 42) (contains? (transient someset) 42)))
+          (is (= (someset 42) ((transient someset) 42)))
+          (is (= (count someset) (count (transient someset)))))))
     
-    (testing "calling non-bang interface on transient throws"
+    (testing "calling non-bang interface throws"
       (testing "for transient vector"
-        (are [op] (thrown? #?(:cljs js/Error :default Exception) (op (transient [1 2 3])))
-                  #(assoc % 0 5)
-                  #(conj % 5)
-                  #(pop %)))
+        (let [avec [1 2 3]]
+          (is (thrown? #?(:cljs js/Error :default Exception) (assoc (transient avec) 0 5)))
+          (is (thrown? #?(:cljs js/Error :default Exception) (conj (transient avec) 5)))
+          (is (thrown? #?(:cljs js/Error :default Exception) (pop (transient avec))))))
       
       (testing "for transient map"
-        (are [op] (thrown? #?(:cljs js/Error :default Exception) (op (transient {:x 1 :y -1})))
-                  #(assoc % :x 5)
-                  #(dissoc % :x)
-                  #(conj % [:x 5])))
+        (let [amap {:x 1 :y -1}]
+          (is (thrown? #?(:cljs js/Error :default Exception) (assoc (transient amap) :x 5)))
+          (is (thrown? #?(:cljs js/Error :default Exception) (dissoc (transient amap) :x)))
+          (is (thrown? #?(:cljs js/Error :default Exception) (conj (transient amap) [:x 5])))))
       
       (testing "for transient set"
-        (are [op] (thrown? #?(:cljs js/Error :default Exception) (op (transient {:x 1 :y -1})))
-                  #(disj % 42)
-                  #(conj % 42))))
+        (let [someset #{42 "life"}]
+          (is (thrown? #?(:cljs js/Error :default Exception) (disj (transient someset) 42)))
+          (is (thrown? #?(:cljs js/Error :default Exception) (conj (transient someset) 43))))))
     
     (testing "calling transient a second time throws"
       (are [a-transient] (thrown? #?(:cljs js/Error :default Exception) (transient a-transient))
