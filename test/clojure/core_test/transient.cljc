@@ -38,6 +38,24 @@
                   #(% 42)
                   count)))
     
+    (testing "calling non-bang interface on transient throws"
+      (testing "for transient vector"
+        (are [op] (thrown? #?(:cljs js/Error :default Exception) (op (transient [1 2 3])))
+                  #(assoc % 0 5)
+                  #(conj % 5)
+                  #(pop %)))
+      
+      (testing "for transient map"
+        (are [op] (thrown? #?(:cljs js/Error :default Exception) (op (transient {:x 1 :y -1})))
+                  #(assoc % :x 5)
+                  #(dissoc % :x)
+                  #(conj % [:x 5])))
+      
+      (testing "for transient set"
+        (are [op] (thrown? #?(:cljs js/Error :default Exception) (op (transient {:x 1 :y -1})))
+                  #(disj % 42)
+                  #(conj % 42))))
+    
     (testing "calling transient a second time throws"
       (are [a-transient] (thrown? #?(:cljs js/Error :default Exception) (transient a-transient))
                          (transient [1 2 3])
