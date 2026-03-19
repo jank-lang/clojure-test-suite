@@ -5,11 +5,17 @@
 (when-var-exists transient
   (deftest test-transient
     (testing "creation"
-      (are [coll] (let [a-transient (transient coll)]
-                    (= coll (persistent! a-transient)))
+      (are [coll] (let [a-transient (transient coll)
+                        persisted (persistent! a-transient)]
+                    (and (= coll persisted)
+                         (= (type coll) (type persisted))))
                   [1 2 3]
                   {:x 0 :y -1}
-                  #{42 "life"}))
+                  ;; Basilisp does not currently implement sorted collections.
+                  #?@(:lpy [] :default [(array-map :a 1)])
+                  (hash-map :b 2)
+                  #{42 "life"}
+                  (hash-set 43 "thing")))
     
     (testing "support read-only interface"
       (testing "for transient vector"
@@ -57,7 +63,7 @@
       (are [a-transient] (thrown? #?(:cljs js/Error :default Exception) (transient a-transient))
                          (transient [1 2 3])
                          (transient {:x 1 :y -1})
-                         (transient #{42 "life"}))) 
+                         (transient #{42 "life"})))
     
     (testing "bad input"
       (are [v] (thrown? #?(:cljs js/Error :default Exception) (transient v))
@@ -65,7 +71,9 @@
                `sym
                "meow"
                1
+               1N
                1.0
+               10.0M
                #?@(:cljs [] ; most Clojure dialects support ratios - not CLJS
                    :default [111/7])
                \newline
@@ -76,4 +84,10 @@
                :kw
                :ns/kw
                #(+ 1 %)
-               '(1 2 3)))))
+               '(1 2 3)
+               ;; Basilisp does not currently implement sorted collections.
+               #?@(:lpy []
+                   :default [(sorted-set :i :j :k)
+                             (sorted-map :hp 99)])
+               #?@(:cljs [] ;; thrown? range error in clojurescript causes Javacript heap OOM
+                   :default [(range)])))))
