@@ -30,6 +30,13 @@
    ms))
 
 (defmacro thrown?
+  "Tests that evaluating `form` throws an exception, without asserting the
+  type of exception thrown. Works across all supported Clojure dialects
+  (Clojure JVM, ClojureScript, ClojureCLR, Basilisp, bb, jank, etc.) and
+  integrates with each dialect's native test result reporting API.
+
+  Prefer this macro over manually written reader conditionals, which risk
+  accidentally using dialect-specific symbols as `:default` cases."
   [form]
   `(let [report-success# #?(:lpy (fn [_])
                             :cljs t/report
