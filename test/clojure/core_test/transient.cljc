@@ -16,7 +16,7 @@
                   (hash-map :b 2)
                   #{42 "life"}
                   (hash-set 43 "thing")))
-    
+
     (testing "support read-only interface"
       (testing "for transient vector"
         (let [avec [1 2 3]]
@@ -28,7 +28,7 @@
               :lpy [] ;; basilisp, TypeError: 'TransientVector' object is not callable
               :default [(is (= (avec 1) ((transient avec) 1)))])
           (is (= (count avec) (count (transient avec))))))
-      
+
       (testing "for transient map"
         (let [amap {:x 1 :y -1}]
           (is (= (get amap :x) (get (transient amap) :x)))
@@ -36,38 +36,38 @@
           (is (= (:x amap) (:x (transient amap))))
           (is (= (amap :x) ((transient amap) :x)))
           (is (= (count amap) (count (transient amap))))))
-      
+
       (testing "for transient set"
         (let [someset #{42 "life"}]
-          (is (= (get someset 42) (get (transient someset) 42))) 
+          (is (= (get someset 42) (get (transient someset) 42)))
           (is (= (contains? someset 42) (contains? (transient someset) 42)))
           (is (= (someset 42) ((transient someset) 42)))
           (is (= (count someset) (count (transient someset)))))))
-    
+
     (testing "calling non-bang interface throws"
       (testing "for transient vector"
         (let [avec [1 2 3]]
           (is (thrown? #?(:cljs js/Error :default Exception) (assoc (transient avec) 0 5)))
           (is (thrown? #?(:cljs js/Error :default Exception) (conj (transient avec) 5)))
           (is (thrown? #?(:cljs js/Error :default Exception) (pop (transient avec))))))
-      
+
       (testing "for transient map"
         (let [amap {:x 1 :y -1}]
           (is (thrown? #?(:cljs js/Error :default Exception) (assoc (transient amap) :x 5)))
           (is (thrown? #?(:cljs js/Error :default Exception) (dissoc (transient amap) :x)))
           (is (thrown? #?(:cljs js/Error :default Exception) (conj (transient amap) [:x 5])))))
-      
+
       (testing "for transient set"
         (let [someset #{42 "life"}]
           (is (thrown? #?(:cljs js/Error :default Exception) (disj (transient someset) 42)))
           (is (thrown? #?(:cljs js/Error :default Exception) (conj (transient someset) 43))))))
-    
+
     (testing "calling transient a second time throws"
       (are [a-transient] (thrown? #?(:cljs js/Error :default Exception) (transient a-transient))
                          (transient [1 2 3])
                          (transient {:x 1 :y -1})
                          (transient #{42 "life"})))
-    
+
     (testing "bad input"
       (are [v] (thrown? #?(:cljs js/Error :default Exception) (transient v))
                'sym
