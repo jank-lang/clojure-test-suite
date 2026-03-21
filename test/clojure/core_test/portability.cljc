@@ -29,40 +29,44 @@
       :lpy time/sleep)
    ms))
 
-(defmacro thrown?
-  "Tests that evaluating `form` throws an exception, without asserting the
-  type of exception thrown. Works across all supported Clojure dialects
-  (Clojure JVM, ClojureScript, ClojureCLR, Basilisp, bb, jank, etc.) and
-  integrates with each dialect's native test result reporting API.
-
-  Prefer this macro over manually written reader conditionals, which risk
-  accidentally using dialect-specific symbols as `:default` cases."
-  [form]
-  `(let [report-success# #?(:lpy (fn [_])
-                            :cljs t/report
-                            :default t/do-report)
-         report-failure# #?(:lpy (partial vswap! t/*test-failures* conj)
-                            :cljs t/report
-                            :default t/do-report)
-         success-opts# (fn [~'error]
-                         {:type :pass :message nil
-                          :expected '~form :actual ~'error})
-         failure-opts# {:type #?(:lpy :failure
-                                 :default :fail)
-                        :message nil
-                        :expected '~form
-                        :actual nil}]
-     (try
-       (do ~form)
-       (report-failure# failure-opts#)
-       (catch #?(:jank ~'jank.runtime.object_ref
-                 ; This is a hack to determine if we're running this macro for Clojure or
-                 ; ClojureScript. There doesn't seem to be an official way to check this.
-                 :clj ~(if (-> &env :ns some?) 'js/Error 'Throwable)
-                 :lpy ~'BaseException
-                 :default ~'Exception) e#
-         (report-success# (success-opts# e#))
-         e#)
-       #?(:jank (catch ~'std.exception e#
-                  (report-success# (success-opts# (~'.what e#))))))))
+(defmethod #?(:lpy t/gen-assert
+              :default t/assert-expr)
+  'p/thrown?
+  #?(:lpy [form msg _line-num]
+     :cljs [_menv msg form]
+     :default [msg form])
+  ;; Tests that evaluating `form` throws an exception, without asserting the
+  ;; type of exception thrown. Works across all supported Clojure dialects
+  ;; (Clojure JVM, ClojureScript, ClojureCLR, Basilisp, bb, jank, etc.) and
+  ;; integrates with each dialect's native test result reporting API.
+  ;;
+  ;; Prefer this multimethod over manually written reader conditionals, which
+  ;; risk accidentally using dialect-specific symbols as `:default` cases."
+  (let [body (drop 1 form)]
+    `(let [report-success# #?(:lpy (fn [_])
+                              :cljs t/report
+                              :default t/do-report)
+           report-failure# #?(:lpy (partial vswap! t/*test-failures* conj)
+                              :cljs t/report
+                              :default t/do-report)
+           success-opts# (fn [~'error]
+                           {:type :pass :message '~msg
+                            :expected '~form :actual ~'error})
+           failure-opts# {:type #?(:lpy :failure
+                                   :default :fail)
+                          :message '~msg 
+                          :expected '~form
+                          :actual nil}]
+       (try
+         ~@body
+         (report-failure# failure-opts#)
+         (catch #?(:jank ~'jank.runtime.object_ref
+                   :clj ~'Throwable
+                   :cljs ~'js/Error
+                   :lpy ~'BaseException
+                   :default ~'Exception) e#
+           (report-success# (success-opts# e#))
+           e#)
+         #?(:jank (catch ~'std.exception e#
+                    (report-success# (success-opts# (~'.what e#)))))))))
 

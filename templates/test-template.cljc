@@ -14,9 +14,9 @@
     (testing "section name"
       (is (= 1 0)))
 
-    ;; Test cases that expect exceptions should use the `thrown?` macro
-    ;; from the portability namespace, rather than the default method
-    ;; provided by `clojure.test`.
+    ;; Test cases that expect exceptions should use the `p/thrown?`
+    ;; multimethod from the portability namespace, rather than the `thrown?` 
+    ;; method provided by `clojure.test`.
     ;;
     ;; Prefer this macro over manually written reader conditionals, which
     ;; risk accidentally using dialect-specific symbols as `:default` cases.
