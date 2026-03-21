@@ -63,7 +63,6 @@
          (catch #?(:jank ~'jank.runtime.object_ref
                    :clj ~'Throwable
                    :cljs ~'js/Error
-                   :lpy ~'BaseException
                    :default ~'Exception) e#
            (report-success# (success-opts# e#))
            e#)
