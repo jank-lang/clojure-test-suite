@@ -42,30 +42,30 @@
   ;;
   ;; Prefer this multimethod over manually written reader conditionals, which
   ;; risk accidentally using dialect-specific symbols as `:default` cases."
-  (let [body (drop 1 form)
-        report-success #?(:lpy (fn [_])
-                          :cljs t/report
-                          :default t/do-report)
-        report-failure #?(:lpy (partial vswap! t/*test-failures* conj)
-                          :cljs t/report
-                          :default t/do-report)
-        success-opts (fn [error]
-                       {:type :pass :message msg
-                        :expected (list 'quote form) :actual error})
-        failure-opts {:type #?(:lpy :failure
-                               :default :fail)
-                       :message msg 
-                       :expected (list 'quote form)
-                       :actual nil}]
-       `(try
+  (let [body (drop 1 form)]
+    `(let [report-success# #?(:lpy (fn [_])
+                              :cljs t/report
+                              :default t/do-report)
+           report-failure# #?(:lpy (partial vswap! t/*test-failures* conj)
+                              :cljs t/report
+                              :default t/do-report)
+           success-opts# (fn [~'error]
+                           {:type :pass :message '~msg
+                            :expected '~form :actual ~'error})
+           failure-opts# {:type #?(:lpy :failure
+                                   :default :fail)
+                          :message '~msg 
+                          :expected '~form
+                          :actual nil}]
+       (try
          ~@body
-         (~report-failure ~failure-opts)
+         (report-failure# failure-opts#)
          (catch #?(:jank ~'jank.runtime.object_ref
                    :clj ~'Throwable
                    :cljs ~'js/Error
                    :default ~'Exception) e#
-           (~report-success (~success-opts e#))
+           (report-success# (success-opts# e#))
            e#)
          #?(:jank (catch ~'std.exception e#
-                    (~report-success (~success-opts (~'.what e#))))))))
+                    (report-success# (success-opts# (~'.what e#)))))))))
 
