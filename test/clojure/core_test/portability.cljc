@@ -48,24 +48,24 @@
                           :default t/do-report)
         report-failure #?(:lpy (partial vswap! t/*test-failures* conj)
                           :cljs t/report
-                          :default t/do-report)
-        success-opts (fn [error]
-                       {:type :pass :message msg
-                        :expected (list 'quote form) :actual error})
+                          :default t/do-report) 
         failure-opts {:type #?(:lpy :failure
                                :default :fail)
                        :message msg 
                        :expected (list 'quote form)
                        :actual nil}]
-       `(try
+    `(let [success-opts# (fn [~'error]
+                           {:type :pass :message '~msg
+                            :expected '~form :actual ~'error})]
+       (try
          ~@body
          (~report-failure ~failure-opts)
          (catch #?(:jank ~'jank.runtime.object_ref
                    :clj ~'Throwable
                    :cljs ~'js/Error
                    :default ~'Exception) e#
-           (~report-success (~success-opts e#))
+           (~report-success (success-opts# e#))
            e#)
          #?(:jank (catch ~'std.exception e#
-                    (~report-success (~success-opts (~'.what e#))))))))
+                    (~report-success (success-opts# (~'.what e#)))))))))
 
