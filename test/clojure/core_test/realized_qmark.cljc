@@ -1,6 +1,6 @@
 (ns clojure.core-test.realized-qmark
   (:require [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists sleep]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists sleep] :as p]))
 
 ;; You realize the sun doesn't go down
 ;; It's just an illusion caused by the world spinning 'round

@@ -1,7 +1,7 @@
 (ns clojure.core-test.byte
   (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.portability
-             #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+             #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists byte
   (deftest test-byte

@@ -1,6 +1,6 @@
 (ns clojure.core-test.take-last
   (:require [clojure.test :as t :refer [deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists take-last
   (deftest test-take-last

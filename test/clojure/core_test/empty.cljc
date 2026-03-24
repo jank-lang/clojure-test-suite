@@ -1,7 +1,7 @@
 (ns clojure.core-test.empty
   (:require [clojure.core-test.number-range :as r]
             [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists empty
   (deftest test-empty

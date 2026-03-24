@@ -1,6 +1,6 @@
 (ns clojure.core-test.descendants
   (:require [clojure.test :refer [are deftest is testing use-fixtures]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists descendants
 

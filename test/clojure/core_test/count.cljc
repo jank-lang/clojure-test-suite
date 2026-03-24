@@ -1,6 +1,6 @@
 (ns clojure.core-test.count
   (:require [clojure.test :as t :refer [are deftest]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists count
   (deftest test-count

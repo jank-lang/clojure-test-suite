@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [clojure.test :as t :refer [deftest testing is]]
             [clojure.core-test.portability
-             #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+             #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists str/blank?
   (deftest test-blank?

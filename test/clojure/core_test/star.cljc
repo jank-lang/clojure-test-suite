@@ -1,7 +1,7 @@
 (ns clojure.core-test.star
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists big-int?]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists big-int?] :as p]))
 
 (when-var-exists *
   (deftest test-*

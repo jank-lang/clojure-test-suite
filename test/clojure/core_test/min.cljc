@@ -1,6 +1,6 @@
 (ns clojure.core-test.min
   (:require [clojure.test :refer [are deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists min
   (deftest test-min

@@ -1,6 +1,6 @@
 (ns clojure.core-test.parse-double
   (:require [clojure.test :as t :refer [are deftest testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists parse-double
   (deftest test-parse-double

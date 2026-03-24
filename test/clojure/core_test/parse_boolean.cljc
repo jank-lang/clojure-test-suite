@@ -1,6 +1,6 @@
 (ns clojure.core-test.parse-boolean
   (:require [clojure.test :as t :refer [are deftest testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists parse-boolean
   (deftest test-parse-boolean

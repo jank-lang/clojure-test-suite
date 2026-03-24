@@ -1,7 +1,7 @@
 (ns clojure.string-test.ends-with-qmark
   (:require [clojure.string :as str]
             [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists str/ends-with?
   (deftest test-ends-with?
