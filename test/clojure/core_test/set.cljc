@@ -1,7 +1,7 @@
 (ns clojure.core-test.set
   (:require clojure.core
             [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists set
   (deftest test-set
@@ -17,11 +17,11 @@
       (is (= #{:a 1 "a"} (set [:a 1 "a"])))
       (is (= #{:a 1 "a" [\space]} (set [:a 1 "a" [\space]])))
       #?@(:cljs [(is (= #{\space} (set \space)))
-                 (is (thrown? js/Error (set 1)))
-                 (is (thrown? js/Error (set :a)))]
+                 (is (p/thrown? (set 1)))
+                 (is (p/thrown? (set :a)))]
           :lpy [(is (= #{\space} (set \space)))
-                (is (thrown? Exception (set 1)))
-                (is (thrown? Exception (set :a)))]
-          :default  [(is (thrown? Exception (set 1)))
-                     (is (thrown? Exception (set \space)))
-                     (is (thrown? Exception (set :a)))]))))
+                (is (p/thrown? (set 1)))
+                (is (p/thrown? (set :a)))]
+          :default  [(is (p/thrown? (set 1)))
+                     (is (p/thrown? (set \space)))
+                     (is (p/thrown? (set :a)))]))))

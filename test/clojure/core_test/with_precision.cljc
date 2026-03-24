@@ -1,6 +1,6 @@
 (ns clojure.core-test.with-precision
   (:require [clojure.test :as t :refer [deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists with-precision
   (deftest test-with-precision
@@ -25,5 +25,5 @@
     (is (= -2M (with-precision 1 :rounding HALF_UP (* -1.5M 1M))))
     (is (= -1M (with-precision 1 :rounding HALF_DOWN (* -1.5M 1M))))
 
-    (is (thrown? Exception (with-precision 1 :rounding UNNECESSARY (* 1.5M 1M)))) ;; => Execution error (ArithmeticException) at... Rounding necessary
+    (is (p/thrown? (with-precision 1 :rounding UNNECESSARY (* 1.5M 1M)))) ;; => Execution error (ArithmeticException) at... Rounding necessary
     (is (= 2M (with-precision 1 :rounding UNNECESSARY (* 2M 1M))))))

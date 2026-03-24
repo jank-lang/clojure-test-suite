@@ -1,6 +1,6 @@
 (ns clojure.core-test.compare
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists compare
  (deftest test-compare
@@ -17,7 +17,7 @@
            :default
            [neg? [1 100/3]]))
 
-     (is (thrown? #?(:cljs :default :default Exception) (compare 1 []))))
+     (is (p/thrown? (compare 1 []))))
 
   (testing "lexical-types"
     (are [pred args] (pred (compare (first args) (second args)))
@@ -31,8 +31,8 @@
       neg?  [:cat  :animal/cat]
       pos?  ['a    nil])
 
-    (is (thrown? #?(:cljs :default :default Exception) (compare "a" [])))
-    (is (thrown? #?(:cljs :default :default Exception) (compare "cat" '(\c \a \t)))))
+    (is (p/thrown? (compare "a" [])))
+    (is (p/thrown? (compare "cat" '(\c \a \t)))))
 
   (testing "collection-types"
     (are [pred args] (pred (compare (first args) (second args)))
@@ -53,14 +53,14 @@
       ;; zero?  ['()         '()]
       )
 
-    (is (thrown? #?(:cljs :default :default Exception) (compare []  '())))
-    (is (thrown? #?(:cljs :default :default Exception) (compare [1] [[]])))
-    (is (thrown? #?(:cljs :default :default Exception) (compare []  {})))
-    (is (thrown? #?(:cljs :default :default Exception) (compare []  #{})))
+    (is (p/thrown? (compare []  '())))
+    (is (p/thrown? (compare [1] [[]])))
+    (is (p/thrown? (compare []  {})))
+    (is (p/thrown? (compare []  #{})))
     (when-var-exists sorted-set
-      (is (thrown? #?(:cljs :default :default Exception) (compare #{} (sorted-set)))))
-    (is (thrown? #?(:cljs :default :default Exception) (compare #{1} #{1})))
-    (is (thrown? #?(:cljs :default :default Exception) (compare {1 2} {1 2})))
-    (is (thrown? #?(:cljs :default :default Exception) (compare (range 5) (range 5))))
+      (is (p/thrown? (compare #{} (sorted-set)))))
+    (is (p/thrown? (compare #{1} #{1})))
+    (is (p/thrown? (compare {1 2} {1 2})))
+    (is (p/thrown? (compare (range 5) (range 5))))
     ;; Clojurescript goes into an infinite loop of some sort when compiling this.
-    #_(is (thrown? #?(:cljs :default :default Exception) (compare (range 5) (range)))))))
+    #_(is (p/thrown? (compare (range 5) (range)))))))

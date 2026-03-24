@@ -1,6 +1,6 @@
 (ns clojure.core-test.cons
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists cons
   (deftest test-cons
@@ -35,7 +35,7 @@
                             1 [] [1]))
 
     (testing "bad shape"
-      (are [seq] (thrown? #?(:cljs js/Error :default Exception) (cons 1 seq))
+      (are [seq] (p/thrown? (cons 1 seq))
                  :k
                  42
                  3.14

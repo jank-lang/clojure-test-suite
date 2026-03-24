@@ -1,7 +1,7 @@
 (ns clojure.core-test.minus
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists clojure.core/-
   (deftest test--
@@ -69,7 +69,7 @@
 
       ;; Zero arg
       #?(:cljs nil
-         :default (is (thrown? #?(:cljs :default :default Exception) (-))))
+         :default (is (p/thrown? (-))))
 
       ;; Single arg
       (is (= -3 (- 3)))
@@ -92,16 +92,16 @@
            #_(is (- r/min-int 1))
            #_(is (- r/max-int -1))]
           :default
-          [(is (thrown? Exception (- nil 1)))
-           (is (thrown? Exception (- 1 nil)))
-           (is (thrown? Exception (- nil 1N)))
-           (is (thrown? Exception (- 1N nil)))
-           (is (thrown? Exception (- nil 1.0)))
-           (is (thrown? Exception (- 1.0 nil)))
-           (is (thrown? Exception (- nil 1.0M)))
-           (is (thrown? Exception (- 1.0M nil)))
-           (is (thrown? Exception (- r/min-int 1)))
-           (is (thrown? Exception (- r/max-int -1)))]))
+          [(is (p/thrown? (- nil 1)))
+           (is (p/thrown? (- 1 nil)))
+           (is (p/thrown? (- nil 1N)))
+           (is (p/thrown? (- 1N nil)))
+           (is (p/thrown? (- nil 1.0)))
+           (is (p/thrown? (- 1.0 nil)))
+           (is (p/thrown? (- nil 1.0M)))
+           (is (p/thrown? (- 1.0M nil)))
+           (is (p/thrown? (- r/min-int 1)))
+           (is (p/thrown? (- r/max-int -1)))]))
 
 
     #?(:cljs
@@ -151,8 +151,8 @@
          ;; Multi arg
          (is (= -2089/2520 (- 1 1/2 1/3 1/4 1/5 1/6 1/7 1/8 1/9)))
 
-         (is (thrown? Exception (- nil 1/2)))
-         (is (thrown? Exception (- 1/2 nil)))
+         (is (p/thrown? (- nil 1/2)))
+         (is (p/thrown? (- 1/2 nil)))
 
          (is (- r/max-int -1/2)) ; test that these don't throw
          (is (- r/min-int 1/2))
@@ -217,5 +217,5 @@
           [(is (NaN? (- ##NaN nil)))
            (is (= ##Inf (- ##Inf nil)))]
           :default
-          [(is (thrown? Exception (- ##NaN nil)))
-           (is (thrown? Exception (- ##Inf nil)))]))))
+          [(is (p/thrown? (- ##NaN nil)))
+           (is (p/thrown? (- ##Inf nil)))]))))

@@ -1,7 +1,7 @@
 (ns clojure.core-test.float
   (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists float
   (deftest test-float
@@ -36,23 +36,23 @@
          (is (= "0" (float "0")))
          (is (= :0 (float :0)))]
         :cljr
-        [(is (thrown? Exception (float r/max-double)))
-         (is (thrown? Exception (float ##Inf)))
-         (is (thrown? Exception (float ##-Inf)))
+        [(is (p/thrown? (float r/max-double)))
+         (is (p/thrown? (float ##Inf)))
+         (is (p/thrown? (float ##-Inf)))
          (is (= (float 0.0) (float "0")))
-         (is (thrown? Exception(float :0)))]
+         (is (p/thrown? (float :0)))]
         :lpy
         [(is (= r/max-double (float r/max-double)))
          (is (= ##Inf (float ##Inf)))
          (is (= ##-Inf (float ##-Inf)))
          (is (= 0.0 (float "0")))
-         (is (thrown? Exception (float :0)))]
+         (is (p/thrown? (float :0)))]
         :default
-        [(is (thrown? Exception (float r/max-double)))
-         (is (thrown? Exception (float ##Inf)))
-         (is (thrown? Exception (float ##-Inf)))
-         (is (thrown? Exception (float "0")))
-         (is (thrown? Exception (float :0)))])
+        [(is (p/thrown? (float r/max-double)))
+         (is (p/thrown? (float ##Inf)))
+         (is (p/thrown? (float ##-Inf)))
+         (is (p/thrown? (float "0")))
+         (is (p/thrown? (float :0)))])
 
     #?@(:clj
         [(is (instance? java.lang.Float (float 0)))

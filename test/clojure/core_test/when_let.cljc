@@ -1,6 +1,6 @@
 (ns clojure.core-test.when-let
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists when-let
                  (deftest test-when-let
@@ -34,6 +34,4 @@
                    #?(:cljs nil ; Skipped due to ClojureScript's atypical macro expansion.
                       :bb nil ; Skipped because of Babashka issue https://github.com/babashka/babashka/issues/1894
                       :default (testing "when-let accepts exactly two"
-                                 (is (thrown? Exception
-                                              (macroexpand
-                                                '(when-let [x (range 5) y (range 5)]))))))))
+                                 (is (p/thrown? (macroexpand '(when-let [x (range 5) y (range 5)]))))))))

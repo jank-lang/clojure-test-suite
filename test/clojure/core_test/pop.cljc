@@ -1,6 +1,6 @@
 (ns clojure.core-test.pop
   (:require [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists pop
   (deftest test-pop
@@ -11,15 +11,15 @@
       (is (= [1 2] (pop [1 2 (range)])))
       (is (= '(2 3) (pop '(1 2 3))))
       (is (= '(2 3) (pop '((range) 2 3))))
-      #?@(:cljs [(is (thrown? js/Error (pop \space)))
-                 (is (thrown? js/Error (pop 0)))
-                 (is (thrown? js/Error (pop 0.0)))
-                 (is (thrown? js/Error (pop [])))
-                 (is (thrown? js/Error (pop '())))
-                 (is (thrown? js/Error (pop {})))]
-          :default [(is (thrown? Exception (pop 0)))
-                    (is (thrown? Exception (pop 0.0)))
-                    (is (thrown? Exception (pop \space)))
-                    (is (thrown? Exception (pop [])))
-                    (is (thrown? Exception (pop '())))
-                    (is (thrown? Exception (pop {})))]))))
+      #?@(:cljs [(is (p/thrown? (pop \space)))
+                 (is (p/thrown? (pop 0)))
+                 (is (p/thrown? (pop 0.0)))
+                 (is (p/thrown? (pop [])))
+                 (is (p/thrown? (pop '())))
+                 (is (p/thrown? (pop {})))]
+          :default [(is (p/thrown? (pop 0)))
+                    (is (p/thrown? (pop 0.0)))
+                    (is (p/thrown? (pop \space)))
+                    (is (p/thrown? (pop [])))
+                    (is (p/thrown? (pop '())))
+                    (is (p/thrown? (pop {})))]))))

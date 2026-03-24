@@ -1,11 +1,11 @@
 (ns clojure.string-test.lower-case
   (:require [clojure.string :as str]
             [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer)  [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists str/lower-case
   (deftest test-lower-case
-    (is (thrown? #?(:cljs :default :default Exception) (str/lower-case nil)))
+    (is (p/thrown? (str/lower-case nil)))
     (is (= "" (str/lower-case "")))
     (is (= "֎" (str/lower-case "֎")))
     (is (= "asdf" (str/lower-case "AsdF")))
@@ -14,21 +14,21 @@
       (is (= "asdf" (str/lower-case "ASDF")))
       (is (= "ASDF" s) "original string mutated"))
     #?(:cljs
-       (are [v] (thrown? :default (str/lower-case v))
+       (are [v] (p/thrown? (str/lower-case v))
          :ASDF
          :ASDF/ASDF
          'ASDF
          'ASDF/ASDF)
 
        :cljr
-       (are [v] (thrown? Exception (str/lower-case v))
+       (are [v] (p/thrown? (str/lower-case v))
          :ASDF
          :ASDF/ASDF
          'ASDF
          'ASDF/ASDF)
 
        :lpy
-       (are [v] (thrown? Exception (str/lower-case v))
+       (are [v] (p/thrown? (str/lower-case v))
          :ASDF
          :ASDF/ASDF
          'ASDF

@@ -1,6 +1,6 @@
 (ns clojure.core-test.dissoc
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists dissoc
 
@@ -44,7 +44,7 @@
                              r [:d])))
 
     (testing "bad shape"
-      (are [m keys] (thrown? #?(:cljs js/Error :default Exception) (apply dissoc m keys))
+      (are [m keys] (p/thrown? (apply dissoc m keys))
                     42 [4]
                     '() [0]
                     [] [0]

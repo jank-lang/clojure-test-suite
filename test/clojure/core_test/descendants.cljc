@@ -1,6 +1,6 @@
 (ns clojure.core-test.descendants
   (:require [clojure.test :refer [are deftest is testing use-fixtures]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists descendants
 
@@ -64,14 +64,14 @@
 
       (testing "cannot get descendants by type inheritance"
         #?@(:cljs
-            [(is (thrown? js/Error (descendants TestDescendantsProtocol)))
-             (is (thrown? js/Error (descendants js/Object)))]
+            [(is (p/thrown? (descendants TestDescendantsProtocol)))
+             (is (p/thrown? (descendants js/Object)))]
             :lpy
             [(is (nil? (descendants TestDescendantsProtocol)))
-             (is (thrown? Exception (descendants python/object)))]
+             (is (p/thrown? (descendants python/object)))]
             :default
             [(is (nil? (descendants TestDescendantsProtocol)))
-             (is (thrown? Exception (descendants Object)))]))
+             (is (p/thrown? (descendants Object)))]))
 
       (testing "does not throw on invalid tag"
         (are [tag] (nil? (descendants tag))
@@ -114,9 +114,9 @@
                               nil datatypes ::a))
 
       (testing "cannot get descendants by type inheritance, whether the tag is in h or not"
-        (are [h] #?(:cljs    (thrown? js/Error (descendants h js/Object))
-                    :lpy     (thrown? Exception (descendants h python/object))
-                    :default (thrown? Exception (descendants h Object)))
+        (are [h] #?(:cljs    (p/thrown? (descendants h js/Object))
+                    :lpy     (p/thrown? (descendants h python/object))
+                    :default (p/thrown? (descendants h Object)))
                  ; tag in h
                  (derive (make-hierarchy) #?(:cljs js/Object :lpy python/object :default Object) ::object)
                  ; tag not in h

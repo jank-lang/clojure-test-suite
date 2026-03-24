@@ -1,6 +1,6 @@
 (ns clojure.core-test.numerator
   (:require [clojure.test :as t :refer [deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists numerator
  (deftest test-numerator
@@ -14,10 +14,10 @@
        [(is (= 1 (numerator 1)))
         (is (= 1 (numerator 1N)))]
        :default
-       [(is (thrown? #?(:cljs :default :default Exception) (numerator 1)))
-        (is (thrown? #?(:cljs :default :default Exception) (numerator 1N)))])
-   (is (thrown? #?(:cljs :default :default Exception) (numerator 1.0)))
-   (is (thrown? #?(:cljs :default :default Exception) (numerator 1.0M)))
-   (is (thrown? #?(:cljs :default :default Exception) (numerator ##Inf)))
-   (is (thrown? #?(:cljs :default :default Exception) (numerator ##NaN)))
-   (is (thrown? #?(:cljs :default :default Exception) (numerator nil)))))
+       [(is (p/thrown? (numerator 1)))
+        (is (p/thrown? (numerator 1N)))])
+   (is (p/thrown? (numerator 1.0)))
+   (is (p/thrown? (numerator 1.0M)))
+   (is (p/thrown? (numerator ##Inf)))
+   (is (p/thrown? (numerator ##NaN)))
+   (is (p/thrown? (numerator nil)))))

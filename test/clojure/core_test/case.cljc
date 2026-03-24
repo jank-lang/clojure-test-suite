@@ -1,6 +1,6 @@
 (ns clojure.core-test.case
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists case
 
@@ -191,5 +191,5 @@
         'quote :quote-foo-result
         'foo :quote-foo-result)
 
-      (is (thrown? #?(:cljs :default :default Exception) (negative-tests ##NaN)))
-      (is (thrown? #?(:cljs :default :default Exception) (negative-tests :something-not-found))))))
+      (is (p/thrown? (negative-tests ##NaN)))
+      (is (p/thrown? (negative-tests :something-not-found))))))

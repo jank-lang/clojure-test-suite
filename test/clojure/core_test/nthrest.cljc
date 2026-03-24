@@ -1,6 +1,6 @@
 (ns clojure.core-test.nthrest
   (:require [clojure.test :as t :refer [deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists nthrest
   (deftest test-nthrest
@@ -29,10 +29,10 @@
          (is (= '(0 1 2) (nthrest [0 1 2] nil)))
          (is (nil? (nthrest nil nil)))]
         :lpy
-        [(is (thrown? Exception (nthrest (range 0 10) nil)))
-         (is (thrown? Exception (nthrest [0 1 2] nil)))
+        [(is (p/thrown? (nthrest (range 0 10) nil)))
+         (is (p/thrown? (nthrest [0 1 2] nil)))
          (is (nil? (nthrest nil nil)))]
         :default
-        [(is (thrown? Exception (nthrest (range 0 10) nil)))
-         (is (thrown? Exception (nthrest [0 1 2] nil)))
-         (is (thrown? Exception (nthrest nil nil)))])))
+        [(is (p/thrown? (nthrest (range 0 10) nil)))
+         (is (p/thrown? (nthrest [0 1 2] nil)))
+         (is (p/thrown? (nthrest nil nil)))])))

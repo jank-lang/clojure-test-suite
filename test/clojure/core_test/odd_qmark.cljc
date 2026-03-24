@@ -1,6 +1,6 @@
 (ns clojure.core-test.odd-qmark
   (:require [clojure.test :as t :refer [are deftest testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists odd?
   (deftest test-odd?
@@ -18,7 +18,7 @@
         -120N false))
 
     (testing "invalid"
-      (are [x] (thrown? #?(:cljs js/Error :default Exception) (odd? x))
+      (are [x] (p/thrown? (odd? x))
         nil
         ##Inf
         ##-Inf

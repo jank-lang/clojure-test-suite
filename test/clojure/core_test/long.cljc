@@ -1,6 +1,6 @@
 (ns clojure.core-test.long
   (:require [clojure.test :as t :refer [are deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists long
   (deftest test-long
@@ -39,8 +39,8 @@
         :lpy [] ; Python VMs integer types are arbitrary precision and have no min or max
         :default
         ;; `long` throws outside the range of 9223372036854775807 ... -9223372036854775808
-        [(is (thrown? #?(:cljs :default :default Exception) (long -9223372036854775809)))
-         (is (thrown? #?(:cljs :default :default Exception) (long 9223372036854775808)))])
+        [(is (p/thrown? (long -9223372036854775809)))
+         (is (p/thrown? (long 9223372036854775808)))])
 
     ;; Check handling of other types
     #?@(:cljs
@@ -50,16 +50,16 @@
          (is (= 0 (long nil)))] ; Hm. Interesting.
         :cljr
         [(is (= 0 (long "0")))
-         (is (thrown? Exception (long :0)))
-         (is (thrown? Exception (long [0])))
-         (is (thrown? Exception (long nil)))]
+         (is (p/thrown? (long :0)))
+         (is (p/thrown? (long [0])))
+         (is (p/thrown? (long nil)))]
         :lpy
         [(is (= 0 (long "0")))
-         (is (thrown? Exception (long :0)))
-         (is (thrown? Exception (long [0])))
-         (is (thrown? Exception (long nil)))]
+         (is (p/thrown? (long :0)))
+         (is (p/thrown? (long [0])))
+         (is (p/thrown? (long nil)))]
         :default
-        [(is (thrown? Exception (long "0")))
-         (is (thrown? Exception (long :0)))
-         (is (thrown? Exception (long [0])))
-         (is (thrown? Exception (long nil)))])))
+        [(is (p/thrown? (long "0")))
+         (is (p/thrown? (long :0)))
+         (is (p/thrown? (long [0])))
+         (is (p/thrown? (long nil)))])))

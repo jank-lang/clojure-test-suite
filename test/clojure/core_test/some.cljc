@@ -1,6 +1,6 @@
 (ns clojure.core-test.some
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists some
   (deftest test-some
@@ -61,7 +61,7 @@
       (is (= 5 (some identity [nil false 5 nil 7]))))
 
     (testing "bad shape"
-      (are [coll] (thrown? #?(:cljs js/Error :default Exception) (some identity coll))
+      (are [coll] (p/thrown? (some identity coll))
                   :some
                   42
                   3.14))))

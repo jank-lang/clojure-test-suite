@@ -1,6 +1,6 @@
 (ns clojure.core-test.random-sample
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists random-sample
 
@@ -57,6 +57,6 @@
         (is (every? (comp nil? seq) (repeatedly draws #(transduce (random-sample -1) conj [] nil))))
         
         #?(:cljs (is (nil? (seq (random-sample nil coll))))
-           :default (is (thrown? Exception (seq (random-sample nil coll)))))
-        (is (thrown? #?(:cljs :default :default Exception) (seq (random-sample 0.5 42))))
-        (is (thrown? #?(:cljs :default :default Exception) (seq (random-sample 0.5 :foo))))))))
+           :default (is (p/thrown? (seq (random-sample nil coll)))))
+        (is (p/thrown? (seq (random-sample 0.5 42))))
+        (is (p/thrown? (seq (random-sample 0.5 :foo))))))))

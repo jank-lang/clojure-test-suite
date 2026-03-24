@@ -1,6 +1,6 @@
 (ns clojure.core-test.take-nth
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists take-nth
   (deftest test-take-nth
@@ -35,11 +35,9 @@
         (range 0 10 1) -1 (range 10)
         (range 0 10 2) -2 (range 10))
 
-      (is (thrown? #?(:cljs :default :default Exception)
-                   (seq (take-nth nil (range 10)))))
-      (is (thrown? #?(:cljs :default :default Exception)
-                   (transduce (take-nth nil) conj [] (range 10))))
+      (is (p/thrown? (seq (take-nth nil (range 10)))))
+      (is (p/thrown? (transduce (take-nth nil) conj [] (range 10))))
       #?(:cljs
          (is (= [] (transduce (take-nth 0) conj [] (range 10))))
          :default
-         (is (thrown? Exception (transduce (take-nth 0) conj [] (range 10))))))))
+         (is (p/thrown? (transduce (take-nth 0) conj [] (range 10))))))))

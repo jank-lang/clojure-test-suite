@@ -1,6 +1,6 @@
 (ns clojure.core-test.rseq
   (:require [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists rseq
   (deftest test-rseq
@@ -10,19 +10,19 @@
       (is (= '(:c :b :a) (rseq [:a :b :c])))
       (is (= '(\c \b \a) (rseq [\a \b \c])))
       (is (= '(4 3 [1 2]) (rseq [[1 2] 3 4])))
-      #?@(:cljs [(is (thrown? js/Error (rseq nil)))
-                 (is (thrown? js/Error (rseq "")))
-                 (is (thrown? js/Error (rseq :a)))
-                 (is (thrown? js/Error (rseq 0)))
-                 (is (thrown? js/Error (rseq 0.0)))
-                 (is (thrown? js/Error (rseq {:a :b})))]
-          :default [(is (thrown? Exception (rseq nil)))
-                    (is (thrown? Exception (rseq "")))
-                    (is (thrown? Exception (rseq \space)))
-                    (is (thrown? Exception (rseq :a)))
-                    (is (thrown? Exception (rseq 0)))
-                    (is (thrown? Exception (rseq 0.0)))
-                    (is (thrown? Exception (rseq {:a :b})))]))
+      #?@(:cljs [(is (p/thrown? (rseq nil)))
+                 (is (p/thrown? (rseq "")))
+                 (is (p/thrown? (rseq :a)))
+                 (is (p/thrown? (rseq 0)))
+                 (is (p/thrown? (rseq 0.0)))
+                 (is (p/thrown? (rseq {:a :b})))]
+          :default [(is (p/thrown? (rseq nil)))
+                    (is (p/thrown? (rseq "")))
+                    (is (p/thrown? (rseq \space)))
+                    (is (p/thrown? (rseq :a)))
+                    (is (p/thrown? (rseq 0)))
+                    (is (p/thrown? (rseq 0.0)))
+                    (is (p/thrown? (rseq {:a :b})))]))
 
     (when-var-exists sorted-map
                      (testing "sorted-map"

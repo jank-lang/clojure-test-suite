@@ -1,6 +1,6 @@
 (ns clojure.core-test.parse-boolean
   (:require [clojure.test :as t :refer [are deftest testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists parse-boolean
   (deftest test-parse-boolean
@@ -25,7 +25,7 @@
            nil   "true "))
 
     (testing "exceptions"
-      #?(:cljs (are [x] (thrown? js/Error (parse-boolean x))
+      #?(:cljs (are [x] (p/thrown? (parse-boolean x))
                  nil
                  0
                  0.0
@@ -34,7 +34,7 @@
                  '()
                  #{}
                  [])
-         :lpy (are [x] (thrown? Exception (parse-boolean x))
+         :lpy (are [x] (p/thrown? (parse-boolean x))
                 nil
                 0
                 0.0
@@ -43,7 +43,7 @@
                 '()
                 #{}
                 [])
-         :default (are [x] (thrown? Exception (parse-boolean x))
+         :default (are [x] (p/thrown? (parse-boolean x))
                     nil
                     0
                     0.0

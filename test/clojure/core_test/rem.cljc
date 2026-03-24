@@ -101,11 +101,11 @@
      (is (NaN? (rem 1 ##NaN)))
      (is (NaN? (rem ##NaN 1)))]
     :default
-    [(is (thrown? #?(:cljs :default :default Exception) (rem 10 0)))
-     (is (thrown? #?(:cljs :default :default Exception) (rem ##Inf 1)))
+    [(is (p/thrown? (rem 10 0)))
+     (is (p/thrown? (rem ##Inf 1)))
      (is (NaN? (rem 1 ##Inf)))
-     (is (thrown? #?(:cljs :default :default Exception) (rem ##-Inf 1)))
+     (is (p/thrown? (rem ##-Inf 1)))
      (is (NaN? (rem 1 ##-Inf)))
-     (is (thrown? #?(:cljs :default :default Exception) (rem ##NaN 1)))
-     (is (thrown? #?(:cljs :default :default Exception) (rem 1 ##NaN)))
-     (is (thrown? #?(:cljs :default :default Exception) (rem ##NaN 1)))])))
+     (is (p/thrown? (rem ##NaN 1)))
+     (is (p/thrown? (rem 1 ##NaN)))
+     (is (p/thrown? (rem ##NaN 1)))])))

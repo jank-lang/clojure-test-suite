@@ -1,6 +1,6 @@
 (ns clojure.core-test.derive
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists derive
   (deftest test-derive
@@ -49,27 +49,27 @@
                                     :parents     {::rect #{::shape}}} {:parents {} :descendants {} :ancestors {}} ::rect ::shape))
 
     (testing "cyclic derivation"
-      (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (derive ::a ::a)))
+      (is (p/thrown? (derive ::a ::a)))
       (let [h (-> (make-hierarchy) (derive ::a ::b) (derive ::b ::c))]
-        (is (thrown? #?(:cljs js/Error :default Exception) (derive h ::c ::a)))))
+        (is (p/thrown? (derive h ::c ::a)))))
 
     (testing "bad shapes"
 
       (testing "nils"
-        (are [tag parent] (thrown? #?(:cljs js/Error :bb Error :default Exception) (derive tag parent))
+        (are [tag parent] (p/thrown? (derive tag parent))
                           nil nil
                           ::tag nil))
 
       #?(:bb      "bb allows non-namespaced tags"           ; https://github.com/babashka/babashka/issues/1890
          :cljs    "cljs allows non-namespaced tags"         ; https://ask.clojure.org/index.php/14759/derive-tag-parent-accepts-namespaced-keyword-symbol-parent
          :default (testing "non-namespaced tag"
-                    (are [tag parent] (thrown? #?(:cljr Exception :lpy Exception :default Error) (derive tag parent))
+                    (are [tag parent] (p/thrown? (derive tag parent))
                                       :a ::b
                                       'a 'n/b)))
 
       #?(:bb      "bb allows non-namespaced parents"        ; https://github.com/babashka/babashka/issues/1890
          :default (testing "non-namespaced parent"
-                    (are [tag parent] (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (derive tag parent))
+                    (are [tag parent] (p/thrown? (derive tag parent))
                                       :a :b
                                       ::a :b
                                       'a 'b
@@ -77,13 +77,13 @@
                                       #?(:cljs js/String :lpy python/str :default String) :b)))
 
       (testing "more invalid parents"
-        (are [tag parent] (thrown? #?(:cljs js/Error :bb Error :default Exception) (derive tag parent))
+        (are [tag parent] (p/thrown? (derive tag parent))
                           ::tag #?(:cljs js/String :lpy python/str :default String)
                           ::tag 42
                           ::tag "parent"))
 
       (testing "invalid hierarchy"
-        (are [h tag parent] (thrown? #?(:cljs js/Error :default Exception) (derive h tag parent))
+        (are [h tag parent] (p/thrown? (derive h tag parent))
                             nil ::a ::b
                             {} ::a ::b
                             {:parents {} :descendants {}} ::a ::b

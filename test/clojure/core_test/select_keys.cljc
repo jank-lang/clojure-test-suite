@@ -1,7 +1,7 @@
 (ns clojure.core-test.select-keys
   (:require clojure.core
             [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists select-keys
   (deftest test-select-keys
@@ -17,10 +17,10 @@
       (is (= {:a "a"} (select-keys {:a "a" :b (range)} [:a])))
       #?@(:cljs [(is (= {} (select-keys "" [:a])))
                  (is (= {} (select-keys 0 [:a])))
-                 (is (thrown? js/Error (select-keys {} :a)))]
+                 (is (p/thrown? (select-keys {} :a)))]
           :cljr [(is (= {} (select-keys "" [:a])))
                  (is (= {}  (select-keys 0 [:a])))
-                 (is (thrown? Exception (select-keys {} :a)))]
-          :default [(is (thrown? Exception (select-keys "" [:a])))
-                    (is (thrown? Exception (select-keys 0 [:a])))
-                    (is (thrown? Exception (select-keys {} :a)))]))))
+                 (is (p/thrown? (select-keys {} :a)))]
+          :default [(is (p/thrown? (select-keys "" [:a])))
+                    (is (p/thrown? (select-keys 0 [:a])))
+                    (is (p/thrown? (select-keys {} :a)))]))))

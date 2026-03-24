@@ -1,6 +1,6 @@
 (ns clojure.core-test.nthnext
   (:require [clojure.test :as t :refer [deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists nthnext
   (deftest test-nthnext
@@ -23,5 +23,5 @@
         [(is (= (range 0 10) (nthnext (range 0 10) nil)))
          (is (= '(0 1 2) (nthnext [0 1 2] nil)))]
         :default
-        [(is (thrown? #?(:cljs :default :default Exception) (nthnext (range 0 10) nil)))
-         (is (thrown? #?(:cljs :default :default Exception) (nthnext [0 1 2] nil)))])))
+        [(is (p/thrown? (nthnext (range 0 10) nil)))
+         (is (p/thrown? (nthnext [0 1 2] nil)))])))

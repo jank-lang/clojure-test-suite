@@ -1,6 +1,6 @@
 (ns clojure.core-test.partial
   (:require [clojure.test :as t :refer [deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
  (defn test-fn [& args]
    (into [] args))
@@ -12,7 +12,7 @@
     (let [lazily-evaluated (partial inc 1 17)]
       ;; CLJS ignores extra parameters given to apply. E.g., (apply inc 1 17) => 2
       #?(:cljs (is (= 2 (lazily-evaluated)))
-         :default (is (thrown? #?(:cljs :default :default Exception) (lazily-evaluated)))))
+         :default (is (p/thrown? (lazily-evaluated)))))
     (let [variadic (partial test-fn 1 2 3)]
       (is (= [1 2 3 4]   (variadic 4)))
       (is (= [1 2 3 4 5] (variadic 4 5))))

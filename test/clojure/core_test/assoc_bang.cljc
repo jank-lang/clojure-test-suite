@@ -1,6 +1,6 @@
 (ns clojure.core-test.assoc-bang
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists assoc!
 
@@ -35,7 +35,7 @@
                                     [[0 1 -1] [0 1 2] [-1 -1]
                                      [1 3 5]  [1 2]   [-1 3 2 5]])))
       (testing "vectors - out-of-bounds indices"
-        (are [vec ivs] (thrown? #?(:cljs js/Error :default Exception) (apply assoc! (transient vec) ivs))
+        (are [vec ivs] (p/thrown? (apply assoc! (transient vec) ivs))
                        [] [-1 0]
                        [] [1 0]
                        [0 1 2] [4 4]
@@ -58,12 +58,12 @@
         :default
         [(testing "cannot assoc! transient after persistent! call"
            (let [t (transient {:a 1}), _ (persistent! t)]
-             (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (assoc! t :b 2))))
+             (is (p/thrown? (assoc! t :b 2))))
            (let [t (transient [1]), _ (persistent! t)]
-             (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (assoc! t 0 2)))))])
+             (is (p/thrown? (assoc! t 0 2)))))])
 
     (testing "bad shape"
-      (are [coll] (thrown? #?(:cljs js/Error :default Exception) (assoc! coll 1 3))
+      (are [coll] (p/thrown? (assoc! coll 1 3))
                   nil
                   {:a 1 :b 2}
                   [0 1 2]

@@ -1,6 +1,6 @@
 (ns clojure.core-test.denominator
   (:require [clojure.test :as t :refer [deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists denominator
   (deftest test-denominator
@@ -12,10 +12,10 @@
         [(is (= 1 (denominator 1)))
          (is (= 1 (denominator 1N)))]
         :default
-        [(is (thrown? #?(:cljs :default :default Exception) (denominator 1)))
-         (is (thrown? #?(:cljs :default :default Exception) (denominator 1N)))])
-    (is (thrown? #?(:cljs :default :default Exception) (denominator 1.0)))
-    (is (thrown? #?(:cljs :default :default Exception) (denominator 1.0M)))
-    (is (thrown? #?(:cljs :default :default Exception) (denominator ##Inf)))
-    (is (thrown? #?(:cljs :default :default Exception) (denominator ##NaN)))
-    (is (thrown? #?(:cljs :default :default Exception) (denominator nil)))))
+        [(is (p/thrown? (denominator 1)))
+         (is (p/thrown? (denominator 1N)))])
+    (is (p/thrown? (denominator 1.0)))
+    (is (p/thrown? (denominator 1.0M)))
+    (is (p/thrown? (denominator ##Inf)))
+    (is (p/thrown? (denominator ##NaN)))
+    (is (p/thrown? (denominator nil)))))

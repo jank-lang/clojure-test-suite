@@ -1,6 +1,6 @@
 (ns clojure.core-test.underive
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists
   underive
@@ -68,7 +68,7 @@
                             diamond-hierarchy ::d ::a)))
 
     (testing "bad shape"
-      (are [h tag parent] (thrown? #?(:cljs js/Error :default Exception) (underive h tag parent))
+      (are [h tag parent] (p/thrown? (underive h tag parent))
                           nil ::a ::b
                           {} ::a ::b
                           [[:parents {}] [:descendants {}] [:ancestors {}]] ::a ::b

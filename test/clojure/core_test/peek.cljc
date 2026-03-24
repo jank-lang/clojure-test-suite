@@ -1,6 +1,6 @@
 (ns clojure.core-test.peek
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists peek
   (deftest test-peek
@@ -17,7 +17,7 @@
       (is (nil? (peek nil))))
 
     (testing "bad shape"
-      (are [coll] (thrown? #?(:cljs js/Error :default Exception) (peek coll))
+      (are [coll] (p/thrown? (peek coll))
                   #{1 2 3}
                   {:a 1 :b 2}
                   (cons 1 '())

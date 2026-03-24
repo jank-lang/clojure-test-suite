@@ -1,14 +1,14 @@
 (ns clojure.core-test.bit-xor
   (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists bit-xor
   (deftest test-bit-xor
     #?(:cljs (is (bit-xor nil 1))
-       :default (is (thrown? Exception (bit-xor nil 1))))
+       :default (is (p/thrown? (bit-xor nil 1))))
     #?(:cljs (is (bit-xor 1 nil))
-       :default (is (thrown? Exception (bit-xor 1 nil))))
+       :default (is (p/thrown? (bit-xor 1 nil))))
 
     (are [ex a b] (= ex (bit-xor a b))
       2r0101

@@ -1,6 +1,6 @@
 (ns clojure.core-test.update
   (:require [clojure.test :as t :refer [are deftest testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists update
  (deftest test-update
@@ -81,7 +81,7 @@
        #?@(:cljs ([{:k 1} :k inc 1 2 3 4] {:k 2}))))
 
    (testing "Throws"
-     (are [in] (thrown? #?(:cljs js/Error :default Exception) (apply update in))
+     (are [in] (p/thrown? (apply update in))
        ;; Throw when settting index 1 when 0 doesn't exist
        [[]        1 identity]
        ;; Throw on Negative indices!

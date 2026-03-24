@@ -1,6 +1,6 @@
 (ns clojure.core-test.zipmap
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists zipmap
  (deftest test-zipmap
@@ -29,5 +29,5 @@
      (are [in ex] (= (apply zipmap in) ex)
        [(range)  '("a" "b")]    {0 "a" 1 "b"}))
    (testing "Bad inputs"
-     (is (thrown? #?(:cljs :default :default Exception) (zipmap :not-seqable [1 2 3])))
-     (is (thrown? #?(:cljs :default :default Exception) (zipmap 123          [1 2 3]))))))
+     (is (p/thrown? (zipmap :not-seqable [1 2 3])))
+     (is (p/thrown? (zipmap 123          [1 2 3]))))))

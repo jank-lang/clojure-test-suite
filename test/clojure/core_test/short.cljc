@@ -1,6 +1,6 @@
 (ns clojure.core-test.short
   (:require [clojure.test :as t :refer [are deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists short
   (deftest test-short
@@ -59,28 +59,28 @@
         :cljr
         [;; `short` throws outside the range of 32767 ... -32768.
          (is (= (short -32768) (short -32768.000001)))
-         (is (thrown? Exception (short -32769)))
-         (is (thrown? Exception (short 32768)))
+         (is (p/thrown? (short -32769)))
+         (is (p/thrown? (short 32768)))
          (is (= (short 32767) (short 32767.000001)))
 
          ;; Check handling of other types
          (is (= (short 0) (short "0")))
-         (is (thrown? Exception (short :0)))
-         (is (thrown? Exception (short [0])))
-         (is (thrown? Exception (short nil)))]
+         (is (p/thrown? (short :0)))
+         (is (p/thrown? (short [0])))
+         (is (p/thrown? (short nil)))]
 
         :default
         [;; `short` throws outside the range of 32767 ... -32768.
          #?@(:bb []
              :clj
-             [(is (thrown? Exception (short -32768.000001)))
-              (is (thrown? Exception (short -32769)))
-              (is (thrown? Exception (short 32768)))
-              (is (thrown? Exception (short 32767.000001)))])
+             [(is (p/thrown? (short -32768.000001)))
+              (is (p/thrown? (short -32769)))
+              (is (p/thrown? (short 32768)))
+              (is (p/thrown? (short 32767.000001)))])
 
          ;; Check handling of other types
          #?(:lpy (is (= 0 (short "0")))
-            :default (is (thrown? Exception (short "0"))))
-         (is (thrown? Exception (short :0)))
-         (is (thrown? Exception (short [0])))
-         (is (thrown? Exception (short nil)))])))
+            :default (is (p/thrown? (short "0"))))
+         (is (p/thrown? (short :0)))
+         (is (p/thrown? (short [0])))
+         (is (p/thrown? (short nil)))])))

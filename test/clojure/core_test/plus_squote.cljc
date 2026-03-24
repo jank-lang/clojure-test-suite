@@ -1,7 +1,7 @@
 (ns clojure.core-test.plus-squote
   (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists +'
   (deftest test-+'
@@ -70,8 +70,8 @@
       6N 1N 5
       6N 1N 5N)
 
-    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (+' 1 nil)))
-    (is (thrown? #?(:cljs :default :clj Exception :cljr Exception) (+' nil 1)))
+    (is (p/thrown? (+' 1 nil)))
+    (is (p/thrown? (+' nil 1)))
 
     (is (instance? clojure.lang.BigInt (+' 0 1N)))
     (is (instance? clojure.lang.BigInt (+' 0N 1)))

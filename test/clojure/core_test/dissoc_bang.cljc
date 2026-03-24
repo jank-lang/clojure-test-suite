@@ -1,6 +1,6 @@
 (ns clojure.core-test.dissoc-bang
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists dissoc!
   (deftest test-dissoc!
@@ -22,10 +22,10 @@
 
     (testing "cannot dissoc! transient after persistent! call"
       (let [t (transient {:a 1}), _ (persistent! t)]
-        (is (thrown? #?(:cljs js/Error :cljr Exception :lpy Exception :default Error) (dissoc! t :a)))))
+        (is (p/thrown? (dissoc! t :a)))))
 
     (testing "bad shape"
-      (are [m keys] (thrown? #?(:cljs js/Error :default Exception) (apply dissoc! m keys))
+      (are [m keys] (p/thrown? (apply dissoc! m keys))
                     {:a 1} [:a]
                     [0] [0]
                     (transient [0]) [0]

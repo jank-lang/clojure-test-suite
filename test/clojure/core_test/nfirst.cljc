@@ -1,7 +1,7 @@
 (ns clojure.core-test.nfirst
   (:require clojure.core
             [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists nfirst
   (deftest test-nfirst
@@ -22,12 +22,12 @@
     
     (testing "exceptions"
       #?@(:cljs
-          [(is (thrown? js/Error (nfirst (range 0 10))))
-           (is (thrown? js/Error (nfirst (range))))
-           (is (thrown? js/Error (nfirst [:a :b :c])))
-           (is (thrown? js/Error (nfirst '(:a :b :c))))]
+          [(is (p/thrown? (nfirst (range 0 10))))
+           (is (p/thrown? (nfirst (range))))
+           (is (p/thrown? (nfirst [:a :b :c])))
+           (is (p/thrown? (nfirst '(:a :b :c))))]
           :default
-          [(is (thrown? Exception (nfirst (range 0 10))))
-           (is (thrown? Exception (nfirst (range))))
-           (is (thrown? Exception (nfirst [:a :b :c])))
-           (is (thrown? Exception (nfirst '(:a :b :c))))]))))
+          [(is (p/thrown? (nfirst (range 0 10))))
+           (is (p/thrown? (nfirst (range))))
+           (is (p/thrown? (nfirst [:a :b :c])))
+           (is (p/thrown? (nfirst '(:a :b :c))))]))))

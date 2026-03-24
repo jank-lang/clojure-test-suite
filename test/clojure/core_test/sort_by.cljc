@@ -1,6 +1,6 @@
 (ns clojure.core-test.sort-by
   (:require [clojure.test :as t :refer [deftest testing is are]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists sort-by
   ;; Data for simple tests
@@ -111,14 +111,14 @@
     
     (testing "negative cases"
       ;; key-fn is not a fn
-      (is (thrown? #?(:cljs :default, :default Exception) (sort-by nil simple-vec-maps)))
-      (is (thrown? #?(:cljs :default, :default Exception) (sort-by [] simple-vec-maps)))
+      (is (p/thrown? (sort-by nil simple-vec-maps)))
+      (is (p/thrown? (sort-by [] simple-vec-maps)))
       ;; comparator is not a fn
-      (is (thrown? #?(:cljs :default, :default Exception) (sort-by :a nil simple-vec-maps)))
-      (is (thrown? #?(:cljs :default, :default Exception) (sort-by :a [] simple-vec-maps)))
+      (is (p/thrown? (sort-by :a nil simple-vec-maps)))
+      (is (p/thrown? (sort-by :a [] simple-vec-maps)))
       ;; collection is not a collection
-      (is (thrown? #?(:cljs :default, :default Exception) (sort-by :a 1)))
-      (is (thrown? #?(:cljs :default, :default Exception) (sort-by :a true))))
+      (is (p/thrown? (sort-by :a 1)))
+      (is (p/thrown? (sort-by :a true))))
     
     (testing "stable sort"
       ;; sort first by :b and then by :a results in runs of :a in

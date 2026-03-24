@@ -1,6 +1,6 @@
 (ns clojure.core-test.double
   (:require [clojure.test :as t :refer [are deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists double
  (deftest test-double
@@ -25,13 +25,13 @@
         (is (= :0 (double :0)))]
        :cljr
        [(is (= 0.0 (double "0")))
-        (is (thrown? Exception (double :0)))]
+        (is (p/thrown? (double :0)))]
        :lpy
        [(is (= 0.0 (double "0")))
-        (is (thrown? Exception (double :0)))]
+        (is (p/thrown? (double :0)))]
        :default
-       [(is (thrown? Exception (double "0")))
-        (is (thrown? Exception (double :0)))])
+       [(is (p/thrown? (double "0")))
+        (is (p/thrown? (double :0)))])
 
    #?@(:clj
        [(is (instance? java.lang.Double (double 0)))

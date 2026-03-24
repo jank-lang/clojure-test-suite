@@ -1,6 +1,6 @@
 (ns clojure.core-test.conj
   (:require [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists conj
   (deftest test-conj
@@ -25,20 +25,20 @@
       (is (= ["a" "b" "c" ["d" "e" "f"]] (conj ["a" "b" "c"] ["d" "e" "f"])))
 
       #?@(:jank []
-          :cljs [(is (thrown? js/Error (conj \a \b)))
-                 (is (thrown? js/Error (conj 1 2)))
-                 (is (thrown? js/Error (conj :a :b)))
-                 (is (thrown? js/Error (conj {:a 0} '(:b 1))))]
+          :cljs [(is (p/thrown? (conj \a \b)))
+                 (is (p/thrown? (conj 1 2)))
+                 (is (p/thrown? (conj :a :b)))
+                 (is (p/thrown? (conj {:a 0} '(:b 1))))]
 
-          :default [(is (thrown? Exception (conj "a" "b")))
-                    (is (thrown? Exception (conj \a \b)))
-                    (is (thrown? Exception (conj 1 2)))
-                    (is (thrown? Exception (conj :a :b)))
+          :default [(is (p/thrown? (conj "a" "b")))
+                    (is (p/thrown? (conj \a \b)))
+                    (is (p/thrown? (conj 1 2)))
+                    (is (p/thrown? (conj :a :b)))
                     ;; Basilisp is fairly liberal with its coercion to map entry,
                     ;; meaning that many two element sequences can be conj'ed to
                     ;; a map.
                     #?@(:lpy [(is (= {:a 0 :b 1} (conj {:a 0} '(:b 1))))]
-                        :default [(is (thrown? Exception (conj {:a 0} '(:b 1))))])]))
+                        :default [(is (p/thrown? (conj {:a 0} '(:b 1))))])]))
 
     (testing "meta preservation"
       (let [meta-data {:foo 42}

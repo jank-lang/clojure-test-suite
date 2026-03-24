@@ -1,6 +1,6 @@
 (ns clojure.core-test.contains-qmark
   (:require [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists contains?
   (deftest test-contains?
@@ -10,7 +10,7 @@
       (is (= false (contains? [] nil)))
       #?(:cljs (is (= false (contains? "abc" "a")))
          :lpy (is (= true (contains? "abc" "a")))
-         :default (is (thrown? Exception (contains? "abc" "a"))))
+         :default (is (p/thrown? (contains? "abc" "a"))))
 
       ;; find by index
       (is (= true (contains? ["a" "b" "c"] 0)))

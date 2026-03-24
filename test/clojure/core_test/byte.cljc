@@ -1,7 +1,7 @@
 (ns clojure.core-test.byte
   (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.portability
-             #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+             #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists byte
   (deftest test-byte
@@ -58,35 +58,35 @@
          (is (= nil (byte nil)))]
         :cljr
         [ ;; `byte` throws outside the range of 127 ... -128.
-         (is (thrown? Exception (byte -128.000001)))
-         (is (thrown? Exception (byte -129)))
+         (is (p/thrown? (byte -128.000001)))
+         (is (p/thrown? (byte -129)))
          (is (= 128 (byte 128)))
          (is (= 127(byte 127.000001)))
          ;; Check handling of other types
          (is (= 0 (byte "0")))
-         (is (thrown? Exception (byte :0)))
-         (is (thrown? Exception (byte [0])))
-         (is (thrown? Exception (byte nil)))]
+         (is (p/thrown? (byte :0)))
+         (is (p/thrown? (byte [0])))
+         (is (p/thrown? (byte nil)))]
         :bb [] ;; byte constructions goes via boxed argument
         :lpy
         [ ;; `byte` throws outside the range of 127 ... -128.
          (is (= -128 (byte -128.000001)))
-         (is (thrown? Exception (byte -129)))
-         (is (thrown? Exception (byte 128)))
+         (is (p/thrown? (byte -129)))
+         (is (p/thrown? (byte 128)))
          (is (= 127 (byte 127.000001)))
          ;; Check handling of other types
          (is (= 0 (byte "0")))
-         (is (thrown? Exception (byte :0)))
-         (is (thrown? Exception (byte [0])))
-         (is (thrown? Exception (byte nil)))]
+         (is (p/thrown? (byte :0)))
+         (is (p/thrown? (byte [0])))
+         (is (p/thrown? (byte nil)))]
         :default
         [ ;; `byte` throws outside the range of 127 ... -128.
-         (is (thrown? Exception (byte -128.000001)))
-         (is (thrown? Exception (byte -129)))
-         (is (thrown? Exception (byte 128)))
-         (is (thrown? Exception (byte 127.000001)))
+         (is (p/thrown? (byte -128.000001)))
+         (is (p/thrown? (byte -129)))
+         (is (p/thrown? (byte 128)))
+         (is (p/thrown? (byte 127.000001)))
          ;; Check handling of other types
-         (is (thrown? Exception (byte "0")))
-         (is (thrown? Exception (byte :0)))
-         (is (thrown? Exception (byte [0])))
-         (is (thrown? Exception (byte nil)))])))
+         (is (p/thrown? (byte "0")))
+         (is (p/thrown? (byte :0)))
+         (is (p/thrown? (byte [0])))
+         (is (p/thrown? (byte nil)))])))

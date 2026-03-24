@@ -1,6 +1,6 @@
 (ns clojure.core-test.nan-qmark
   (:require [clojure.test :as t :refer [are deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists NaN?
  (deftest test-NaN?
@@ -8,8 +8,8 @@
        [(is (not (NaN? nil)))
         (is (NaN? "##NaN"))]            ; Surprising
        :default
-       [(is (thrown? Exception (NaN? nil)))
-        (is (thrown? Exception (NaN? "##NaN")))])
+       [(is (p/thrown? (NaN? nil)))
+        (is (p/thrown? (NaN? "##NaN")))])
    (is (double? ##NaN))
    ;; NaN is not equal to anything, even itself.
    ;; See: https://clojure.org/guides/equality

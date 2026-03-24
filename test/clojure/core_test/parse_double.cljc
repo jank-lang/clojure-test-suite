@@ -1,6 +1,6 @@
 (ns clojure.core-test.parse-double
   (:require [clojure.test :as t :refer [are deftest testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists parse-double
   (deftest test-parse-double
@@ -35,7 +35,7 @@
            ##Inf "Infinity"
            ##-Inf "-Infinity"))
     (testing "exceptions"
-      #?(:cljs (are [x] (thrown? js/Error (parse-double x))
+      #?(:cljs (are [x] (p/thrown? (parse-double x))
                  {}
                  '()
                  []
@@ -43,7 +43,7 @@
                  :key
                  0.0
                  1000)
-         :lpy (are [x] (thrown? Exception (parse-double x))
+         :lpy (are [x] (p/thrown? (parse-double x))
                 {}
                 '()
                 []
@@ -51,7 +51,7 @@
                 :key
                 0.0
                 1000)
-         :default (are [x] (thrown? Exception (parse-double x))
+         :default (are [x] (p/thrown? (parse-double x))
                     {}
                     '()
                     []

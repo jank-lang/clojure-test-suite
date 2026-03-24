@@ -1,6 +1,6 @@
 (ns clojure.core-test.take-while
   (:require [clojure.test :as t :refer [deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists take-while
   (deftest test-take-while
@@ -15,7 +15,5 @@
     (is (= [] (into [] (take-while #(< % 5)) nil)))
 
     ;; Negative tests
-    (is (thrown? #?(:cljs :default :default Exception)
-                 (doall (take-while nil (range 0 10)))))
-    (is (thrown? #?(:cljs :default :default Exception)
-                 (into [] (take-while nil) (range 0 10))))))
+    (is (p/thrown? (doall (take-while nil (range 0 10)))))
+    (is (p/thrown? (into [] (take-while nil) (range 0 10))))))

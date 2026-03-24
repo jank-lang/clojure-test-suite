@@ -1,6 +1,6 @@
 (ns clojure.core-test.key
   (:require [clojure.test :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists key
   (deftest test-key
@@ -19,7 +19,7 @@
       (when-var-exists array-map
         (is (= :a (key (first (array-map :a :b)))))))
     (testing "`key` throws on lots of things"
-      (are [arg] (thrown? #?(:cljs js/Error :default Exception) (key arg))
+      (are [arg] (p/thrown? (key arg))
                  nil
                  0
                  '()
