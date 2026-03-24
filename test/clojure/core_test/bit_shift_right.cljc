@@ -1,6 +1,6 @@
 (ns clojure.core-test.bit-shift-right
   (:require [clojure.test :as t :refer [are deftest is]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists bit-shift-right
   (deftest test-bit-shift-right

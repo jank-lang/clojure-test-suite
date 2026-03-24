@@ -1,7 +1,7 @@
 (ns clojure.core-test.parse-long
   (:require clojure.core
             [clojure.test :as t :refer [are deftest testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists parse-long
   (deftest test-parse-long
