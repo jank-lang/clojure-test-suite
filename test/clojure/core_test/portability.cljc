@@ -29,11 +29,13 @@
       :lpy time/sleep)
    ms))
 
+#?(;; The implementation of CLJS is separate but the intent behind it is the same.
+   :cljs nil
+   :default
 (defmethod #?(:lpy t/gen-assert
               :default t/assert-expr)
   'p/thrown?
   #?(:lpy [form msg _line-num]
-     :cljs [_menv msg form]
      :default [msg form])
   ;; Tests that evaluating `form` throws an exception, without asserting the
   ;; type of exception thrown. Works across all supported Clojure dialects
@@ -41,13 +43,11 @@
   ;; integrates with each dialect's native test result reporting API.
   ;;
   ;; Prefer this multimethod over manually written reader conditionals, which
-  ;; risk accidentally using dialect-specific symbols as `:default` cases."
+  ;; risk accidentally using dialect-specific symbols as `:default` cases.".
   (let [body (drop 1 form)]
     `(let [report-success# #?(:lpy (fn [_])
-                              :cljs t/report
                               :default t/do-report)
            report-failure# #?(:lpy (partial vswap! t/*test-failures* conj)
-                              :cljs t/report
                               :default t/do-report)
            success-opts# (fn [~'error]
                            {:type :pass :message '~msg
@@ -62,10 +62,36 @@
          (report-failure# failure-opts#)
          (catch #?(:jank ~'jank.runtime.object_ref
                    :clj ~'Throwable
-                   :cljs ~'js/Error
                    :default ~'Exception) e#
            (report-success# (success-opts# e#))
            e#)
          #?(:jank (catch ~'std.exception e#
-                    (report-success# (success-opts# (~'.what e#)))))))))
+                    (report-success# (success-opts# (~'.what e#))))))))))
+
+;; The ClojureScript implementation of the portability exception macro is
+;; slightly special. The `cljs.test/assert-expr` is not a ClojureScript
+;; runtime var, it's a Clojure-side compiler multimethod. It lives in the JVM
+;; cljs.test namespace and is invoked during macro expansion of cljs.test/is,
+;; not at runtime in the JS environment.
+#?(:clj
+   (try
+     (require '[cljs.test])
+     (eval '(defmethod cljs.test/assert-expr 'p/thrown?
+              [_menv msg form]
+              (let [body (drop 1 form)]
+                `(try
+                   ~@body
+                   (cljs.test/report
+                     {:type :fail
+                      :message '~msg 
+                      :expected '~form
+                      :actual nil})
+                   (catch ~'js/Error e#
+                     (cljs.test/report
+                       {:type :pass
+                        :message '~msg
+                        :expected '~form
+                        :actual e#})
+                    e#)))))
+     (catch Exception  _)))
 
