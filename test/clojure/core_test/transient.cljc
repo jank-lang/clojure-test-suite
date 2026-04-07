@@ -23,8 +23,7 @@
           (is (= (nth avec 1) (nth (transient avec) 1)))
           (is (= (get avec 1) (get (transient avec) 1)))
           (is (= (contains? avec 1) (contains? (transient avec) 1)))
-          #?@(:cljr [] ;; ClojureCLR, clojure.lang.ArityException: Wrong number of args (1) passed to: clojure.lang.PersistentVector+TransientVector
-              :default [(is (= (avec 1) ((transient avec) 1)))])
+          (is (= (avec 1) ((transient avec) 1)))
           (is (= (count avec) (count (transient avec))))))
 
       (testing "for transient map"
