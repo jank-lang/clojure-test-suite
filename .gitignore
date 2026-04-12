@@ -26,3 +26,4 @@ __pycache__/
 .python-version
 poetry.lock
 *.egg-info/
+/vendor/

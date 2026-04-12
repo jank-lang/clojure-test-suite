@@ -1,0 +1,5 @@
+{
+    "require": {
+        "phel-lang/phel-lang": "dev-main"
+    }
+}
