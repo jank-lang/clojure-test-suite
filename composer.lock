@@ -245,12 +245,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phel-lang/phel-lang.git",
-                "reference": "32082b82c86468f0725aaff38184a0cf5af69f5a"
+                "reference": "0bf784120b325cadb741d8cb0e21f674c5996328"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phel-lang/phel-lang/zipball/32082b82c86468f0725aaff38184a0cf5af69f5a",
-                "reference": "32082b82c86468f0725aaff38184a0cf5af69f5a",
+                "url": "https://api.github.com/repos/phel-lang/phel-lang/zipball/0bf784120b325cadb741d8cb0e21f674c5996328",
+                "reference": "0bf784120b325cadb741d8cb0e21f674c5996328",
                 "shasum": ""
             },
             "require": {
@@ -258,7 +258,8 @@
                 "gacela-project/gacela": "^1.12",
                 "php": ">=8.3",
                 "phpunit/php-timer": "^6.0|^7.0|^8.0",
-                "symfony/console": "^6.0|^7.0|^8.0"
+                "symfony/console": "^6.0|^7.0|^8.0",
+                "symfony/routing": "^7.3"
             },
             "require-dev": {
                 "ergebnis/composer-normalize": "^2.50",
@@ -318,7 +319,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2026-04-12T12:59:40+00:00"
+            "time": "2026-04-12T21:39:57+00:00"
         },
         {
             "name": "phpunit/php-timer",
@@ -996,6 +997,91 @@
                 }
             ],
             "time": "2026-04-10T17:25:58+00:00"
+        },
+        {
+            "name": "symfony/routing",
+            "version": "v7.4.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/routing.git",
+                "reference": "9608de9873ec86e754fb6c0a0fa7e5f1a960eb6b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/routing/zipball/9608de9873ec86e754fb6c0a0fa7e5f1a960eb6b",
+                "reference": "9608de9873ec86e754fb6c0a0fa7e5f1a960eb6b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/deprecation-contracts": "^2.5|^3"
+            },
+            "conflict": {
+                "symfony/config": "<6.4",
+                "symfony/dependency-injection": "<6.4",
+                "symfony/yaml": "<6.4"
+            },
+            "require-dev": {
+                "psr/log": "^1|^2|^3",
+                "symfony/config": "^6.4|^7.0|^8.0",
+                "symfony/dependency-injection": "^6.4|^7.0|^8.0",
+                "symfony/expression-language": "^6.4|^7.0|^8.0",
+                "symfony/http-foundation": "^6.4|^7.0|^8.0",
+                "symfony/yaml": "^6.4|^7.0|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Routing\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Maps an HTTP request to a set of configuration variables",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "router",
+                "routing",
+                "uri",
+                "url"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/routing/tree/v7.4.8"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-03-24T13:12:05+00:00"
         },
         {
             "name": "symfony/service-contracts",
