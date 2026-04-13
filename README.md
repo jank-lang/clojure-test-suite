@@ -110,6 +110,9 @@ deactivate
 ```
 
 ## Running the Phel tests
+
+Status: failing with 0bf7841
+
 ### Pre-requisities
 
 - PHP 8.3+ / [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
@@ -119,7 +122,7 @@ Install Phel:
 composer install
 ```
 
-For convenience Phel version is not pinned for now in `composer.json` so latest `dev-main` version gets used.
+~For convenience Phel version is not pinned for now in `composer.json` so latest `dev-main` version gets used.~
 
 See also [Getting Started guide](https://phel-lang.org/documentation/getting-started/).
 
