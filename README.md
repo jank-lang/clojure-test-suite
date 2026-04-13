@@ -109,6 +109,28 @@ bb test-lpy
 deactivate
 ```
 
+## Running the Glojure tests
+
+[Gloat](https://gloathub.org/) has a
+[fork of Glojure](https://github.com/gloathub/glojure) that is being actively
+maintained and developed.
+
+See the clojure-test-suite results for Glojure
+[here](https://gloathub.org/test-report/).
+
+Or run them yourself, like so:
+
+```bash
+git clone https://github.com/gloathub/glojure
+make -C glojure test-suite
+<browser-cmd> glojure/test/clojure-test-suite/report.html
+```
+
+There are no prerequisites for this beyond `git`, `make` and `curl`.
+The [Makefile](https://github.com/gloathub/glojure/blob/gloat/Makefile)
+installs [everything else](https://github.com/makeplus/makes)
+as needed inside the glojure/ directory.
+
 ## Babashka Tasks
 
 You can see which Babashka tasks are available with:
