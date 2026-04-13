@@ -111,7 +111,7 @@ deactivate
 
 ## Running the Phel tests
 
-Status: failing with 0bf7841
+Status: runs with f6698bf, skipped 12 file(s) due to compile errors.
 
 ### Pre-requisities
 
