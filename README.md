@@ -146,13 +146,16 @@ Version can also be pinned manually in `composer.json` after which `composer upd
 
 ### Running the test suite
 
+Run full suite:
 ```
-# Full suite
 ./vendor/bin/phel test
-
-# Specific test
+```
+Run specific test:
+```
 ./vendor/bin/phel test test/clojure/core_test/abs.cljc
 ```
+
+If test runner crashes before producing a report, run the tests with more verbosity using `-v` or `--testdox` flag which may help tracking down the specific test where failure is coming from.
 
 - Phel docs on [running tests](https://phel-lang.org/documentation/testing/#running-tests).
 
