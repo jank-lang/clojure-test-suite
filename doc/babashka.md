@@ -2,7 +2,7 @@
 
 # Setting Up the Environment
 
-To be written...
+To install Babashka, see the various [installation options](https://github.com/babashka/babashka#installation) available on the [Babashka GitHub page](https://github.com/babashka/babashka).
 
 # Running the Tests
 
