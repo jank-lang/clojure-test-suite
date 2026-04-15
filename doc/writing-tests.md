@@ -107,6 +107,7 @@ There are Babashka tasks for running the tests under multiple environments:
 $ bb test-jvm        # run tests under Clojure JVM
 $ bb test-cljs       # run tests under ClojureScript on Node.js
 $ bb test-bb         # run tests under Babashka on GraalVM
+$ bb test-lpy         # run tests under Basilisp
 ```
 
 Ideally, you should run all three of these *before* submitting a PR.
