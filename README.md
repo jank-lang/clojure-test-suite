@@ -86,13 +86,11 @@ npx nodemon -w target/js taget/js/node-tests.js --test=clojure.core-test.int-que
 ```bash
 cljr -X:test
 ```
-=======
-1. [Clojure](clojure.md)
-2. [ClojureScript](clojurescript.md)
-3. [Babashka](babashka.md)
-4. [Clojure CLR](clojureclr.md)
-5. [Basilisp](basilisp.md)
->>>>>>> 9839af4 (Move dialect-specific instructions from README.md to separate docs)
+1. [Clojure](doc/clojure.md)
+2. [ClojureScript](doc/clojurescript.md)
+3. [Babashka](doc/babashka.md)
+4. [Clojure CLR](doc/clojureclr.md)
+5. [Basilisp](doc/basilisp.md)
 
 ## Running the Basilisp tests
 
