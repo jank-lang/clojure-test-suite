@@ -111,7 +111,7 @@ deactivate
 
 ## Running the Phel tests
 
-Status: runs with f6698bf, skipped 12 file(s) due to compile errors.
+Status: runs with 5a7fb3e, skipped 8 file(s) due to compile errors requiring Phel specific code additions to tests
 
 ### Pre-requisities
 
