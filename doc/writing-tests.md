@@ -75,16 +75,16 @@ The `new-test` task will create a new file in `test/clojure/core_test/<function-
 Note that if `<function-name>` contains non-alphanumeric symbols (or "-", which is technically numeric), the filename will use the following mapping:
 
 | Function Name Character | File Name Replacement |
-| - | - |
-| * | star |
-| + | plus |
-| ! | bang |
-| ' | squote |
-| ? | qmark |
-| < | lt |
-| > | gt |
-| = | eq |
-| % | percent |
+| - | "minus" if at the start of a word, otherwise "_" |
+| * | "star" |
+| + | "plus" |
+| ! | "bang" |
+| ' | "squote" |
+| ? | "qmark" |
+| < | "lt" |
+| > | "gt" |
+| = | "eq" |
+| % | "percent" |
 
 Thus, the file containing the `<=` test, for example, will be located in `test/clojure/core_test/lt_eq.cljc`.
 
