@@ -46,8 +46,9 @@
                        (println "  cljs    Runs tests in ClojureScript")
                        (println "  bb      Runs tests in Babashka")
                        (println "  lpy     Runs tests in Basilisp")
+                       (println "  all     Runs tests in all supported dialects")
                        (println "Tests are run in the order given."))]
-               (let [valid #{"jvm" "cljs" "bb" "lpy"}
+               (let [valid #{"jvm" "cljs" "bb" "lpy" "all"}
                      unknown (remove valid *command-line-args*)]
                 (cond
                  (not (some? (seq *command-line-args*)))
@@ -65,7 +66,8 @@
                    "jvm" (run 'test-jvm)
                    "cljs" (run 'test-cljs)
                    "bb" (run 'test-bb)
-                   "lpy" (run 'test-lpy))))))}
+                   "lpy" (run 'test-lpy)
+                   "all" (run 'test-all))))))}
   new-test {:doc "Creates new test for the Clojure symbols named by <args>. Unqualified symbols assume clojure.core"
             :requires ([new-test])
             :task (new-test/new-test *command-line-args*)}}}
