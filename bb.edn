@@ -60,14 +60,16 @@
                   (println "Unknown dialect name(s):" (clojure.string/join ", " unknown))
                   (help))
 
+                 (some? (seq (some #{"all"} *command-line-args*)))
+                 (run 'test-all)
+
                  :else
                  (doseq [dialect (seq *command-line-args*)]
                   (case dialect
                    "jvm" (run 'test-jvm)
                    "cljs" (run 'test-cljs)
                    "bb" (run 'test-bb)
-                   "lpy" (run 'test-lpy)
-                   "all" (run 'test-all))))))}
+                   "lpy" (run 'test-lpy))))))}
   new-test {:doc "Creates new test for the Clojure symbols named by <args>. Unqualified symbols assume clojure.core"
             :requires ([new-test])
             :task (new-test/new-test *command-line-args*)}}}
