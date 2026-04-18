@@ -75,6 +75,7 @@ The `new-test` task will create a new file in `test/clojure/core_test/<function-
 Note that if `<function-name>` contains non-alphanumeric symbols (or "-", which is technically numeric), the filename will use the following mapping:
 
 | Function Name Character | File Name Replacement |
+| :---: | :--- |
 | - | "minus" if at the start of a word, otherwise "_" |
 | * | "star" |
 | + | "plus" |
