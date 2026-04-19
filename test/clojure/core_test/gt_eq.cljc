@@ -42,10 +42,10 @@
         true ##Inf 1
 
         true 0 0
-        true  1 1
-        true  -1 -1
-        true  ##Inf ##Inf
-        true  ##-Inf ##-Inf
+        true 1 1
+        true -1 -1
+        true ##Inf ##Inf
+        true ##-Inf ##-Inf
         false ##NaN ##NaN               ; ##NaN is never equal, even to itself
 
         ;; Mixing numeric types should't matter
