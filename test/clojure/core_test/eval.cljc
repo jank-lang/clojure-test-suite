@@ -33,6 +33,10 @@
              (is (fn? (eval +)))
              (is (fn? (eval '+))))
 
+           (testing "Vars"
+             ;; eval'ing a var gets the value of the var
+             (is (var? (eval '(var +)))))
+
            (testing "Symbol resolution"
              ;; namespace qualified
              (is (= 42 (eval 'clojure.core-test.eval/x))))
