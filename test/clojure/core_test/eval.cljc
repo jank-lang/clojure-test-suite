@@ -34,7 +34,7 @@
              (is (fn? (eval '+))))
 
            (testing "Vars"
-             ;; eval'ing a var gets the value of the var
+             ;; eval'ing a var just returns the var
              (is (var? (eval '(var +)))))
 
            (testing "Symbol resolution"
