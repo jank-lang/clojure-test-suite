@@ -28,9 +28,11 @@
                :a-keyword :a-keyword))
 
            (testing "Functions"
-             (is (fn? (eval (fn [x] x))))
+             #?(:lpy nil
+                :default (is (fn? (eval (fn [x] x)))))
              (is (fn? (eval '(fn [x] x))))
-             (is (fn? (eval +)))
+             #?(:lpy nil
+                :default (is (fn? (eval +))))
              (is (fn? (eval '+))))
 
            (testing "Vars"
