@@ -29,7 +29,9 @@
 
            (testing "Functions"
              (is (fn? (eval (fn [x] x))))
-             (is (fn? (eval +))))
+             (is (fn? (eval '(fn [x] x))))
+             (is (fn? (eval +)))
+             (is (fn? (eval '+))))
 
            (testing "Symbol resolution"
              ;; namespace qualified
