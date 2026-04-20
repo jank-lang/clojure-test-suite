@@ -27,6 +27,10 @@
                nil nil
                :a-keyword :a-keyword))
 
+           (testing "Functions"
+             (is (fn? (eval (fn [x] x))))
+             (is (fn? (eval +))))
+
            (testing "Symbol resolution"
              ;; namespace qualified
              (is (= 42 (eval 'clojure.core-test.eval/x))))
