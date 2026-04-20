@@ -60,4 +60,7 @@
              (is (= 42 (eval '(and (+ 2 3) clojure.core-test.eval/x))))
              ;; special forms
              (is (= 43 (eval '(let [y 43] (or false y)))))
-             (is (= 43 (eval '(loop [y 0] (if (= y 43) y (recur (inc y))))))))))))
+             (is (= 43 (eval '(loop [y 0] (if (= y 43) y (recur (inc y))))))))
+
+           (testing "Recursive eval"
+             (is (= 1 (eval '(eval 1)))))))))
