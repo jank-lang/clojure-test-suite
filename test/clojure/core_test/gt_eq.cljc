@@ -5,15 +5,16 @@
 (when-var-exists >=
   (deftest test->=
     (testing "arity 1"
-      ;; Doesn't matter what the argument is, `>=` return `true` for
-      ;; one argument.
-      (is (>= 1))
-      (is (>= 0))
-      (is (>= -1))
-      ;; Doesn't check whether arg is a number
-      (is (>= "abc"))
-      (is (>= :foo))
-      (is (>= nil)))
+      (are [x] (= true (>= x))
+        ;; Doesn't matter what the argument is, `>=` return `true` for
+        ;; one argument.
+        1
+        0
+        -1
+        ;; Doesn't check whether the argument is a number
+        "abc"
+        :foo
+        nil))
 
     (testing "arity 2"
       (are [expected x y] (= expected (>= x y))
