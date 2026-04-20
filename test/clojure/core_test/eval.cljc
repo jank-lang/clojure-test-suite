@@ -72,4 +72,5 @@
              (is (eval '(range))))
 
            (testing "Recursive eval"
-             (is (= 1 (eval '(eval 1)))))))))
+             (is (= 1 (eval '(eval 1))))
+             (is (= 1 (eval '(eval (eval 1))))))))))
