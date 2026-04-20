@@ -62,5 +62,14 @@
              (is (= 43 (eval '(let [y 43] (or false y)))))
              (is (= 43 (eval '(loop [y 0] (if (= y 43) y (recur (inc y))))))))
 
+           (testing "Infinite sequence"
+             ;; The `(range)` form is a lazy infinite sequence. If it
+             ;; remains unrealized by the `eval`, as it should, then
+             ;; we should get back an implementation-specific value of
+             ;; some sort. If the sequence is fully realized, then
+             ;; we'd expect to get an out-of-memory Exception which
+             ;; will throw and fail the test.
+             (is (eval '(range))))
+
            (testing "Recursive eval"
              (is (= 1 (eval '(eval 1)))))))))
