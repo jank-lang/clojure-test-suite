@@ -84,7 +84,8 @@
         false -1 -2 0
         false -1 0 -2)
       (is (= true (apply > (reverse (range 10)))))
-      (is (= false (apply > -1 (reverse (range 10))))))
+      (is (= false (apply > -1 (reverse (range 10)))))
+      (is (= false (apply < (repeat 5 1)))))
 
     (testing "negative tests"
       ;; `>` only compares numbers, except in ClojureScript (really
