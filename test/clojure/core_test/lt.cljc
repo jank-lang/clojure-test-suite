@@ -67,7 +67,11 @@
              false 1/2 1/16
              false 0.5 1/16
              false -1/16 -1/2
-             false -1/16 -0.5))))
+             false -1/16 -0.5
+             false 1/2 1/2
+             false 1/3 1/3
+             false -1/2 -1/2
+             false -1/3 -1/3))))
 
     (testing "arity 3 and more"
       (are [expected x y z] (= expected (< x y z))
