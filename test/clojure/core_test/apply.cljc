@@ -38,4 +38,6 @@
     (is (p/thrown? (apply 2 [[0 1 2 3 4]])))  ; but numbers don't implement IFn
     (is (= :a (apply #{:a :b :c} [:a])))      ; apply set to element
     (is (= :a (apply :a [#{:a :b :c}])))      ; apply keyword to set
-    ))
+
+    ;; apply recrusively
+    (is (= 10 (apply apply + [1 2 [3 4]])))))
