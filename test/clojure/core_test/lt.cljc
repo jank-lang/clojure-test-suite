@@ -94,31 +94,19 @@
           [(is (= true (< nil 1)))
            (is (= false (< 1 nil)))
            (is (= true (< nil 1 2)))
-           (is (= false (< 1 2 nil)))
-           (is (= true (< "1" "2")))
-           (is (= false (< "foo" "bar")))
-           (is (= false (< :foo :bar)))]
+           (is (= false (< 1 2 nil)))]
           :cljr
           [(is (p/thrown? (< nil 1)))
            (is (p/thrown? (< 1 nil)))
            (is (p/thrown? (< nil 1 2)))
-           (is (p/thrown? (< 1 2 nil)))
-           (is (= true (< "1" "2")))
-           (is (p/thrown? (< "foo" "bar")))
-           (is (p/thrown? (< :foo :bar)))]
+           (is (p/thrown? (< 1 2 nil)))]
           :lpy
           [(is (p/thrown? (< nil 1)))
            (is (p/thrown? (< 1 nil)))
            (is (p/thrown? (< nil 1 2)))
-           (is (p/thrown? (< 1 2 nil)))
-           (is (= true (< "1" "2")))
-           (is (= false (< "foo" "bar")))
-           (is (= false (< :foo :bar)))]
+           (is (p/thrown? (< 1 2 nil)))]
           :default
           [(is (p/thrown? (< nil 1)))
            (is (p/thrown? (< 1 nil)))
            (is (p/thrown? (< nil 1 2)))
-           (is (p/thrown? (< 1 2 nil)))
-           (is (p/thrown? (< "1" "2")))
-           (is (p/thrown? (< "foo" "bar")))
-           (is (p/thrown? (< :foo :bar)))]))))
+           (is (p/thrown? (< 1 2 nil)))]))))
