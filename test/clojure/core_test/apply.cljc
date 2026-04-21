@@ -11,7 +11,7 @@
     (is (= 0 (apply + #{})))
     (is (= 0 (apply + "")))             ; string is a sequence of characters
 
-    (is (= 1 (apply + 1 nil)))          ; Apply + with 1 arg and empty seqeuence
+    (is (= 1 (apply + 1 nil)))          ; Apply + with 1 arg and empty sequence
     (is (= 1 (apply + 1 '())))
     (is (= 1 (apply + 1 [])))
     (is (= 1 (apply + 1 {})))
