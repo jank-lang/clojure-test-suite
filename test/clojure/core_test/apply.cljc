@@ -26,8 +26,8 @@
     (is (= 45 (apply + (range 10))))    ; All args as sequential
     (is (= 10 (apply + 1 [2 3 4])))
     (is (= 10 (apply + 1 #{2 3 4})))    ; A set works but order not guaranteed
-    (is (= [[:a 1] [:b 2]]
-           (apply conj [] {:a 1, :b 2})))
+    (is (= #{[:a 1] [:b 2]}             ; Can't guarantee order of map entries
+           (apply conj #{} {:a 1, :b 2})))
     (is (= [\a \b \c]                   ; String is sequence of chars
            (apply conj [] "abc")))
 
