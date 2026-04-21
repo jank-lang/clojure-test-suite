@@ -19,26 +19,26 @@
     (testing "arity 2"
       (are [expected x y] (= expected (> x y))
         true 1 0
-        true  0 -1
-        true  1N 0N
-        true  0N -1N
-        true  1.0 0.0
-        true  0.0 -1.0
-        true  1.0M 0.0M
-        true  0.0M -1.0M
-        true  -1 ##-Inf
-        true  ##Inf 1
+        true 0 -1
+        true 1N 0N
+        true 0N -1N
+        true 1.0 0.0
+        true 0.0 -1.0
+        true 1.0M 0.0M
+        true 0.0M -1.0M
+        true -1 ##-Inf
+        true ##Inf 1
 
         false 0 1
-        false  -1 0
-        false  0N 1N
-        false  -1N 0N
-        false  0.0 1.0
-        false  -1.0 0.0
-        false  0.0M 1.0M
-        false  -1.0M 0.0M
-        false  ##-Inf -1
-        false  1 ##Inf
+        false -1 0
+        false 0N 1N
+        false -1N 0N
+        false 0.0 1.0
+        false -1.0 0.0
+        false 0.0M 1.0M
+        false -1.0M 0.0M
+        false ##-Inf -1
+        false 1 ##Inf
 
         false 1 ##NaN                   ; Anything compared with ##NaN is false
         false ##NaN 1
@@ -62,14 +62,14 @@
          (testing "Rationals"
            (are [expected x y] (= expected (> x y))
              true 1/2 1/16
-             true  0.5 1/16
-             true  -1/16 -1/2
-             true  -1/16 -0.5
+             true 0.5 1/16
+             true -1/16 -1/2
+             true -1/16 -0.5
 
              false 1/16 1/2
-             false  -1/2 -1/16
-             false  1/16 0.5
-             false  -0.5 -1/16))))
+             false -1/2 -1/16
+             false 1/16 0.5
+             false -0.5 -1/16))))
 
     (testing  "arity 3 and more"
       (are [expected x y z] (= expected (> x y z))
