@@ -6,7 +6,7 @@
   (deftest test-<=
     (testing "arity 1"
       (are [x] (= true (<= x))
-        ;; Doesn't matter what the argument is, `<=` return `true` for
+        ;; Doesn't matter what the argument is, `<=` returns `true` for
         ;; one argument.
         1
         0
