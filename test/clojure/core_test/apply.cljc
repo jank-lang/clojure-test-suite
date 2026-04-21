@@ -7,17 +7,17 @@
     (is (= 0 (apply + nil)))            ; Apply + with no args
     (is (= 0 (apply + '())))
     (is (= 0 (apply + [])))
-    (is (= 0 (apply + {})))
-    (is (= 0 (apply + #{})))            ; map is a sequence of map entries
+    (is (= 0 (apply + {})))             ; map is a sequence of map entries
+    (is (= 0 (apply + #{})))
     (is (= 0 (apply + "")))             ; string is a sequence of characters
-    
+
     (is (= 1 (apply + 1 nil)))          ; Apply + with 1 arg and empty seqeuence
     (is (= 1 (apply + 1 '())))
     (is (= 1 (apply + 1 [])))
     (is (= 1 (apply + 1 {})))
     (is (= 1 (apply + 1 #{})))
     (is (= 1 (apply + 1 "")))
-    
+
     (is (= 1 (apply + '(1))))           ; Zero non-sequence arg
     (is (= 3 (apply + 1 '(2))))         ; One non-sequential arg
     (is (= 6 (apply + 1 2 '(3))))       ; Two non-sequential args
