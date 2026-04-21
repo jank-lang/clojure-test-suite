@@ -83,7 +83,8 @@
         false 0 -2 -1
         false -2 0 -1)
       (is (= true (apply < (range 10))))
-      (is (= false (apply < 100 (range 10)))))
+      (is (= false (apply < 100 (range 10))))
+      (is (= false (apply < (repeat 5 1)))))
 
     (testing "negative tests"
       ;; `<` only compares numbers, except in ClojureScript (really
