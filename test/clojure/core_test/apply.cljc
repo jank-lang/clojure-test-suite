@@ -40,4 +40,7 @@
     (is (= :a (apply :a [#{:a :b :c}])))      ; apply keyword to set
 
     ;; apply recrusively
-    (is (= 10 (apply apply + [1 2 [3 4]])))))
+    (is (= 10 (apply apply + [1 2 [3 4]])))
+
+    ;; validate that `apply` doesn't try to further evaluate its arguments. If the range
+    (is (= 3 (count (apply conj [] [1 2 (range)]))))))
