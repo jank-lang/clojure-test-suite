@@ -6,7 +6,7 @@
   (deftest test->
     (testing "arity 1"
       (are [x] (= true (> x))
-        ;; Doesn't matter what the argument is, `>` return `true` for
+        ;; Doesn't matter what the argument is, `>` returns `true` for
         ;; one argument.
         1
         0
@@ -85,7 +85,7 @@
         false -1 0 -2)
       (is (= true (apply > (reverse (range 10)))))
       (is (= false (apply > -1 (reverse (range 10)))))
-      (is (= false (apply < (repeat 5 1)))))
+      (is (= false (apply > (repeat 5 1)))))
 
     (testing "negative tests"
       ;; `>` only compares numbers, except in ClojureScript (really
