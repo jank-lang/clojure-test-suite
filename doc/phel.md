@@ -1,7 +1,5 @@
 # Running the Phel tests
 
-Status: failing with 0bf7841
-
 ## Pre-requisities
 
 - PHP 8.3+ / [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
