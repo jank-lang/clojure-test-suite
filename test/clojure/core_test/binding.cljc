@@ -1,6 +1,8 @@
 (ns clojure.core-test.binding
   (:require [clojure.test :as t]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]])
+  #?(:phel (:require [phel\async :refer [future]])) ;; TODO should Phel have future in core namespace?
+  )
 
 (when-var-exists binding
   (def  ^:dynamic *x* :unset)
