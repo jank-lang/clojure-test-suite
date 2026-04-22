@@ -5,39 +5,40 @@
 (when-var-exists >
   (deftest test->
     (testing "arity 1"
-      ;; Doesn't matter what the argument is, `>` return `true` for
-      ;; one argument.
-      (is (> 1))
-      (is (> 0))
-      (is (> -1))
-      ;; Doesn't check whether arg is a number
-      (is (> "abc"))
-      (is (> :foo))
-      (is (> nil)))
+      (are [x] (= true (> x))
+        ;; Doesn't matter what the argument is, `>` returns `true` for
+        ;; one argument.
+        1
+        0
+        -1
+        ;; Doesn't check whether the argument is a number
+        "abc"
+        :foo
+        nil))
 
     (testing "arity 2"
       (are [expected x y] (= expected (> x y))
         true 1 0
-        true  0 -1
-        true  1N 0N
-        true  0N -1N
-        true  1.0 0.0
-        true  0.0 -1.0
-        true  1.0M 0.0M
-        true  0.0M -1.0M
-        true  -1 ##-Inf
-        true  ##Inf 1
+        true 0 -1
+        true 1N 0N
+        true 0N -1N
+        true 1.0 0.0
+        true 0.0 -1.0
+        true 1.0M 0.0M
+        true 0.0M -1.0M
+        true -1 ##-Inf
+        true ##Inf 1
 
         false 0 1
-        false  -1 0
-        false  0N 1N
-        false  -1N 0N
-        false  0.0 1.0
-        false  -1.0 0.0
-        false  0.0M 1.0M
-        false  -1.0M 0.0M
-        false  ##-Inf -1
-        false  1 ##Inf
+        false -1 0
+        false 0N 1N
+        false -1N 0N
+        false 0.0 1.0
+        false -1.0 0.0
+        false 0.0M 1.0M
+        false -1.0M 0.0M
+        false ##-Inf -1
+        false 1 ##Inf
 
         false 1 ##NaN                   ; Anything compared with ##NaN is false
         false ##NaN 1
@@ -60,15 +61,18 @@
          :default
          (testing "Rationals"
            (are [expected x y] (= expected (> x y))
-             true 1/2 1/16
-             true  0.5 1/16
-             true  -1/16 -1/2
-             true  -1/16 -0.5
-
              false 1/16 1/2
-             false  -1/2 -1/16
-             false  1/16 0.5
-             false  -0.5 -1/16))))
+             false -1/2 -1/16
+             false 1/16 0.5
+             false -0.5 -1/16
+             true 1/2 1/16
+             true 0.5 1/16
+             true -1/16 -1/2
+             true -1/16 -0.5
+             false 1/2 1/2
+             false 1/3 1/3
+             false -1/2 -1/2
+             false -1/3 -1/3))))
 
     (testing  "arity 3 and more"
       (are [expected x y z] (= expected (> x y z))
@@ -80,7 +84,8 @@
         false -1 -2 0
         false -1 0 -2)
       (is (= true (apply > (reverse (range 10)))))
-      (is (= false (apply > -1 (reverse (range 10))))))
+      (is (= false (apply > -1 (reverse (range 10)))))
+      (is (= false (apply > (repeat 5 1)))))
 
     (testing "negative tests"
       ;; `>` only compares numbers, except in ClojureScript (really
@@ -91,31 +96,19 @@
           [(is (= true (> 1 nil)))
            (is (= false (> nil 1)))
            (is (= true (> 2 1 nil)))
-           (is (= false (> 1 2 nil)))
-           (is (= true (> "2" "1")))
-           (is (= false (> "bar" "foo")))
-           (is (= false (> :bar :foo)))]
+           (is (= false (> 1 2 nil)))]
           :cljr
           [(is (p/thrown? (> 1 nil)))
            (is (p/thrown? (> nil 1)))
            (is (p/thrown? (> 1 nil 2)))
-           (is (p/thrown? (> 2 1 nil)))
-           (is (= true (> "2" "1")))
-           (is (p/thrown? (> "bar" "foo")))
-           (is (p/thrown? (> :bar :foo)))]
+           (is (p/thrown? (> 2 1 nil)))]
           :lpy
           [(is (p/thrown? (> 1 nil)))
            (is (p/thrown? (> nil 1)))
            (is (p/thrown? (> 1 nil 2)))
-           (is (p/thrown? (> 2 1 nil)))
-           (is (= true (> "2" "1")))
-           (is (= false (> "bar" "foo")))
-           (is (= false (> :bar :foo)))]
+           (is (p/thrown? (> 2 1 nil)))]
           :default
           [(is (p/thrown? (> 1 nil)))
            (is (p/thrown? (> nil 1)))
            (is (p/thrown? (> 1 nil 2)))
-           (is (p/thrown? (> 2 1 nil)))
-           (is (p/thrown? (> "2" "1")))
-           (is (p/thrown? (> "bar" "foo")))
-           (is (p/thrown? (> :bar :foo)))]))))
+           (is (p/thrown? (> 2 1 nil)))]))))

@@ -1,31 +1,75 @@
 {:min-bb-version "1.12.210"
  :paths ["bb"]
  :tasks
- {test-jvm {:doc "Runs JVM tests"
-            :task (shell "lein test")}
-  test-bb {:doc "Runs bb tests"
+ {:init (defn banner
+         [message]
+         (let [stars (clojure.string/join (repeat 70 "*"))
+               padding-len (- 70 (count message) 5)
+               spaces (clojure.string/join (repeat padding-len " "))]
+          (println stars)
+          (println "*" message spaces "*")
+          (println stars)))
+  test-jvm {:doc "Runs tests in JVM"
+            :task (do
+                   (banner "Running JVM Tests")
+                   (shell "lein test"))}
+  test-bb {:doc "Runs tests in Babashka"
            :extra-deps {io.github.cognitect-labs/test-runner
                         {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
            :extra-paths ["test"]
-           :task (exec 'cognitect.test-runner.api/test)
+           :task (do
+                  (banner "Running Babashka Tests")
+                  (exec 'cognitect.test-runner.api/test))
            :exec-args {:patterns [".*"]}}
-  test-cljs {:doc "Runs CLJS tests"
-             :task (shell "npx shadow-cljs compile test")}
-  test-lpy {:doc  "Run Basilisp tests"
-            :task (shell
-                   {:extra-env {"BASILISP_TEST_PATH"         "./test"
-                                "BASILISP_TEST_FILE_PATTERN" ".*\\.(lpy|cljc)"}}
-                   "basilisp test -p test -- -n auto")}
+  test-cljs {:doc "Runs tests in ClojureScript"
+             :task (do
+                    (banner "Running CLJS Tests")
+                    (shell "npx shadow-cljs compile test"))}
+  test-lpy {:doc  "Run tests in Basilisp"
+            :task (do
+                   (banner "Running Basilisp Tests")
+                   (shell
+                    {:extra-env {"BASILISP_TEST_PATH"         "./test"
+                                 "BASILISP_TEST_FILE_PATTERN" ".*\\.(lpy|cljc)"}}
+                    "basilisp test -p test -- -n auto"))}
+  test-all {:doc "Run tests under all dialects"
+            :task (do
+                   (run 'test-jvm)
+                   (run 'test-cljs)
+                   (run 'test-bb)
+                   (run 'test-lpy))}
+  test {:doc "Runs tests in multiple named dialects: jvm, bb, cljs, or lpy"
+        :task (letfn [(help []
+                       (println "Usage: bb test <dialect1> [<dialect2>]...")
+                       (println "Where <dialect> is one of:")
+                       (println "  jvm     Runs tests in Clojure JVM")
+                       (println "  cljs    Runs tests in ClojureScript")
+                       (println "  bb      Runs tests in Babashka")
+                       (println "  lpy     Runs tests in Basilisp")
+                       (println "  all     Runs tests in all supported dialects")
+                       (println "Tests are run in the order given."))]
+               (let [valid #{"jvm" "cljs" "bb" "lpy" "all"}
+                     unknown (remove valid *command-line-args*)]
+                (cond
+                 (not (some? (seq *command-line-args*)))
+                 (do
+                  (help))
+
+                 (some? (seq unknown))
+                 (do
+                  (println "Unknown dialect name(s):" (clojure.string/join ", " unknown))
+                  (help))
+
+                 (some? (seq (some #{"all"} *command-line-args*)))
+                 (run 'test-all)
+
+                 :else
+                 (doseq [dialect (seq *command-line-args*)]
+                  (case dialect
+                   "jvm" (run 'test-jvm)
+                   "cljs" (run 'test-cljs)
+                   "bb" (run 'test-bb)
+                   "lpy" (run 'test-lpy))))))}
   new-test {:doc "Creates new test for the Clojure symbols named by <args>. Unqualified symbols assume clojure.core"
             :requires ([new-test])
-            :task (new-test/new-test *command-line-args*)}
-  nrepl {:doc "Starts an nrepl server on port 1339 using an .nrepl-port file"
-         :requires ([babashka.fs :as fs]
-                    [babashka.nrepl.server :as srv])
-         :task (do (srv/start-server! {:host "localhost"
-                                       :port 1339})
-                   (spit ".nrepl-port" "1339")
-                   (-> (Runtime/getRuntime)
-                       (.addShutdownHook
-                         (Thread. (fn [] (fs/delete ".nrepl-port")))))
-                   (deref (promise)))}}}
+            :task (new-test/new-test *command-line-args*)}}}

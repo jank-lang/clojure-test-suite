@@ -9,6 +9,7 @@ pom.xml.asc
 /.lein-*
 /.nrepl-port
 /.prepl-port
+.repl*
 .hgignore
 .hg/
 /.clj-kondo/*
@@ -26,4 +27,5 @@ __pycache__/
 .python-version
 poetry.lock
 *.egg-info/
+.DS_Store
 /vendor/
