@@ -22,3 +22,4 @@ See these documents for how to set up individual dialect-specific environments a
 3. [Babashka](doc/babashka.md)
 4. [Clojure CLR](doc/clojureclr.md)
 5. [Basilisp](doc/basilisp.md)
+6. [Phel](doc/phel.md)
