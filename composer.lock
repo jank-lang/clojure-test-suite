@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "78890d4010200e338eb921ba2fb673aa",
+    "content-hash": "43e7fd8150df6f4bf5d97e716745937c",
     "packages": [
         {
             "name": "amphp/amp",
@@ -246,12 +246,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phel-lang/phel-lang.git",
-                "reference": "cbdc3ba"
+                "reference": "9245324"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phel-lang/phel-lang/zipball/cbdc3ba",
-                "reference": "cbdc3ba",
+                "url": "https://api.github.com/repos/phel-lang/phel-lang/zipball/9245324",
+                "reference": "9245324",
                 "shasum": ""
             },
             "require": {
@@ -319,7 +319,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2026-04-23T11:45:02+00:00"
+            "time": "2026-04-23T14:55:45+00:00"
         },
         {
             "name": "psr/container",
