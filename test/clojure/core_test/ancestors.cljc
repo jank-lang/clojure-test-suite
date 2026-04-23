@@ -87,10 +87,12 @@
 
       (testing "returns ancestors by type inheritance when tag is a class"
         #?(:cljs "cljs doesn't report ancestors by type inheritance yet (CLJS-3464)"
+           :phel "phel doesn't report ancestors by type inheritance"
            :clj  (is (contains? (ancestors ChildT) AncestorT))))
 
       #?(:bb      "bb doesn't report ancestors by type inheritance for custom types"
          :cljs    "cljs doesn't report ancestors by type inheritance yet (CLJS-3464)"
+         :phel    "phel doesn't report ancestors by type inheritance"
          :default (testing "returns ancestors by type inheritance when tag is a custom type"
                     (is (contains? (ancestors TestAncestorsType) #?(:lpy (:interface TestAncestorsProtocol) :phel (:interface TestAncestorsProtocol) :default clojure.core_test.ancestors.TestAncestorsProtocol)))
                     (is (contains? (ancestors TestAncestorsRecord) #?(:lpy (:interface TestAncestorsProtocol) :phel (:interface TestAncestorsProtocol) :default clojure.core_test.ancestors.TestAncestorsProtocol)))
@@ -144,7 +146,7 @@
                               #{} datatypes ::a))
 
       #?(:cljs    "cljs doesn't report ancestors by type inheritance yet (CLJS-3464)"
-         :phel    "TODO skipped for now"
+         :phel    "phel doesn't report ancestors by type inheritance"
          :default (testing "returns ancestors by type inheritance when tag is a class, whether the tag is in h or not"
                     (are [h] (contains? (ancestors h ChildT) AncestorT)
                              ; tag in h
@@ -155,6 +157,7 @@
 
       #?(:bb      "bb doesn't report ancestors by type inheritance for custom types"
          :cljs    "cljs doesn't report ancestors by type inheritance yet (CLJS-3464)"
+         :phel    "phel doesn't report ancestors by type inheritance"
          :default (testing "returns ancestors by type inheritance when tag is a custom type, whether the tag is in h or not"
                     (are [h tag] (let [actual-ancestors (ancestors h tag)]
                                    (and (contains? actual-ancestors #?(:lpy (:interface TestAncestorsProtocol) :phel PersistentMapInterface :default clojure.core_test.ancestors.TestAncestorsProtocol))
