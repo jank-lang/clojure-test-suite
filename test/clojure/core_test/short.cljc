@@ -11,6 +11,7 @@
     (is (int? (short 0)))
     #?@(:cljs []
         :lpy [] ; Python VMs only have one integer type.
+        :phel []
         :default
         [(is (instance? #?(:clj java.lang.Short :cljr System.Int16) (short 0)))])
 
