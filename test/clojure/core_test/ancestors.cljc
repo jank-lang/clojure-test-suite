@@ -3,15 +3,24 @@
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]
 
             )
-  #?(:phel (:use \ArrayIterator))
-  #?(:phel (:use \RecursiveArrayIterator))
+  ;; TODO FQN not supported (https://github.com/phel-lang/phel-lang/issues/1553)
+  #?(:phel (:use ArrayIterator RecursiveArrayIterator
+                 Phel\Lang\Collections\Map\PersistentMapInterface))
+
   )
 
 (when-var-exists ancestors
 
-  ; Some classes for testing ancestors by type inheritance
-  (def AncestorT #?(:cljs js/Object :lpy python/object :phel nil :default Object))
-  (def ChildT #?(:cljs :default :lpy basilisp.lang.set/PersistentSet :phel nil :default clojure.lang.PersistentHashSet))
+  ;; Some classes for testing ancestors by type inheritance
+
+  ;; TODO Phel cannot use ArrayIterator / RecursiveArrayIterator here:
+  ;; Undefined constant "ArrayIterator"
+
+  ;; (def AncestorT #?(:cljs js/Object :lpy python/object :phel ArrayIterator :default Object))
+  ;; (def ChildT #?(:cljs :default :lpy basilisp.lang.set/PersistentSet :phel RecursiveArrayIterator :default clojure.lang.PersistentHashSet))
+
+  (def AncestorT #?(:cljs js/Object :lpy python/object :phel :ancestor1 :default Object))
+  (def ChildT #?(:cljs :default :lpy basilisp.lang.set/PersistentSet :phel :child1 :default clojure.lang.PersistentHashSet))
 
   ; Some custom types for testing ancestors by type inheritance
   (defprotocol TestAncestorsProtocol)
@@ -85,7 +94,7 @@
          :default (testing "returns ancestors by type inheritance when tag is a custom type"
                     (is (contains? (ancestors TestAncestorsType) #?(:lpy (:interface TestAncestorsProtocol) :phel (:interface TestAncestorsProtocol) :default clojure.core_test.ancestors.TestAncestorsProtocol)))
                     (is (contains? (ancestors TestAncestorsRecord) #?(:lpy (:interface TestAncestorsProtocol) :phel (:interface TestAncestorsProtocol) :default clojure.core_test.ancestors.TestAncestorsProtocol)))
-                    (is (contains? (ancestors TestAncestorsRecord) #?(:lpy basilisp.lang.interfaces/IAssociative :phel \Phel\Lang\Collections\Map\PersistentMapInterface :default clojure.lang.Associative)))
+                    (is (contains? (ancestors TestAncestorsRecord) #?(:lpy basilisp.lang.interfaces/IAssociative :phel PersistentMapInterface :default clojure.lang.Associative)))
                     (is (nil? (ancestors TestAncestorsProtocol)))))
 
       (testing "does not throw on invalid tag"
@@ -148,8 +157,8 @@
          :cljs    "cljs doesn't report ancestors by type inheritance yet (CLJS-3464)"
          :default (testing "returns ancestors by type inheritance when tag is a custom type, whether the tag is in h or not"
                     (are [h tag] (let [actual-ancestors (ancestors h tag)]
-                                   (and (contains? actual-ancestors #?(:lpy (:interface TestAncestorsProtocol) :phel \Phel\Lang\Collections\Map\PersistentMapInterface :default clojure.core_test.ancestors.TestAncestorsProtocol))
-                                        (contains? actual-ancestors #?(:lpy basilisp.lang.interfaces/IAssociative :phel \Phel\Lang\Collections\Map\PersistentMapInterface :default clojure.lang.Associative))))
+                                   (and (contains? actual-ancestors #?(:lpy (:interface TestAncestorsProtocol) :phel PersistentMapInterface :default clojure.core_test.ancestors.TestAncestorsProtocol))
+                                        (contains? actual-ancestors #?(:lpy basilisp.lang.interfaces/IAssociative :phel PersistentMapInterface :default clojure.lang.Associative))))
                                  ; tag in h
                                  datatypes TestAncestorsRecord
                                  ; tag not in h
