@@ -20,7 +20,8 @@
                                           (catch #?(:cljs :default
                                                     :clj clojure.lang.ExceptionInfo
                                                     :cljr clojure.lang.ExceptionInfo
-                                                    :lpy basilisp.lang.exception/ExceptionInfo) e
+                                                    :lpy basilisp.lang.exception/ExceptionInfo
+                                                    :phel \phel\lang\ExInfoException) e
                                             (let [data (ex-data e)]
                                               (vswap! state conj data)))))]
                         (do-update a)
@@ -91,7 +92,8 @@
                                                (catch #?(:cljs :default
                                                          :clj clojure.lang.ExceptionInfo
                                                          :cljr clojure.lang.ExceptionInfo
-                                                         :lpy basilisp.lang.exception/ExceptionInfo) e
+                                                         :lpy basilisp.lang.exception/ExceptionInfo
+                                                         :phel\phel\lang\ExInfoException) e
                                                  (let [{:keys [old] :as data} (ex-data e)]
                                                    (vswap! state conj data)))))]
                              (do-update #'testvar-a)
