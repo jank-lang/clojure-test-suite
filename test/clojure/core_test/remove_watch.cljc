@@ -50,6 +50,8 @@
 
     #?(:cljs
        nil
+       :phel  ; Phel does not implement vars.
+       nil
 
        :default
        (testing "remove watch vars"
@@ -103,6 +105,8 @@
        ;; Basilisp does not implement refs.
        :lpy
        nil
+       :phel
+       nil
 
        :default
        (testing "remove watch refs"
@@ -152,6 +156,8 @@
 
        ;; Basilisp does not implement agents.
        :lpy
+       nil
+       :phel
        nil
 
        :default
@@ -205,4 +211,5 @@
            ;; Check to make sure nothing was added
            (is (= @messages #{{:key :key1 :ref watchable :old 0 :new 1 :watcher :watcher1}
                               {:key :key2 :ref watchable :old 0 :new 1 :watcher :watcher2}
-                              {:key :key2 :ref watchable :old 1 :new 2 :watcher :watcher2}})))))))
+                              {:key :key2 :ref watchable :old 1 :new 2 :watcher :watcher2}})))))
+    ))
