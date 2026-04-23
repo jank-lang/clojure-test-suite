@@ -4,6 +4,7 @@
    [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p])
   #?(:clj (:import (clojure.lang IReduce))))
 
+; TODO Phel (PHP) doesn't have class object model ..
 (def interop
   {:int-new (fn [x]
               (#?(:clj Integer.
@@ -16,36 +17,31 @@
                :cljr System.Int32
                :cljs js/Number
                :lpy python/int
-               :default identity  ; TODO Phel (PHP) doesn't have classes for ..
-               )
+               :default identity)
 
    :Long #?(:clj Long/TYPE
             :cljr System.Int64
             :cljs js/Number
             :lpy python/int
-            :phel identity  ; TODO Phel (PHP) doesn't have classes for ..
-            )
+            :phel identity)
 
    :Float #?(:clj Long/TYPE
              :cljr System.Single
              :cljs js/Number
              :lpy python/float
-             :phel identity  ; TODO Phel (PHP) doesn't have classes for ..
-             )
+             :phel identity)
 
    :Double #?(:clj Double/TYPE
               :cljr System.Double
               :cljs js/Number
               :lpy python/float
-              :phel identity  ; TODO Phel (PHP) doesn't have classes for ..
-              )
+              :phel identity)
 
    :Boolean #?(:clj Boolean/TYPE
                :cljr System.Boolean
                :cljs js/Boolean
                :lpy python/bool
-               :phel identity  ; TODO Phel (PHP) doesn't have classes for ..
-               )})
+               :phel identity)})
 
 
 (when-var-exists clojure.core/reduce
