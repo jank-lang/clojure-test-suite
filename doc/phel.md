@@ -2,7 +2,7 @@
 
 ## Pre-requisities
 
-- PHP 8.3+ / [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
+- PHP 8.4+ / [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 
 Install Phel:
 ```
