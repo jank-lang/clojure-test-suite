@@ -9,32 +9,43 @@
               (#?(:clj Integer.
                   :cljr identity
                   :cljs js/Number.
-                  :lpy python/int) x))
+                  :lpy python/int
+                  :phel php/intval) x))
 
    :Integer #?(:clj Integer/TYPE
                :cljr System.Int32
                :cljs js/Number
-               :lpy python/int)
+               :lpy python/int
+               :default identity  ; TODO Phel (PHP) doesn't have classes for ..
+               )
 
    :Long #?(:clj Long/TYPE
             :cljr System.Int64
             :cljs js/Number
-            :lpy python/int)
+            :lpy python/int
+            :phel identity  ; TODO Phel (PHP) doesn't have classes for ..
+            )
 
    :Float #?(:clj Long/TYPE
              :cljr System.Single
              :cljs js/Number
-             :lpy python/float)
+             :lpy python/float
+             :phel identity  ; TODO Phel (PHP) doesn't have classes for ..
+             )
 
    :Double #?(:clj Double/TYPE
               :cljr System.Double
               :cljs js/Number
-              :lpy python/float)
+              :lpy python/float
+              :phel identity  ; TODO Phel (PHP) doesn't have classes for ..
+              )
 
    :Boolean #?(:clj Boolean/TYPE
                :cljr System.Boolean
                :cljs js/Boolean
-               :lpy python/bool)})
+               :lpy python/bool
+               :phel identity  ; TODO Phel (PHP) doesn't have classes for ..
+               )})
 
 
 (when-var-exists clojure.core/reduce
@@ -82,6 +93,7 @@
                   (reduce + arange)
                   (reduce + avec)
                   #?(:bb 4950
+                     :phel 4950  ; TODO
                      :clj (.reduce ^IReduce avec +))
                   (reduce + alist)
                   (reduce + obj-array)
