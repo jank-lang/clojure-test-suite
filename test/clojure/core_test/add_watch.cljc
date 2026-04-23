@@ -1,6 +1,8 @@
 (ns clojure.core-test.add-watch
   (:require [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists sleep]]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists sleep]])
+  #?(:phel (:use Phel\Lang\ExInfoException))  ; FQN \Phel\Lang\ExInfoException gives Clojure syntax error
+  )
 
 (when-var-exists add-watch
   (deftest test-add-watch
@@ -21,7 +23,7 @@
                                                     :clj clojure.lang.ExceptionInfo
                                                     :cljr clojure.lang.ExceptionInfo
                                                     :lpy basilisp.lang.exception/ExceptionInfo
-                                                    :phel \phel\lang\ExInfoException) e
+                                                    :phel ExInfoException) e
                                             (let [data (ex-data e)]
                                               (vswap! state conj data)))))]
                         (do-update a)
@@ -74,6 +76,7 @@
                          {:key :e :ref r :old 14 :new 15 :tester :err})))))
 
     #?@(:cljs []
+        :phel []
         :default
         [(def testvar-a 0)
          (def testvar-b 10)
@@ -92,8 +95,7 @@
                                                (catch #?(:cljs :default
                                                          :clj clojure.lang.ExceptionInfo
                                                          :cljr clojure.lang.ExceptionInfo
-                                                         :lpy basilisp.lang.exception/ExceptionInfo
-                                                         :phel\phel\lang\ExInfoException) e
+                                                         :lpy basilisp.lang.exception/ExceptionInfo) e
                                                  (let [{:keys [old] :as data} (ex-data e)]
                                                    (vswap! state conj data)))))]
                              (do-update #'testvar-a)
@@ -147,6 +149,7 @@
 
     #?(:cljs nil
        :lpy nil
+       :phel nil
        :default
        (testing "watch ref"
          (let [state (volatile! [])
@@ -219,6 +222,7 @@
 
     #?@(:cljs []
         :lpy []
+        :phel []
         :default
         [(testing "watch agent"
            (let [state (volatile! [])
