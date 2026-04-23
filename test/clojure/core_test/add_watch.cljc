@@ -1,8 +1,8 @@
 (ns clojure.core-test.add-watch
   (:require [clojure.test :as t :refer [deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists sleep]])
-  #?(:phel (:use Phel\Lang\ExInfoException))  ; FQN \Phel\Lang\ExInfoException gives Clojure syntax error
-  )
+  ;; Phel doesn't support FQN without Clojure compatible backslash-free syntax (\Phel\Lang\ExInfoException)
+  #?(:phel (:use Phel.Lang.ExInfoException)))
 
 (when-var-exists add-watch
   (deftest test-add-watch
