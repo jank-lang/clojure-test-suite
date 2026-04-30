@@ -111,6 +111,23 @@
              4N :big-decimal-result
              4.0 :big-decimal-result
              4.0M :big-decimal-result]
+            :phel
+            [1 :integer-result
+             1N :integer-result
+             1.0 :default
+             1.0M :default
+             2 :big-integer-result
+             2N :big-integer-result
+             2.0 :default
+             2.0M :default
+             3 :default
+             3N :default
+             3.0 :double-result
+             3.0M :double-result ; big-decimal not supported (uses float)
+             4 :default
+             4N :default
+             4.0 :big-decimal-result ; big-decimal not supported (uses float)
+             4.0M :big-decimal-result]
             :default
             [1 :integer-result
              1N :integer-result ; JVM sees ints and big ints as equal for int-sized values

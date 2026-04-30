@@ -9,26 +9,29 @@
       (are [arg] (special-symbol? 'arg)
                  ;; Basilisp does not recognize these as special symbols.
                  #?@(:lpy []
+                     :phel [&]
                      :default [&
                                case*
                                new])
-                 .
+                 #?@(:phel []
+                     :default
+                     [.
+                      fn*
+                      loop*
+                      deftype*
+                      set!
+                      let*
+                      letfn*
+                      var])
                  catch
                  def
-                 deftype*
                  do
                  finally
-                 fn*
                  if
-                 let*
-                 letfn*
-                 loop*
                  quote
                  recur
-                 set!
                  throw
-                 try
-                 var))
+                 try))
 
     (testing "not special symbols"
       (are [arg] (not (special-symbol? arg))

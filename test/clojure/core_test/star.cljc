@@ -107,6 +107,34 @@
 
     #?(:cljs
        nil
+       :phel ; Phel evaluates ratios as float
+       (testing "rationals"
+         ;; Many comparisons fail due to float rounding
+         (are [prod x y equates] (= equates (= prod (* x y) (* y x)))
+           1     1/2  2/1  false
+           1     1/2  2    false
+           -1    1/2  -2   false
+           -1    -1/2 2    false
+           1     -1/2 -2   false
+           1.0   1/2  2.0  true
+           -1.0  1/2  -2.0 true
+           -1.0  -1/2 2.0  true
+           1.0   -1/2 -2.0 true
+           1     1/2  2N   false
+           -1    1/2  -2N  false
+           -1    -1/2 2N   false
+           1     -1/2 -2N  false
+           1.0   1/3  3.0  false
+           0     1/2  0    false
+           0.0   1/2  0.0  true
+           0     1/2  0N   false
+           1/10  1/2  1/5  true
+           -1/10 1/2  -1/5 true
+           -1/10 -1/2 1/5  true
+           1/10  -1/2 -1/5 true)
+
+         (is (p/thrown? (* 1/2 nil)))
+         (is (p/thrown? (* nil 1/2))))
 
        :default
        (testing "rationals"

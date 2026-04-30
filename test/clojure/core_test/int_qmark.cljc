@@ -22,10 +22,13 @@
      false ##Inf
      false ##-Inf
      false ##NaN
-     #?@(:cljs [true] :lpy [true] :default [false]) 0N
-     #?@(:cljs [true] :lpy [true] :default [false]) 1N
-     #?@(:cljs [true] :lpy [true] :default [false]) -1N
+     #?@(:cljs [true] :lpy [true] :phel [true] :default [false]) 0N
+     #?@(:cljs [true] :lpy [true] :phel [true] :default [false]) 1N
+     #?@(:cljs [true] :lpy [true] :phel [true] :default [false]) -1N
      #?@(:cljs []
+         :phel [false  0/2
+                false 1/2
+                false -1/2]
          :default
          [true  0/2
           false 1/2

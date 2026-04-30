@@ -106,6 +106,65 @@
 
     #?(:cljs
        nil ; CLJS doesn't support ratios
+       :phel ; Phel evaluates ratios as float
+       (testing "rationals"
+         ;; Most comparisons fail due to float rounding
+         (are [expected x y equates] (= equates (= expected (- x y)))
+           1/2 1 1/2 true
+           1/3 1 2/3 false
+           1/4 1 3/4 true
+           1/5 1 4/5 false
+           1/6 1 5/6 false
+           1/7 1 6/7 false
+           1/8 1 7/8 true
+           1/9 1 8/9 false
+
+           1 1/2 -1/2 false
+           1 1/3 -2/3 false
+           1 1/4 -3/4 false
+           1 1/5 -4/5 false
+           1 1/6 -5/6 false
+           1 1/7 -6/7 false
+           1 1/8 -7/8 false
+           1 1/9 -8/9 false
+
+           1  3/2 1/2 false
+           1  5/3 2/3 false
+           1  7/4 3/4 false
+           1  9/5 4/5 false
+           1 11/6 5/6 false
+           1 13/7 6/7 false
+           1 15/8 7/8 false
+           1 17/9 8/9 false
+
+           3/2 2 1/2 true
+           4/3 2 2/3 false
+
+           1.0 1.5 1/2 true)
+
+         ;; Single arg
+         (is (= -1/2 (- 1/2)))
+         (is (= 1/2 (- -1/2)))
+
+         ;; Multi arg
+         (is (not (= -2089/2520 (- 1 1/2 1/3 1/4 1/5 1/6 1/7 1/8 1/9))))
+
+         (is (p/thrown? (- nil 1/2)))
+         (is (p/thrown? (- 1/2 nil)))
+
+         (is (- r/max-int -1/2)) ; test that these don't throw
+         (is (- r/min-int 1/2))
+         (is (= (- r/max-double) (- (- r/max-double) 1/2)))
+         (is (= r/max-double (- r/max-double -1/2)))
+         (is (= -0.5 (- r/min-double 1/2)))
+         (is (= 0.5 (- r/min-double -1/2)))
+         (is (not (ratio? (- 0 1/3))))
+         (is (not (ratio? (- 0N 1/3))))
+         (is (not (ratio? (- 1 1/3))))
+         (is (not (ratio? (- 1N 1/3))))
+
+         (is (float? (- 0.0 1/3)))
+         (is (float? (- 1.0 1/3))))
 
        :default
        (testing "rationals"

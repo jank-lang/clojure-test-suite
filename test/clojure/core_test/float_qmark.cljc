@@ -56,10 +56,19 @@
           false 0N
           false 1N
           false -1N
-          false 0.0M
-          false 1.0M
-          false -1.0M])
+          #?@(:phel
+              [true 0.0M
+               true 1.0M
+               true -1.0M]
+              :default
+              [false 0.0M
+               false 1.0M
+               false -1.0M])])
      #?@(:cljs [] ; CLJS doesn't have ratios
+         :phel
+         [true 0/2
+          true 1/2
+          true -1/2]
          :default
          [false 0/2
           false 1/2

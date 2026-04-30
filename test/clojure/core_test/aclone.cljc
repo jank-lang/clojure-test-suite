@@ -13,8 +13,14 @@
       (is (= 3 (alength a')))
       (is (every? identity (map #(= (aget a %) (aget a' %)) (range 3))))
       (is (zero? (alength b')))
-      (is (not (identical? a a')))
-      (is (not (identical? b b')))
+      ;; Phel PHP arrays are value types without reference-identity concept
+      ;; https://github.com/phel-lang/phel-lang/issues/1735
+      #?@(:phel
+          [(is (identical? a a'))
+           (is (identical? b b'))]
+          :default
+          [(is (not (identical? a a')))
+           (is (not (identical? b b')))])
       (aset a 1 11)
       (is (= 11 (aget a 1)))
       (is (= 2 (aget a' 1)))

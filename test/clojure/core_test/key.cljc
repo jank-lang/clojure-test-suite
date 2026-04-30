@@ -12,6 +12,7 @@
       ;; https://groups.google.com/g/clojure/c/FVcrbHJpCW4/m/Fh7NsX_Yb7sJ
       (is (= 'k (key #?(:cljs    (cljs.core/MapEntry. 'k 'v nil)
                         :lpy     (map-entry 'k 'v)
+                        :phel    ['k 'v]  ; Phel map entries are vectors
                         :default (clojure.lang.MapEntry/create 'k 'v)))))
       (when-var-exists sorted-map
         (is (= :a (key (first (sorted-map :a :b))))))

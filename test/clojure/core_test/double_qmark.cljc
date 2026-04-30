@@ -35,6 +35,10 @@
              [true (float 0.0)
               true (float 1.0)
               true (float -1.0)]
+             :phel
+             [true (float 0.0)
+              true (float 1.0)
+              true (float -1.0)]
              :default
              [false (float 0.0) ; surprising since (float? (double 0.0)) = true
               false (float 1.0) ; surprising since (float? (double 1.0)) = true
@@ -55,6 +59,13 @@
               true 0.0M
               true 1.0M
               true -1.0M]
+             :phel
+             [false 0N
+              false 1N
+              false -1N
+              true 0.0M
+              true 1.0M
+              true -1.0M]
              :default
              [false 0N
               false 1N
@@ -63,6 +74,9 @@
               false 1.0M
               false -1.0M])
       #?@(:cljs [] ; CLJS doesn't have ratios
+          :phel [true 0/2 ; Phel handles ratios as float
+                 true 1/2
+                 true -1/2]
           :default
           [false 0/2
            false 1/2

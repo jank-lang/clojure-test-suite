@@ -30,4 +30,4 @@
       false 1.0M
       false :a-keyword
       false 'a-sym
-      #?(:cljs true :lpy true :default false) \a)))
+      #?(:cljs true :lpy true :phel true :default false) \a)))

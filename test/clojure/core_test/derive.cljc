@@ -13,7 +13,7 @@
                           success)
                         ::rect ::shape
                         'n/a 'n/b
-                        #?(:cljs js/String :lpy python/str :default String) ::object))
+                        #?(:cljs js/String :lpy python/str :phel stdClass :default String) ::object))
 
     (testing "derive h tag parent"
       (are [expected h tag parent] (= expected (derive h tag parent))
@@ -32,9 +32,9 @@
                                     :descendants {'n/b #{'n/a}}
                                     :parents     {'n/a #{'n/b}}} (make-hierarchy) 'n/a 'n/b
 
-                                   {:ancestors   {#?(:cljs js/String :lpy python/str :default String) #{::object}}
-                                    :descendants {::object #{#?(:cljs js/String :lpy python/str :default String)}}
-                                    :parents     {#?(:cljs js/String :lpy python/str :default String) #{::object}}} (make-hierarchy) #?(:cljs js/String :lpy python/str :default String) ::object
+                                   {:ancestors   {#?(:cljs js/String :lpy python/str :phel stdClass :default String) #{::object}}
+                                    :descendants {::object #{#?(:cljs js/String :lpy python/str :phel stdClass :default String)}}
+                                    :parents     {#?(:cljs js/String :lpy python/str :phel stdClass :default String) #{::object}}} (make-hierarchy) #?(:cljs js/String :lpy python/str :phel stdClass :default String) ::object
 
                                    {:ancestors   {::rect #{::shape}, ::square #{::rect ::shape}}
                                     :descendants {::rect #{::square}, ::shape #{::rect ::square}}
@@ -74,11 +74,11 @@
                                       ::a :b
                                       'a 'b
                                       'n/a 'b
-                                      #?(:cljs js/String :lpy python/str :default String) :b)))
+                                      #?(:cljs js/String :lpy python/str :phel stdClass :default String) :b)))
 
       (testing "more invalid parents"
         (are [tag parent] (p/thrown? (derive tag parent))
-                          ::tag #?(:cljs js/String :lpy python/str :default String)
+                          ::tag #?(:cljs js/String :lpy python/str :phel stdClass :default String)
                           ::tag 42
                           ::tag "parent"))
 

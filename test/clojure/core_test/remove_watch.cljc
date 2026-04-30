@@ -50,6 +50,8 @@
 
     #?(:cljs
        nil
+       :phel  ; Phel does not implement vars.
+       nil
 
        :default
        (testing "remove watch vars"
@@ -103,6 +105,8 @@
        ;; Basilisp does not implement refs.
        :lpy
        nil
+       :phel
+       nil
 
        :default
        (testing "remove watch refs"
@@ -152,6 +156,8 @@
 
        ;; Basilisp does not implement agents.
        :lpy
+       nil
+       :phel
        nil
 
        :default
