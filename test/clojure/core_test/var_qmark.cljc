@@ -14,62 +14,57 @@
 (when-var-exists defprotocol
   (defprotocol MyProtocol))
 
-;; Phel doesn't have vars yet but it has irrelevant `var?` function (deprecated)
-;; https://github.com/phel-lang/phel-lang/issues/1717
-#?(:phel nil
-   :default
-   (when-var-exists var?
-     (deftest test-var?
-       (testing "things which are vars"
-         (are [v] (var? v)
-           #'foo               ; locally-defined
-           #'var?              ; clojure.core
-           #'i-am-dynamic      ; dynamic & local
-           #'*assert*          ; dynamic
-           #?@(; CLJS `def` doesn't necessarily evaluate to the value of the var:
-               :cljs [],
-               :default [(def baz)])
-           #?@(; CLJS `defn` produces a non-var
-               :cljs [],
-               :default [(defn qux [] nil)]))
+(when-var-exists var?
+  (deftest test-var?
+    (testing "things which are vars"
+      (are [v] (var? v)
+        #'foo               ; locally-defined
+        #'var?              ; clojure.core
+        #'i-am-dynamic      ; dynamic & local
+        #'*assert*          ; dynamic
+        #?@(; CLJS `def` doesn't necessarily evaluate to the value of the var:
+            :cljs [],
+            :default [(def baz)])
+        #?@(; CLJS `defn` produces a non-var
+            :cljs [],
+            :default [(defn qux [] nil)]))
 
-         (when-var-exists defmulti
-           (is (var? #'bar)))
+      (when-var-exists defmulti
+        (is (var? #'bar)))
+      
+      (when-var-exists defprotocol
+        (is (var? #'MyProtocol))))
 
-         (when-var-exists defprotocol
-           (is (var? #'MyProtocol))))
+    (testing "var-adjacent things"
+      (are [not-a-var] (not (var? not-a-var))
+        foo
+        var?
+        i-am-dynamic
+        'foo
+        'var?
+        'i-am-dynamic
+        *assert*
+        #(+ 1 %)
+        (fn baz [x] x)))
 
-       (testing "var-adjacent things"
-         (are [not-a-var] (not (var? not-a-var))
-           foo
-           var?
-           i-am-dynamic
-           'foo
-           'var?
-           'i-am-dynamic
-           *assert*
-           #(+ 1 %)
-           (fn baz [x] x)))
-
-       (testing "things which are clearly not vars"
-         (are [v] (not (var? v))
-           'sym
-           `sym
-           "abc"
-           999
-           1.2
-           #?@(:cljs [] ; most Clojure dialects support ratios - not CLJS or Phel
-               :phel []
-               :default [2/3])
-           \backspace
-           nil
-           true
-           false
-           :keyword
-           :namespace/keyword
-           '(one two three)
-           [4 5 6]
-           {:7 "8"}
-           (zipmap (take 100 (range))
-                   (cycle ['foo 'bar 'baz 'qux]))
-           #{:a :b "c"})))))
+    (testing "things which are clearly not vars"
+      (are [v] (not (var? v))
+        'sym
+        `sym
+        "abc"
+        999
+        1.2
+        #?@(:cljs [], ; most Clojure dialects support ratios - not CLJS
+            :default [2/3])
+        \backspace
+        nil
+        true
+        false
+        :keyword
+        :namespace/keyword
+        '(one two three)
+        [4 5 6]
+        {:7 "8"}
+        (zipmap (take 100 (range))
+                (cycle ['foo 'bar 'baz 'qux]))
+        #{:a :b "c"}))))
