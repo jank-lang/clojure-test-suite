@@ -28,7 +28,7 @@
          :cljr (is (p/thrown? (inc Int64/MaxValue)))
          :cljs (is (= (inc js/Number.MAX_SAFE_INTEGER) (+ 2 js/Number.MAX_SAFE_INTEGER)))
          ;; Phel integers avoid overflow by being promoted to BigInteger
-         :phel nil (is (not (= (inc php/PHP_INT_MAX) (+ 2 php/PHP_INT_MAX))))
+         :phel (is (not (= (inc php/PHP_INT_MAX) (+ 2 php/PHP_INT_MAX))))
          :lpy nil  ; Python integers cannot overflow
          :default (is false "overflow untested")))
 

@@ -32,6 +32,32 @@
           true 0.0M
           true 1.0M
           true -1.0M]
+         :phel
+         [true  0.0
+          true  1.0
+          true  -1.0
+          true  (float 0.0)
+          true  (float 1.0)
+          true  (float -1.0)
+          true  (double 0.0)
+          true  (double 1.0)
+          true  (double -1.0)
+          true  r/max-double
+          true  r/min-double
+          true  ##Inf
+          true  ##-Inf
+          true  ##NaN
+          false 0
+          false 1
+          false -1
+          false r/max-int
+          false r/min-int
+          false 0N
+          false 1N
+          false -1N
+          true 0.0M ; Phel doesn't have BigDecimal
+          true 1.0M
+          true -1.0M]
          :default
          [true  0.0
           true  1.0
@@ -55,13 +81,8 @@
           false r/min-int
           false 0N
           false 1N
-          false -1N])
-     #?@(:phel ; Phel doesn't have BigDecimal
-         [true 0.0M
-          true 1.0M
-          true -1.0M]
-         :default
-         [false 0.0M
+          false -1N
+          false 0.0M
           false 1.0M
           false -1.0M])
      #?@(:cljs [] ; CLJS doesn't have ratios
