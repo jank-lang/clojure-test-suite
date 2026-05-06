@@ -60,6 +60,19 @@
            double? 2.0M  -10.0M 3.0M
            double? -1.0M -10.0M -3.0M
            double? -2.0M 10.0M  -3.0M]
+          :phel
+          [double? 1.0M  10     3.0M
+           double? 2.0M  -10    3.0M
+           double? -1.0M -10    -3.0M
+           double? -2.0M 10     -3.0M
+           double? 1.0M  10.0M  3
+           double? 2.0M  -10.0M 3
+           double? -1.0M -10.0M -3
+           double? -2.0M 10.0M  -3
+           double? 1.0M  10.0M  3.0M
+           double? 2.0M  -10.0M 3.0M
+           double? -1.0M -10.0M -3.0M
+           double? -2.0M 10.0M  -3.0M]
           :default
           [decimal? 1.0M  10     3.0M
            decimal? 2.0M  -10    3.0M
