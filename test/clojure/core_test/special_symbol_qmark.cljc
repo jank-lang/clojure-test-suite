@@ -13,16 +13,16 @@
                      :default [&
                                case*
                                new])
+                 ;; Phel does not recognize these as special symbols.
                  #?@(:phel []
-                     :default
-                     [.
-                      fn*
-                      loop*
-                      deftype*
-                      set!
-                      let*
-                      letfn*])
-                 var
+                     :default [.
+                               deftype*
+                               fn*
+                               let*
+                               letfn*
+                               loop*
+                               set!
+                               ])
                  catch
                  def
                  do
@@ -31,7 +31,8 @@
                  quote
                  recur
                  throw
-                 try))
+                 try
+                 var))
 
     (testing "not special symbols"
       (are [arg] (not (special-symbol? arg))
