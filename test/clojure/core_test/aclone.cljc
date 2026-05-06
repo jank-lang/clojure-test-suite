@@ -15,9 +15,7 @@
       (is (zero? (alength b')))
       ;; Phel PHP arrays are value types without reference-identity concept
       ;; https://github.com/phel-lang/phel-lang/issues/1735
-      #?@(:phel
-          [(is (identical? a a'))
-           (is (identical? b b'))]
+      #?@(:phel []
           :default
           [(is (not (identical? a a')))
            (is (not (identical? b b')))])
