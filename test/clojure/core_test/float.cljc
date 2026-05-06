@@ -26,6 +26,7 @@
       ;; so float returns the same value here.
       #?@(:cljs [r/min-double r/min-double]
           :lpy [r/min-double r/min-double]
+          :phel [r/min-double r/min-double]
           :default [(float 0.0) r/min-double]))
     (is (NaN? (float ##NaN)))
 

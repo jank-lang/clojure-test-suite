@@ -26,6 +26,7 @@
       #?(:clj (is (p/thrown? (dec Long/MIN_VALUE)))
          :cljr (is (p/thrown? (dec Int64/MinValue)))
          :cljs (is (= (dec js/Number.MIN_SAFE_INTEGER) (- js/Number.MIN_SAFE_INTEGER 2)))
+         :phel (is (= (dec php/PHP_INT_MIN) (dec php/PHP_INT_MIN)))
          :lpy []  ; Python integers cannot underflow
          :default (is false "TODO underflow")))
 

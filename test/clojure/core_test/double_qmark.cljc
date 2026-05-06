@@ -35,6 +35,10 @@
              [true (float 0.0)
               true (float 1.0)
               true (float -1.0)]
+             :phel
+             [true (float 0.0)
+              true (float 1.0)
+              true (float -1.0)]
              :default
              [false (float 0.0) ; surprising since (float? (double 0.0)) = true
               false (float 1.0) ; surprising since (float? (double 1.0)) = true
@@ -52,6 +56,13 @@
              [true 0N
               true 1N
               true -1N
+              true 0.0M
+              true 1.0M
+              true -1.0M]
+             :phel
+             [false 0N
+              false 1N
+              false -1N
               true 0.0M
               true 1.0M
               true -1.0M]

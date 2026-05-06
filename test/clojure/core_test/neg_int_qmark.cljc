@@ -45,9 +45,21 @@
      #?@(:cljs [true -1.0
                 true -1.0M
                 true -1N]
+         :lpy [false -1.0
+               false -1.0M
+               true -1N
+               false 0/2
+               false 1/2
+               false -1/2]
+         :phel [false -1.0
+                false -1.0M
+                true -1N
+                false 0/2
+                false 1/2
+                false -1/2]
          :default [false -1.0
                    false -1.0M
-                   #?(:lpy true :default false) -1N
+                   false -1N
                    false 0/2
                    false 1/2
                    false -1/2]))))

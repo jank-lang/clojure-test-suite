@@ -40,31 +40,44 @@
      double? 1.0  10.0  -3.0
 
      #?@(:cljs
-      [double? 1.0M  10     3.0M
-       double? -1.0M -10    3.0M
-       double? -1.0M -10    -3.0M
-       double? 1.0M  10     -3.0M
-       double? 1.0M  10.0M  3
-       double? -1.0M -10.0M 3
-       double? -1.0M -10.0M -3
-       double? 1.0M  10.0M  -3
-       double? 1.0M  10.0M  3.0M
-       double? -1.0M -10.0M 3.0M
-       double? -1.0M -10.0M -3.0M
-       double? 1.0M  10.0M  -3.0M]
-      :default
-      [decimal? 1.0M  10     3.0M
-       decimal? -1.0M -10    3.0M
-       decimal? -1.0M -10    -3.0M
-       decimal? 1.0M  10     -3.0M
-       decimal? 1.0M  10.0M  3
-       decimal? -1.0M -10.0M 3
-       decimal? -1.0M -10.0M -3
-       decimal? 1.0M  10.0M  -3
-       decimal? 1.0M  10.0M  3.0M
-       decimal? -1.0M -10.0M 3.0M
-       decimal? -1.0M -10.0M -3.0M
-       decimal? 1.0M  10.0M  -3.0M])
+         [double? 1.0M  10     3.0M
+          double? -1.0M -10    3.0M
+          double? -1.0M -10    -3.0M
+          double? 1.0M  10     -3.0M
+          double? 1.0M  10.0M  3
+          double? -1.0M -10.0M 3
+          double? -1.0M -10.0M -3
+          double? 1.0M  10.0M  -3
+          double? 1.0M  10.0M  3.0M
+          double? -1.0M -10.0M 3.0M
+          double? -1.0M -10.0M -3.0M
+          double? 1.0M  10.0M  -3.0M]
+         :phel
+         [double? 1.0M  10     3.0M
+          double? -1.0M -10    3.0M
+          double? -1.0M -10    -3.0M
+          double? 1.0M  10     -3.0M
+          double? 1.0M  10.0M  3
+          double? -1.0M -10.0M 3
+          double? -1.0M -10.0M -3
+          double? 1.0M  10.0M  -3
+          double? 1.0M  10.0M  3.0M
+          double? -1.0M -10.0M 3.0M
+          double? -1.0M -10.0M -3.0M
+          double? 1.0M  10.0M  -3.0M]
+         :default
+         [decimal? 1.0M  10     3.0M
+          decimal? -1.0M -10    3.0M
+          decimal? -1.0M -10    -3.0M
+          decimal? 1.0M  10     -3.0M
+          decimal? 1.0M  10.0M  3
+          decimal? -1.0M -10.0M 3
+          decimal? -1.0M -10.0M -3
+          decimal? 1.0M  10.0M  -3
+          decimal? 1.0M  10.0M  3.0M
+          decimal? -1.0M -10.0M 3.0M
+          decimal? -1.0M -10.0M -3.0M
+          decimal? 1.0M  10.0M  -3.0M])
 
      ;; Unexpectedly downconverts result to double, rather than BigDecimal
      double? 1.0  10.0M  3.0

@@ -103,6 +103,8 @@
        ;; Basilisp does not implement refs.
        :lpy
        nil
+       :phel
+       nil
 
        :default
        (testing "remove watch refs"
@@ -152,6 +154,8 @@
 
        ;; Basilisp does not implement agents.
        :lpy
+       nil
+       :phel
        nil
 
        :default

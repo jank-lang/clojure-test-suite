@@ -67,6 +67,9 @@
          :lpy     (testing "returns parents by type inheritance when tag is a class"
                     (is (contains? (parents python/str) python/object))
                     (is (nil? (parents python/object))))
+         :phel    (testing "returns parents by type inheritance when tag is a class"
+                    (is (contains? (parents RuntimeException) Exception))
+                    (is (nil? (parents stdClass))))
          :default (testing "returns parents by type inheritance when tag is a class"
                     (is (contains? (parents String) Object))
                     (is (nil? (parents Object)))))
@@ -74,8 +77,8 @@
       #?(:bb      "bb doesn't report parents by type inheritance for custom types"
          :cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
          :default (testing "returns parents by type inheritance when tag is a custom type"
-                    (is (contains? (parents TestParentsType) #?(:lpy (:interface TestParentsProtocol) :default clojure.core_test.parents.TestParentsProtocol)))
-                    (is (contains? (parents TestParentsRecord) #?(:lpy (:interface TestParentsProtocol) :default clojure.core_test.parents.TestParentsProtocol)))
+                    (is (contains? (parents TestParentsType) #?(:lpy (:interface TestParentsProtocol) :phel TestParentsProtocol :default clojure.core_test.parents.TestParentsProtocol)))
+                    (is (contains? (parents TestParentsRecord) #?(:lpy (:interface TestParentsProtocol) :phel TestParentsProtocol :default clojure.core_test.parents.TestParentsProtocol)))
                     (is (nil? (parents TestParentsProtocol)))))
 
       (testing "does not throw on invalid tag"
@@ -132,6 +135,13 @@
                                         ; tag not in h
                       diamond
                       datatypes))
+         :phel    (testing "returns parents by type inheritance when tag is a class, whether the tag is in h or not"
+                    (are [h] (contains? (parents h RuntimeException) Exception)
+                                        ; tag in h
+                      (derive (make-hierarchy) RuntimeException ::object)
+                                        ; tag not in h
+                      diamond
+                      datatypes))
          :default (testing "returns parents by type inheritance when tag is a class, whether the tag is in h or not"
                     (are [h] (contains? (parents h String) Object)
                              ; tag in h
@@ -143,7 +153,7 @@
       #?(:bb      "bb doesn't report parents by type inheritance for custom types"
          :cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
          :default (testing "returns parents by type inheritance when tag is a custom type, whether the tag is in h or not"
-                    (are [h tag] (contains? (parents h tag) #?(:lpy (:interface TestParentsProtocol) :default clojure.core_test.parents.TestParentsProtocol))
+                    (are [h tag] (contains? (parents h tag) #?(:lpy (:interface TestParentsProtocol) :phel TestParentsProtocol :default clojure.core_test.parents.TestParentsProtocol))
                                  ; tag in h
                                  datatypes TestParentsType
                                  datatypes TestParentsRecord

@@ -19,8 +19,10 @@
                           1 :a [:a]
                           3 :a [:a :a :a]
                           3.14 :a #?(:cljs    [:a :a :a :a]
+                                     :phel    [:a :a :a :a]
                                      :default [:a :a :a])
                           3.99 :a #?(:cljs    [:a :a :a :a]
+                                     :phel    [:a :a :a :a]
                                      :default [:a :a :a])
                           7 :a [:a :a :a :a :a :a :a]
                           7 nil [nil nil nil nil nil nil nil]))

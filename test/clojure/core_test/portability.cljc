@@ -18,6 +18,7 @@
   ;; return true if the fractional part of the double is zero
   #?(:cljs (integer? n)
      :lpy (integer? n)
+     :phel (integer? n)
      :default
      (and (integer? n)
           (not (int? n)))))
@@ -26,7 +27,8 @@
   (#?(:cljr System.Threading.Thread/Sleep
       :cljs #(js/setTimeout identity %)
       :clj Thread/sleep
-      :lpy time/sleep)
+      :lpy time/sleep
+      :phel #(phel.async/delay (/ % 1000)))
    ms))
 
 ;; --- Portable exception multimethod. ---
@@ -65,6 +67,7 @@
          (report-failure# failure-opts#)
          (catch #?(:jank ~'jank.runtime.object_ref
                    :clj ~'Throwable
+                   :phel ~'Throwable
                    :default ~'Exception) e#
            (report-success# (success-opts# e#))
            e#)

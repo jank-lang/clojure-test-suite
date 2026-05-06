@@ -9,32 +9,38 @@
               (#?(:clj Integer.
                   :cljr identity
                   :cljs js/Number.
-                  :lpy python/int) x))
+                  :lpy python/int
+                  :phel php/intval) x))
 
    :Integer #?(:clj Integer/TYPE
                :cljr System.Int32
                :cljs js/Number
-               :lpy python/int)
+               :lpy python/int
+               :phel php/intval)
 
    :Long #?(:clj Long/TYPE
             :cljr System.Int64
             :cljs js/Number
-            :lpy python/int)
+            :lpy python/int
+            :phel php/intval)
 
    :Float #?(:clj Long/TYPE
              :cljr System.Single
              :cljs js/Number
-             :lpy python/float)
+             :lpy python/float
+             :phel php/floatval)
 
    :Double #?(:clj Double/TYPE
               :cljr System.Double
               :cljs js/Number
-              :lpy python/float)
+              :lpy python/float
+              :phel php/floatval)
 
    :Boolean #?(:clj Boolean/TYPE
                :cljr System.Boolean
                :cljs js/Boolean
-               :lpy python/bool)})
+               :lpy python/bool
+               :phel php/boolval)})
 
 
 (when-var-exists clojure.core/reduce
@@ -82,6 +88,7 @@
                   (reduce + arange)
                   (reduce + avec)
                   #?(:bb 4950
+                     :phel 4950
                      :clj (.reduce ^IReduce avec +))
                   (reduce + alist)
                   (reduce + obj-array)
