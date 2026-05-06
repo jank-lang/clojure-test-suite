@@ -21,8 +21,8 @@
                       deftype*
                       set!
                       let*
-                      letfn*
-                      var])
+                      letfn*])
+                 var
                  catch
                  def
                  do

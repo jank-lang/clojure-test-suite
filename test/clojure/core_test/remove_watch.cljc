@@ -50,8 +50,6 @@
 
     #?(:cljs
        nil
-       :phel  ; Phel does not implement vars.
-       nil
 
        :default
        (testing "remove watch vars"
