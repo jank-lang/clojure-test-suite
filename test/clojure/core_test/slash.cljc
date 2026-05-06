@@ -123,7 +123,6 @@
 
       ;; Multi arg
       #?(:cljs (is (= 50 (/ 100 1 2)))
-         :phel (is (= 50 (/ 100 1 2)))
          :default (is (= 1/362880 (/ 1 2 3 4 5 6 7 8 9))))
 
       #?@(:cljs
@@ -137,31 +136,6 @@
 
     #?(:cljs
        nil
-       :phel ; Phel evaluates ratios as float
-       (testing "rationals"
-         ;; Many comparisons fail due to float rounding
-         (are [expected x y equates] (= equates (= expected (/ x y)))
-           10   10  1      true
-           5    10  2      true
-           10/3 10  3      false
-           1    2   2      true
-           4    2   1/2    false
-           1/4  1/2 2      true
-           4.0   2.0  1/2  true
-           0.25  1/2  2.0  true
-           4M    2.0M 1/2  true
-           0.25M 1/2  2.0M true
-           )
-
-         ;; Single arg
-         (is (not (= 2N (/ 1/2))))
-         (is (not (= 3N (/ 1/3))))
-
-         ;; Multi arg
-         (is (not (= 362880N (/ 1/1 1/2 1/3 1/4 1/5 1/6 1/7 1/8 1/9))))
-
-         (is (p/thrown? (/ 1/2 nil)))
-         (is (p/thrown? (/ nil 1/2))))
 
        :default
        (testing "rationals"

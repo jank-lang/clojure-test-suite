@@ -74,9 +74,6 @@
               false 1.0M
               false -1.0M])
       #?@(:cljs [] ; CLJS doesn't have ratios
-          :phel [true 0/2 ; Phel handles ratios as float
-                 true 1/2
-                 true -1/2]
           :default
           [false 0/2
            false 1/2

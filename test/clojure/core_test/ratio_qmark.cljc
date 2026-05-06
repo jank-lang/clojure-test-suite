@@ -45,7 +45,6 @@
      false 'a-sym
 
      #?@(:cljs []
-         :phel []
          :default
          [false 0/2 ; perhaps surprising
           true  1/2

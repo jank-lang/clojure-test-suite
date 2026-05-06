@@ -26,10 +26,6 @@
       true   1N
       true   -1N
       #?@(:cljs []
-          :phel
-          [false 0/2
-           false 1/2
-           false -1/2]
           :default
           [true  0/2
            false 1/2
