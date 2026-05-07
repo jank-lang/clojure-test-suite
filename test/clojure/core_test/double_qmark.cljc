@@ -59,13 +59,6 @@
               true 0.0M
               true 1.0M
               true -1.0M]
-             :phel
-             [false 0N
-              false 1N
-              false -1N
-              true 0.0M
-              true 1.0M
-              true -1.0M]
              :default
              [false 0N
               false 1N

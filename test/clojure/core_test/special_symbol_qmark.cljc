@@ -21,8 +21,8 @@
                                let*
                                letfn*
                                loop*
-                               set!
-                               ])
+                               set!])
+
                  catch
                  def
                  do
