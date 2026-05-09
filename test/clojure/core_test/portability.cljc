@@ -18,6 +18,7 @@
   ;; return true if the fractional part of the double is zero
   #?(:cljs (integer? n)
      :lpy (integer? n)
+     :jank (cpp/jank.runtime.is_big_integer n)
      :default
      (and (integer? n)
           (not (int? n)))))
