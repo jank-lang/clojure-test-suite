@@ -1,5 +1,6 @@
 (ns clojure.core-test.dec
   (:require [clojure.test :as t :refer [are deftest is testing]]
+            [clojure.core-test.number-range :refer [min-int]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists dec
@@ -27,6 +28,7 @@
          :cljr (is (p/thrown? (dec Int64/MinValue)))
          :cljs (is (= (dec js/Number.MIN_SAFE_INTEGER) (- js/Number.MIN_SAFE_INTEGER 2)))
          :lpy []  ; Python integers cannot underflow
+         :jank (is (p/thrown? (dec min-int)))
          :default (is false "TODO underflow")))
 
     (testing "dec-nil"
