@@ -1,5 +1,6 @@
 (ns clojure.core-test.inc
   (:require [clojure.test :as t :refer [are deftest is testing]]
+            [clojure.core-test.number-range :refer [max-int]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists inc
@@ -28,6 +29,7 @@
          :cljr (is (p/thrown? (inc Int64/MaxValue)))
          :cljs (is (= (inc js/Number.MAX_SAFE_INTEGER) (+ 2 js/Number.MAX_SAFE_INTEGER)))
          :lpy nil  ; Python integers cannot overflow
+         :jank (is (p/thrown? (inc max-int)))
          :default (is false "overflow untested")))
 
     (testing "inc-nil"
