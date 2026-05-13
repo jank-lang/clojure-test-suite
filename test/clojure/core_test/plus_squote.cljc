@@ -1,7 +1,7 @@
 (ns clojure.core-test.plus-squote
   (:require [clojure.test :as t :refer [are deftest is]]
             [clojure.core-test.number-range :as r]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists big-int?] :as p]))
 
 (when-var-exists +'
   (deftest test-+'
@@ -73,15 +73,15 @@
     (is (p/thrown? (+' 1 nil)))
     (is (p/thrown? (+' nil 1)))
 
-    (is (instance? clojure.lang.BigInt (+' 0 1N)))
-    (is (instance? clojure.lang.BigInt (+' 0N 1)))
-    (is (instance? clojure.lang.BigInt (+' 0N 1N)))
-    (is (instance? clojure.lang.BigInt (+' 1N 1)))
-    (is (instance? clojure.lang.BigInt (+' 1 1N)))
-    (is (instance? clojure.lang.BigInt (+' 1N 1N)))
-    (is (instance? clojure.lang.BigInt (+' 1 5N)))
-    (is (instance? clojure.lang.BigInt (+' 1N 5)))
-    (is (instance? clojure.lang.BigInt (+' 1N 5N)))
+    (is (big-int? (+' 0 1N)))
+    (is (big-int? (+' 0N 1)))
+    (is (big-int? (+' 0N 1N)))
+    (is (big-int? (+' 1N 1)))
+    (is (big-int? (+' 1 1N)))
+    (is (big-int? (+' 1N 1N)))
+    (is (big-int? (+' 1 5N)))
+    (is (big-int? (+' 1N 5)))
+    (is (big-int? (+' 1N 5N)))
 
-    (is (instance? clojure.lang.BigInt (+' -1 r/min-int)))
-    (is (instance? clojure.lang.BigInt (+' r/min-int -1)))))
+    (is (big-int? (+' -1 r/min-int)))
+    (is (big-int? (+' r/min-int -1)))))

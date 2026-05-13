@@ -14,23 +14,23 @@ jobs:
   test-jvm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Prepare java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version: "21"
 
       - name: Install clojure tools
-        uses: DeLaGuardo/setup-clojure@13.2
+        uses: DeLaGuardo/setup-clojure@13.6.0
         with:
           cli: 1.12.0.1530
           lein: 2.11.2
           bb: latest
 
       - name: Cache clojure dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.m2/repository
@@ -46,23 +46,23 @@ jobs:
   test-cljs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Prepare java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version: "21"
 
       - name: Install clojure tools
-        uses: DeLaGuardo/setup-clojure@13.2
+        uses: DeLaGuardo/setup-clojure@13.6.0
         with:
           cli: 1.12.0.1530
           lein: 2.11.2
           bb: latest
 
       - name: Cache clojure dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.m2/repository
@@ -73,7 +73,7 @@ jobs:
           restore-keys: cljdeps-${{ env.CACHE_VERSION }}-
 
       - name: Prepare node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "23.x"
           check-latest: true
@@ -92,16 +92,16 @@ jobs:
   test-bb:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Prepare java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version: "21"
 
       - name: Install clojure tools
-        uses: DeLaGuardo/setup-clojure@13.2
+        uses: DeLaGuardo/setup-clojure@13.6.0
         with:
           cli: 1.12.0.1530
           lein: 2.11.2
@@ -111,7 +111,7 @@ jobs:
         run: bash <(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install) --dev-build --dir /tmp
 
       - name: Cache clojure dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.m2/repository
@@ -127,7 +127,7 @@ jobs:
   test-clr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Prepare dotnet
         uses: xt0rted/setup-dotnet@v1.5.0
@@ -143,11 +143,11 @@ jobs:
   test-basilisp:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          python-version: "3.14"
 
       - name: Install pip and dependencies
         run: |
@@ -161,7 +161,7 @@ jobs:
           source .venv/bin/activate
           BASILISP_TEST_PATH="$(pwd)/test" \
             BASILISP_TEST_FILE_PATTERN='.*\.(lpy|cljc)' \
-            basilisp test -p test -- -n auto
+            basilisp test -p test -- -n 0
 
   test-phel:
     runs-on: ubuntu-latest

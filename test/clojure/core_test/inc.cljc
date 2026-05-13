@@ -1,5 +1,6 @@
 (ns clojure.core-test.inc
   (:require [clojure.test :as t :refer [are deftest is testing]]
+            [clojure.core-test.number-range :refer [max-int]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists inc
@@ -30,6 +31,7 @@
          ;; Phel integers avoid overflow by being promoted to BigInteger
          :phel (is (not (= (inc php/PHP_INT_MAX) (+ 2 php/PHP_INT_MAX))))
          :lpy nil  ; Python integers cannot overflow
+         :jank (is (p/thrown? (inc max-int)))
          :default (is false "overflow untested")))
 
     (testing "inc-nil"

@@ -19,6 +19,7 @@
   #?(:cljs (integer? n)
      :lpy (integer? n)
      :phel (integer? n)
+     :jank (cpp/jank.runtime.is_big_integer n)
      :default
      (and (integer? n)
           (not (int? n)))))

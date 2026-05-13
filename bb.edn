@@ -31,7 +31,7 @@
                    (shell
                     {:extra-env {"BASILISP_TEST_PATH"         "./test"
                                  "BASILISP_TEST_FILE_PATTERN" ".*\\.(lpy|cljc)"}}
-                    "basilisp test -p test -- -n auto"))}
+                    "basilisp test -p test -- -n 0"))}
   test-all {:doc "Run tests under all dialects"
             :task (do
                    (run 'test-jvm)
