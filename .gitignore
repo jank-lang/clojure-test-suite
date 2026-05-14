@@ -28,3 +28,4 @@ __pycache__/
 poetry.lock
 *.egg-info/
 .DS_Store
+/vendor/

@@ -26,6 +26,7 @@ If possible, install them all and run the tests against each dialect before subm
 3. [Babashka](babashka.md)
 4. [Clojure CLR](clojureclr.md)
 5. [Basilisp](basilisp.md)
+6. [Phel](phel.md)
 
 ## How to Write a New Test
 
@@ -110,12 +111,13 @@ $ bb test-cljs       # run tests under ClojureScript on Node.js
 $ bb test-cljr       # run tests under ClojureCLR
 $ bb test-bb         # run tests under Babashka
 $ bb test-lpy        # run tests under Basilisp
+$ bb test-phel       # run tests under Phel
 $ bb test-all        # run tests for all dialects (sequentially)
 ```
 
 Ideally, you should run ~bb test-all~ *before* submitting a PR.
 This helps prevent the PR from failing during CI testing.
-The Clojure Test Suite CI testing runs the tests in Clojure, ClojureScript, Babashka, Basilisp, and ClojureCLR environments.
+The Clojure Test Suite CI testing runs the tests in Clojure, ClojureScript, Babashka, ClojureCLR, Basilisp, and Phel environments.
 
 ### Create commits
 
