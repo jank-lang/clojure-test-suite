@@ -14,16 +14,12 @@
               fails-second-run (fn [n] (if (> @n 0)
                                         (throw (ex-info "expected" {}))
                                         (swap! n inc)))]
-          (try
-            (last (repeatedly 2 #(fails-second-run state)))
-            (catch #?(:cljs    :default
-                      :default Exception) _ nil))
+          (is (p/thrown? (last (repeatedly 2 #(fails-second-run state)))))
           (is (= @state 1))))
       (testing "is lazy"
-        (let [state (atom 0)]
-          #_{:clj-kondo/ignore [:redundant-do]}
-          (do (repeatedly #(swap! state inc))
-              (is (= 0 @state))))))
+        (let [state (atom 0)
+              _ (repeatedly #(swap! state inc))]
+          (is (= 0 @state)))))
 
     (testing "Single argument"
       (is (= 0 (first (repeatedly +)))))
