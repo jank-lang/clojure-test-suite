@@ -107,13 +107,15 @@ There are Babashka tasks for running the tests under multiple environments:
 ```bash
 $ bb test-jvm        # run tests under Clojure JVM
 $ bb test-cljs       # run tests under ClojureScript on Node.js
+$ bb test-cljr       # run tests under ClojureCLR
 $ bb test-bb         # run tests under Babashka
 $ bb test-lpy        # run tests under Basilisp
+$ bb test-all        # run tests for all dialects (sequentially)
 ```
 
-Ideally, you should run all three of these *before* submitting a PR.
+Ideally, you should run ~bb test-all~ *before* submitting a PR.
 This helps prevent the PR from failing during CI testing.
-The Clojure Test Suite CI testing runs the tests in Clojure, ClojureScript, Babashka, and ClojureCLR environments.
+The Clojure Test Suite CI testing runs the tests in Clojure, ClojureScript, Babashka, Basilisp, and ClojureCLR environments.
 
 ### Create commits
 

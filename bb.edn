@@ -25,6 +25,10 @@
              :task (do
                     (banner "Running CLJS Tests")
                     (shell "npx shadow-cljs compile test"))}
+  test-cljr {:doc "Runs test in ClojureCLR"
+             :task (do
+                     (banner "Running CLJR Tests")
+                     (shell "cljr -X:test"))}
   test-lpy {:doc  "Run tests in Basilisp"
             :task (do
                    (banner "Running Basilisp Tests")
@@ -36,6 +40,7 @@
             :task (do
                    (run 'test-jvm)
                    (run 'test-cljs)
+                   (run 'test-cljr)
                    (run 'test-bb)
                    (run 'test-lpy))}
   test {:doc "Runs tests in multiple named dialects: jvm, bb, cljs, or lpy"
@@ -44,11 +49,12 @@
                        (println "Where <dialect> is one of:")
                        (println "  jvm     Runs tests in Clojure JVM")
                        (println "  cljs    Runs tests in ClojureScript")
+                       (println "  cljr    Runs tests in ClojureCLR")
                        (println "  bb      Runs tests in Babashka")
                        (println "  lpy     Runs tests in Basilisp")
                        (println "  all     Runs tests in all supported dialects")
                        (println "Tests are run in the order given."))]
-               (let [valid #{"jvm" "cljs" "bb" "lpy" "all"}
+               (let [valid #{"jvm" "cljs" "cljr" "bb" "lpy" "all"}
                      unknown (remove valid *command-line-args*)]
                 (cond
                  (not (some? (seq *command-line-args*)))
@@ -68,6 +74,7 @@
                   (case dialect
                    "jvm" (run 'test-jvm)
                    "cljs" (run 'test-cljs)
+                   "cljr" (run 'test-cljr)
                    "bb" (run 'test-bb)
                    "lpy" (run 'test-lpy))))))}
   new-test {:doc "Creates new test for the Clojure symbols named by <args>. Unqualified symbols assume clojure.core"
