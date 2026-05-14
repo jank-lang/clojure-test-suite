@@ -178,10 +178,25 @@ jobs:
           coverage: none
           tools: composer
 
+      - name: Cache Composer downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            composer-${{ matrix.php }}-
+
+      - name: Cache Phel compiled artifacts
+        uses: actions/cache@v4
+        with:
+          path: .phel/cache
+          key: phel-cache-${{ matrix.php }}-${{ hashFiles('composer.lock', 'phel-config.php') }}-${{ hashFiles('test/**/*.cljc', 'test/**/*.phel') }}
+          restore-keys: |
+            phel-cache-${{ matrix.php }}-${{ hashFiles('composer.lock', 'phel-config.php') }}-
+            phel-cache-${{ matrix.php }}-
+
       - name: Install dependencies
         run: composer install --no-interaction --no-ansi --no-progress
 
       - name: Run tests
-        env:
-          XDEBUG_MODE: off
-        run: php -d memory_limit=256M ./vendor/bin/phel test
+        run: composer test

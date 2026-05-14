@@ -110,12 +110,7 @@ $ bb test-jvm        # run tests under Clojure JVM
 $ bb test-cljs       # run tests under ClojureScript on Node.js
 $ bb test-bb         # run tests under Babashka
 $ bb test-lpy        # run tests under Basilisp
-```
-
-Phel has no Babashka task yet — run it directly (see [phel.md](phel.md)):
-
-```bash
-$ composer test
+$ bb test-phel       # run tests under Phel
 ```
 
 Ideally, you should run all of these *before* submitting a PR.
