@@ -21,21 +21,23 @@ Full suite:
 
 ```bash
 composer test
-# or directly:
-./vendor/bin/phel test
 ```
 
 A single file:
 
 ```bash
-./vendor/bin/phel test test/clojure/core_test/abs.cljc
+composer test -- test/clojure/core_test/abs.cljc
 ```
 
 A namespace:
 
 ```bash
-./vendor/bin/phel test --filter clojure.core-test.abs
+composer test -- --filter clojure.core-test.abs
 ```
+
+> The `composer test` script sets `XDEBUG_MODE=off`, which makes startup
+> noticeably faster than calling `./vendor/bin/phel test` directly when
+> Xdebug is installed system-wide.
 
 If the runner crashes before printing a report, re-run with `--testdox` or `-v` to locate the failing test.
 

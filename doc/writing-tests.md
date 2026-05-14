@@ -115,7 +115,7 @@ $ bb test-lpy        # run tests under Basilisp
 Phel has no Babashka task yet — run it directly (see [phel.md](phel.md)):
 
 ```bash
-$ ./vendor/bin/phel test
+$ composer test
 ```
 
 Ideally, you should run all of these *before* submitting a PR.

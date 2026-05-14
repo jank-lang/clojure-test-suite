@@ -3,6 +3,6 @@
         "phel-lang/phel-lang": "^0.37"
     },
     "scripts": {
-        "test": "./vendor/bin/phel test"
+        "test": "XDEBUG_MODE=off ./vendor/bin/phel test"
     }
 }
