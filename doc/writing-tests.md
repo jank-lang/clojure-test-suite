@@ -115,7 +115,7 @@ $ bb test-phel       # run tests under Phel
 $ bb test-all        # run tests for all dialects (sequentially)
 ```
 
-Ideally, you should run ~bb test-all~ *before* submitting a PR.
+Ideally, you should run `bb test-all` *before* submitting a PR.
 This helps prevent the PR from failing during CI testing.
 The Clojure Test Suite CI testing runs the tests in Clojure, ClojureScript, Babashka, ClojureCLR, Basilisp, and Phel environments.
 
