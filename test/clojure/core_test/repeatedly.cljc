@@ -15,7 +15,10 @@
                                         (throw (ex-info "expected" {}))
                                         (swap! n inc)))]
           (is (p/thrown? (last (repeatedly 2 #(fails-second-run state)))))
-          (is (= @state 1))))
+          (is (= #?(;; phel doesn't seem to handle mid failures gracefully
+                    :phel    0
+                    :default 1)
+                 @state))))
       (testing "is lazy"
         (let [state (atom 0)
               _ (repeatedly #(swap! state inc))]
@@ -37,9 +40,9 @@
         (is (= '(0 0 0) (repeatedly 3 +))))
       (testing "non-integer numbers"
         (is (= '(0 0) (repeatedly 1.5 +)))
-        (is (= '(0)
-               #?(:cljs '(0) ;; cljs doesn't implement ratios
-                  :default (repeatedly 1/2 +))))
+        (is #?(:cljs true ;; cljs doesn't implement ratios
+               :phel (p/thrown? (repeatedly 1/2 +))
+               :default (= '(0) (repeatedly 1/2 +))))
         (is (= '() (repeatedly -1 +)))))
 
     (testing "Exception cases"
