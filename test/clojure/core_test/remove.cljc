@@ -13,7 +13,6 @@
     (testing "Two arguments"
       (testing "pred returning nil keeps the item"
         (is (= '(nil false) (remove identity [nil true false 0 ""]))))
-      (is (= #{:b :c :d :e} (into #{} (remove #{:a} #{:a :b :c :d :e}))))
       (is (= #{:b :c :d :e} (into #{} (remove #{:a} #{:a :b :c :d :e})))))
 
     (testing "Exception cases"
