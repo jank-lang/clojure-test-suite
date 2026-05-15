@@ -13,7 +13,11 @@
     (testing "Two arguments"
       (testing "pred returning nil keeps the item"
         (is (= '(nil false) (remove identity [nil true false 0 ""]))))
-      (is (= #{:b :c :d :e} (into #{} (remove #{:a} #{:a :b :c :d :e}))))
+      (testing "empty and nil collections"
+        (is (= '() (remove identity nil)))
+        (is (= '() (remove identity []))))
+      (testing "infinite collection"
+        (is (= '(0 1 2) (take 3 (remove (partial < 5) (range))))))
       (is (= #{:b :c :d :e} (into #{} (remove #{:a} #{:a :b :c :d :e})))))
 
     (testing "Exception cases"
@@ -23,7 +27,7 @@
           ""
           #""
           0
-          []))
+          nil))
       (testing "non collection passed as second argument throws"
         (are [x] (p/thrown? (first (remove nil? x)))
           #""
