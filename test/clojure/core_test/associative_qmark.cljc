@@ -19,8 +19,12 @@
       false #{}
       false #{:a :b}
       false "ab"
-      false (seq "ab")                  ; seq
-      false (to-array [1 2 3])
+
+      #?@(:phel [true (seq "ab") ; PHP arrays are associative
+                 true (to-array [1 2 3])]
+          :default
+          [false (seq "ab")                  ; seq
+           false (to-array [1 2 3])])
       false :a
       false 'a
       false 1

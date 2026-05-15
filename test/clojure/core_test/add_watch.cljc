@@ -20,7 +20,8 @@
                                           (catch #?(:cljs :default
                                                     :clj clojure.lang.ExceptionInfo
                                                     :cljr clojure.lang.ExceptionInfo
-                                                    :lpy basilisp.lang.exception/ExceptionInfo) e
+                                                    :lpy basilisp.lang.exception/ExceptionInfo
+                                                    :phel Phel.Lang.ExInfoException) e
                                             (let [data (ex-data e)]
                                               (vswap! state conj data)))))]
                         (do-update a)
@@ -73,6 +74,7 @@
                          {:key :e :ref r :old 14 :new 15 :tester :err})))))
 
     #?@(:cljs []
+        :phel []
         :default
         [(def testvar-a 0)
          (def testvar-b 10)
@@ -145,6 +147,7 @@
 
     #?(:cljs nil
        :lpy nil
+       :phel nil
        :default
        (testing "watch ref"
          (let [state (volatile! [])
@@ -217,6 +220,7 @@
 
     #?@(:cljs []
         :lpy []
+        :phel []
         :default
         [(testing "watch agent"
            (let [state (volatile! [])

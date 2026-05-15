@@ -83,6 +83,7 @@
   (testing "regex"
     ;; Basilisp regex patterns compare equal and identical?
     #?(:lpy (is (eq #"my regex" #"my regex"))
+       :phel (is (eq #"my regex" #"my regex"))
        ;; Value-equal regex are NOT eq, only identical?
        :default (is (not (eq #"my regex" #"my regex"))))
     (is (let [r #"my regex"
