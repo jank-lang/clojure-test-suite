@@ -60,7 +60,7 @@
                        (println "  phel    Runs tests in Phel")
                        (println "  all     Runs tests in all supported dialects")
                        (println "Tests are run in the order given."))]
-               (let [valid #{"jvm" "cljs" "cljr" "bb" "lpy" "phel"  "all"}
+               (let [valid #{"jvm" "cljs" "cljr" "bb" "lpy" "phel" "all"}
                      unknown (remove valid *command-line-args*)]
                 (cond
                  (not (some? (seq *command-line-args*)))
