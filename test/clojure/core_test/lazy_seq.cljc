@@ -74,7 +74,17 @@
       (let [s (lazy-seq (lazy-seq (lazy-seq (cons 1 '(2 3)))))]
         (is (= 1 (first s)))
         (is (= 2 (first (next s))))
-        (is (= 3 (first (next (next s)))))))
+        (is (= 3 (first (next (next s))))))
+
+      ;; `nil` is a seq
+      (is (nil? (first (lazy-seq nil))))
+      (is (= '() (rest (lazy-seq nil))))
+      (is (nil? (next (lazy-seq nil))))
+
+      ;; the empty list is also a seq
+      (is (nil? (first (lazy-seq '()))))
+      (is (= '() (rest (lazy-seq '()))))
+      (is (nil? (next (lazy-seq '())))))
 
     (testing "negative cases"
       ;; The realized value of `lazy-seq` must be a seq (i.e., satisfy
