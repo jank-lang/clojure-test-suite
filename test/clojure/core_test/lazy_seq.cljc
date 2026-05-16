@@ -71,7 +71,17 @@
       ;; the lazy seq is realized, Clojure will keep realizing lazy
       ;; seqs until it bottoms out with something that is not a lazy
       ;; seq
-      (let [s (lazy-seq (lazy-seq (lazy-seq (cons 1 '(2 3)))))]
+      (let [s (lazy-seq
+               (lazy-seq
+                (lazy-seq
+                 (cons 1 (lazy-seq
+                          (lazy-seq
+                           (lazy-seq
+                            (lazy-seq (cons 2 (lazy-seq
+                                               (lazy-seq
+                                                (lazy-seq
+                                                 (lazy-seq
+                                                  (lazy-seq (cons 3 nil)))))))))))))))]
         (is (= 1 (first s)))
         (is (= 2 (first (next s))))
         (is (= 3 (first (next (next s))))))
