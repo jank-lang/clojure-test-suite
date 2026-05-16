@@ -23,7 +23,7 @@
       (if (zero? n)
         coll
         (recur (dec n) (rest coll)))))
-  
+
   (deftest test-lazy-seq
     ;; Note: lazy seqs are stateful. Once a lazy seq is realized, it
     ;; cannot be unrealized. Holding a reference to the lazy seq from
@@ -65,7 +65,18 @@
         (is (realized? (rest s))) ; `next` forces realization of next element
         (is (p/lazy-seq? (nthrest* s 10)))
         (is (not (realized? (nthrest* s 10))))))  ; but further elements not realized
-    (testing "negative-cases"
+
+    (testing "oddball cases"
+      ;; You can have lazy seqs wrapping lazy seqs. In this case, when
+      ;; the lazy seq is realized, Clojure will keep realizing lazy
+      ;; seqs until it bottoms out with something that is not a lazy
+      ;; seq
+      (let [s (lazy-seq (lazy-seq (lazy-seq (cons 1 '(2 3)))))]
+        (is (= 1 (first s)))
+        (is (= 2 (first (next s))))
+        (is (= 3 (first (next (next s)))))))
+
+    (testing "negative cases"
       ;; The realized value of `lazy-seq` must be a seq (i.e., satisfy
       ;; `ISeq` or its dialect-specific equivalent)
       (is (p/thrown? (first (lazy-seq 1))))) ; a long is not a seq
