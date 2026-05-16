@@ -37,6 +37,7 @@
   sort, typically for whether `x` conforms to a specific object type."
   [x]
   #?(:cljs (instance? LazySeq x)
+     :phel (phel.core/lazy-seq? x)
      :default (instance? clojure.lang.LazySeq x)))
 
 ;; --- Portable exception multimethod. ---
