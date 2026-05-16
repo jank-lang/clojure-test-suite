@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a715e87fd47198697005d49d2c3a63e4",
+    "content-hash": "3f53c92650283dcf04dddc2d93bd0dc5",
     "packages": [
         {
             "name": "amphp/amp",
@@ -242,16 +242,16 @@
         },
         {
             "name": "phel-lang/phel-lang",
-            "version": "v0.37.0",
+            "version": "v0.38.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phel-lang/phel-lang.git",
-                "reference": "091e9be0ff0f52ccfb4340e6776db1243ef96933"
+                "reference": "ecf3779e8c72e013b9c9751f4fa415d6b56d6c3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phel-lang/phel-lang/zipball/091e9be0ff0f52ccfb4340e6776db1243ef96933",
-                "reference": "091e9be0ff0f52ccfb4340e6776db1243ef96933",
+                "url": "https://api.github.com/repos/phel-lang/phel-lang/zipball/ecf3779e8c72e013b9c9751f4fa415d6b56d6c3b",
+                "reference": "ecf3779e8c72e013b9c9751f4fa415d6b56d6c3b",
                 "shasum": ""
             },
             "require": {
@@ -310,7 +310,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phel-lang/phel-lang/issues",
-                "source": "https://github.com/phel-lang/phel-lang/tree/v0.37.0"
+                "source": "https://github.com/phel-lang/phel-lang/tree/v0.38.0"
             },
             "funding": [
                 {
@@ -318,7 +318,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2026-05-12T13:13:01+00:00"
+            "time": "2026-05-16T18:05:12+00:00"
         },
         {
             "name": "psr/container",
