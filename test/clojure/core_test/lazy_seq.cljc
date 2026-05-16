@@ -61,6 +61,7 @@
       ;; realizes the element and returns a seq rather than a lazy
       ;; seq.
       (let [s (lazy-infinite-range)]
+        (next s)
         (is (realized? (rest s))) ; `next` forces realization of next element
         (is (p/lazy-seq? (nthrest* s 10)))
         (is (not (realized? (nthrest* s 10))))))  ; but further elements not realized
