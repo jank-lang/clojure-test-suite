@@ -32,6 +32,13 @@
       :phel #(phel.async/delay (/ % 1000)))
    ms))
 
+(defn lazy-seq?
+  "Is `x` a lazy seq. This requires a dialect-specific test of some
+  sort, typically for whether `x` conforms to a specific object type."
+  [x]
+  #?(:cljs (instance? LazySeq x)
+     :default (instance? clojure.lang.LazySeq x)))
+
 ;; --- Portable exception multimethod. ---
 
 ;; Tests that evaluating `form` throws an exception, without asserting the
