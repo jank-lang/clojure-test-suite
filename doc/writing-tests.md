@@ -26,12 +26,12 @@ If possible, install them all and run the tests against each dialect before subm
 3. [Babashka](babashka.md)
 4. [Clojure CLR](clojureclr.md)
 5. [Basilisp](basilisp.md)
+6. [Phel](phel.md)
 
 ## How to Write a New Test
 
-Step-by-step of selecting a function, claiming it, creating a new test, modifying the template, creating a PR.
+For this section, we assume:
 
-Assumptions:
 1. You know how to use Clojure.
 2. You know how to use Git and Github.
 3. You know how to submit a PR.
@@ -96,6 +96,28 @@ You will have to put quotes of various types around them or otherwise escape the
 
 At this point, you've created a file for your new tests and it contains boilerplate.
 Fire up your favorite editor and create appropriate tests for the function you have selected.
+
+As you use the standard `is` and `are` macros to create test assertions, follow a standard argument order: the expected value followed by the actual value.
+Thus, do this
+
+```clojure
+(is (= 0 (dec 1))
+
+(are [expected arg1 arg2] (= expected (+ arg1 arg2))
+  4 2 2)
+```
+
+not this
+
+```clojure
+(is (= (dec 1) 0))
+
+(are [arg1 arg2 expected] (= (+ arg1 arg2) expected)
+  2 2 4)
+```
+
+Having a consistent order throughout the tests helps reduce confusion when reading tests.
+
 See [Writing a Good Test](#writing-a-good-test), below, for more suggestions on how to craft good tests.
 
 ### Run Your New Test
@@ -107,13 +129,16 @@ There are Babashka tasks for running the tests under multiple environments:
 ```bash
 $ bb test-jvm        # run tests under Clojure JVM
 $ bb test-cljs       # run tests under ClojureScript on Node.js
+$ bb test-cljr       # run tests under ClojureCLR
 $ bb test-bb         # run tests under Babashka
 $ bb test-lpy        # run tests under Basilisp
+$ bb test-phel       # run tests under Phel
+$ bb test-all        # run tests for all dialects (sequentially)
 ```
 
-Ideally, you should run all three of these *before* submitting a PR.
+Ideally, you should run `bb test-all` *before* submitting a PR.
 This helps prevent the PR from failing during CI testing.
-The Clojure Test Suite CI testing runs the tests in Clojure, ClojureScript, Babashka, and ClojureCLR environments.
+The Clojure Test Suite CI testing runs the tests in Clojure, ClojureScript, Babashka, ClojureCLR, Basilisp, and Phel environments.
 
 ### Create commits
 

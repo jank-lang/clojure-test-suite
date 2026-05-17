@@ -1,0 +1,8 @@
+{
+    "require": {
+        "phel-lang/phel-lang": "^0.38"
+    },
+    "scripts": {
+        "test": "XDEBUG_MODE=off ./vendor/bin/phel test"
+    }
+}

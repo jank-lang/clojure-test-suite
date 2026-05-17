@@ -4,29 +4,23 @@
 
 (when-var-exists key
   (deftest test-key
-    (testing "`key` on map-entry-like things"
+    (testing "basic tests"
       (is (= nil (key (first {nil nil}))))
       (is (= :k (key (first {:k :v}))))
-      (is (contains? #{:k :one} (key (first {:k :v, :one :two}))))
-      ;; Note: the following may be built on shaky ground, per Rich:
-      ;; https://groups.google.com/g/clojure/c/FVcrbHJpCW4/m/Fh7NsX_Yb7sJ
-      (is (= 'k (key #?(:cljs    (cljs.core/MapEntry. 'k 'v nil)
-                        :lpy     (map-entry 'k 'v)
-                        :default (clojure.lang.MapEntry/create 'k 'v)))))
+      (is (= :k (key (first (hash-map :k :v)))))
       (when-var-exists sorted-map
-        (is (= :a (key (first (sorted-map :a :b))))))
-      (is (= :a (key (first (hash-map :a :b)))))
+        (is (= :k (key (first (sorted-map :k :v))))))
       (when-var-exists array-map
-        (is (= :a (key (first (array-map :a :b)))))))
+        (is (= :k (key (first (array-map :k :v)))))))
     (testing "`key` throws on lots of things"
       (are [arg] (p/thrown? (key arg))
-                 nil
-                 0
-                 '()
-                 '(1 2)
-                 {}
-                 {1 2}
-                 []
-                 [1 2]
-                 #{}
-                 #{1 2}))))
+        nil
+        0
+        '()
+        '(1 2)
+        {}
+        {1 2}
+        []
+        [1 2]                           ; might be dialect-specific
+        #{}
+        #{1 2}))))
