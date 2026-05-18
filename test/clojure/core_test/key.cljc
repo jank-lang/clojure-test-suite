@@ -21,6 +21,6 @@
         {}
         {1 2}
         []
-        [1 2]                           ; might be dialect-specific
+        [1 2]
         #{}
         #{1 2}))))

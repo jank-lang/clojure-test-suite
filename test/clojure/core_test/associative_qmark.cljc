@@ -23,7 +23,7 @@
       #?@(:phel [true (seq "ab") ; PHP arrays are associative
                  true (to-array [1 2 3])]
           :default
-          [false (seq "ab")                  ; seq
+          [false (seq "ab")             ; seq
            false (to-array [1 2 3])])
       false :a
       false 'a

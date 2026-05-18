@@ -42,21 +42,24 @@
      false :-1
      false 'a-sym
 
-     #?@(:cljs [true -1.0
-                true -1.0M
-                true -1N]
-         :lpy [false -1.0
+     #?@(:lpy [false -1.0
                false -1.0M
                true -1N
                false 0/2
                false 1/2
                false -1/2]
+         
          :phel [false -1.0
                 false -1.0M
                 true -1N
                 false 0/2
                 false 1/2
                 false -1/2]
+         
+         :cljs [true -1.0
+                true -1.0M
+                true -1N]
+         
          :default [false -1.0
                    false -1.0M
                    false -1N

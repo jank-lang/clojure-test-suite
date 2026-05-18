@@ -10,8 +10,8 @@
     ;; `java.lang.Byte`, but there is no predicate for it. Here, we just
     ;; test whether it's a fixed-length integer of some sort.
     (is (int? (byte 0)))
-    #?(:clj  (is (instance? java.lang.Byte (byte 0)))
-       :cljr (is (instance? System.Byte (byte 0))))
+    #?(:cljr (is (instance? System.Byte (byte 0)))
+       :clj  (is (instance? java.lang.Byte (byte 0))))
 
     ;; Check conversions and rounding from other numeric types
     ;; In ClojureCLR, Byte is unsigned, so we have to wipe all tests
@@ -46,16 +46,9 @@
            1    1.1M
            #?@(:cljr [] :default [-1 -1.1M])]))
 
-    #?@(:cljs
-        [ ;; ClojureScript `byte` just returns its argument
-         (is (= -128.5 (byte -128.5)))
-         (is (= -129 (byte -129)))
-         (is (= 128(byte 128)))
-         (is (= 127.5 (byte 127.5)))
-         (is (= "0" (byte "0")))
-         (is (= :0 (byte :0)))
-         (is (= [0] (byte [0])))
-         (is (= nil (byte nil)))]
+    #?@(:bb
+        [] ;; byte constructions goes via boxed argument
+
         :cljr
         [ ;; `byte` throws outside the range of 127 ... -128.
          (is (p/thrown? (byte -128.000001)))
@@ -67,7 +60,7 @@
          (is (p/thrown? (byte :0)))
          (is (p/thrown? (byte [0])))
          (is (p/thrown? (byte nil)))]
-        :bb [] ;; byte constructions goes via boxed argument
+
         :lpy
         [ ;; `byte` throws outside the range of 127 ... -128.
          (is (= -128 (byte -128.000001)))
@@ -79,6 +72,18 @@
          (is (p/thrown? (byte :0)))
          (is (p/thrown? (byte [0])))
          (is (p/thrown? (byte nil)))]
+
+        :cljs
+        [ ;; ClojureScript `byte` just returns its argument
+         (is (= -128.5 (byte -128.5)))
+         (is (= -129 (byte -129)))
+         (is (= 128(byte 128)))
+         (is (= 127.5 (byte 127.5)))
+         (is (= "0" (byte "0")))
+         (is (= :0 (byte :0)))
+         (is (= [0] (byte [0])))
+         (is (= nil (byte nil)))]
+
         :default
         [ ;; `byte` throws outside the range of 127 ... -128.
          (is (p/thrown? (byte -128.000001)))

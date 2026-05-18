@@ -9,5 +9,4 @@
     #?(:cljs (is (= 0 (bit-clear 1 nil)))
        :default (is (p/thrown? (bit-clear 1 nil))))
 
-    (are [ex a b] (= ex (bit-clear a b))
-      3 11 3)))
+    (is (= 3 (bit-clear 11 3)))))

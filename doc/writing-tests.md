@@ -215,7 +215,25 @@ Here are some things to do and think about when you're writing tests.
     For example, CLJS doesn't support rational numbers, so if you do tests with rationals, it can be helpful to put those in a separate `testing` form and then exclude those tests for CLJS.
 12. Let your mind go and try to consider what could go wrong with this function if it was implemented incorrectly, by someone just concerned about the "happy path" who wasn't thinking deeply about the corner cases.
     Write tests to validate those corner cases.
-   
+13. Follow the reader conditional order outlined in [Reader Conditional Order](#reader-conditional-order)
+
+## Reader Conditional Order
+
+When using reader conditionals (i.e. `#?(...)`) to write dialect specific code, please follow the following order:
+
+```clj
+#?(:bb      ...
+   :cljr    ...
+   :lpy     ...
+   :phel    ...
+   :jank    ...
+   :cljs    ...
+   :clj     ...
+   :default ...)
+```
+ 
+This is important not only for consistency but also for ensuring your test runs as expected since certain dialects, like Babashka, will use the Clojure branch of a reader conditional if it's listed higher than the Babashka branch of the reader conditional. 
+ 
 ## Things to Avoid
 
 There are a few things that will cause your PR to be rejected.

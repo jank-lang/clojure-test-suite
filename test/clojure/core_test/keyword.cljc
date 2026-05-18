@@ -81,23 +81,26 @@
     (is (nil? (namespace (keyword nil "hi"))))
     (is (= #?(:jank nil :default "") (namespace (keyword "" "hi"))))
     ;; But if name is nil, then maybe we throw or maybe we don't
-    #?(; CLJS creates a keyword that isn't
-       ; readable (symbol part is null string: ":abc/")
-       :cljs
+    #?(:jank
        nil
 
-       :jank
+       ; CLJS creates a keyword that isn't
+       ; readable (symbol part is null string: ":abc/")
+       :cljs
        nil
 
        :default
        (is (p/thrown? (keyword "abc" nil))))
 
-    #?@(:jank []
+    #?@(:jank
+        []
+
         :cljs
         [(is (= :abc/abc (keyword 'abc "abc")))
          (is (= :abc/abc (keyword "abc" 'abc)))
          (is (= :abc/abc (keyword :abc "abc")))
          (is (= :abc/abc (keyword "abc" :abc)))]
+
         :default
         [(is (p/thrown? (keyword 'abc "abc")))
          (is (p/thrown? (keyword "abc" 'abc)))

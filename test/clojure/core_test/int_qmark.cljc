@@ -37,17 +37,7 @@
       false :1
       false :-1
       false 'a-sym
-      #?@(:cljs
-          [true 0.0
-           true 1.0
-           true -1.0
-           true 0N
-           true 1N
-           true -1N
-           true 0.0M
-           true 1.0M
-           true -1.0M]
-          :lpy
+      #?@(:lpy
           [false 0.0
            false 1.0
            false -1.0
@@ -60,6 +50,7 @@
            true 0/2
            false 1/2
            false -1/2]
+          
           :phel
           [false 0.0
            false 1.0
@@ -73,6 +64,18 @@
            true 0/2
            false 1/2
            false -1/2]
+
+          :cljs
+          [true 0.0
+           true 1.0
+           true -1.0
+           true 0N
+           true 1N
+           true -1N
+           true 0.0M
+           true 1.0M
+           true -1.0M]
+          
           :default
           [false 0.0
            false 1.0

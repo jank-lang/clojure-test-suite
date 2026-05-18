@@ -3,9 +3,7 @@
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists assoc!
-
   (deftest test-assoc!
-
     (testing "maps"
       (testing "maps - single value"
         (are [expected map key val] (= expected (persistent! (assoc! (transient map) key val)))

@@ -45,19 +45,15 @@
                                        {:b "b"}))))
 
       (testing "vectors in position 2+ are treated as map-entries, per `conj`"
-        #?(:cljs    (is (p/thrown? (merge {} [])))
-           :clj     (is (p/thrown? (merge {} [])))
-           :default (is (p/thrown? (merge {} []))))
-        #?(:cljs    (is (p/thrown? (merge {} [:foo])))
-           :clj     (is (p/thrown? (merge {} [:foo])))
-           :default (is (p/thrown? (merge {} [:foo]))))
+        (is (p/thrown? (merge {} [])))
+        (is (p/thrown? (merge {} [:foo])))
         (is (= {:foo "foo"} (merge {} [:foo "foo"])))
         (is (= {"x" 1} (merge {} ["x" 1])))
         (is (= {'x 10, 'y 10} (merge {'x 10} ['y 10])))
         (testing "In CLJS (unlike other dialects) vectors with >2 arguments are treated as map-entries (where the latter values are ignored)"
-          #?(:cljs (is (= {:foo :bar} (merge {} [:foo :bar :baz]))),
-             :clj  (is (p/thrown? (merge {} [:foo :bar :baz]))),
-             :clr  (is (p/thrown? (merge {} [:foo :bar :baz])))))
+          #?(:clr  (is (p/thrown? (merge {} [:foo :bar :baz]))
+             :cljs (is (= {:foo :bar} (merge {} [:foo :bar :baz])))
+             :clj  (is (p/thrown? (merge {} [:foo :bar :baz]))))))
 
         (is (= {:foo "foo", :bar "bar"} (merge {} [:foo "foo"] [:bar "bar"])))
         (is (= {'x 10, 'y 10, 'z 10} (merge {'x 10} ['y 10] ['z 10])))
@@ -67,14 +63,14 @@
              :default (is (p/thrown? (merge {} [:foo :bar :baz :bar]))))))
 
       (testing "atomic values in position 2+ throw"
-        #?@(:cljs    [(is (p/thrown? (merge {} 1)))
-                      (is (p/thrown? (merge {} 1 2)))
-                      (is (p/thrown? (merge {} :foo)))
-                      (is (p/thrown? (merge {} "str")))]
-            :default [(is (p/thrown? (merge {} 1)))
-                      (is (p/thrown? (merge {} 1 2)))
-                      (is (p/thrown? (merge {} :foo)))
-                      (is (p/thrown? (merge {} "str")))]))
+        (is (p/thrown? (merge {} 1)))
+        (is (p/thrown? (merge {} 1 2)))
+        (is (p/thrown? (merge {} :foo)))
+        (is (p/thrown? (merge {} "str")))
+        (is (p/thrown? (merge {} 1)))
+        (is (p/thrown? (merge {} 1 2)))
+        (is (p/thrown? (merge {} :foo)))
+        (is (p/thrown? (merge {} "str")))))
 
       (testing "undefined `merge` behavior on non-maps"
         ;; Behavior for non-map input is undefined. We intentionally do not test
@@ -101,4 +97,4 @@
                       (is (p/thrown? (merge nil (range))))
                       #?@(:lpy [(is (= {1 2} (merge {} '(1 2))))]
                           :default [(is (p/thrown? (merge {} '(1 2))))])
-                      (is (p/thrown? (merge {} 1 2)))])))))
+                      (is (p/thrown? (merge {} 1 2)))]))))

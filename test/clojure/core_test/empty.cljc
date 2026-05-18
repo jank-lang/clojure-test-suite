@@ -22,8 +22,8 @@
            nil map
            nil r/max-int
            nil r/min-int
-           #?@(:cljs [nil (js/Date)]
-               :cljr [nil (new Object)]
+           #?@(:cljr [nil (new Object)]
+               :cljs [nil (js/Date)]
                :clj  [nil (new Object)])))
 
     (testing "meta preservation"
@@ -34,8 +34,8 @@
     (when-var-exists defrecord
       (testing "record"
         (defrecord Record [field])
-        #?@(:cljs [(is (= nil (empty (->Record ""))))]
-            :cljr  [(is (p/thrown? (empty (->Record ""))))]
+        #?@(:cljr  [(is (p/thrown? (empty (->Record ""))))]
+            :cljs [(is (= nil (empty (->Record ""))))]
             :clj  [(is (p/thrown? (empty (->Record ""))))])))
 
     (when-var-exists deftype

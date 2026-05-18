@@ -11,14 +11,15 @@
        :default (is (p/thrown? (bit-and-not 1 nil))))
 
     (are [ex a b] (= ex (bit-and-not a b))
-      0                        0                        0
-      8                        12                       4
-      0xff                     0xff                     0
-      0x80                     0xff                     0x7f
-      #?(:cljs -1 :default r/all-ones-int)           r/all-ones-int           0
-      0                        0                        r/all-ones-int
-      0                        r/all-ones-int           r/all-ones-int
-      r/full-width-checker-pos r/full-width-checker-pos 0
-      0                        r/full-width-checker-pos r/full-width-checker-pos
-      0                        r/full-width-checker-pos r/all-ones-int
-      r/full-width-checker-pos r/full-width-checker-pos r/full-width-checker-neg)))
+      0                                     0                        0
+      8                                     12                       4
+      0xff                                  0xff                     0
+      0x80                                  0xff                     0x7f
+      #?(:cljs -1
+         :default r/all-ones-int)           r/all-ones-int           0
+      0                                     0                        r/all-ones-int
+      0                                     r/all-ones-int           r/all-ones-int
+      r/full-width-checker-pos              r/full-width-checker-pos 0
+      0                                     r/full-width-checker-pos r/full-width-checker-pos
+      0                                     r/full-width-checker-pos r/all-ones-int
+      r/full-width-checker-pos              r/full-width-checker-pos r/full-width-checker-neg)))

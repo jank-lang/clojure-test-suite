@@ -19,27 +19,31 @@
      (double -1.0) -1.0M)
    (is (NaN? (double ##NaN)))
 
-   #?@(:cljs
-       ;; In cljs, `double` just returns the argument unchanged
-       [(is (= "0" (double "0")))
-        (is (= :0 (double :0)))]
-       :cljr
+   #?@(:cljr
        [(is (= 0.0 (double "0")))
         (is (p/thrown? (double :0)))]
+
        :lpy
        [(is (= 0.0 (double "0")))
         (is (p/thrown? (double :0)))]
+
+       :cljs
+       ;; In cljs, `double` just returns the argument unchanged
+       [(is (= "0" (double "0")))
+        (is (= :0 (double :0)))]
+
        :default
        [(is (p/thrown? (double "0")))
         (is (p/thrown? (double :0)))])
 
-   #?@(:clj
-       [(is (instance? java.lang.Double (double 0)))
-        (is (instance? java.lang.Double (double 0.0)))
-        (is (instance? java.lang.Double (double 0N)))
-        (is (instance? java.lang.Double (double 0.0M)))]
-       :cljr
+   #?@(:cljr
        [(is (instance? System.Double (double 0)))
         (is (instance? System.Double (double 0.0)))
         (is (instance? System.Double (double 0N)))
-        (is (instance? System.Double (double 0.0M)))])))
+        (is (instance? System.Double (double 0.0M)))]
+
+       :clj
+       [(is (instance? java.lang.Double (double 0)))
+        (is (instance? java.lang.Double (double 0.0)))
+        (is (instance? java.lang.Double (double 0N)))
+        (is (instance? java.lang.Double (double 0.0M)))])))

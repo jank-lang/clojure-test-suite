@@ -25,11 +25,13 @@
       (is (= nil (fnext #{"abcd"}))))
 
     (testing "exceptions"
-      #?@(:cljs
-          [(is (p/thrown? (fnext 0)))]
-          :lpy
+      #?@(:lpy
           [(is (p/thrown? (fnext 0)))
            (is (= nil (fnext \a)))]
+
+          :cljs
+          [(is (p/thrown? (fnext 0)))]
+          
           :default
           [(is (p/thrown? (fnext 0)))
            (is (p/thrown? (fnext \a)))]))))

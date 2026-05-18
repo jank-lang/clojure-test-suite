@@ -63,12 +63,12 @@
                             #{#?(:bb 'clojure.core_test.descendants/TestDescendantsRecord :default TestDescendantsRecord)} ::record))
 
       (testing "cannot get descendants by type inheritance"
-        #?@(:cljs
-            [(is (p/thrown? (descendants TestDescendantsProtocol)))
-             (is (p/thrown? (descendants js/Object)))]
-            :lpy
+        #?@(:lpy
             [(is (nil? (descendants TestDescendantsProtocol)))
              (is (p/thrown? (descendants python/object)))]
+            :cljs
+            [(is (p/thrown? (descendants TestDescendantsProtocol)))
+             (is (p/thrown? (descendants js/Object)))]
             :default
             [(is (nil? (descendants TestDescendantsProtocol)))
              (is (p/thrown? (descendants Object)))]))
@@ -114,11 +114,11 @@
                               nil datatypes ::a))
 
       (testing "cannot get descendants by type inheritance, whether the tag is in h or not"
-        (are [h] #?(:cljs    (p/thrown? (descendants h js/Object))
-                    :lpy     (p/thrown? (descendants h python/object))
+        (are [h] #?(:lpy     (p/thrown? (descendants h python/object))
+                    :cljs    (p/thrown? (descendants h js/Object))
                     :default (p/thrown? (descendants h Object)))
                  ; tag in h
-                 (derive (make-hierarchy) #?(:cljs js/Object :lpy python/object :default Object) ::object)
+                 (derive (make-hierarchy) #?(:lpy python/object :cljs js/Object :default Object) ::object)
                  ; tag not in h
                  diamond
                  datatypes))

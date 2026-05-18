@@ -18,12 +18,12 @@
       (is (= false (empty? "abc")))
       (is (= false (empty? #{0 \space "a"})))
       (is (= false (empty? [(repeat (range))])))
-      #?@(:cljs [(is (= false (empty? \space)))
-                 (is (p/thrown? (empty? 0)))
-                 (is (p/thrown? (empty? 0.0)))]
-          :lpy [(is (= false (empty? \space)))
+      #?@(:lpy [(is (= false (empty? \space)))
                 (is (p/thrown? (empty? 0)))
                 (is (p/thrown? (empty? 0.0)))]
+          :cljs [(is (= false (empty? \space)))
+                 (is (p/thrown? (empty? 0)))
+                 (is (p/thrown? (empty? 0.0)))]
           :default [(is (p/thrown? (empty? 0)))
                     (is (p/thrown? (empty? 0.0)))
                     (is (p/thrown? (empty? \space)))]))))

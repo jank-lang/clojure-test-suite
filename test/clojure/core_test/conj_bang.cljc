@@ -68,7 +68,7 @@
     (testing "bad shapes"
       (are [coll x] (p/thrown? (conj! coll x))
         ;; Basilisp is fairly liberal with its coercion to map entry, meaning
-        ;; that many two element sequences can be conj'ed to a map.
+        ;; that many two element sequences can be conj'd to a map.
         #?@(:lpy []
             :default
             [(transient {}) '(:a 1)

@@ -4,4 +4,4 @@
 
 (when-var-exists make-hierarchy
   (deftest test-make-hierarchy
-      (is (= {:parents {}, :descendants {}, :ancestors {}} (make-hierarchy)))))
+    (is (= {:parents {}, :descendants {}, :ancestors {}} (make-hierarchy)))))

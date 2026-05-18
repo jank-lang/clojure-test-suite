@@ -36,13 +36,15 @@
     (is (NaN? (max ##-Inf ##NaN ##Inf)))
     (is (NaN? (max ##NaN)))
 
-    #?@(:cljs
-        [(is (= 1 (max nil 1)))
-         (is (= 1 (max 1 nil)))]
-        :lpy
+    #?@(:lpy
         [(is (= "y" (max "x" "y")))
          (is (p/thrown? (max nil 1)))
          (is (p/thrown? (max 1 nil)))]
+
+        :cljs
+        [(is (= 1 (max nil 1)))
+         (is (= 1 (max 1 nil)))]
+        
         :default
         [(is (p/thrown? (max "x" "y")))
          (is (p/thrown? (max nil 1)))

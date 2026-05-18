@@ -24,30 +24,33 @@
       ;; float doesn't do anything, whereas in Clojure JVM it rounds
       ;; down to zero. All floating point numbers in Basilisp are doubles,
       ;; so float returns the same value here.
-      #?@(:cljs [r/min-double r/min-double]
-          :lpy [r/min-double r/min-double]
+      #?@(:lpy [r/min-double r/min-double]
           :phel [r/min-double r/min-double]
+          :cljs [r/min-double r/min-double]
           :default [(float 0.0) r/min-double]))
     (is (NaN? (float ##NaN)))
 
-    #?@(:cljs
-        [(is (= r/max-double (float r/max-double)))
-         (is (= ##Inf (float ##Inf)))
-         (is (= ##-Inf (float ##-Inf)))
-         (is (= "0" (float "0")))
-         (is (= :0 (float :0)))]
-        :cljr
+    #?@(:cljr
         [(is (p/thrown? (float r/max-double)))
          (is (p/thrown? (float ##Inf)))
          (is (p/thrown? (float ##-Inf)))
          (is (= (float 0.0) (float "0")))
          (is (p/thrown? (float :0)))]
+        
         :lpy
         [(is (= r/max-double (float r/max-double)))
          (is (= ##Inf (float ##Inf)))
          (is (= ##-Inf (float ##-Inf)))
          (is (= 0.0 (float "0")))
          (is (p/thrown? (float :0)))]
+
+        :cljs
+        [(is (= r/max-double (float r/max-double)))
+         (is (= ##Inf (float ##Inf)))
+         (is (= ##-Inf (float ##-Inf)))
+         (is (= "0" (float "0")))
+         (is (= :0 (float :0)))]
+
         :default
         [(is (p/thrown? (float r/max-double)))
          (is (p/thrown? (float ##Inf)))
@@ -55,13 +58,14 @@
          (is (p/thrown? (float "0")))
          (is (p/thrown? (float :0)))])
 
-    #?@(:clj
-        [(is (instance? java.lang.Float (float 0)))
-         (is (instance? java.lang.Float (float 0.0)))
-         (is (instance? java.lang.Float (float 0N)))
-         (is (instance? java.lang.Float (float 0.0M)))]
-       :cljr
+    #?@(:cljr
         [(is (instance? System.Single (float 0)))
          (is (instance? System.Single (float 0.0)))
          (is (instance? System.Single (float 0N)))
-         (is (instance? System.Single (float 0.0M)))])))
+         (is (instance? System.Single (float 0.0M)))]
+
+        :clj
+        [(is (instance? java.lang.Float (float 0)))
+         (is (instance? java.lang.Float (float 0.0)))
+         (is (instance? java.lang.Float (float 0N)))
+         (is (instance? java.lang.Float (float 0.0M)))])))

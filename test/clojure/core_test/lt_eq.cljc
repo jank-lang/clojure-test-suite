@@ -96,21 +96,24 @@
       ;; `<=` only compares numbers, except in ClojureScript (really
       ;; JavaScript under the hood) where comparisons are just a bit
       ;; of a mess.
-      #?@(:cljs
-          [(is (= true (<= nil 1)))
-           (is (= false (<= 1 nil)))
-           (is (= true (<= nil 1 2)))
-           (is (= false (<= 1 2 nil)))]
-          :cljr
+      #?@(:cljr
           [(is (p/thrown? (<= nil 1)))
            (is (p/thrown? (<= 1 nil)))
            (is (p/thrown? (<= nil 1 2)))
            (is (p/thrown? (<= 1 2 nil)))]
+          
           :lpy
           [(is (p/thrown? (<= nil 1)))
            (is (p/thrown? (<= 1 nil)))
            (is (p/thrown? (<= nil 1 2)))
            (is (p/thrown? (<= 1 2 nil)))]
+
+          :cljs
+          [(is (= true (<= nil 1)))
+           (is (= false (<= 1 nil)))
+           (is (= true (<= nil 1 2)))
+           (is (= false (<= 1 2 nil)))]
+          
           :default
           [(is (p/thrown? (<= nil 1)))
            (is (p/thrown? (<= 1 nil)))

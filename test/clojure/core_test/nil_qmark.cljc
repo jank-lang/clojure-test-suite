@@ -19,5 +19,7 @@
         '()   false
         []    false))
 
+    #?(:cljs (is (nil? js/undefined)))
+    
     (testing "infinite-sequence"
       (is (= false (nil? (range)))))))

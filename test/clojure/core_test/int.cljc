@@ -11,8 +11,8 @@
     ;; predicate for it. Here, we just test whether it's a fixed-length
     ;; integer of some sort.
     (is (int? (int 0)))
-    #?(:clj  (is (instance? java.lang.Integer (int 0)))
-       :cljr (is (instance? System.Int32 (int 0))))
+    #?(:cljr (is (instance? System.Int32 (int 0)))
+       :clj  (is (instance? java.lang.Integer (int 0))))
 
     ;; Check conversions and rounding from other numeric types
     (are [expected x] (= expected (int x))
@@ -37,8 +37,9 @@
            0    1/10
            0    -1/10]))
 
-    #?@(:cljs []
-        :bb []
+    #?@(:bb
+        []
+
         :cljr
         [ ;; `int` throws outside the range of 32767 ... -32768.
          (is (p/thrown? (int -2147483648.000001)))
@@ -62,6 +63,10 @@
          (is (p/thrown? (int :0)))
          (is (p/thrown? (int [0])))
          (is (p/thrown? (int nil)))]
+
+        :cljs
+        []
+        
         :default
         [ ;; `int` throws outside the range of 32767 ... -32768.
          (is (p/thrown? (int -2147483648.000001)))

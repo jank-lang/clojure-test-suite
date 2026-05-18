@@ -16,12 +16,14 @@
       (is (= [\space] (not-empty [\space])))
       (is (= '(nil) (not-empty '(nil))))
       (is (= "abc" (not-empty "abc")))
-      #?@(:cljs [(is (= "a" (not-empty \a)))
-                 (is (p/thrown? (not-empty 0)))
-                 (is (p/thrown? (not-empty 0.0)))]
-          :lpy [(is (= "a" (not-empty \a)))
+      #?@(:lpy [(is (= "a" (not-empty \a)))
                 (is (p/thrown? (not-empty 0)))
                 (is (p/thrown? (not-empty 0.0)))]
+
+          :cljs [(is (= "a" (not-empty \a)))
+                 (is (p/thrown? (not-empty 0)))
+                 (is (p/thrown? (not-empty 0.0)))]
+          
           :default [(is (p/thrown? (not-empty \a)))
                     (is (p/thrown? (not-empty 0)))
                     (is (p/thrown? (not-empty 0.0)))]))))

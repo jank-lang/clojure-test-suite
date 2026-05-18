@@ -27,14 +27,14 @@
         (is (= {:a "a"} (meta (atom nil :meta (array-map :a "a"))))))
       (when-var-exists clojure.core/hash-map
         (is (= {:a "a"} (meta (atom nil :meta (hash-map :a "a"))))))
-      #?(:cljs (is (= 5 (meta (atom nil :meta 5)))),
-         :lpy (is (= 5 (meta (atom nil :meta 5)))),
+      #?(:lpy (is (= 5 (meta (atom nil :meta 5))))
+         :cljs (is (= 5 (meta (atom nil :meta 5))))
          :default (is (p/thrown? (atom nil :meta 5))))
-      #?(:cljs (is (= #{} (meta (atom nil :meta #{})))),
-         :lpy (is (= #{} (meta (atom nil :meta #{})))),
+      #?(:lpy (is (= #{} (meta (atom nil :meta #{}))))
+         :cljs (is (= #{} (meta (atom nil :meta #{}))))
          :default (is (p/thrown? (atom nil :meta #{}))))
-      #?(:cljs (is (= [] (meta (atom nil :meta (vector))))),
-         :lpy (is (= [] (meta (atom nil :meta (vector))))),
+      #?(:lpy (is (= [] (meta (atom nil :meta (vector)))))
+         :cljs (is (= [] (meta (atom nil :meta (vector)))))
          :default (is (p/thrown? (atom nil :meta (vector))))))
 
     (testing "validator-fn"
@@ -75,21 +75,21 @@
       (testing "always-falsey validator can't initialize atom"
         #?(:cljs (testing "Broken but current behavior due to CLJS-3447"
                    ;; FIXME when https://clojure.atlassian.net/browse/CLJS-3447 is fixed
-                   (is (= {} (deref (atom {} :validator (constantly nil)))))),
+                   (is (= {} (deref (atom {} :validator (constantly nil))))))
            :default (is (p/thrown? (atom {} :validator (constantly nil)))))
         #?(:cljs (testing "Broken but current behavior due to CLJS-3447"
                    ;; FIXME when https://clojure.atlassian.net/browse/CLJS-3447 is fixed
-                   (is (= {} (deref (atom {} :validator (constantly false)))))),
+                   (is (= {} (deref (atom {} :validator (constantly false))))))
            :default (is (p/thrown? (atom {} :validator (constantly false)))))
         #?(:cljs (testing "Broken but current behavior due to CLJS-3447"
                    ;; FIXME when https://clojure.atlassian.net/browse/CLJS-3447 is fixed
-                   (is (= {} (deref (atom {} :validator #(when true (throw (ex-info "boom" {})))))))),
+                   (is (= {} (deref (atom {} :validator #(when true (throw (ex-info "boom" {}))))))))
            :default (is (p/thrown? (atom {} :validator #(when true (throw (ex-info "boom" {}))))))))
 
       (testing "conditional validators are obeyed at creation, swap! and reset!"
         #?(:cljs (testing "Broken but current behavior due to CLJS-3447"
                    ;; FIXME when https://clojure.atlassian.net/browse/CLJS-3447 is fixed
-                   (is (= #{} (deref (atom #{} :validator (fn [v] (some string? v))))))),
+                   (is (= #{} (deref (atom #{} :validator (fn [v] (some string? v)))))))
            :default (is (p/thrown? (atom #{} :validator (fn [v] (some string? v))))))
         (let [some-strings (atom #{"str"} :validator (fn [v] (some string? v)))]
           (is (= #{"str" :not-a-string} (swap! some-strings conj :not-a-string)))

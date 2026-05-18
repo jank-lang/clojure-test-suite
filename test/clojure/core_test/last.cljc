@@ -17,11 +17,13 @@
       (is (= nil (last nil))))
 
     (testing "exceptions"
-      #?@(:cljs
-          [(is (p/thrown? (last 0)))]
-          :lpy
+      #?@(:lpy
           [(is (= \a (last \a)))
            (is (p/thrown? (last 0)))]
+
+          :cljs
+          [(is (p/thrown? (last 0)))]
+          
           :default
           [(is (p/thrown? (last \a)))
            (is (p/thrown? (last 0)))]))))

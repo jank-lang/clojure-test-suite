@@ -115,10 +115,11 @@
       (are [f col] (p/thrown? (apply min-key f col))
         nil [1 2]
         nil [2 1 3]
-        #?@(:cljs []
-            :lpy
+        #?@(:lpy
             [identity [{:val 1} {:val 2}]
              identity [{:val 2} {:val 1} {:val 3}]]
+            :cljs
+            []
             :default
             [identity ["x" "y"]
              identity ["y" "x" "z"]

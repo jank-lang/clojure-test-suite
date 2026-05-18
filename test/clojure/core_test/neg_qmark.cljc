@@ -32,14 +32,16 @@
            false 1/2
            true  -1/2]))
 
-    #?@(:cljs
-        [(is (not (neg? nil)))
-         (is (not (neg? false))) ; Prints warning
-         (is (not (neg? true)))] ; Prints warning
-        :lpy
+    #?@(:lpy
         [(is (p/thrown? (neg? nil)))
          (is (not (neg? false)))
          (is (not (neg? true)))]
+
+        :cljs
+        [(is (not (neg? nil)))
+         (is (not (neg? false))) ; Prints warning
+         (is (not (neg? true)))] ; Prints warning
+        
         :default
         [(is (p/thrown? (neg? nil)))
          (is (p/thrown? (neg? false)))

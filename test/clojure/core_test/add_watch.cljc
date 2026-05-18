@@ -17,11 +17,11 @@
                       (let [do-update (fn [x]
                                         (try
                                           (swap! x inc)
-                                          (catch #?(:cljs :default
-                                                    :clj clojure.lang.ExceptionInfo
-                                                    :cljr clojure.lang.ExceptionInfo
+                                          (catch #?(:cljr clojure.lang.ExceptionInfo
                                                     :lpy basilisp.lang.exception/ExceptionInfo
-                                                    :phel Phel.Lang.ExInfoException) e
+                                                    :phel Phel.Lang.ExInfoException
+                                                    :cljs :default
+                                                    :clj clojure.lang.ExceptionInfo) e
                                             (let [data (ex-data e)]
                                               (vswap! state conj data)))))]
                         (do-update a)
@@ -73,8 +73,8 @@
           (is (contains? (set (keyed :e @state))
                          {:key :e :ref r :old 14 :new 15 :tester :err})))))
 
-    #?@(:cljs []
-        :phel []
+    #?@(:phel []
+        :cljs []
         :default
         [(def testvar-a 0)
          (def testvar-b 10)
@@ -145,9 +145,9 @@
                (is (contains? (set (keyed :e @state))
                               {:key :e :ref #'testvar-b :old 14 :new 15 :tester :err})))))])
 
-    #?(:cljs nil
-       :lpy nil
+    #?(:lpy nil
        :phel nil
+       :cljs nil
        :default
        (testing "watch ref"
          (let [state (volatile! [])
@@ -218,9 +218,9 @@
              (is (= [{:key :e :ref r :old 16 :new 17 :tester :err}]
                     (keyed :e @state)))))))
 
-    #?@(:cljs []
-        :lpy []
+    #?@(:lpy []
         :phel []
+        :cljs []
         :default
         [(testing "watch agent"
            (let [state (volatile! [])

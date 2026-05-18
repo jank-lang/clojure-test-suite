@@ -5,8 +5,8 @@
 (when-var-exists ancestors
 
   ; Some classes for testing ancestors by type inheritance
-  (def AncestorT #?(:cljs js/Object :lpy python/object :phel ArrayIterator :default Object))
-  (def ChildT #?(:cljs :default :lpy basilisp.lang.set/PersistentSet :phel RecursiveArrayIterator :default clojure.lang.PersistentHashSet))
+  (def AncestorT #?(:lpy python/object :phel ArrayIterator :cljs js/Object :default Object))
+  (def ChildT #?(:lpy basilisp.lang.set/PersistentSet :phel RecursiveArrayIterator :cljs :default :default clojure.lang.PersistentHashSet))
 
   ; Some custom types for testing ancestors by type inheritance
   (defprotocol TestAncestorsProtocol)
@@ -66,14 +66,14 @@
                             #{'ns/p-0} ::p-1
                             nil ::p-2)
         #?(:bb      "bb doesn't report ancestors by relationship globally defined with derive for custom types
-                   (https://github.com/babashka/babashka/issues/1893)"
+                     (https://github.com/babashka/babashka/issues/1893)"
            :default (is (= #{::record ::object} (->> (ancestors TestAncestorsRecord)
                                                      (filter keyword?) ; filter out parents by type, tested in next sections
                                                      set)))))
 
       (testing "returns ancestors by type inheritance when tag is a class"
-        #?(:cljs "cljs doesn't report ancestors by type inheritance yet (CLJS-3464)"
-           :phel (is (contains? (ancestors ChildT) AncestorT))
+        #?(:phel (is (contains? (ancestors ChildT) AncestorT))
+           :cljs "cljs doesn't report ancestors by type inheritance yet (CLJS-3464)"
            :clj  (is (contains? (ancestors ChildT) AncestorT))))
 
       #?(:bb      "bb doesn't report ancestors by type inheritance for custom types"

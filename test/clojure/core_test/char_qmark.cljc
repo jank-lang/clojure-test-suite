@@ -28,7 +28,7 @@
       false 0N
       false 1N
       false -1N
-      #?@(:cljs [] ; cljs doesn't have ratios
+      #?@(:cljs [] ; CLJS doesn't have ratios
           :default
           [false 0/2
            false 1/2
@@ -40,15 +40,18 @@
       false true
       false false
       false "a string"
-      #?@(:cljs ; In cljs, chars are single element strings
+      #?@(:lpy
           [true "0"
            true "1"]
-          :lpy
-          [true "0"
-           true "1"]
+          
           :phel
           [true "0"
            true "1"]
+
+          :cljs ; In CLJS, chars are single element strings
+          [true "0"
+           true "1"]
+          
           :default
           [false "0"
            false "1"])
@@ -65,5 +68,4 @@
       false :0
       false :1
       false :-1
-      false 'a-sym))
-  )
+      false 'a-sym)))

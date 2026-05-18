@@ -9,9 +9,9 @@
         nil                    true
         false                  true
         true                   false
-        #?(:clj (Object.)
-           :cljr (Object.)
+        #?(:cljr (Object.)
            :cljs #js {}
+           :clj (Object.)
            :default :anything) false))
 
     (testing "infinite-sequence"

@@ -24,15 +24,15 @@
       (is (NaN? (dec ##NaN))))
 
     (testing "underflow"
-      #?(:clj (is (p/thrown? (dec Long/MIN_VALUE)))
-         :cljr (is (p/thrown? (dec Int64/MinValue)))
-         :cljs (is (= (dec js/Number.MIN_SAFE_INTEGER) (- js/Number.MIN_SAFE_INTEGER 2)))
-         :phel (is (= (dec php/PHP_INT_MIN) (dec php/PHP_INT_MIN)))
-         :lpy []  ; Python integers cannot underflow
-         :jank (is (p/thrown? (dec min-int)))
+      #?(:cljr    (is (p/thrown? (dec Int64/MinValue)))
+         :phel    (is (= (dec php/PHP_INT_MIN) (dec php/PHP_INT_MIN)))
+         :lpy     []  ; Python integers cannot underflow
+         :jank    (is (p/thrown? (dec min-int)))
+         :cljs    (is (= (dec js/Number.MIN_SAFE_INTEGER) (- js/Number.MIN_SAFE_INTEGER 2)))
+         :clj     (is (p/thrown? (dec Long/MIN_VALUE)))
          :default (is false "TODO underflow")))
 
     (testing "dec-nil"
       ;; ClojureScript says (= -1 (dec nil)) because JavaScript casts null to 0
-      #?(:cljs (is (= -1 (dec nil)))
+      #?(:cljs    (is (= -1 (dec nil)))
          :default (is (p/thrown? (dec nil)))))))

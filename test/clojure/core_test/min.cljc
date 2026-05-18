@@ -36,13 +36,15 @@
     (is (NaN? (min ##-Inf ##NaN ##Inf)))
     (is (NaN? (min ##NaN)))
 
-    #?@(:cljs
-        [(is (nil? (min nil 1)))                            ; nil acts like zero
-         (is (nil? (min 1 nil)))]
-        :lpy
+    #?@(:lpy
         [(is (= "x" (min "x" "y")))
          (is (p/thrown? (min nil 1)))
          (is (p/thrown? (min 1 nil)))]
+
+        :cljs
+        [(is (nil? (min nil 1)))                            ; nil acts like zero
+         (is (nil? (min 1 nil)))]
+        
         :default
         [(is (p/thrown? (min "x" "y")))
          (is (p/thrown? (min nil 1)))

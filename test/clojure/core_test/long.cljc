@@ -9,8 +9,8 @@
     ;; but there is no predicate for it. Here, we just test whether it's
     ;; a fixed-length integer of some sort.
     (is (int? (int 0)))
-    #?(:clj (is (instance? java.lang.Long (long 0)))
-       :cljr (is (instance? System.Int64 (long 0))))
+    #?(:cljr (is (instance? System.Int64 (long 0)))
+       :clj (is (instance? java.lang.Long (long 0))))
 
     ;; Check conversions and rounding from other numeric types
     (are [expected x] (= expected (long x))
@@ -35,29 +35,32 @@
            0    1/10
            0    -1/10]))
 
-    #?@(:cljs [] ; In CLJS all numbers are double-precision floating point
-        :lpy [] ; Python VMs integer types are arbitrary precision and have no min or max
+    #?@(:lpy [] ; Python VMs integer types are arbitrary precision and have no min or max
+        :cljs [] ; In CLJS all numbers are double-precision floating point
         :default
         ;; `long` throws outside the range of 9223372036854775807 ... -9223372036854775808
         [(is (p/thrown? (long -9223372036854775809)))
          (is (p/thrown? (long 9223372036854775808)))])
 
     ;; Check handling of other types
-    #?@(:cljs
-        [(is (= 0 (long "0"))) ; JavaScript peeking through?
-         (is (NaN? (long :0)))
-         (is (NaN? (long [0])))
-         (is (= 0 (long nil)))] ; Hm. Interesting.
-        :cljr
+    #?@(:cljr
         [(is (= 0 (long "0")))
          (is (p/thrown? (long :0)))
          (is (p/thrown? (long [0])))
          (is (p/thrown? (long nil)))]
+        
         :lpy
         [(is (= 0 (long "0")))
          (is (p/thrown? (long :0)))
          (is (p/thrown? (long [0])))
          (is (p/thrown? (long nil)))]
+
+        :cljs
+        [(is (= 0 (long "0"))) ; JavaScript peeking through?
+         (is (NaN? (long :0)))
+         (is (NaN? (long [0])))
+         (is (= 0 (long nil)))] ; Hm. Interesting.
+        
         :default
         [(is (p/thrown? (long "0")))
          (is (p/thrown? (long :0)))

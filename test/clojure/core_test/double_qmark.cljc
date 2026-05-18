@@ -12,6 +12,7 @@
               true -1
               true r/max-int
               true r/min-int]
+             
              :default
              [false 0
               false 1
@@ -21,24 +22,30 @@
          true  0.0
          true  1.0
          true  -1.0
-         #?@(:jank
-             [;; Since currently jank doesn't support `float` (`jank::f32`) literal values only `double` (`jank::f64`)
-              ;; literal values, there is no difference in the implementation of `float` and `double`.
-              true (float 0.0)
-              true (float 1.0)
-              true (float -1.0)]
-             :cljs
+         #?@(:lpy
              [true (float 0.0)
               true (float 1.0)
               true (float -1.0)]
-             :lpy
-             [true (float 0.0)
-              true (float 1.0)
-              true (float -1.0)]
+             
              :phel
              [true (float 0.0)
               true (float 1.0)
               true (float -1.0)]
+
+             :jank
+             [;; Since currently jank doesn't support `float` (`jank::f32`)
+              ;; literal values only `double` (`jank::f64`) literal values,
+              ;; there is no difference in the implementation of `float` and
+              ;; `double`.
+              true (float 0.0)
+              true (float 1.0)
+              true (float -1.0)]
+
+             :cljs
+             [true (float 0.0)
+              true (float 1.0)
+              true (float -1.0)]
+
              :default
              [false (float 0.0) ; surprising since (float? (double 0.0)) = true
               false (float 1.0) ; surprising since (float? (double 1.0)) = true
@@ -59,6 +66,7 @@
               true 0.0M
               true 1.0M
               true -1.0M]
+
              :default
              [false 0N
               false 1N

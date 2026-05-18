@@ -3,7 +3,6 @@
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists case
-
   ;; Note that this eclectic group of test value types tests the :hashes path in Clojure
   (defn positive-tests
     [x]
@@ -74,24 +73,7 @@
         'sym :sym-result
         :kw :kw-result
         "string" :string-result
-        #?@(:cljs ; all numbers are double-precision floating point in CLJS
-            [1 :integer-result
-             1.0 :integer-result
-             1N :integer-result
-             1.0M :integer-result
-             2 :big-integer-result
-             2N :big-integer-result
-             2.0 :big-integer-result
-             2.0M :big-integer-result
-             3 :double-result
-             3N :double-result
-             3.0 :double-result
-             3.0M :double-result
-             4 :big-decimal-result
-             4N :big-decimal-result
-             4.0 :big-decimal-result
-             4.0M :big-decimal-result]
-            ;; In Python, 1 and True share the same hash value, so it is not
+        #?@(;; In Python, 1 and True share the same hash value, so it is not
             ;; possible to distinguish between them in a map. The "winning"
             ;; value is always the value which is inserted into the map last.
             :lpy
@@ -111,6 +93,25 @@
              4N :big-decimal-result
              4.0 :big-decimal-result
              4.0M :big-decimal-result]
+
+            :cljs ; all numbers are double-precision floating point in CLJS
+            [1 :integer-result
+             1.0 :integer-result
+             1N :integer-result
+             1.0M :integer-result
+             2 :big-integer-result
+             2N :big-integer-result
+             2.0 :big-integer-result
+             2.0M :big-integer-result
+             3 :double-result
+             3N :double-result
+             3.0 :double-result
+             3.0M :double-result
+             4 :big-decimal-result
+             4N :big-decimal-result
+             4.0 :big-decimal-result
+             4.0M :big-decimal-result]
+
             :default
             [1 :integer-result
              1N :integer-result ; JVM sees ints and big ints as equal for int-sized values
