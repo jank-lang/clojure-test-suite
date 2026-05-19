@@ -21,7 +21,7 @@
                                                     :clj clojure.lang.ExceptionInfo
                                                     :cljr clojure.lang.ExceptionInfo
                                                     :lpy basilisp.lang.exception/ExceptionInfo
-                                                    :phel Phel.Lang.ExInfoException) e
+                                                    :phel Phel.Lang.ExceptionInfo) e
                                             (let [data (ex-data e)]
                                               (vswap! state conj data)))))]
                         (do-update a)

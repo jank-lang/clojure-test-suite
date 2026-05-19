@@ -1,6 +1,6 @@
 {
     "require": {
-        "phel-lang/phel-lang": "^0.38"
+        "phel-lang/phel-lang": "^0.39"
     },
     "scripts": {
         "test": "XDEBUG_MODE=off ./vendor/bin/phel test"
