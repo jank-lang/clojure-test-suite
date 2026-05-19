@@ -140,63 +140,70 @@ jobs:
       - name: Run ClojureCLR Tests
         run: cljr -X:test
 
-  test-basilisp:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+  # These are disabled for now until we add some parity reporting mechanism. Our priority
+  # right now is filling out the test suite and newer dialects have far more failures which
+  # get in the way of us writing the tests. Dialect devs are still encouraged to run this
+  # test suite in their forks. Meanwhile, we're working on implementing a parity reporting
+  # mechanism so that we can enable all of these again, and more, and get nice reports
+  # about their compatibility.
+  #
+  #test-basilisp:
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.14"
+  #    - uses: actions/setup-python@v6
+  #      with:
+  #        python-version: "3.14"
 
-      - name: Install pip and dependencies
-        run: |
-          pip install -U pip
-          python -m venv .venv
-          source .venv/bin/activate
-          pip install .
+  #    - name: Install pip and dependencies
+  #      run: |
+  #        pip install -U pip
+  #        python -m venv .venv
+  #        source .venv/bin/activate
+  #        pip install .
 
-      - name: Run tests
-        run: |
-          source .venv/bin/activate
-          BASILISP_TEST_PATH="$(pwd)/test" \
-            BASILISP_TEST_FILE_PATTERN='.*\.(lpy|cljc)' \
-            basilisp test -p test -- -n 0
+  #    - name: Run tests
+  #      run: |
+  #        source .venv/bin/activate
+  #        BASILISP_TEST_PATH="$(pwd)/test" \
+  #          BASILISP_TEST_FILE_PATTERN='.*\.(lpy|cljc)' \
+  #          basilisp test -p test -- -n 0
 
-  test-phel:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php: ['8.4', '8.5']
-    steps:
-      - uses: actions/checkout@v4
+  #test-phel:
+  #  runs-on: ubuntu-latest
+  #  strategy:
+  #    fail-fast: false
+  #    matrix:
+  #      php: ['8.4', '8.5']
+  #  steps:
+  #    - uses: actions/checkout@v4
 
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          coverage: none
-          tools: composer
+  #    - uses: shivammathur/setup-php@v2
+  #      with:
+  #        php-version: ${{ matrix.php }}
+  #        coverage: none
+  #        tools: composer
 
-      - name: Cache Composer downloads
-        uses: actions/cache@v4
-        with:
-          path: ~/.composer/cache
-          key: composer-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
-          restore-keys: |
-            composer-${{ matrix.php }}-
+  #    - name: Cache Composer downloads
+  #      uses: actions/cache@v4
+  #      with:
+  #        path: ~/.composer/cache
+  #        key: composer-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
+  #        restore-keys: |
+  #          composer-${{ matrix.php }}-
 
-      - name: Cache Phel compiled artifacts
-        uses: actions/cache@v4
-        with:
-          path: .phel/cache
-          key: phel-cache-${{ matrix.php }}-${{ hashFiles('composer.lock', 'phel-config.php') }}-${{ hashFiles('test/**/*.cljc', 'test/**/*.phel') }}
-          restore-keys: |
-            phel-cache-${{ matrix.php }}-${{ hashFiles('composer.lock', 'phel-config.php') }}-
-            phel-cache-${{ matrix.php }}-
+  #    - name: Cache Phel compiled artifacts
+  #      uses: actions/cache@v4
+  #      with:
+  #        path: .phel/cache
+  #        key: phel-cache-${{ matrix.php }}-${{ hashFiles('composer.lock', 'phel-config.php') }}-${{ hashFiles('test/**/*.cljc', 'test/**/*.phel') }}
+  #        restore-keys: |
+  #          phel-cache-${{ matrix.php }}-${{ hashFiles('composer.lock', 'phel-config.php') }}-
+  #          phel-cache-${{ matrix.php }}-
 
-      - name: Install dependencies
-        run: composer install --no-interaction --no-ansi --no-progress
+  #    - name: Install dependencies
+  #      run: composer install --no-interaction --no-ansi --no-progress
 
-      - name: Run tests
-        run: composer test
+  #    - name: Run tests
+  #      run: composer test

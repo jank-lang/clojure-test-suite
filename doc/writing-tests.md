@@ -30,9 +30,8 @@ If possible, install them all and run the tests against each dialect before subm
 
 ## How to Write a New Test
 
-Step-by-step of selecting a function, claiming it, creating a new test, modifying the template, creating a PR.
+For this section, we assume:
 
-Assumptions:
 1. You know how to use Clojure.
 2. You know how to use Git and Github.
 3. You know how to submit a PR.
@@ -97,6 +96,28 @@ You will have to put quotes of various types around them or otherwise escape the
 
 At this point, you've created a file for your new tests and it contains boilerplate.
 Fire up your favorite editor and create appropriate tests for the function you have selected.
+
+As you use the standard `is` and `are` macros to create test assertions, follow a standard argument order: the expected value followed by the actual value.
+Thus, do this
+
+```clojure
+(is (= 0 (dec 1))
+
+(are [expected arg1 arg2] (= expected (+ arg1 arg2))
+  4 2 2)
+```
+
+not this
+
+```clojure
+(is (= (dec 1) 0))
+
+(are [arg1 arg2 expected] (= (+ arg1 arg2) expected)
+  2 2 4)
+```
+
+Having a consistent order throughout the tests helps reduce confusion when reading tests.
+
 See [Writing a Good Test](#writing-a-good-test), below, for more suggestions on how to craft good tests.
 
 ### Run Your New Test
@@ -108,12 +129,14 @@ There are Babashka tasks for running the tests under multiple environments:
 ```bash
 $ bb test-jvm        # run tests under Clojure JVM
 $ bb test-cljs       # run tests under ClojureScript on Node.js
+$ bb test-cljr       # run tests under ClojureCLR
 $ bb test-bb         # run tests under Babashka
 $ bb test-lpy        # run tests under Basilisp
 $ bb test-phel       # run tests under Phel
+$ bb test-all        # run tests for all dialects (sequentially)
 ```
 
-Ideally, you should run all of these *before* submitting a PR.
+Ideally, you should run `bb test-all` *before* submitting a PR.
 This helps prevent the PR from failing during CI testing.
 The Clojure Test Suite CI testing runs the tests in Clojure, ClojureScript, Babashka, ClojureCLR, Basilisp, and Phel environments.
 
@@ -129,6 +152,15 @@ This text will also flow into the PR title by default.
 After pushing your new branch containing commits that implement your test to your forked project on Github, create a new PR.
 Add a "Closes #xxx" comment with the appropriate issue number in the PR comment section.
 This helps ensure the correct issue gets closed when your PR is merged.
+
+To convey that your pull request is ready for review, please add me ([jeaye](https://github.com/jeaye))
+as a reviewer. I will then review your pull request when I am next available.
+
+After review, I may request iteration on your pull request. If you iterate and
+you're ready for review again, please add me as a reviewer again in order to
+request another review. Github emails me with every change you push, but I
+
+cannot know which one is final. A request for review is unambiguous.
 
 ### Monitor Github for Reviewer Comments
 
