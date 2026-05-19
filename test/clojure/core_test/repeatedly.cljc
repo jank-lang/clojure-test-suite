@@ -18,21 +18,20 @@
           (is (= #?(;; phel doesn't seem to handle mid failures gracefully
                     :phel    0
                     :default 1)
-                 @state))))
-      (testing "is lazy"
-        (let [state (atom 0)
-              _ (repeatedly #(swap! state inc))]
-          (is (= #?(;; phel doesn't seem to handle repeatedly lazily and so this
-                    ;; odd behavior seems to possibly be related to processing
-                    ;; a thunk of calls
-                    :phel    33
-                    :default 0)
-                 @state)))))
+                 @state))))))
 
     (testing "Single argument"
-      (is (= 0 (first (repeatedly +)))))
+      (is (= 0 (first (repeatedly +))))
+      (testing "is lazy"
+        (let [call (repeatedly identity)]
+          (is (not (realized? call)))
+          (is (p/lazy-seq? call)))))
 
     (testing "Two arguments"
+      (testing "is lazy"
+        (let [call (repeatedly 1000 identity)]
+          (is (not (realized? call)))
+          (is (p/lazy-seq? call))))
       (testing "zero returns empty list"
         (is (= '() (repeatedly 0 +))))
       (testing "natural numbers"
