@@ -66,28 +66,6 @@
             ;; don't do anything on success
             e#))))
 
-   ;; :phel
-   ;; (defmethod t/assert-expr 'p/thrown?
-   ;;   [msg form]
-   ;;   (let [body (drop 1 form)]
-   ;;     `(let [report-success# t/do-report
-   ;;            report-failure# t/do-report
-   ;;            success-opts# (fn [~'error]
-   ;;                            {:type :pass
-   ;;                             :message '~msg
-   ;;                             :expected '~form
-   ;;                             :actual ~'error})
-   ;;            failure-opts# {:type :fail
-   ;;                           :message '~msg
-   ;;                           :expected '~form
-   ;;                           :actual nil}]
-   ;;        (try
-   ;;          ~@body
-   ;;          (report-failure# failure-opts#)
-   ;;          (catch ~'Throwable e#
-   ;;            (report-success# (success-opts# e#))
-   ;;            e#)))))
-
    :jank
    (defmethod t/assert-expr 'p/thrown?
      [msg form]
