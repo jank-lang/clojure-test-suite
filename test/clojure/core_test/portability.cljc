@@ -112,7 +112,24 @@
                             :actual actual#})
               actual#)))))
 
-   :default  ; Clojure JVM, CLR, Babashka, Phel
+   :cljr
+   (defmethod t/assert-expr 'p/thrown?
+     [msg form]
+     (let [body (rest form)]
+       `(try
+          (let [result# (do ~@body)]
+            (t/do-report {:type :fail
+                          :message ~msg
+                          :expected '~form
+                          :actual result#}))
+          (catch ~'Exception e#
+            (t/do-report {:type :pass
+                          :message ~msg
+                          :expected '~form
+                          :actual e#})
+            e#))))
+
+   :default  ; Clojure JVM, Babashka, Phel
    (defmethod t/assert-expr 'p/thrown?
      [msg form]
      (let [body (rest form)]
