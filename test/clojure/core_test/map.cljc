@@ -18,8 +18,7 @@
       (let [result (map inc (range 5))]
         ;; `map` should return an unrealized lazy-seq
         (is (p/lazy-seq? result))
-        (realized? result)
-        (is (seq? result))
+        (is (not (realized? result)))
         (is (= [1 2 3 4 5] result)))
 
       ;; nil and empty list just result in empty seq
@@ -99,7 +98,13 @@
       (is (empty? (map + (range 5) (range 5) (range 5) '())))
       (is (empty? (map + (range 5) (range 5) '() (range 5))))
       (is (empty? (map + (range 5) '() (range 5) (range 5))))
-      (is (empty? (map + '() (range 5) (range 5) (range 5)))))
+      (is (empty? (map + '() (range 5) (range 5) (range 5))))
+
+      ;; Try five collections
+      (is (= [0 5 10 15 20] (map + (range 5) (range 5) (range 5) (range 5) (range 5))))
+
+      ;; Try with infinite ranges except for one
+      (is (= [0 5 10 15 20] (map + (range) (range) (range 5) (range) (range)))))
 
     (testing "negative cases"
       ;; Note: must realize resulting lazy-seq with `seq` to force the
