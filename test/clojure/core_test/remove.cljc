@@ -17,7 +17,10 @@
         (is (= '() (remove identity nil)))
         (is (= '() (remove identity []))))
       (testing "infinite collection"
-        (is (= '(0 1 2) (take 3 (remove (partial < 5) (range))))))
+        (let [res (remove (partial < 5) (range))]
+          (is (p/lazy-seq? res))
+          (is (not (realized? res)))
+          (is (= '(0 1 2) (take 3 res)))))
       (is (= #{:b :c :d :e} (into #{} (remove #{:a} #{:a :b :c :d :e})))))
 
     (testing "Exception cases"
