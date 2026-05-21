@@ -45,26 +45,6 @@
             nil
             ##Inf)]
 
-         :cljs
-         []
-
-         :clj
-         [(testing "longs"
-            (let [l       (long 1)
-                  L       (num l)
-                  checker (Checker.)]
-              (is (.isLong checker l))
-              (is (false? (.isLong checker L)))))
-          (testing "doubles"
-            (let [d       (double 1.0)
-                  D       (num d)
-                  checker (Checker.)]
-              (is (.isDouble checker d))
-              (is (false? (.isDouble checker D)))))
-          ;; `BigInt` and `BigDecimal` are always boxed and `num` just returns them as-is.
-          (is (instance? clojure.lang.BigInt (num 1N)))
-          (is (instance? java.math.BigDecimal (num 1.0M)))]
-
          :cljr [(is (NaN? (num ##NaN)))
                 (is (= (byte 1) (num (byte 1))))
                 (is (= System.UInt64 (type (num (byte 1)))))
@@ -84,6 +64,26 @@
                   (double 1.0)
                   nil
                   ##Inf)]
+         
+         :cljs
+         []
+
+         :clj
+         [(testing "longs"
+            (let [l       (long 1)
+                  L       (num l)
+                  checker (Checker.)]
+              (is (.isLong checker l))
+              (is (false? (.isLong checker L)))))
+          (testing "doubles"
+            (let [d       (double 1.0)
+                  D       (num d)
+                  checker (Checker.)]
+              (is (.isDouble checker d))
+              (is (false? (.isDouble checker D)))))
+          ;; `BigInt` and `BigDecimal` are always boxed and `num` just returns them as-is.
+          (is (instance? clojure.lang.BigInt (num 1N)))
+          (is (instance? java.math.BigDecimal (num 1.0M)))]
 
          ;; By default assume that other platforms are no-ops for numeric inputs
          :default [(is (NaN? (num ##NaN)))
@@ -105,10 +105,7 @@
      (testing "exceptions thrown"
        ;; [[num]] is *almost* a true no-op in `cljr`, equivalent to [[identity]],
        ;; except that it will upcast to System.Int64/System.UInt64
-       #?@(:cljs
-           []
-
-           :cljr
+       #?@(:cljr
            [(are [x] (and (= x (num x))
                           (= (type x) (type (num x))))
               f
@@ -124,6 +121,9 @@
               #"")
             (is (fn? (num (fn []))))]
 
+           :cljs
+           []
+           
            :default
            [(are [x] (p/thrown? (num x))
               (fn [])

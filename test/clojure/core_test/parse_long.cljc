@@ -23,6 +23,7 @@
            nil                "-Infinity"
            nil                "-50Infinity"
            nil                "NaN"
+           nil                "1e3"
            0                  "0"
            42                 "42"
            12                 "+12"
@@ -32,15 +33,7 @@
                       999999999999999    "999999999999999"]
                :default [999999999999999999 "999999999999999999"])))
     (testing "exceptions"
-      #?(:cljs (are [x] (p/thrown? (parse-long x))
-                 {}
-                 '()
-                 []
-                 #{}
-                 :key
-                 0.0
-                 1000)
-         :lpy (are [x] (p/thrown? (parse-long x))
+      #?(:lpy (are [x] (p/thrown? (parse-long x))
                 {}
                 '()
                 []
@@ -48,6 +41,14 @@
                 :key
                 0.0
                 1000)
+         :cljs (are [x] (p/thrown? (parse-long x))
+                 {}
+                 '()
+                 []
+                 #{}
+                 :key
+                 0.0
+                 1000)
          :default (are [x] (p/thrown? (parse-long x))
                     {}
                     '()

@@ -63,13 +63,13 @@
                      (https://github.com/babashka/babashka/issues/1893)"
            :default (is (contains? (parents TestParentsRecord) ::record))))
 
-      #?(:cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
-         :lpy     (testing "returns parents by type inheritance when tag is a class"
+      #?(:lpy     (testing "returns parents by type inheritance when tag is a class"
                     (is (contains? (parents python/str) python/object))
                     (is (nil? (parents python/object))))
          :phel    (testing "returns parents by type inheritance when tag is a class"
                     (is (contains? (parents RuntimeException) Exception))
                     (is (nil? (parents stdClass))))
+         :cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
          :default (testing "returns parents by type inheritance when tag is a class"
                     (is (contains? (parents String) Object))
                     (is (nil? (parents Object)))))
@@ -127,8 +127,7 @@
                               #{} datatypes ::b
                               #{} datatypes ::a))
 
-      #?(:cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
-         :lpy     (testing "returns parents by type inheritance when tag is a class, whether the tag is in h or not"
+      #?(:lpy     (testing "returns parents by type inheritance when tag is a class, whether the tag is in h or not"
                     (are [h] (contains? (parents h python/str) python/object)
                                         ; tag in h
                       (derive (make-hierarchy) python/str ::object)
@@ -142,6 +141,7 @@
                                         ; tag not in h
                       diamond
                       datatypes))
+         :cljs    "cljs doesn't report parents by type inheritance yet (CLJS-3464)"
          :default (testing "returns parents by type inheritance when tag is a class, whether the tag is in h or not"
                     (are [h] (contains? (parents h String) Object)
                              ; tag in h

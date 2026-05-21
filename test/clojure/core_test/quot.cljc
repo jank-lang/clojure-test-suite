@@ -13,6 +13,8 @@
       int? 3  -10 -3
       int? -3 10  -3
 
+      #?@(:cljs    []
+          :default [p/big-int? 0N  1/2  3/4])
       p/big-int? 3N  10   3N
       p/big-int? -3N -10  3N
       p/big-int? 3N  -10  -3N

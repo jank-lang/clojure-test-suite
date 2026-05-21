@@ -25,16 +25,7 @@
            nil   "true "))
 
     (testing "exceptions"
-      #?(:cljs (are [x] (p/thrown? (parse-boolean x))
-                 nil
-                 0
-                 0.0
-                 :key
-                 {}
-                 '()
-                 #{}
-                 [])
-         :lpy (are [x] (p/thrown? (parse-boolean x))
+      #?(:lpy (are [x] (p/thrown? (parse-boolean x))
                 nil
                 0
                 0.0
@@ -43,6 +34,15 @@
                 '()
                 #{}
                 [])
+         :cljs (are [x] (p/thrown? (parse-boolean x))
+                 nil
+                 0
+                 0.0
+                 :key
+                 {}
+                 '()
+                 #{}
+                 [])
          :default (are [x] (p/thrown? (parse-boolean x))
                     nil
                     0

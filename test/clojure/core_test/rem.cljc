@@ -40,31 +40,31 @@
      double? 1.0  10.0  -3.0
 
      #?@(:cljs
-      [double? 1.0M  10     3.0M
-       double? -1.0M -10    3.0M
-       double? -1.0M -10    -3.0M
-       double? 1.0M  10     -3.0M
-       double? 1.0M  10.0M  3
-       double? -1.0M -10.0M 3
-       double? -1.0M -10.0M -3
-       double? 1.0M  10.0M  -3
-       double? 1.0M  10.0M  3.0M
-       double? -1.0M -10.0M 3.0M
-       double? -1.0M -10.0M -3.0M
-       double? 1.0M  10.0M  -3.0M]
-      :default
-      [decimal? 1.0M  10     3.0M
-       decimal? -1.0M -10    3.0M
-       decimal? -1.0M -10    -3.0M
-       decimal? 1.0M  10     -3.0M
-       decimal? 1.0M  10.0M  3
-       decimal? -1.0M -10.0M 3
-       decimal? -1.0M -10.0M -3
-       decimal? 1.0M  10.0M  -3
-       decimal? 1.0M  10.0M  3.0M
-       decimal? -1.0M -10.0M 3.0M
-       decimal? -1.0M -10.0M -3.0M
-       decimal? 1.0M  10.0M  -3.0M])
+         [double? 1.0M  10     3.0M
+          double? -1.0M -10    3.0M
+          double? -1.0M -10    -3.0M
+          double? 1.0M  10     -3.0M
+          double? 1.0M  10.0M  3
+          double? -1.0M -10.0M 3
+          double? -1.0M -10.0M -3
+          double? 1.0M  10.0M  -3
+          double? 1.0M  10.0M  3.0M
+          double? -1.0M -10.0M 3.0M
+          double? -1.0M -10.0M -3.0M
+          double? 1.0M  10.0M  -3.0M]
+         :default
+         [decimal? 1.0M  10     3.0M
+          decimal? -1.0M -10    3.0M
+          decimal? -1.0M -10    -3.0M
+          decimal? 1.0M  10     -3.0M
+          decimal? 1.0M  10.0M  3
+          decimal? -1.0M -10.0M 3
+          decimal? -1.0M -10.0M -3
+          decimal? 1.0M  10.0M  -3
+          decimal? 1.0M  10.0M  3.0M
+          decimal? -1.0M -10.0M 3.0M
+          decimal? -1.0M -10.0M -3.0M
+          decimal? 1.0M  10.0M  -3.0M])
 
      ;; Unexpectedly downconverts result to double, rather than BigDecimal
      double? 1.0  10.0M  3.0
@@ -92,20 +92,20 @@
          ratio?     -7/2 -37/2 -15]))
 
    #?@(:cljs
-    [(is (NaN? (rem 10 0)))
-     (is (NaN? (rem ##Inf 1)))
-     (is (NaN? (rem 1 ##Inf)))
-     (is (NaN? (rem ##-Inf 1)))
-     (is (NaN? (rem 1 ##-Inf)))
-     (is (NaN? (rem ##NaN 1)))
-     (is (NaN? (rem 1 ##NaN)))
-     (is (NaN? (rem ##NaN 1)))]
-    :default
-    [(is (p/thrown? (rem 10 0)))
-     (is (p/thrown? (rem ##Inf 1)))
-     (is (NaN? (rem 1 ##Inf)))
-     (is (p/thrown? (rem ##-Inf 1)))
-     (is (NaN? (rem 1 ##-Inf)))
-     (is (p/thrown? (rem ##NaN 1)))
-     (is (p/thrown? (rem 1 ##NaN)))
-     (is (p/thrown? (rem ##NaN 1)))])))
+       [(is (NaN? (rem 10 0)))
+        (is (NaN? (rem ##Inf 1)))
+        (is (NaN? (rem 1 ##Inf)))
+        (is (NaN? (rem ##-Inf 1)))
+        (is (NaN? (rem 1 ##-Inf)))
+        (is (NaN? (rem ##NaN 1)))
+        (is (NaN? (rem 1 ##NaN)))
+        (is (NaN? (rem ##NaN 1)))]
+       :default
+       [(is (p/thrown? (rem 10 0)))
+        (is (p/thrown? (rem ##Inf 1)))
+        (is (NaN? (rem 1 ##Inf)))
+        (is (p/thrown? (rem ##-Inf 1)))
+        (is (NaN? (rem 1 ##-Inf)))
+        (is (p/thrown? (rem ##NaN 1)))
+        (is (p/thrown? (rem 1 ##NaN)))
+        (is (p/thrown? (rem ##NaN 1)))])))

@@ -97,15 +97,16 @@
                               {:key :key2 :ref #'watchable :old 0 :new 1 :watcher :watcher2}
                               {:key :key2 :ref #'watchable :old 1 :new 2 :watcher :watcher2}})))))
 
-    #?(:cljs
-       nil
-
-       ;; Basilisp does not implement refs.
+    #?(;; Basilisp does not implement refs.
        :lpy
        nil
+
        :phel
        nil
 
+       :cljs
+       nil
+       
        :default
        (testing "remove watch refs"
          (let [messages (volatile! #{})
@@ -149,15 +150,16 @@
                               {:key :key2 :ref watchable :old 0 :new 1 :watcher :watcher2}
                               {:key :key2 :ref watchable :old 1 :new 2 :watcher :watcher2}})))))
 
-    #?(:cljs
-       nil
-
-       ;; Basilisp does not implement agents.
+    #?(;; Basilisp does not implement agents.
        :lpy
        nil
+
        :phel
        nil
 
+       :cljs
+       nil
+       
        :default
        (testing "remove watch agents"
          (let [messages (volatile! #{})

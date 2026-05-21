@@ -5,6 +5,7 @@
 (when-var-exists qualified-symbol?
  (deftest test-qualified-symbol?
    (are [expected x] (= expected (qualified-symbol? x))
+     true  (symbol "a/b/c")
      true  'a-ns/a-keyword
 
      false :a-keyword

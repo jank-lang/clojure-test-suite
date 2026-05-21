@@ -19,9 +19,9 @@
     (let [infinite-sequence (partial #(take %2 %1) (range))]
       (is (= '(0 1 2 3 4) (infinite-sequence 5)))
       (is (= '(0 1 2) (infinite-sequence 3))))
-    (let [partial-partial ((partial partial) test-fn)
-          pppartial (partial partial-partial :inner)]
-      (is (= [:inner :outer] (partial-partial :inner :outer)))
+    (let [ppartial ((partial partial) test-fn)
+          pppartial (partial ppartial :inner)]
+      (is (= [:inner :outer] (ppartial :inner :outer)))
       (is (= [:inner :outer] (pppartial :outer))))
     (let [seq-of-partials (map #(partial * %1 %2) (range) (range))]
       (is (= (map #(* % % %) (range 5))

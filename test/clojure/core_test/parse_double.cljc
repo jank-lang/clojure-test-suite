@@ -35,15 +35,7 @@
            ##Inf "Infinity"
            ##-Inf "-Infinity"))
     (testing "exceptions"
-      #?(:cljs (are [x] (p/thrown? (parse-double x))
-                 {}
-                 '()
-                 []
-                 #{}
-                 :key
-                 0.0
-                 1000)
-         :lpy (are [x] (p/thrown? (parse-double x))
+      #?(:lpy (are [x] (p/thrown? (parse-double x))
                 {}
                 '()
                 []
@@ -51,6 +43,14 @@
                 :key
                 0.0
                 1000)
+         :cljs (are [x] (p/thrown? (parse-double x))
+                 {}
+                 '()
+                 []
+                 #{}
+                 :key
+                 0.0
+                 1000)
          :default (are [x] (p/thrown? (parse-double x))
                     {}
                     '()

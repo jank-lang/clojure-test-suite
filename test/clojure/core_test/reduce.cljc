@@ -6,44 +6,44 @@
 
 (def interop
   {:int-new (fn [x]
-              (#?(:clj Integer.
-                  :cljr identity
-                  :cljs js/Number.
+              (#?(:cljr identity
                   :lpy python/int
-                  :phel php/intval) x))
+                  :phel php/intval
+                  :cljs js/Number.
+                  :clj Integer.) x))
 
-   :Integer #?(:clj Integer/TYPE
-               :cljr System.Int32
-               :cljs js/Number
+   :Integer #?(:cljr System.Int32
                :lpy python/int
-               :phel php/intval)
+               :phel php/intval
+               :cljs js/Number
+               :clj Integer/TYPE)
 
-   :Long #?(:clj Long/TYPE
-            :cljr System.Int64
-            :cljs js/Number
+   :Long #?(:cljr System.Int64
             :lpy python/int
-            :phel php/intval)
+            :phel php/intval
+            :cljs js/Number
+            :clj Long/TYPE)
 
-   :Float #?(:clj Long/TYPE
-             :cljr System.Single
-             :cljs js/Number
+   :Float #?(:cljr System.Single
              :lpy python/float
-             :phel php/floatval)
+             :phel php/floatval
+             :cljs js/Number
+             :clj Long/TYPE)
 
-   :Double #?(:clj Double/TYPE
-              :cljr System.Double
-              :cljs js/Number
+   :Double #?(:cljr System.Double
               :lpy python/float
-              :phel php/floatval)
+              :phel php/floatval
+              :cljs js/Number
+              :clj Double/TYPE)
 
-   :Boolean #?(:clj Boolean/TYPE
-               :cljr System.Boolean
-               :cljs js/Boolean
+   :Boolean #?(:cljr System.Boolean
                :lpy python/bool
-               :phel php/boolval)})
+               :phel php/boolval
+               :cljs js/Boolean
+               :clj Boolean/TYPE)})
 
 
-(when-var-exists clojure.core/reduce
+(when-var-exists reduce
   (deftest test-reduce
     (testing "common"
       (is (nil? (reduce nil nil nil)))

@@ -11,6 +11,6 @@
     ;; https://ask.clojure.org/index.php/14298/incorrect-result-when-evaluating-not-on-nans
     (testing "If ##NaNs are ="
       #?(:bb      (is (not= ##NaN ##NaN))
-         :clj     (is (not (not= ##NaN ##NaN)))
          :cljr    (is (not (not= ##NaN ##NaN)))
+         :clj     (is (not (not= ##NaN ##NaN)))
          :default (is (not= ##NaN ##NaN))))))
