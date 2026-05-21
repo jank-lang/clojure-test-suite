@@ -27,6 +27,12 @@
         (is (and (p/lazy-seq? try-nil) (empty? try-nil)))
         (is (and (p/lazy-seq? try-empty-list) (empty? try-empty-list))))
 
+      ;; infinite lazy seq
+      (let [s (map + (range))]
+        (is (p/lazy-seq? s))
+        (is (not (realized? s)))
+        (is (= [0 1 2 3 4] (take 5 s))))
+
       ;; Works on anything that can be turned into a seq, but order
       ;; isn't guaranteed for things like maps or sets
       (is (= [[:k :v]] (map identity {:k :v})))
@@ -45,11 +51,22 @@
       ;; one that is
       (is (= [0 2 4 6] (map + (range 5) (range 4))))
       (is (= [0 2 4 6] (map + (range 4) (range 5))))
+
+      ;; Infinite ranges
+      (let [s (map + (range) (range))]
+        (is (p/lazy-seq? s))
+        (is (not (realized? s)))
+        (is (= [0 2 4 6 8] (take 5 s))))
+      
       ;; if one of the seqs is empty, map yields no elements
       (is (empty? (map + (range 5) nil)))
+      (is (empty? (map + (range) nil)))
       (is (empty? (map + nil (range 5))))
+      (is (empty? (map + nil (range))))
       (is (empty? (map + (range 5) '())))
+      (is (empty? (map + (range) '())))
       (is (empty? (map + '() (range 5))))
+      (is (empty? (map + '() (range))))
       (is (empty? (map + nil nil)))
       (is (empty? (map + '() '()))))
     
@@ -66,14 +83,18 @@
       (is (= [0 3 6 9] (map + (range 5) (range 5) (range 4))))
       (is (= [0 3 6 9] (map + (range 5) (range 4) (range 5))))
       (is (= [0 3 6 9] (map + (range 4) (range 5) (range 5))))
+
+      ;; Infinite ranges
+      (is (= [0 3 6 9] (take 4 (map + (range) (range) (range)))))
+      
       ;; if any of the seqs is `nil`, result is empty
-      (is (empty? (map + (range 5) (range 5) nil)))
-      (is (empty? (map + (range 5) nil (range 5))))
-      (is (empty? (map + nil (range 5) (range 5))))
+      (is (empty? (map + (range 5) (range) nil)))
+      (is (empty? (map + (range 5) nil (range))))
+      (is (empty? (map + nil (range 5) (range))))
       ;; if any of the seqs is the empty list, result is empty
-      (is (empty? (map + (range 5) (range 5) '())))
-      (is (empty? (map + (range 5) '() (range 5))))
-      (is (empty? (map + '() (range 5) (range 5)))))
+      (is (empty? (map + (range 5) (range) '())))
+      (is (empty? (map + (range 5) '() (range))))
+      (is (empty? (map + '() (range 5) (range)))))
 
     (testing "arity 5+"
       ;; multiple seqs result in multiple args to the mapping function
@@ -89,19 +110,26 @@
       (is (= [0 4 8 12] (map + (range 5) (range 5) (range 4) (range 5))))
       (is (= [0 4 8 12] (map + (range 5) (range 4) (range 5) (range 5))))
       (is (= [0 4 8 12] (map + (range 4) (range 5) (range 5) (range 5))))
+
+      ;; Infinite ranges
+      (is (= [0 4 8 12] (take 4 (map + (range) (range) (range) (range)))))
+      
       ;; if any of the seqs is `nil`, result is empty
-      (is (empty? (map + (range 5) (range 5) (range 5) nil)))
-      (is (empty? (map + (range 5) (range 5) nil (range 5))))
-      (is (empty? (map + (range 5) nil (range 5) (range 5))))
-      (is (empty? (map + nil (range 5) (range 5) (range 5))))
+      (is (empty? (map + (range 5) (range) (range 5) nil)))
+      (is (empty? (map + (range 5) (range) nil (range 5))))
+      (is (empty? (map + (range 5) nil (range) (range 5))))
+      (is (empty? (map + nil (range 5) (range) (range 5))))
       ;; if any of the seqs is the empty list, result is empty
-      (is (empty? (map + (range 5) (range 5) (range 5) '())))
-      (is (empty? (map + (range 5) (range 5) '() (range 5))))
-      (is (empty? (map + (range 5) '() (range 5) (range 5))))
-      (is (empty? (map + '() (range 5) (range 5) (range 5))))
+      (is (empty? (map + (range 5) (range) (range 5) '())))
+      (is (empty? (map + (range 5) (range) '() (range 5))))
+      (is (empty? (map + (range 5) '() (range) (range 5))))
+      (is (empty? (map + '() (range 5) (range) (range 5))))
 
       ;; Try five collections
       (is (= [0 5 10 15 20] (map + (range 5) (range 5) (range 5) (range 5) (range 5))))
+
+      ;; Five infinite ranges
+      (is (= [0 5 10 15 20] (take 5 (map + (range) (range) (range) (range) (range)))))
 
       ;; Try with infinite ranges except for one
       (is (= [0 5 10 15 20] (map + (range) (range) (range 5) (range) (range)))))
