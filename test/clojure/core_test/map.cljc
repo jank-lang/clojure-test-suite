@@ -135,9 +135,9 @@
       (is (= [0 5 10 15 20] (map + (range) (range) (range 5) (range) (range)))))
 
     (testing "negative cases"
-      ;; Note: must realize resulting lazy-seq with `seq` to force the
+      ;; Note: must realize resulting lazy-seq to force the
       ;; exception
-      (are [x] (p/thrown? (seq (map identity x)))
+      (are [x] (p/thrown? (doall (map identity x)))
         ;; map works over all seqs, but these aren't seqs
         1
         true
