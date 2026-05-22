@@ -1,5 +1,5 @@
 (ns clojure.core-test.uuid-qmark
-  (:require [clojure.test :refer [are deftest testing]]
+  (:require [clojure.test :refer #?(:cljs [are deftest is testing] :default [are deftest testing])]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists uuid?
@@ -12,6 +12,10 @@
                (parse-uuid "f81d4fae-7dec-11d0-a765-00a0c91e6bf6")
                (random-uuid)))
 
+    ;; CLJS is fairly lose with what it considers a UUID
+    #?@(:cljs [(is (uuid? (uuid "")))
+               (is (uuid? (uuid "5")))])
+    
     (testing "not uuids"
       (are [x] (not (uuid? x))
                nil

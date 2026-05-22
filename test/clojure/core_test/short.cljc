@@ -9,11 +9,11 @@
     ;; `java.lang.Short`, but there is no predicate for it. Here, we just
     ;; test whether it's a fixed-length integer of some sort.
     (is (int? (short 0)))
-    #?@(:cljs []
-        :lpy [] ; Python VMs only have one integer type.
+    #?@(:lpy [] ; Python VMs only have one integer type.
         :phel []
+        :cljs []
         :default
-        [(is (instance? #?(:clj java.lang.Short :cljr System.Int16) (short 0)))])
+        [(is (instance? #?(:cljr System.Int16 :clj java.lang.Short) (short 0)))])
 
     ;; Check conversions and rounding from other numeric types
     (are [expected x] (= expected (short x))
@@ -47,17 +47,7 @@
           [1    1.1M
            -1   -1.1M]))
 
-    #?@(:cljs
-        [;; CLJS short is just a dummy cast
-         (is (= -32768.1 (short -32768.1)))
-         (is (= -32769 (short -32769)))
-         (is (= 32768 (short 32768)))
-         (is (= 32767.1 (short 32767.1)))
-         (is (= "0" (short "0")))
-         (is (= :0 (short :0)))
-         (is (= [0] (short [0])))
-         (is (= nil (short nil)))]
-        :cljr
+    #?@(:cljr
         [;; `short` throws outside the range of 32767 ... -32768.
          (is (= (short -32768) (short -32768.000001)))
          (is (p/thrown? (short -32769)))
@@ -69,6 +59,17 @@
          (is (p/thrown? (short :0)))
          (is (p/thrown? (short [0])))
          (is (p/thrown? (short nil)))]
+
+         :cljs
+        [;; CLJS short is just a dummy cast
+         (is (= -32768.1 (short -32768.1)))
+         (is (= -32769 (short -32769)))
+         (is (= 32768 (short 32768)))
+         (is (= 32767.1 (short 32767.1)))
+         (is (= "0" (short "0")))
+         (is (= :0 (short :0)))
+         (is (= [0] (short [0])))
+         (is (= nil (short nil)))]
 
         :default
         [;; `short` throws outside the range of 32767 ... -32768.

@@ -7,6 +7,7 @@
    (are [expected x] (= expected (simple-symbol? x))
      true  'a-symbol
 
+     false (symbol "a/b/c")
      false :a-keyword
      false :a-ns/a-keyword
      false 'a-ns/a-keyword

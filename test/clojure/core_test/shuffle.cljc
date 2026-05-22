@@ -25,16 +25,16 @@
     (testing "negative cases"
       #?(:cljs (is (p/thrown? (shuffle 1)))
          :default (is (p/thrown? (shuffle 1))))
-      #?@(:cljs
-          [(is (= [] (shuffle nil)))
-           (is (= [] (shuffle {})))]
-          :cljr
+      #?@(:cljr
           [(is (p/thrown? (shuffle nil)))
            (is (p/thrown? (shuffle "abc")))
            (is (= [] (shuffle {})))]
           :lpy
           [(is (p/thrown? (shuffle nil)))
            (is (= #{"a" "b" "c"} (set (shuffle "abc"))))
+           (is (= [] (shuffle {})))]
+          :cljs
+          [(is (= [] (shuffle nil)))
            (is (= [] (shuffle {})))]
           :default
           [(is (p/thrown? (shuffle nil)))

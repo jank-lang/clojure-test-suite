@@ -15,6 +15,7 @@
       true nil
       true "a string"
       true (object-array 3)
+
       false 1
       false 1N
       false 1.0
@@ -23,18 +24,21 @@
       false 'a-sym
       ;; Basilisp does not currently implement sorted collections or array-map.
       #?@(:lpy [true \a]
-          :cljs [true \a
-                 true (sorted-map :a 1)
-                 true (sorted-set :a)
-                 true (array-map :a 1)
-                 true (seq (sorted-map :a 1))
-                 true (seq (sorted-set :a))]
+
           :phel [true \a
                  true (sorted-map :a 1)
                  true (sorted-set :a)
                  true (array-map :a 1)
                  true (seq (sorted-map :a 1))
                  true (seq (sorted-set :a))]
+
+          :cljs [true \a
+                 true (sorted-map :a 1)
+                 true (sorted-set :a)
+                 true (array-map :a 1)
+                 true (seq (sorted-map :a 1))
+                 true (seq (sorted-set :a))]
+
           :default [false \a
                     true (sorted-map :a 1)
                     true (sorted-set :a)

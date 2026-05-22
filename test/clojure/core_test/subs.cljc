@@ -24,17 +24,7 @@
     (is (= "" (subs "abcd֎" 5 5)))
     (is (= "" (subs "abcde" 4 4)))
     (is (= "" (subs "abc֎e" 4 4)))
-    #?@(:cljs
-        [(is (= "b" (subs "abcde" 2 1)))
-         (is (= "bcde" (subs "abcde" 1 6)))
-         (is (= "bcde" (subs "abcde" 1 200)))
-         (is (= "abcde" (subs "abcde" -1)))
-         (is (= "abc" (subs "abcde" -1 3)))
-         (is (= "" (subs "abcde" -1 -3)))
-         (is (p/thrown? (subs nil 1 2)))
-         (is (= "ab" (subs "abcde" nil 2)))
-         (is (= "a" (subs "abcde" 1 nil)))]
-        :lpy
+    #?@(:lpy
         ;; Directly delegate to Python's slicing syntax.
         ;; s[2:1] just returns an empty string, rather than throwing an exception.
         [(is (= "" (subs "abcde" 2 1)))
@@ -46,6 +36,19 @@
          (is (p/thrown? (subs nil 1 2)))
          (is (= "ab" (subs "abcde" nil 2)))
          (is (= "bcde" (subs "abcde" 1 nil)))]
+
+        :cljs
+        [(is (= "b" (subs "abcde" 2 1)))
+         (is (= "bcde" (subs "abcde" 1 6)))
+         (is (= "bcde" (subs "abcde" 1 200)))
+         (is (= "abcde" (subs "abcde" -1)))
+         (is (= "abc" (subs "abcde" -1 3)))
+         (is (= "" (subs "abcde" -1 -3)))
+         (is (= "a" (subs \a 0)))
+         (is (p/thrown? (subs nil 1 2)))
+         (is (= "ab" (subs "abcde" nil 2)))
+         (is (= "a" (subs "abcde" 1 nil)))]
+        
         :default
         [(is (p/thrown? (subs "abcde" 2 1)))
          (is (p/thrown? (subs "abcde" 1 6)))

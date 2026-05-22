@@ -8,6 +8,7 @@
       ;; Basilisp does not currently implement sorted collections.
       #?@(:lpy [] :default [true (sorted-set :a)])
       true (hash-set :a)
+      true #{}
 
       false [1 2 3]
       false '(1 2 3)

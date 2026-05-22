@@ -23,10 +23,10 @@
         #'i-am-dynamic      ; dynamic & local
         #'*assert*          ; dynamic
         #?@(; CLJS `def` doesn't necessarily evaluate to the value of the var:
-            :cljs [],
+            :cljs []
             :default [(def baz)])
         #?@(; CLJS `defn` produces a non-var
-            :cljs [],
+            :cljs []
             :default [(defn qux [] nil)]))
 
       (when-var-exists defmulti
@@ -54,7 +54,7 @@
         "abc"
         999
         1.2
-        #?@(:cljs [], ; most Clojure dialects support ratios - not CLJS
+        #?@(:cljs [] ; most Clojure dialects support ratios - not CLJS
             :default [2/3])
         \backspace
         nil

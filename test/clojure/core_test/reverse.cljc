@@ -13,12 +13,12 @@
       (is (= '([4 5] 3 2 1) (reverse [1 2 3 [4 5]])))
       (is (= '(\c \b \a) (reverse "abc")))
       (is (= '([:a :b]) (reverse {:a :b})))
-      #?@(:cljs [(is (= '(\a) (reverse \a)))
-                 (is (p/thrown? (reverse 0)))
-                 (is (p/thrown? (reverse 0.0)))]
-          :lpy [(is (= '(\a) (reverse \a)))
+      #?@(:lpy [(is (= '(\a) (reverse \a)))
                 (is (p/thrown? (reverse 0)))
                 (is (p/thrown? (reverse 0.0)))]
+          :cljs [(is (= '(\a) (reverse \a)))
+                 (is (p/thrown? (reverse 0)))
+                 (is (p/thrown? (reverse 0.0)))]
           :default [(is (p/thrown? (reverse \a)))
                     (is (p/thrown? (reverse 0)))
                     (is (p/thrown? (reverse 0.0)))]))))

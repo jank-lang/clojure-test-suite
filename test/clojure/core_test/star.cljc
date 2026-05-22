@@ -78,8 +78,7 @@
           [(is (p/thrown? (* 1 nil)))
            (is (p/thrown? (* nil 1)))])
 
-      #?@(:cljs []
-          :lpy
+      #?@(:lpy
           [(is (big-int? (* 0 1N)))
            (is (big-int? (* 0N 1)))
            (is (big-int? (* 0N 1N)))
@@ -89,6 +88,10 @@
            (is (big-int? (* 1 5N)))
            (is (big-int? (* 1N 5)))
            (is (big-int? (* 1N 5N)))]
+
+          :cljs
+          []
+          
           :default
           [(is (big-int? (* 0 1N)))
            (is (big-int? (* 0N 1)))

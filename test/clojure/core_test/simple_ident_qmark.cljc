@@ -8,6 +8,9 @@
      true  :a-keyword
      true  'a-symbol
 
+     #?(:cljs true :default false) (keyword "a/b/c")
+     false (symbol "a/b/c")
+     false ::a-keyword
      false :a-ns/a-keyword
      false 'a-ns/a-keyword
      false "a string"
