@@ -42,7 +42,11 @@
         (is (p/lazy-seq? s))
         (is (not (realized? s)))
         ;; Now, take the first 16 items from the concatenation
-        (is (= [0 1 2 3 4 5 6 7 8 9 10 11 12 0 1 2] (take 16 s)))))
+        (is (= [0 1 2 3 4 5 6 7 8 9 10 11 12 0 1 2] (take 16 s))))
+
+      ;; Go crazy with ranges, empty list, and nil
+      (is (= [0 1 2 3 4 5 0 1 2 3 4 5 6 7 8]
+             (take 15 (concat (range 3) nil (range 3 6) '() (range))))))
 
     (testing "empty list and nil"
       (is (= [1 2 3] (concat [1 2 3] '())))
