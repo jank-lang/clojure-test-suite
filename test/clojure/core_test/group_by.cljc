@@ -4,9 +4,9 @@
 
 (when-var-exists group-by
   (deftest test-group-by
-    ;; Bqsics
+    ;; Basics
     (is (= {false [0 2 4 6 8] true [1 3 5 7 9]} (group-by odd? (range 10))))
-    (is (= {0 [0, ]1 [1], 2 [2], 3 [3], 4 [4], 5 [5], 6 [6], 7 [7], 8 [8], 9 [9]}
+    (is (= {0 [0], 1 [1], 2 [2], 3 [3], 4 [4], 5 [5], 6 [6], 7 [7], 8 [8], 9 [9]}
            (group-by identity (range 10))))
     ;; Empty sequence returns empty map
     (is (= {} (group-by odd? '())))
