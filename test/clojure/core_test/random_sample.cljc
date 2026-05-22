@@ -21,7 +21,7 @@
                                  (< item nitems)))
                           sub))
                 xs)))
-  
+
   (deftest test-random-sample
     ;; Multiple calls to random-sample should return non-constant
     ;; subsets If all the items in the collection are unique, every
@@ -55,7 +55,7 @@
         ;; if nil as input collection, then the result is always empty
         (is (every? (comp nil? seq) (repeatedly draws #(random-sample -1 nil))))
         (is (every? (comp nil? seq) (repeatedly draws #(transduce (random-sample -1) conj [] nil))))
-        
+
         #?(:cljs (is (nil? (seq (random-sample nil coll))))
            :default (is (p/thrown? (seq (random-sample nil coll)))))
         (is (p/thrown? (seq (random-sample 0.5 42))))

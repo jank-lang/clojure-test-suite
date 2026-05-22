@@ -13,7 +13,7 @@
         (is (= [1 2 3 4 5] (transduce mfn conj (range 5))))
         ;; Can it be composed?
         (is (= [2 3 4 5 6] (transduce (comp mfn mfn) conj (range 5))))))
-    
+
     (testing "arity 2"
       (let [result (map inc (range 5))]
         ;; `map` should return an unrealized lazy-seq
@@ -38,7 +38,7 @@
       (is (= [[:k :v]] (map identity {:k :v})))
       (is (= #{1 2 3 4 5} (set (map inc (range 5)))))
       (is (= [\a \b \c \d] (map identity "abcd"))))
-    
+
     (testing "arity 3"
       ;; multiple seqs result in multiple args to the mapping function
       (let [s (map + (range 5) (range 5))]
@@ -57,7 +57,7 @@
         (is (p/lazy-seq? s))
         (is (not (realized? s)))
         (is (= [0 2 4 6 8] (take 5 s))))
-      
+
       ;; if one of the seqs is empty, map yields no elements
       (is (empty? (map + (range 5) nil)))
       (is (empty? (map + (range) nil)))
@@ -69,7 +69,7 @@
       (is (empty? (map + '() (range))))
       (is (empty? (map + nil nil)))
       (is (empty? (map + '() '()))))
-    
+
     (testing "arity 4"
       ;; multiple seqs result in multiple args to the mapping function
       (let [s (map + (range 5) (range 5) (range 5))]
@@ -86,7 +86,7 @@
 
       ;; Infinite ranges
       (is (= [0 3 6 9] (take 4 (map + (range) (range) (range)))))
-      
+
       ;; if any of the seqs is `nil`, result is empty
       (is (empty? (map + (range 5) (range) nil)))
       (is (empty? (map + (range 5) nil (range))))
@@ -113,7 +113,7 @@
 
       ;; Infinite ranges
       (is (= [0 4 8 12] (take 4 (map + (range) (range) (range) (range)))))
-      
+
       ;; if any of the seqs is `nil`, result is empty
       (is (empty? (map + (range 5) (range) (range 5) nil)))
       (is (empty? (map + (range 5) (range) nil (range 5))))
@@ -142,7 +142,9 @@
         1
         true
         false
-        #?@(:cljs ()        ; Chars aren't seqs except in CLJS where char is string of length 1
-            :default (\a))  ; Note: list is for #?@.
+        #?@(;; Chars aren't seqs except in CLJS and Basilisp where char is string of length 1
+            :cljs []
+            :lpy  []
+            :default [\a])
         :a
         'a))))
