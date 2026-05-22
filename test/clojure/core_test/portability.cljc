@@ -38,6 +38,7 @@
   [x]
   #?(:cljs (instance? LazySeq x)
      :phel (phel.core/lazy-seq? x)
+     :lpy (instance? basilisp.lang.seq/LazySeq x)
      :default (instance? clojure.lang.LazySeq x)))
 
 ;; --- Portable exception multimethod. ---
