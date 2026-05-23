@@ -42,8 +42,17 @@
 
     (testing "arity 4 - (partition n step pad coll"
       ;; Use padding for the last element
-      (is (= '((0 1 2) (1 2 3) (2 3 4) (3 4 :a)) (partition 3 1 [:a :a :a] (range 5))))
-      (is (= '((0 1 2) (3 4 5) (6 7 8) (9 :a :a))  (partition 3 3 [:a :a :a] (range 10))))
+      (is (= '((0 1 2) (1 2 3) (2 3 4) (3 4 :a)) (partition 3 1 [:a :b :c] (range 5))))
+      (is (= '((0 1 2) (3 4 5) (6 7 8) (9 :a :b))  (partition 3 3 [:a :b :c] (range 10))))
+
+      ;; If the padding collection is short, then the last partition is short
+      (is (= '((0 1 2) (3 4 5) (6 7 8) (9 :a)) (partition 3 3 [:a] (range 10))))
+
+      ;; If the padding is empty or `nil`, then the last partition has
+      ;; no padding added at all
+      (is (= '((0 1 2) (3 4 5) (6 7 8) (9)) (partition 3 3 [] (range 10))))
+      (is (= '((0 1 2) (3 4 5) (6 7 8) (9)) (partition 3 3 '() (range 10))))
+      (is (= '((0 1 2) (3 4 5) (6 7 8) (9)) (partition 3 3 nil (range 10))))
 
       ;; empty list and nil
       (is (= '() (partition 3 1 [:a :a :a] '())))
