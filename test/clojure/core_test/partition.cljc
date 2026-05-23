@@ -40,7 +40,7 @@
       (is (= '() (partition 2 1 '())))
       (is (= '() (partition 2 1 nil))))
 
-    (testing "arity 4 - (partition n step pad coll"
+    (testing "arity 4 - (partition n step pad coll)"
       ;; Use padding for the last element
       (is (= '((0 1 2) (1 2 3) (2 3 4) (3 4 :a)) (partition 3 1 [:a :b :c] (range 5))))
       (is (= '((0 1 2) (3 4 5) (6 7 8) (9 :a :b))  (partition 3 3 [:a :b :c] (range 10))))
