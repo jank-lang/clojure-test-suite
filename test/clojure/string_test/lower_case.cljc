@@ -13,14 +13,7 @@
     (let [s "ASDF"]
       (is (= "asdf" (str/lower-case "ASDF")))
       (is (= "ASDF" s) "original string mutated"))
-    #?(:cljs
-       (are [v] (p/thrown? (str/lower-case v))
-         :ASDF
-         :ASDF/ASDF
-         'ASDF
-         'ASDF/ASDF)
-
-       :cljr
+    #?(:cljr
        (are [v] (p/thrown? (str/lower-case v))
          :ASDF
          :ASDF/ASDF
@@ -34,6 +27,13 @@
          'ASDF
          'ASDF/ASDF)
 
+       :cljs
+       (are [v] (p/thrown? (str/lower-case v))
+         :ASDF
+         :ASDF/ASDF
+         'ASDF
+         'ASDF/ASDF)
+       
        :default
        (are [expected v] (= expected (str/lower-case v))
          ":asdf"      :ASDF

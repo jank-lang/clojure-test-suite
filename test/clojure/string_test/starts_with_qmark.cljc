@@ -9,8 +9,8 @@
     #?(:cljs (is (false? (str/starts-with? "" nil)))
        :default (is (p/thrown? (str/starts-with? "" nil))))
 
-    #?(:cljs (is (p/thrown? (str/starts-with? nil "")))
-       :cljr (is (true? (str/starts-with? nil "")))
+    #?(:cljr (is (true? (str/starts-with? nil "")))
+       :cljs (is (p/thrown? (str/starts-with? nil "")))
        :default (is (p/thrown? (str/starts-with? nil ""))))
 
     #?(:cljs (do (is (false? (str/starts-with? "ab" :a)))
@@ -28,17 +28,17 @@
     (is (false? (str/starts-with? "a-test" "-")))
     (is (false? (str/starts-with? "a-test" "t")))
 
-    #?@(:cljs
-        [(is (p/thrown? (str/starts-with? 'ab ":a")))
-         (is (p/thrown? (str/starts-with? :ab ":a")))
-         (is (p/thrown? (str/starts-with? 'a/b ":a")))
-         (is (p/thrown? (str/starts-with? :a/b ":a")))]
-        :cljr
+    #?@(:cljr
         [(is (p/thrown? (str/starts-with? 'ab ":a")))
          (is (p/thrown? (str/starts-with? :ab ":a")))
          (is (p/thrown? (str/starts-with? 'a/b ":a")))
          (is (p/thrown? (str/starts-with? :a/b ":a")))]
         :lpy
+        [(is (p/thrown? (str/starts-with? 'ab ":a")))
+         (is (p/thrown? (str/starts-with? :ab ":a")))
+         (is (p/thrown? (str/starts-with? 'a/b ":a")))
+         (is (p/thrown? (str/starts-with? :a/b ":a")))]
+        :cljs
         [(is (p/thrown? (str/starts-with? 'ab ":a")))
          (is (p/thrown? (str/starts-with? :ab ":a")))
          (is (p/thrown? (str/starts-with? 'a/b ":a")))

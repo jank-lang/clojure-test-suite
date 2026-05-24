@@ -13,14 +13,7 @@
     (let [s "asdf"]
       (is (= "ASDF" (str/upper-case "asdf")))
       (is (= "asdf" s) "original string mutated"))
-    #?(:cljs
-       (are [v] (p/thrown? (str/upper-case v))
-         :asdf
-         :asdf/asdf
-         'asdf
-         'asdf/asdf)
-
-       :cljr
+    #?(:cljr
        (are [v] (p/thrown? (str/upper-case v))
          :asdf
          :asdf/asdf
@@ -28,6 +21,13 @@
          'asdf/asdf)
 
        :lpy
+       (are [v] (p/thrown? (str/upper-case v))
+         :asdf
+         :asdf/asdf
+         'asdf
+         'asdf/asdf)
+
+       :cljs
        (are [v] (p/thrown? (str/upper-case v))
          :asdf
          :asdf/asdf

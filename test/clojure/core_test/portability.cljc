@@ -32,6 +32,15 @@
       :phel #(phel.async/delay (/ % 1000)))
    ms))
 
+(defn lazy-seq?
+  "Is `x` a lazy seq. This requires a dialect-specific test of some
+  sort, typically for whether `x` conforms to a specific object type."
+  [x]
+  #?(:cljs (instance? LazySeq x)
+     :phel (phel.core/lazy-seq? x)
+     :lpy (instance? basilisp.lang.seq/LazySeq x)
+     :default (instance? clojure.lang.LazySeq x)))
+
 ;; --- Portable exception multimethod. ---
 
 ;; Tests that evaluating `form` throws an exception, without asserting the
@@ -42,42 +51,83 @@
 ;; Prefer this multimethod over manually written reader conditionals, which
 ;; risk accidentally using dialect-specific symbols as `:default` cases.".
 
-#?(;; The implementation for CLJS is separate but the intent behind it is the same.
-   :cljs nil
-   :default
-(defmethod #?(:lpy t/gen-assert
-              :default t/assert-expr)
-  'p/thrown?
-  #?(:lpy [form msg _line-num]
-     :default [msg form])
-  (let [body (drop 1 form)]
-    `(let [report-success# #?(:lpy (fn [_])
-                              :default t/do-report)
-           report-failure# #?(:lpy (partial vswap! t/*test-failures* conj)
-                              :default t/do-report)
-           success-opts# (fn [~'error]
-                           {:type :pass :message '~msg
-                            :expected '~form :actual ~'error})
-           failure-opts# {:type #?(:lpy :failure
-                                   :default :fail)
-                          :message '~msg 
+#?(:cljs nil   ; CLJS is special. See below.
+
+   :lpy
+   (defmethod t/gen-assert 'p/thrown?
+     [form msg _line-num]
+     (let [body (rest form)]
+       `(try
+          (let [result# (do ~@body)]
+            (vswap! t/*test-failures* conj {:type :failure
+                                            :message ~msg
+                                            :expected '~form
+                                            :actual result#}))
+          (catch ~'Exception e#
+            ;; don't do anything on success
+            e#))))
+
+   :jank
+   (defmethod t/assert-expr 'p/thrown?
+     [msg form]
+     (let [body (rest form)]
+       `(try
+          (let [result# (do ~@body)]
+            (t/do-report {:type :fail
+                          :message ~msg
                           :expected '~form
-                          :actual nil}]
-       (try
-         ~@body
-         (report-failure# failure-opts#)
-         (catch #?(:jank ~'jank.runtime.object_ref
-                   :clj ~'Throwable
-                   :phel ~'Throwable
-                   :default ~'Exception) e#
-           (report-success# (success-opts# e#))
-           e#)
-         #?(:jank (catch ~'std.exception e#
-                    (report-success# (success-opts# (~'.what e#))))))))))
+                          :actual result#}))
+          (catch ~'jank.runtime.object_ref e#
+            (t/do-report {:type :pass
+                          :message ~msg
+                          :expected '~form
+                          :actual e#})
+            e#)
+          (catch ~'std.exception e#
+            (let [actual# (~'.what e#)]
+              (t/do-report {:type :pass
+                            :message ~msg
+                            :expected '~form
+                            :actual actual#})
+              actual#)))))
+
+   :cljr
+   (defmethod t/assert-expr 'p/thrown?
+     [msg form]
+     (let [body (rest form)]
+       `(try
+          (let [result# (do ~@body)]
+            (t/do-report {:type :fail
+                          :message ~msg
+                          :expected '~form
+                          :actual result#}))
+          (catch ~'Exception e#
+            (t/do-report {:type :pass
+                          :message ~msg
+                          :expected '~form
+                          :actual e#})
+            e#))))
+
+   :default  ; Clojure JVM, Babashka, Phel
+   (defmethod t/assert-expr 'p/thrown?
+     [msg form]
+     (let [body (rest form)]
+       `(try
+          (let [result# (do ~@body)]
+            (t/do-report {:type :fail
+                          :message ~msg
+                          :expected '~form
+                          :actual result#}))
+          (catch ~'Throwable e#
+            (t/do-report {:type :pass
+                          :message ~msg
+                          :expected '~form
+                          :actual e#})
+            e#)))))
 
 ;; The ClojureScript implementation of the portable exception multimethod is
 ;; slightly special. The `cljs.test/assert-expr` is not a ClojureScript
-;; runtime var, it's a Clojure-side compiler multimethod. It lives in the JVM
+;; runtime var. It's a Clojure-side compiler multimethod. It lives in the JVM
 ;; cljs.test namespace and is invoked during macro expansion of cljs.test/is,
 ;; not at runtime in the JS environment.
 #?(:clj
@@ -85,22 +135,19 @@
      (require '[cljs.test])
      (eval '(defmethod cljs.test/assert-expr 'p/thrown?
               [_menv msg form]
-              (let [body (drop 1 form)]
+              (let [body (rest form)]
                 `(try
-                   ~@body
-                   (cljs.test/report
-                     {:type :fail
-                      :message '~msg 
-                      :expected '~form
-                      :actual nil})
+                   (let [result# (do ~@body)]
+                     (cljs.test/report {:type :fail
+                                        :message ~msg
+                                        :expected '~form
+                                        :actual result#}))
                    (catch ~'js/Error e#
-                     (cljs.test/report
-                       {:type :pass
-                        :message '~msg
-                        :expected '~form
-                        :actual e#})
-                    e#)))))
+                     (cljs.test/report {:type :pass
+                                        :message ~msg
+                                        :expected '~form
+                                        :actual e#})
+                     e#)))))
      (catch Exception  _)))
 
 ;; --- Portable exception multimethod. ---
-

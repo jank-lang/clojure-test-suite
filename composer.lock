@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f53c92650283dcf04dddc2d93bd0dc5",
+    "content-hash": "8528b44c559ca9101465f040ae1b2881",
     "packages": [
         {
             "name": "amphp/amp",
@@ -242,16 +242,16 @@
         },
         {
             "name": "phel-lang/phel-lang",
-            "version": "v0.38.0",
+            "version": "v0.39.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phel-lang/phel-lang.git",
-                "reference": "ecf3779e8c72e013b9c9751f4fa415d6b56d6c3b"
+                "reference": "5d89b55910cd5fad22e14a0a40f359948412e390"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phel-lang/phel-lang/zipball/ecf3779e8c72e013b9c9751f4fa415d6b56d6c3b",
-                "reference": "ecf3779e8c72e013b9c9751f4fa415d6b56d6c3b",
+                "url": "https://api.github.com/repos/phel-lang/phel-lang/zipball/5d89b55910cd5fad22e14a0a40f359948412e390",
+                "reference": "5d89b55910cd5fad22e14a0a40f359948412e390",
                 "shasum": ""
             },
             "require": {
@@ -310,7 +310,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phel-lang/phel-lang/issues",
-                "source": "https://github.com/phel-lang/phel-lang/tree/v0.38.0"
+                "source": "https://github.com/phel-lang/phel-lang/tree/v0.39.0"
             },
             "funding": [
                 {
@@ -318,7 +318,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2026-05-16T18:05:12+00:00"
+            "time": "2026-05-19T09:04:48+00:00"
         },
         {
             "name": "psr/container",
@@ -375,16 +375,16 @@
         },
         {
             "name": "revolt/event-loop",
-            "version": "v1.0.8",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/revoltphp/event-loop.git",
-                "reference": "b6fc06dce8e9b523c9946138fa5e62181934f91c"
+                "reference": "44061cf513e53c6200372fc935ac42271566295d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/revoltphp/event-loop/zipball/b6fc06dce8e9b523c9946138fa5e62181934f91c",
-                "reference": "b6fc06dce8e9b523c9946138fa5e62181934f91c",
+                "url": "https://api.github.com/repos/revoltphp/event-loop/zipball/44061cf513e53c6200372fc935ac42271566295d",
+                "reference": "44061cf513e53c6200372fc935ac42271566295d",
                 "shasum": ""
             },
             "require": {
@@ -394,7 +394,7 @@
                 "ext-json": "*",
                 "jetbrains/phpstorm-stubs": "^2019.3",
                 "phpunit/phpunit": "^9",
-                "psalm/phar": "^5.15"
+                "psalm/phar": "6.16.*"
             },
             "type": "library",
             "extra": {
@@ -441,9 +441,9 @@
             ],
             "support": {
                 "issues": "https://github.com/revoltphp/event-loop/issues",
-                "source": "https://github.com/revoltphp/event-loop/tree/v1.0.8"
+                "source": "https://github.com/revoltphp/event-loop/tree/v1.0.9"
             },
-            "time": "2025-08-27T21:33:23+00:00"
+            "time": "2026-05-16T17:55:38+00:00"
         },
         {
             "name": "symfony/console",

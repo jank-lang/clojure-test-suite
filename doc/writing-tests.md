@@ -153,6 +153,15 @@ After pushing your new branch containing commits that implement your test to you
 Add a "Closes #xxx" comment with the appropriate issue number in the PR comment section.
 This helps ensure the correct issue gets closed when your PR is merged.
 
+To convey that your pull request is ready for review, please add me ([jeaye](https://github.com/jeaye))
+as a reviewer. I will then review your pull request when I am next available.
+
+After review, I may request iteration on your pull request. If you iterate and
+you're ready for review again, please add me as a reviewer again in order to
+request another review. Github emails me with every change you push, but I
+
+cannot know which one is final. A request for review is unambiguous.
+
 ### Monitor Github for Reviewer Comments
 
 After your PR is submitted, reviewers might provide comments, ask questions, or suggest changes.
