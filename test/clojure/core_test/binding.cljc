@@ -47,7 +47,7 @@
     ;; Threading/future/delay cases
     (let [f (delay (test-fn))]
       (binding [*x* :here]
-        (is (= @f :here) "Delayed functions inherit there bindings when forced"))
+        (is (= @f :here) "Delayed functions inherit their bindings when forced"))
       (is (= @f :here) "And value persists outside binding expression"))
 
     ;; CLJS doesn't have futures
