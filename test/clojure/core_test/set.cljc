@@ -15,7 +15,7 @@
       (is (= #{1 2 3} (set [1 1 2 2 3 3 3])))
       (is (= #{:a 1 "a"} (set '(:a 1 "a"))))
       (is (= #{:a 1 "a"} (set [:a 1 "a"])))
-      (is (= #{[:a 1] [:b 2]} (set {:a 1 :b 2})))
+      (is (= #?(:phel #{1 2} :default #{[:a 1] [:b 2]}) (set {:a 1 :b 2})))
       (is (= #{:a 1 "a" [\space]} (set [:a 1 "a" [\space]])))
       #?@(:lpy [(is (= #{\space} (set \space)))
                 (is (p/thrown? (set 1)))

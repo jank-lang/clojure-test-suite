@@ -22,12 +22,12 @@
         (is (= 1 (when-first [x s] x)))
         (is (= @calls 1))))
     (testing "without a body, truth doesn't matter"
-      (is (nil? (when-first [x nil])))
-      (is (nil? (when-first [x [false]])))
-      (is (nil? (when-first [x [true]]))))
+      (is (nil? (when-first [_x nil])))
+      (is (nil? (when-first [_x [false]])))
+      (is (nil? (when-first [_x [true]]))))
     (testing "when has an implicit `do`"
       (let [counter (atom 0)]
-        (is (= :bar (when-first [x (range 5)] 
+        (is (= :bar (when-first [_x (range 5)] 
                    (swap! counter inc) 
                    (swap! counter inc)
                    (swap! counter inc)

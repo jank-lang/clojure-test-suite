@@ -20,12 +20,12 @@
                        (is (= '(1 1 1 1 1) (when-let [x s] x)))
                        (is (= @calls 5))))
                    (testing "without a body, truth doesn't matter"
-                     (is (nil? (when-let [x nil])))
-                     (is (nil? (when-let [x [false]])))
-                     (is (nil? (when-let [x [true]]))))
+                     (is (nil? (when-let [_x nil])))
+                     (is (nil? (when-let [_x [false]])))
+                     (is (nil? (when-let [_x [true]]))))
                    (testing "when has an implicit `do`"
                      (let [counter (atom 0)]
-                       (is (= :bar (when-let [x (range 5)]
+                       (is (= :bar (when-let [_x (range 5)]
                                      (swap! counter inc)
                                      (swap! counter inc)
                                      (swap! counter inc)

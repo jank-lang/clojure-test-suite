@@ -7,12 +7,12 @@
 ;; :require or :use that library.
 ;; Copied here for now
 (defn platform-newlines [s]
-  #?(:clj
-     (let [nl (System/getProperty "line.separator")]
-       (.replace s "\n" nl))
-     :cljr
+  #?(:cljr
      (let [nl Environment/NewLine]
        (.Replace ^String s "\n" nl))
+     :clj
+     (let [nl (System/getProperty "line.separator")]
+       (.replace s "\n" nl))
      :default
      s))
 

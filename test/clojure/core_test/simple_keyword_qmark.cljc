@@ -7,7 +7,7 @@
    (are [expected x] (= expected (simple-keyword? x))
      true  :a-keyword
 
-     #?(:cljs true :default false) (keyword "a/b/c")
+     #?(:cljs true :phel true :default false) (keyword "a/b/c")
      false ::a-keyword
      false 'a-symbol
      false :a-ns/a-keyword
