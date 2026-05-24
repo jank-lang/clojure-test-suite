@@ -34,7 +34,7 @@
               :k))))
 
     (testing "wrong-shape input is mostly accepted (and throws when invoked)"
-      #?(:clr  (is (p/thrown? ((juxt nil))))
+      #?(:cljr (is (p/thrown? ((juxt nil))))
          :cljs (is (p/thrown? ((juxt nil))))
          :clj  (is (p/thrown? ((juxt nil)))))
       #?@(:cljs    [(is (p/thrown? ((juxt (range)))))

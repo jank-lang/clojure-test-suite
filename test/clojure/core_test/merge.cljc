@@ -51,9 +51,9 @@
         (is (= {"x" 1} (merge {} ["x" 1])))
         (is (= {'x 10, 'y 10} (merge {'x 10} ['y 10])))
         (testing "In CLJS (unlike other dialects) vectors with >2 arguments are treated as map-entries (where the latter values are ignored)"
-          #?(:clr  (is (p/thrown? (merge {} [:foo :bar :baz]))
+          #?(:cljr (is (p/thrown? (merge {} [:foo :bar :baz])))
              :cljs (is (= {:foo :bar} (merge {} [:foo :bar :baz])))
-             :clj  (is (p/thrown? (merge {} [:foo :bar :baz]))))))
+             :clj  (is (p/thrown? (merge {} [:foo :bar :baz])))))
 
         (is (= {:foo "foo", :bar "bar"} (merge {} [:foo "foo"] [:bar "bar"])))
         (is (= {'x 10, 'y 10, 'z 10} (merge {'x 10} ['y 10] ['z 10])))
@@ -63,10 +63,6 @@
              :default (is (p/thrown? (merge {} [:foo :bar :baz :bar]))))))
 
       (testing "atomic values in position 2+ throw"
-        (is (p/thrown? (merge {} 1)))
-        (is (p/thrown? (merge {} 1 2)))
-        (is (p/thrown? (merge {} :foo)))
-        (is (p/thrown? (merge {} "str")))
         (is (p/thrown? (merge {} 1)))
         (is (p/thrown? (merge {} 1 2)))
         (is (p/thrown? (merge {} :foo)))

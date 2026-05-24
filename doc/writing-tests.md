@@ -228,7 +228,7 @@ Here are some things to do and think about when you're writing tests.
 
 ## Reader Conditional Order
 
-When using reader conditionals (i.e. `#?(...)`) to write dialect specific code, please follow the following order:
+When using reader conditionals (i.e. `#?(...)`) to write dialect-specific code, please follow the following order:
 
 ```clj
 #?(:bb      ...
@@ -241,7 +241,7 @@ When using reader conditionals (i.e. `#?(...)`) to write dialect specific code, 
    :default ...)
 ```
  
-This is important not only for consistency but also for ensuring your test runs as expected since certain dialects, like Babashka, will use the Clojure branch of a reader conditional if it's listed higher than the Babashka branch of the reader conditional. 
+This is important not only for consistency but also for ensuring your tests runs as expected since certain dialects, like Babashka, will use the Clojure branch of a reader conditional if it's listed higher than the Babashka branch of the reader conditional. 
  
 ## Things to Avoid
 
