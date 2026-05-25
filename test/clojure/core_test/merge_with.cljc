@@ -10,9 +10,8 @@
    (testing "`merge-with`"
 
      (testing "zero arg behavior"
-       #?(:clj     (is (p/thrown? (merge-with)))
-          :cljs    (is (nil? (merge-with))) ; TODO how to suppress warning
-          :default (is (p/thrown? (merge-with)))))
+       #?(:cljs    (is (nil? (merge-with)))
+          :clj     (is (p/thrown? (merge-with)))))
 
      (testing "`nil`ish behavior"
        (is (nil? (merge-with second-arg nil)))
@@ -46,15 +45,15 @@
          (is (= [[10 20]] @called-with))))
 
      (testing "non-map types"
-       #?(:clj    (is (thrown-with-msg? java.lang.ClassCastException
+       #?(:cljs    (is (p/thrown? (merge-with second-arg {:a 1} [:a 2])))
+          :clj    (is (thrown-with-msg? java.lang.ClassCastException
                                         #".*cannot be cast to .*"
                                         (merge-with second-arg {:a 1} [:a 2])))
-          :cljs    (is (p/thrown? (merge-with second-arg {:a 1} [:a 2])))
           :default (is (p/thrown? (merge-with second-arg {:a 1} [:a 2]))))
-       #?(:clj    (is (thrown-with-msg? java.lang.IllegalArgumentException
+       #?(:cljs    (is (p/thrown? (merge-with second-arg {:a 1} 1)))
+          :clj    (is (thrown-with-msg? java.lang.IllegalArgumentException
                                         #"^Don't know how to create ISeq from.*"
                                         (merge-with second-arg {:a 1} 1)))
-          :cljs    (is (p/thrown? (merge-with second-arg {:a 1} 1)))
           :default (is (p/thrown? (merge-with second-arg {:a 1} 1)))))
 
      (testing "duplicate mappings are handled according to f"
