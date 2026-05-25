@@ -10,7 +10,6 @@
    (testing "`merge-with`"
 
      (testing "zero arg behavior"
-       ;; NOTE: clojurescript differs from the rest here, bug?
        #?(:clj     (is (p/thrown? (merge-with)))
           :cljs    (is (nil? (merge-with))) ; TODO how to suppress warning
           :default (is (p/thrown? (merge-with)))))
@@ -19,7 +18,7 @@
        (is (nil? (merge-with second-arg nil)))
        (is (nil? (merge-with second-arg nil nil nil)))
        (is (= {} (merge-with second-arg {} nil)))
-       (is (= {} (merge-with second-arg nil {}))) ;; fails in basilisp => nil
+       (is (= {} (merge-with second-arg nil {})))
        (is (= {:a 1} (merge-with second-arg {:a 1} nil {})))
        (is (= {:a 1} (merge-with second-arg {:a 1} {} nil))))
 
