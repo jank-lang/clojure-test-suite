@@ -67,6 +67,14 @@
                                                       [a b]))
                                           {:a 1} {:a 2} {:b 3}))))
 
+     (testing "sorted"
+       (let [result (merge-with +
+                                (sorted-map :c 3 :a 1 :b 2)
+                                (sorted-map :b 2 :c 3 :a 1))]
+         (is (= {:a 2 :b 4 :c 6} result))
+         (is (sorted? result))
+         (is (= [:a :b :c] (keys result)))))
+
      (testing "nested maps are merged with `into`"
        (is (= {:ceo {:salary 1000000, :name "Alice"},
                :cto {:salary 500000, :name "Brenda"}}
