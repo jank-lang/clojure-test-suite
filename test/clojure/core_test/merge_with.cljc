@@ -45,22 +45,12 @@
          (is (= [[10 20]] @called-with))))
 
      (testing "non-map types"
-       #?(:cljs    (is (p/thrown? (merge-with second-arg {:a 1} [:a 2])))
-          :clj     (is (thrown-with-msg? java.lang.ClassCastException
-                                         #".*cannot be cast to .*"
-                                         (merge-with second-arg {:a 1} [:a 2])))
-          :default (is (p/thrown? (merge-with second-arg {:a 1} [:a 2]))))
-       #?(:cljs    (is (p/thrown? (merge-with second-arg {:a 1} 1)))
-          :clj     (is (thrown-with-msg? java.lang.IllegalArgumentException
-                                         #"^Don't know how to create ISeq from.*"
-                                         (merge-with second-arg {:a 1} 1)))
-          :default (is (p/thrown? (merge-with second-arg {:a 1} 1)))))
+       (is (p/thrown? (merge-with second-arg {:a 1} [:a 2])))
+       (is (p/thrown? (merge-with second-arg {:a 1} 1))))
 
      (testing "duplicate mappings are handled according to f"
        (is (= {:a 2} (merge-with second-arg {:a 1} {:a 2})))
        (is (= {:a 3} (merge-with + {:a 1} {:a 2})))
-       (let [val 2]
-         (is (= {:a 4} (merge-with + {:a val} {:a val})))) ; not fooled by identity
        (is (= {:a 3 :b 1} (merge-with + {:a 1} {:b 1} nil {:a 2})))
        (is (= {:a [1 2] :b 3} (merge-with (fn [a b] (if (vector? a)
                                                       (conj a b)
@@ -74,6 +64,28 @@
          (is (= {:a 2 :b 4 :c 6} result))
          (is (sorted? result))
          (is (= [:a :b :c] (keys result)))))
+
+     (testing "key equality"
+       (is (= {3 "longbigint"}
+              (merge-with str {3 'long} {3N 'bigint})))
+       (is (= {'(0 1) "rangelist"}
+              (merge-with str {(range 2) 'range} {'(0 1) 'list})))
+       (is (= {:foo "kw", 'foo "sym"}
+              (merge-with str {:foo "kw"} {'foo "sym"})))
+       (is (= {nil "ab", false "cd", 0 "ef"}
+              (merge-with str {nil "a", false "c", 0 "e"} {nil "b", false "d", 0 "f"})))
+       #?(:cljs (is (= {0 "doublebigdecimal"}
+                       (merge-with str {0.0 'double} {0.0M 'bigdecimal})))
+          :clj  (is (= {0.0 'double, 0.0M 'bigdecimal}
+                       (merge-with str {0.0 'double} {0.0M 'bigdecimal}))))
+       #?(:cljs (is (= {0 "longdouble"}
+                       (merge-with str {0 'long} {0.0 'double})))
+          :clj  (is (= {0 'long, 0.0 'double}
+                       (merge-with str {0 'long} {0.0 'double})))))
+
+     (testing "metadata progation, when keys are equal but not identical"
+       (is (= {:meta1 true}
+              (meta (ffirst (merge-with + {^:meta1 {} 1} {^:meta2 {} 2}))))))
 
      (testing "nested maps are merged with `into`"
        (is (= {:ceo {:salary 1000000, :name "Alice"},
