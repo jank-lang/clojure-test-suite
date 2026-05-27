@@ -112,7 +112,9 @@
    ;; Phel's `phel.test/report` multimethod dispatches on `:type` and only
    ;; recognises `:pass`/`:failed`/`:error` — not Clojure's `:fail`. Use
    ;; phel-native event keys so the assertion counters update. Phel's
-   ;; throwable hierarchy is rooted at PHP's `\Throwable`.
+   ;; throwable hierarchy is rooted at PHP's `\Throwable`; the literal is
+   ;; constructed via `symbol` because Clojure's reader treats a bare `\T`
+   ;; as a character literal (other dialects still read this file).
    (defmethod t/assert-expr 'p/thrown?
      [msg form]
      (let [body (rest form)]
@@ -122,7 +124,7 @@
                        :message ~msg
                        :expected '~form
                        :actual result#}))
-          (catch ~'\Throwable e#
+          (catch ~(symbol "\\Throwable") e#
             (t/report {:type :pass
                        :message ~msg
                        :expected '~form
