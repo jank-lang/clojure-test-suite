@@ -16,23 +16,25 @@
 
       )
 
-    (testing "metadata"
-      ;; Metadata shouldn't participate in the comparison
-      (let [g (group-by first [[^:foo [1] [2]] [^:bar [1] [3]]])]
-        (is (= {[1] [[[1] [2]] [[1] [3]]]} g))
-        ;; Metadata should be preserved on grouped items
-        (is (= {:foo true} (-> g (get [1]) first first meta)))
-        (is (= {:bar true} (-> g (get [1]) second first meta))))
+    #?(:phel nil ;; phel does not propagate metadata through group-by
+       :default
+       (testing "metadata"
+         ;; Metadata shouldn't participate in the comparison
+         (let [g (group-by first [[^:foo [1] [2]] [^:bar [1] [3]]])]
+           (is (= {[1] [[[1] [2]] [[1] [3]]]} g))
+           ;; Metadata should be preserved on grouped items
+           (is (= {:foo true} (-> g (get [1]) first first meta)))
+           (is (= {:bar true} (-> g (get [1]) second first meta))))
 
-      ;; Metadata should also be preserved on items and items should
-      ;; stay in the order of the initial collection
-      (let [s (group-by empty? [^:a [] ^:b [1] ^:c [] ^:d [2]])]
-        ;; validate grouping
-        (is (= s {true [[] []] false [[1] [2]]}))
-        ;; validate order of items in each grouping using attached
-        ;; metadata, which also validates that metadata is preserved
-        ;; on items
-        (is (= {:a true} (-> s (get true) first meta)))
-        (is (= {:c true} (-> s (get true) second meta)))
-        (is (= {:b true} (-> s (get false) first meta)))
-        (is (= {:d true} (-> s (get false) second meta)))))))
+         ;; Metadata should also be preserved on items and items should
+         ;; stay in the order of the initial collection
+         (let [s (group-by empty? [^:a [] ^:b [1] ^:c [] ^:d [2]])]
+           ;; validate grouping
+           (is (= s {true [[] []] false [[1] [2]]}))
+           ;; validate order of items in each grouping using attached
+           ;; metadata, which also validates that metadata is preserved
+           ;; on items
+           (is (= {:a true} (-> s (get true) first meta)))
+           (is (= {:c true} (-> s (get true) second meta)))
+           (is (= {:b true} (-> s (get false) first meta)))
+           (is (= {:d true} (-> s (get false) second meta))))))))
