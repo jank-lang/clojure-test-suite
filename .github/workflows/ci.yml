@@ -172,10 +172,6 @@ jobs:
 
   test-phel:
     runs-on: ubuntu-latest
-    # Phel is not yet at parity with Clojure on the upstream suite (laziness,
-    # type-coercion semantics, ConstantFolder bugs). Surface the run for
-    # visibility without blocking the overall CI gate.
-    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:

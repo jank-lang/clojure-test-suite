@@ -19,7 +19,7 @@
                                           (swap! x inc)
                                           (catch #?(:cljr clojure.lang.ExceptionInfo
                                                     :lpy basilisp.lang.exception/ExceptionInfo
-                                                    :phel Phel.Lang.ExInfoException
+                                                    :phel Phel.Lang.ExceptionInfo
                                                     :cljs :default
                                                     :clj clojure.lang.ExceptionInfo) e
                                             (let [data (ex-data e)]
