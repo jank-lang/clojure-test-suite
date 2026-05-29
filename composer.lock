@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8528b44c559ca9101465f040ae1b2881",
+    "content-hash": "d43f85623f6275799801a6c313dc4659",
     "packages": [
         {
             "name": "amphp/amp",
@@ -242,16 +242,16 @@
         },
         {
             "name": "phel-lang/phel-lang",
-            "version": "v0.39.0",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phel-lang/phel-lang.git",
-                "reference": "5d89b55910cd5fad22e14a0a40f359948412e390"
+                "reference": "9376ab1846f32af7900f091973cdcddd9de20e0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phel-lang/phel-lang/zipball/5d89b55910cd5fad22e14a0a40f359948412e390",
-                "reference": "5d89b55910cd5fad22e14a0a40f359948412e390",
+                "url": "https://api.github.com/repos/phel-lang/phel-lang/zipball/9376ab1846f32af7900f091973cdcddd9de20e0c",
+                "reference": "9376ab1846f32af7900f091973cdcddd9de20e0c",
                 "shasum": ""
             },
             "require": {
@@ -273,6 +273,7 @@
                 "symfony/var-dumper": "^7.4",
                 "vimeo/psalm": "^6.16"
             },
+            "default-branch": true,
             "bin": [
                 "bin/phel"
             ],
@@ -296,7 +297,7 @@
                 },
                 {
                     "name": "Jose M. Valera Reales",
-                    "email": "phel@chemaclass.es",
+                    "email": "phel@chemaclass.com",
                     "homepage": "https://chemaclass.com"
                 }
             ],
@@ -310,7 +311,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phel-lang/phel-lang/issues",
-                "source": "https://github.com/phel-lang/phel-lang/tree/v0.39.0"
+                "source": "https://github.com/phel-lang/phel-lang/tree/main"
             },
             "funding": [
                 {
@@ -318,7 +319,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2026-05-19T09:04:48+00:00"
+            "time": "2026-05-29T10:32:06+00:00"
         },
         {
             "name": "psr/container",
@@ -1206,9 +1207,11 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": {},
-    "prefer-stable": false,
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "phel-lang/phel-lang": 20
+    },
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {},
     "platform-dev": {},
