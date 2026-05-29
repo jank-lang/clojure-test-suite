@@ -35,7 +35,12 @@
         (range 0 10 1) -1 (range 10)
         (range 0 10 2) -2 (range 10))
 
-      (is (p/thrown? (seq (take-nth nil (range 10)))))
+      ;; Phel's lazy arity-2 `take-nth` coerces a `nil` step to 0 and produces
+      ;; an (unrealized) infinite seq of the first element, so merely calling
+      ;; `seq` does not throw. The eager transducer path still throws (modulo
+      ;; by zero). Documented leniency divergence.
+      #?(:phel (is (= 0 (first (seq (take-nth nil (range 10))))))
+         :default (is (p/thrown? (seq (take-nth nil (range 10))))))
       (is (p/thrown? (transduce (take-nth nil) conj [] (range 10))))
       #?(:cljs
          (is (= [] (transduce (take-nth 0) conj [] (range 10))))

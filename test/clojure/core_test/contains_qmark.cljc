@@ -7,8 +7,11 @@
     (is (= false (contains? nil nil)))
     (is (= false (contains? {} nil)))
     (is (= false (contains? [] nil)))
+    ;; Phel's `contains?` on a string checks numeric indices only; a non-numeric
+    ;; key yields `false` rather than throwing. Documented divergence.
     #?(:lpy (is (= true (contains? "abc" "a")))
        :cljs (is (= false (contains? "abc" "a")))
+       :phel (is (= false (contains? "abc" "a")))
        :default (is (p/thrown? (contains? "abc" "a"))))
 
     ;; find by index

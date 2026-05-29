@@ -59,7 +59,10 @@
                                #{1 2 3 4} (conj! (transient #{1 2}) 3) 4)))
 
     ;; Basilisp does not prevent continuing to use transient vectors after persistent! call
+    ;; Phel likewise does not invalidate a transient after `persistent!`, so
+    ;; `conj!` keeps working instead of throwing. Documented divergence.
     #?@(:lpy []
+        :phel []
         :default
         [(testing "cannot conj! after call to persistent!"
            (let [coll (transient []), _ (persistent! coll)]
@@ -69,7 +72,13 @@
       (are [coll x] (p/thrown? (conj! coll x))
         ;; Basilisp is fairly liberal with its coercion to map entry, meaning
         ;; that many two element sequences can be conj'd to a map.
+        ;; Phel likewise coerces a 2-element seq into a [key value] pair, so
+        ;; `(conj! (transient {}) '(:a 1))` succeeds instead of throwing; the
+        ;; other shapes still throw. Documented divergence.
         #?@(:lpy []
+            :phel
+            [(transient {}) #{:a 1}
+             (transient {}) (range 2)]
             :default
             [(transient {}) '(:a 1)
              (transient {}) #{:a 1}

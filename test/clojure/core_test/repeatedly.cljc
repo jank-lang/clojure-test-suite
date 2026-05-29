@@ -15,10 +15,7 @@
                                         (throw (ex-info "expected" {}))
                                         (swap! n inc)))]
           (is (p/thrown? (last (repeatedly 2 #(fails-second-run state)))))
-          (is (= #?(;; phel doesn't seem to handle mid failures gracefully
-                    :phel    0
-                    :default 1)
-                 @state))))))
+          (is (= 1 @state))))))
 
     (testing "Single argument"
       (is (= 0 (first (repeatedly +))))

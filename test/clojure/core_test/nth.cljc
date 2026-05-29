@@ -15,7 +15,14 @@
     ;; `nth` throws if out of range
     (is (p/thrown? (nth [0 1 2] 10)))
     (is (p/thrown? (nth [0 1 2] nil)))
-    #?@(:lpy
+    ;; Phel returns `nil` for `(nth nil _)` regardless of the index (nil acts
+    ;; as an empty collection), so `(nth nil nil)` yields nil instead of
+    ;; throwing. Out-of-bounds on a real vector still throws. Documented
+    ;; leniency divergence.
+    #?@(:phel
+        [(is (p/thrown? (nth [0 1 2] -1)))
+         (is (nil? (nth nil nil)))]
+        :lpy
         [(is (= 2 (nth [0 1 2] -1)))
          (is (= nil (nth nil nil)))]
         :default

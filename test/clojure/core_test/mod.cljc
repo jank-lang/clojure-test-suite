@@ -98,7 +98,19 @@
                     ratio?     -1/3  -3    -4/3
                     ratio?     -7/2  -37/2 -15]))
 
-    #?@(:cljs
+    ;; Phel is lenient with non-finite numerators: `mod` with ##Inf/##-Inf/##NaN
+    ;; returns NaN instead of throwing (like CLJS). Only `mod x 0` throws.
+    ;; Documented divergence.
+    #?@(:phel
+        [(is (p/thrown? (mod 10 0)))
+         (is (NaN? (mod ##Inf 1)))
+         (is (NaN? (mod 1 ##Inf)))
+         (is (NaN? (mod ##-Inf 1)))
+         (is (NaN? (mod 1 ##-Inf)))
+         (is (NaN? (mod ##NaN 1)))
+         (is (NaN? (mod 1 ##NaN)))
+         (is (NaN? (mod ##NaN 1)))]
+        :cljs
         [(is (NaN? (mod 10 0)))
          (is (NaN? (mod ##Inf 1)))
          (is (NaN? (mod 1 ##Inf)))

@@ -10,7 +10,13 @@
         (is (= 2 (numerator 2/3)))
         (is (= 3 (numerator 3/4)))])
 
-   #?@(:lpy
+   ;; Phel's `numerator` accepts plain integers and BigInts (treating them as
+   ;; rationals with denominator 1) instead of throwing like Clojure does.
+   ;; Documented divergence (matches lpy).
+   #?@(:phel
+       [(is (= 1 (numerator 1)))
+        (is (= 1 (numerator 1N)))]
+       :lpy
        [(is (= 1 (numerator 1)))
         (is (= 1 (numerator 1N)))]
        :default

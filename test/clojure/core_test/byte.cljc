@@ -84,6 +84,20 @@
          (is (= [0] (byte [0])))
          (is (= nil (byte nil)))]
 
+        ;; Phel truncates floats toward an integer before range-checking, so
+        ;; -128.000001 and 127.000001 truncate to the in-range -128 / 127
+        ;; instead of throwing. Out-of-range integers still throw.
+        :phel
+        [(is (= -128 (byte -128.000001)))
+         (is (p/thrown? (byte -129)))
+         (is (p/thrown? (byte 128)))
+         (is (= 127 (byte 127.000001)))
+         ;; Check handling of other types
+         (is (p/thrown? (byte "0")))
+         (is (p/thrown? (byte :0)))
+         (is (p/thrown? (byte [0])))
+         (is (p/thrown? (byte nil)))]
+
         :default
         [ ;; `byte` throws outside the range of 127 ... -128.
          (is (p/thrown? (byte -128.000001)))

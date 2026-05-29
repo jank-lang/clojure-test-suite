@@ -120,6 +120,12 @@
              identity [{:val 2} {:val 1} {:val 3}]]
             :cljs
             []
+            ;; Phel's comparison operators are intentionally lenient: strings,
+            ;; vectors, maps and sets are all comparable (structural ordering),
+            ;; so `min-key identity` over them returns a value rather than
+            ;; throwing. Documented divergence.
+            :phel
+            []
             :default
             [identity ["x" "y"]
              identity ["y" "x" "z"]
@@ -128,4 +134,15 @@
              identity [{:val 1} {:val 2}]
              identity [{:val 2} {:val 1} {:val 3}]
              identity [#{1} #{2}]
-             identity [#{2} #{1} #{3}]])))))
+             identity [#{2} #{1} #{3}]]))
+      ;; In Phel these comparisons succeed and pick the structural minimum.
+      #?(:phel
+         (are [expected f col] (= expected (apply min-key f col))
+           "x"     identity ["x" "y"]
+           "x"     identity ["y" "x" "z"]
+           [1]     identity [[1] [2]]
+           [1]     identity [[2] [1] [3]]
+           {:val 1} identity [{:val 1} {:val 2}]
+           {:val 1} identity [{:val 2} {:val 1} {:val 3}]
+           #{1}    identity [#{1} #{2}]
+           #{1}    identity [#{2} #{1} #{3}])))))

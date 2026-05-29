@@ -26,6 +26,15 @@
            (is (p/thrown? (ffirst (range)))) ; infinite lazy seq
            (is (p/thrown? (ffirst [:a :b :c])))
            (is (p/thrown? (ffirst '(:a :b :c))))]
+          ;; Phel's `first` returns `nil` for a non-seqable scalar instead of
+          ;; throwing, so `(ffirst (range ...))` (== `(first (first ...))`,
+          ;; i.e. `(first 0)`) yields `nil` rather than throwing. Calling
+          ;; `first` on a keyword still throws. Documented divergence.
+          :phel
+          [(is (nil? (ffirst (range 0 10))))
+           (is (nil? (ffirst (range)))) ; infinite lazy seq
+           (is (p/thrown? (ffirst [:a :b :c])))
+           (is (p/thrown? (ffirst '(:a :b :c))))]
           :default
           [(is (p/thrown? (ffirst (range 0 10))))
            (is (p/thrown? (ffirst (range)))) ; infinite lazy seq

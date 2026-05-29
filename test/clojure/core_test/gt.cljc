@@ -110,6 +110,15 @@
            (is (= true (> 2 1 nil)))
            (is (= false (> 1 2 nil)))]
 
+          ;; Phel's `>` coerces `nil` to 0 in numeric comparisons instead of
+          ;; throwing, so `(> 1 nil)` is `true`, `(> nil 1)` is `false`, etc.
+          ;; Documented divergence (matches the lenient cljs behavior).
+          :phel
+          [(is (= true (> 1 nil)))
+           (is (= false (> nil 1)))
+           (is (= false (> 1 nil 2)))
+           (is (= true (> 2 1 nil)))]
+
           :default
           [(is (p/thrown? (> 1 nil)))
            (is (p/thrown? (> nil 1)))

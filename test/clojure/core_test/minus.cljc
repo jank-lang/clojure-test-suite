@@ -68,7 +68,10 @@
         -1.0M 1.0M  2.0M)
 
       ;; Zero arg
+      ;; Phel's `-` returns 0 with no arguments instead of throwing. Documented
+      ;; divergence.
       #?(:cljs nil
+         :phel (is (= 0 (-)))
          :default (is (p/thrown? (-))))
 
       ;; Single arg
@@ -79,7 +82,22 @@
       (is (= -45 (- 0 1 2 3 4 5 6 7 8 9)))
 
 
-      #?@(:lpy
+      ;; Phel throws on nil arithmetic operands (like Clojure), but integer
+      ;; subtraction overflows silently into PHP arbitrary-precision rather than
+      ;; throwing. Documented divergence.
+      #?@(:phel
+          [(is (p/thrown? (- nil 1)))
+           (is (p/thrown? (- 1 nil)))
+           (is (p/thrown? (- nil 1N)))
+           (is (p/thrown? (- 1N nil)))
+           (is (p/thrown? (- nil 1.0)))
+           (is (p/thrown? (- 1.0 nil)))
+           (is (p/thrown? (- nil 1.0M)))
+           (is (p/thrown? (- 1.0M nil)))
+           (is (- r/min-int 1))
+           (is (- r/max-int -1))]
+
+          :lpy
           [(is (p/thrown? (- nil 1)))
            (is (p/thrown? (- 1 nil)))
            (is (p/thrown? (- nil 1N)))

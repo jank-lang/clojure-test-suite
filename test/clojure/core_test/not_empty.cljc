@@ -24,6 +24,13 @@
                  (is (p/thrown? (not-empty 0)))
                  (is (p/thrown? (not-empty 0.0)))]
           
+          ;; Phel is lenient on non-collection input instead of throwing:
+          ;; chars are strings so (not-empty \a) => "a"; 0 is treated as empty
+          ;; and yields nil; 0.0 is returned unchanged.
+          :phel [(is (= "a" (not-empty \a)))
+                 (is (= nil (not-empty 0)))
+                 (is (= 0.0 (not-empty 0.0)))]
+
           :default [(is (p/thrown? (not-empty \a)))
                     (is (p/thrown? (not-empty 0)))
                     (is (p/thrown? (not-empty 0.0)))]))))

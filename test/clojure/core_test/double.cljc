@@ -32,6 +32,13 @@
        [(is (= "0" (double "0")))
         (is (= :0 (double :0)))]
 
+       ;; Phel is lenient: `double` parses numeric strings (like PHP's float
+       ;; cast), so `(double "0")` returns 0.0 instead of throwing. A keyword
+       ;; still throws cleanly. Documented divergence.
+       :phel
+       [(is (= 0.0 (double "0")))
+        (is (p/thrown? (double :0)))]
+
        :default
        [(is (p/thrown? (double "0")))
         (is (p/thrown? (double :0)))])

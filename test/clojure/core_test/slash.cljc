@@ -113,7 +113,10 @@
         1.0M  -1.0M -1.0M)
 
       ;; Zero arg
-      #?(:cljs nil
+      ;; Phel defines `(/)` as the multiplicative identity `1` (mirroring
+      ;; `(*) => 1`) instead of throwing on zero args. Documented divergence.
+      #?(:phel (is (= 1 (/)))
+         :cljs nil
          :default (is (p/thrown? (/))))
 
       ;; Single arg

@@ -90,7 +90,16 @@
       ;; `<` only compares numbers, except in ClojureScript (really
       ;; JavaScript under the hood) where comparisons are just a bit
       ;; of a mess.
-      #?@(:cljr
+      ;; Phel treats nil as 0 in comparisons rather than throwing, matching
+      ;; CLJS semantics: (< nil 1) => true, (< 1 nil) => false. Documented
+      ;; divergence.
+      #?@(:phel
+          [(is (= true (< nil 1)))
+           (is (= false (< 1 nil)))
+           (is (= true (< nil 1 2)))
+           (is (= false (< 1 2 nil)))]
+
+          :cljr
           [(is (p/thrown? (< nil 1)))
            (is (p/thrown? (< 1 nil)))
            (is (p/thrown? (< nil 1 2)))

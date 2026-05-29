@@ -17,9 +17,15 @@
                                #{:a :b} #{:a :b :c} [:c]
                                #{true nil} #{true false nil} [false]))
 
-    (testing "cannot disj! transient after persistent! call"
-      (let [t (transient #{1 2 3}), _ (persistent! t)]
-        (is (p/thrown? (disj! t 1)))))
+    ;; Phel does not invalidate a transient after `persistent!`: it stays
+    ;; usable and `disj!` keeps mutating it instead of throwing.
+    ;; Documented divergence.
+    #?(:phel (testing "transient set stays usable after persistent! call"
+               (let [t (transient #{1 2 3}), _ (persistent! t)]
+                 (is (= #{2 3} (persistent! (disj! t 1))))))
+       :default (testing "cannot disj! transient after persistent! call"
+                  (let [t (transient #{1 2 3}), _ (persistent! t)]
+                    (is (p/thrown? (disj! t 1))))))
 
     (testing "bad shape"
       (are [set keys] (p/thrown? (apply disj! set keys))

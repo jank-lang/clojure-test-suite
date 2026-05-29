@@ -142,9 +142,10 @@
         1
         true
         false
-        #?@(;; Chars aren't seqs except in CLJS and Basilisp where char is string of length 1
+        #?@(;; Chars aren't seqs except in CLJS, Basilisp and Phel where char is a string of length 1
             :cljs []
             :lpy  []
+            :phel []
             :default [\a])
         :a
         'a))))

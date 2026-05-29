@@ -8,7 +8,13 @@
     (is (= 3 (denominator 2/3)))
     (is (= 4 (denominator 3/4)))
 
-    #?@(:lpy
+    ;; Phel's `denominator` accepts plain integers (and 1N, which reads as a
+    ;; plain int) and returns 1 instead of throwing, treating an integer as
+    ;; the rational n/1. Documented leniency divergence.
+    #?@(:phel
+        [(is (= 1 (denominator 1)))
+         (is (= 1 (denominator 1N)))]
+        :lpy
         [(is (= 1 (denominator 1)))
          (is (= 1 (denominator 1N)))]
         :default

@@ -19,12 +19,25 @@
 
     (testing "invalid"
       (are [x] (p/thrown? (odd? x))
-        nil
-        ##Inf
-        ##-Inf
-        ##NaN
-        1.5
-        #?@(:cljs []
-            :default
-            [1/2])
-        0.2M))))
+        nil)
+
+      ;; Phel is lenient: `odd?` does not validate that the argument is an
+      ;; integer. Floats (incl. ##Inf/##-Inf/##NaN and decimals) are accepted
+      ;; and return a (meaningless) boolean instead of throwing. Documented
+      ;; divergence; only `nil` is rejected (see above).
+      #?(:phel (are [x] (boolean? (odd? x))
+                 ##Inf
+                 ##-Inf
+                 ##NaN
+                 1.5
+                 0.2M)
+         :default
+         (are [x] (p/thrown? (odd? x))
+           ##Inf
+           ##-Inf
+           ##NaN
+           1.5
+           #?@(:cljs []
+               :default
+               [1/2])
+           0.2M)))))

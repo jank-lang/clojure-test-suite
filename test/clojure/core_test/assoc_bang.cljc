@@ -52,7 +52,16 @@
                       [1] [0 1 1]
                       [1] [0 1 1 2 2]))
 
+    ;; Phel does not invalidate a transient after `persistent!`: it stays
+    ;; usable and `assoc!` keeps mutating it instead of throwing.
+    ;; Documented divergence.
     #?@(:lpy []
+        :phel
+        [(testing "transient stays usable after persistent! call"
+           (let [t (transient {:a 1}), _ (persistent! t)]
+             (is (= {:a 1 :b 2} (persistent! (assoc! t :b 2)))))
+           (let [t (transient [1]), _ (persistent! t)]
+             (is (= [2] (persistent! (assoc! t 0 2))))))]
         :default
         [(testing "cannot assoc! transient after persistent! call"
            (let [t (transient {:a 1}), _ (persistent! t)]

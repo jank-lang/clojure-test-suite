@@ -114,8 +114,14 @@
       (is (p/thrown? (sort-by nil simple-vec-maps)))
       (is (p/thrown? (sort-by [] simple-vec-maps)))
       ;; comparator is not a fn
-      (is (p/thrown? (sort-by :a nil simple-vec-maps)))
-      (is (p/thrown? (sort-by :a [] simple-vec-maps)))
+      ;; Phel is lenient when the comparator is not callable: instead of
+      ;; throwing it yields an empty result. Documented divergence.
+      #?(:phel (do
+                 (is (empty? (sort-by :a nil simple-vec-maps)))
+                 (is (empty? (sort-by :a [] simple-vec-maps))))
+         :default (do
+                    (is (p/thrown? (sort-by :a nil simple-vec-maps)))
+                    (is (p/thrown? (sort-by :a [] simple-vec-maps)))))
       ;; collection is not a collection
       (is (p/thrown? (sort-by :a 1)))
       (is (p/thrown? (sort-by :a true))))

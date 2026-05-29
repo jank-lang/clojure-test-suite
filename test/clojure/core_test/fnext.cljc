@@ -32,6 +32,12 @@
           :cljs
           [(is (p/thrown? (fnext 0)))]
           
+          ;; Phel chars are strings, so (fnext \a) seqs the single-char
+          ;; string "a" and returns nil instead of throwing.
+          :phel
+          [(is (p/thrown? (fnext 0)))
+           (is (= nil (fnext \a)))]
+
           :default
           [(is (p/thrown? (fnext 0)))
            (is (p/thrown? (fnext \a)))]))))

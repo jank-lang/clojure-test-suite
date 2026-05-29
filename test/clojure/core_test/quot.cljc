@@ -103,6 +103,16 @@
          (is (NaN? (quot ##NaN 1)))
          (is (NaN? (quot 1 ##NaN)))
          (is (NaN? (quot ##NaN 1)))]
+        ;; Phel only throws on integer division by zero. With a float operand
+        ;; (##Inf/##-Inf/##NaN) `quot` follows IEEE-754 PHP float semantics and
+        ;; returns Infinity/-Infinity/NaN instead of throwing. Documented
+        ;; divergence; `(quot 10 0)` still throws (see below).
+        :phel
+        [(is (p/thrown? (quot 10 0)))
+         (is (= ##Inf (quot ##Inf 1)))
+         (is (= ##-Inf (quot ##-Inf 1)))
+         (is (NaN? (quot ##NaN 1)))
+         (is (NaN? (quot 1 ##NaN)))]
         :default
         [(is (p/thrown? (quot 10 0)))
          (is (p/thrown? (quot ##Inf 1)))

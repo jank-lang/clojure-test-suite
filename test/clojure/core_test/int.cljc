@@ -67,6 +67,21 @@
         :cljs
         []
         
+        ;; Phel ints are 64-bit, so there is no 32-bit overflow: values
+        ;; outside Java's int range pass through unchanged (floats truncate).
+        ;; int also parses numeric strings and coerces nil to 0; only
+        ;; non-numeric objects (keywords, vectors) throw.
+        :phel
+        [(is (= -2147483648 (int -2147483648.000001)))
+         (is (= -2147483649 (int -2147483649)))
+         (is (= 2147483648 (int 2147483648)))
+         (is (= 2147483647 (int 2147483647.000001)))
+
+         (is (= 0 (int "0")))
+         (is (p/thrown? (int :0)))
+         (is (p/thrown? (int [0])))
+         (is (= 0 (int nil)))]
+
         :default
         [ ;; `int` throws outside the range of 32767 ... -32768.
          (is (p/thrown? (int -2147483648.000001)))

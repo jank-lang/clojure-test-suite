@@ -100,6 +100,17 @@
         (is (NaN? (rem ##NaN 1)))
         (is (NaN? (rem 1 ##NaN)))
         (is (NaN? (rem ##NaN 1)))]
+       ;; Phel follows IEEE-754 float semantics: `rem` with an infinite or NaN
+       ;; operand yields NaN instead of throwing like Clojure does. Only
+       ;; integer division by zero still throws. Documented divergence.
+       :phel
+       [(is (p/thrown? (rem 10 0)))
+        (is (NaN? (rem ##Inf 1)))
+        (is (NaN? (rem 1 ##Inf)))
+        (is (NaN? (rem ##-Inf 1)))
+        (is (NaN? (rem 1 ##-Inf)))
+        (is (NaN? (rem ##NaN 1)))
+        (is (NaN? (rem 1 ##NaN)))]
        :default
        [(is (p/thrown? (rem 10 0)))
         (is (p/thrown? (rem ##Inf 1)))

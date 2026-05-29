@@ -22,6 +22,12 @@
         ;; CLJS does some nil punning to 0
         [(is (= (range 0 10) (nthnext (range 0 10) nil)))
          (is (= '(0 1 2) (nthnext [0 1 2] nil)))]
+        ;; Like CLJS, Phel is lenient and nil-puns the count argument to 0
+        ;; instead of throwing, so `nthnext` returns the whole collection.
+        ;; Documented divergence.
+        :phel
+        [(is (= (range 0 10) (nthnext (range 0 10) nil)))
+         (is (= '(0 1 2) (nthnext [0 1 2] nil)))]
         :default
         [(is (p/thrown? (nthnext (range 0 10) nil)))
          (is (p/thrown? (nthnext [0 1 2] nil)))])))

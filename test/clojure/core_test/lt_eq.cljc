@@ -113,7 +113,16 @@
            (is (= false (<= 1 nil)))
            (is (= true (<= nil 1 2)))
            (is (= false (<= 1 2 nil)))]
-          
+
+          ;; Phel's `<=` is intentionally lenient with `nil`: it coerces `nil`
+          ;; to 0 (nil-punning) instead of throwing, so the comparison returns
+          ;; a boolean. Documented divergence.
+          :phel
+          [(is (= true (<= nil 1)))
+           (is (= false (<= 1 nil)))
+           (is (= true (<= nil 1 2)))
+           (is (= false (<= 1 2 nil)))]
+
           :default
           [(is (p/thrown? (<= nil 1)))
            (is (p/thrown? (<= 1 nil)))

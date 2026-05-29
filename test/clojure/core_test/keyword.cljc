@@ -89,6 +89,10 @@
        :cljs
        nil
 
+       ;; Phel is lenient: (keyword "abc" nil) returns nil instead of throwing.
+       :phel
+       (is (nil? (keyword "abc" nil)))
+
        :default
        (is (p/thrown? (keyword "abc" nil))))
 
@@ -100,6 +104,15 @@
          (is (= :abc/abc (keyword "abc" 'abc)))
          (is (= :abc/abc (keyword :abc "abc")))
          (is (= :abc/abc (keyword "abc" :abc)))]
+
+        ;; Phel accepts symbols/keywords as ns/name args instead of throwing:
+        ;; symbol args are coerced to their names (:abc/abc), while keyword
+        ;; args keep their colon, yielding ::abc/abc and :abc/:abc.
+        :phel
+        [(is (= :abc/abc (keyword 'abc "abc")))
+         (is (= :abc/abc (keyword "abc" 'abc)))
+         (is (= (keyword ":abc" "abc") (keyword :abc "abc")))
+         (is (= (keyword "abc" ":abc") (keyword "abc" :abc)))]
 
         :default
         [(is (p/thrown? (keyword 'abc "abc")))

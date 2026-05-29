@@ -32,11 +32,20 @@
           0
           nil))
       (testing "non collection passed as second argument throws"
-        (are [x] (p/thrown? (first (remove nil? x)))
-          #""
-          0
-          (fn [])
-          (atom nil))
+        ;; Phel treats regexes (and strings) as iterable, so `remove` over a
+        ;; regex yields its pattern characters rather than throwing. Other
+        ;; non-collections (numbers, functions, atoms) still throw. Documented
+        ;; divergence.
+        #?(:phel (are [x] (p/thrown? (first (remove nil? x)))
+                   0
+                   (fn [])
+                   (atom nil))
+           :default (are [x] (p/thrown? (first (remove nil? x)))
+                      #""
+                      0
+                      (fn [])
+                      (atom nil)))
         #?(:cljs    (is (= \a (first (remove nil? \a))))
            :lpy     (is (= \a (first (remove nil? \a))))
+           :phel    (is (= \a (first (remove nil? \a))))
            :default (is (p/thrown? (first (remove nil? \a)))))))))

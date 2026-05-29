@@ -32,7 +32,14 @@
            false 1/2
            true  -1/2]))
 
-    #?@(:lpy
+    ;; Phel divergence: `neg?` does not type-check; nil/false/true are coerced
+    ;; numerically (all to non-negative) and return false instead of throwing.
+    #?@(:phel
+        [(is (not (neg? nil)))
+         (is (not (neg? false)))
+         (is (not (neg? true)))]
+
+        :lpy
         [(is (p/thrown? (neg? nil)))
          (is (not (neg? false)))
          (is (not (neg? true)))]

@@ -43,12 +43,20 @@
          (is (p/thrown? (long 9223372036854775808)))])
 
     ;; Check handling of other types
-    #?@(:cljr
+    ;; Phel divergence: `long` accepts numeric strings (parsing "0" to 0) and
+    ;; treats nil as 0, while still throwing on non-numeric types like :0/[0].
+    #?@(:phel
+        [(is (= 0 (long "0")))
+         (is (p/thrown? (long :0)))
+         (is (p/thrown? (long [0])))
+         (is (= 0 (long nil)))]
+
+        :cljr
         [(is (= 0 (long "0")))
          (is (p/thrown? (long :0)))
          (is (p/thrown? (long [0])))
          (is (p/thrown? (long nil)))]
-        
+
         :lpy
         [(is (= 0 (long "0")))
          (is (p/thrown? (long :0)))

@@ -21,8 +21,11 @@
                              {} {nil nil} [nil nil]))
 
     (testing "cannot dissoc! transient after persistent! call"
+      ;; Phel does not invalidate a transient after `persistent!`, so `dissoc!`
+      ;; on it still succeeds instead of throwing. Documented divergence.
       (let [t (transient {:a 1}), _ (persistent! t)]
-        (is (p/thrown? (dissoc! t :a)))))
+        #?(:phel (is (= {} (persistent! (dissoc! t :a))))
+           :default (is (p/thrown? (dissoc! t :a))))))
 
     (testing "bad shape"
       (are [m keys] (p/thrown? (apply dissoc! m keys))

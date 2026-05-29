@@ -24,6 +24,12 @@
                            #{:a :b :c} (transient #{:a :b :c})))
 
     #?@(:lpy []
+        ;; Phel does not guard against calling persistent! twice; the second
+        ;; call returns the already-persisted collection instead of throwing.
+        :phel
+        [(testing "calling persistent! a second time returns the collection"
+           (let [coll (transient {}), _ (persistent! coll)]
+             (is (= {} (persistent! coll)))))]
         :default
         [(testing "calling persistent! a second time throws"
            (let [coll (transient {}), _ (persistent! coll)]

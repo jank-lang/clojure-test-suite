@@ -48,5 +48,10 @@
                     42 [4]
                     '() [0]
                     [] [0]
-                    #{:a :b} [:a]
-                    "string" [\s \t]))))
+                    ;; Phel accepts sets in `dissoc` (removes the element) instead
+                    ;; of throwing, so this row is asserted separately below.
+                    ;; Documented divergence.
+                    #?@(:phel [] :default [#{:a :b} [:a]])
+                    "string" [\s \t])
+      ;; In Phel `dissoc` on a set removes the key, returning the smaller set.
+      #?(:phel (is (= #{:b} (apply dissoc #{:a :b} [:a])))))))

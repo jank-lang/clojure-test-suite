@@ -16,5 +16,8 @@
       (is (= '("b") (vals {"a" "b"})))
       (is (= '([:b :c]) (vals {:a [:b :c]})))
       (is (= '((:c)) (vals {:a (vals {:b :c})})))
-      #?@(:cljs [(is (p/thrown? (vals 0)))]
+      ;; Phel's `vals` is nil-safe for non-map input: it returns `nil` instead
+      ;; of throwing like Clojure. Documented divergence.
+      #?@(:phel [(is (nil? (vals 0)))]
+          :cljs [(is (p/thrown? (vals 0)))]
           :default [(is (p/thrown? (vals 0)))]))))

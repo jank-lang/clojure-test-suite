@@ -36,10 +36,17 @@
            true  1/2
            false -1/2]))
 
+    ;; Phel's `pos?` is intentionally lenient on non-numbers: nil and false
+    ;; coerce to 0 (not positive => false), true coerces to 1 (positive => true),
+    ;; instead of throwing. Documented divergence.
     #?@(:cljs
         [(is (not (pos? nil)))
          (is (not (pos? false))) ; Prints warning
          (is (pos? true))] ; Prints warning
+        :phel
+        [(is (not (pos? nil)))
+         (is (not (pos? false)))
+         (is (pos? true))]
         :lpy
         [(is (p/thrown? (pos? nil)))
          (is (not (pos? false)))

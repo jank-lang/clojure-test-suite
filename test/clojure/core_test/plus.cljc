@@ -89,7 +89,13 @@
            (is (p/thrown? (+ nil 1.0)))
            ;; Python VMs integer types are arbitrary precision and have no min or max
            ;; and arithmetic operations between integers cannot overflow or underflow.
+           ;; Phel relies on PHP arithmetic, which silently promotes an
+           ;; overflowing integer to a float instead of throwing, so adding to
+           ;; PHP_INT_MAX/MIN yields a value rather than an error. Documented
+           ;; divergence.
            #?@(:lpy []
+               :phel [(is (+ r/max-int 1))
+                      (is (+ r/min-int -1))]
                :default
                [(is (p/thrown? (+ r/max-int 1)))
                 (is (p/thrown? (+ r/min-int -1)))])

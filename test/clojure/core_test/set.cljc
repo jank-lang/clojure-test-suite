@@ -23,6 +23,11 @@
           :cljs [(is (= #{\space} (set \space)))
                  (is (p/thrown? (set 1)))
                  (is (p/thrown? (set :a)))]
+          ;; Phel chars are strings, so (set \space) treats the char as a
+          ;; seqable string and returns #{" "} instead of throwing.
+          :phel [(is (p/thrown? (set 1)))
+                 (is (= #{" "} (set \space)))
+                 (is (p/thrown? (set :a)))]
           :default  [(is (p/thrown? (set 1)))
                      (is (p/thrown? (set \space)))
                      (is (p/thrown? (set :a)))]))))

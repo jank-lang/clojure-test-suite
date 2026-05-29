@@ -18,12 +18,26 @@
         -120N true))
 
     (testing "invalid"
-      (are [x] (p/thrown? (even? x))
-        nil
-        ##Inf
-        ##-Inf
-        ##NaN
-        1.5
-        0.2M
-        #?@(:cljs    []
-            :default [1/2])))))
+      ;; Phel's `even?` is intentionally lenient with non-integer numbers:
+      ;; instead of throwing it returns `false` for floats and infinities
+      ;; (##Inf/##-Inf/##NaN/1.5/0.2M/1/2). Only `nil` throws. Documented
+      ;; divergence.
+      #?(:phel (do
+                 (are [x] (p/thrown? (even? x))
+                   nil)
+                 (are [x] (= false (even? x))
+                   ##Inf
+                   ##-Inf
+                   ##NaN
+                   1.5
+                   0.2M
+                   1/2))
+         :default (are [x] (p/thrown? (even? x))
+                    nil
+                    ##Inf
+                    ##-Inf
+                    ##NaN
+                    1.5
+                    0.2M
+                    #?@(:cljs    []
+                        :default [1/2]))))))

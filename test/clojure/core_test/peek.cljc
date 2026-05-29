@@ -17,10 +17,22 @@
       (is (nil? (peek nil))))
 
     (testing "bad shape"
-      (are [coll] (p/thrown? (peek coll))
-                  #{1 2 3}
-                  {:a 1 :b 2}
-                  (cons 1 '())
-                  (range 10)
-                  "str"
-                  42))))
+      ;; Phel only throws for sets and non-seqable scalars. It is lenient on
+      ;; maps (=> nil), lists/cons and lazy seqs (peeks the head), and strings
+      ;; (peeks the last char, since strings are vector-like here).
+      #?(:phel
+         (do
+           (is (p/thrown? (peek #{1 2 3})))
+           (is (nil? (peek {:a 1 :b 2})))
+           (is (= 1 (peek (cons 1 '()))))
+           (is (= 0 (peek (range 10))))
+           (is (= "r" (peek "str")))
+           (is (p/thrown? (peek 42))))
+         :default
+         (are [coll] (p/thrown? (peek coll))
+                     #{1 2 3}
+                     {:a 1 :b 2}
+                     (cons 1 '())
+                     (range 10)
+                     "str"
+                     42)))))

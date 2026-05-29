@@ -91,6 +91,10 @@
                       (is (p/thrown? (merge 100 :foo)))
                       (is (p/thrown? (merge "str" :foo)))
                       (is (p/thrown? (merge nil (range))))
+                      ;; Phel treats a 2-element seq as a [key value] pair when
+                      ;; conj'd onto a map, so `(merge {} '(1 2))` yields `{1 2}`
+                      ;; instead of throwing. Documented divergence.
                       #?@(:lpy [(is (= {1 2} (merge {} '(1 2))))]
+                          :phel [(is (= {1 2} (merge {} '(1 2))))]
                           :default [(is (p/thrown? (merge {} '(1 2))))])
                       (is (p/thrown? (merge {} 1 2)))]))))

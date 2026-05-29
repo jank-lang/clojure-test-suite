@@ -18,7 +18,14 @@
       (is (= false (empty? "abc")))
       (is (= false (empty? #{0 \space "a"})))
       (is (= false (empty? [(repeat (range))])))
-      #?@(:lpy [(is (= false (empty? \space)))
+      ;; Phel's `empty?` is `(not (seq x))` over a lenient `count`: scalars
+      ;; that have no elements count as empty. `(empty? 0)` is `true` (zero
+      ;; has no elements), while `0.0` and a space character report `false`.
+      ;; Documented divergence.
+      #?@(:phel [(is (= true (empty? 0)))
+                 (is (= false (empty? 0.0)))
+                 (is (= false (empty? \space)))]
+          :lpy [(is (= false (empty? \space)))
                 (is (p/thrown? (empty? 0)))
                 (is (p/thrown? (empty? 0.0)))]
           :cljs [(is (= false (empty? \space)))

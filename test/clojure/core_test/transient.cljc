@@ -43,22 +43,41 @@
           (is (= (count someset) (count (transient someset)))))))
 
     (testing "calling non-bang interface throws"
+      ;; Phel does not enforce a separate transient interface: its persistent
+      ;; operations (`assoc`, `conj`, `dissoc`) accept transient collections
+      ;; and mutate/return them rather than throwing. `pop` (on a transient
+      ;; vector being emptied) and `disj` still throw. Documented divergence;
+      ;; see FLAGS in the batch report (transient-safety gap).
       (testing "for transient vector"
         (let [avec [1 2 3]]
-          (is (p/thrown? (assoc (transient avec) 0 5)))
-          (is (p/thrown? (conj (transient avec) 5)))
-          (is (p/thrown? (pop (transient avec))))))
+          #?@(:phel
+              [(is (some? (assoc (transient avec) 0 5)))
+               (is (some? (conj (transient avec) 5)))
+               (is (p/thrown? (pop (transient avec))))]
+              :default
+              [(is (p/thrown? (assoc (transient avec) 0 5)))
+               (is (p/thrown? (conj (transient avec) 5)))
+               (is (p/thrown? (pop (transient avec))))])))
 
       (testing "for transient map"
         (let [amap {:x 1 :y -1}]
-          (is (p/thrown? (assoc (transient amap) :x 5)))
-          (is (p/thrown? (dissoc (transient amap) :x)))
-          (is (p/thrown? (conj (transient amap) [:x 5])))))
+          #?@(:phel
+              [(is (some? (assoc (transient amap) :x 5)))
+               (is (some? (dissoc (transient amap) :x)))
+               (is (some? (conj (transient amap) [:x 5])))]
+              :default
+              [(is (p/thrown? (assoc (transient amap) :x 5)))
+               (is (p/thrown? (dissoc (transient amap) :x)))
+               (is (p/thrown? (conj (transient amap) [:x 5])))])))
 
       (testing "for transient set"
         (let [someset #{42 "life"}]
-          (is (p/thrown? (disj (transient someset) 42)))
-          (is (p/thrown? (conj (transient someset) 43))))))
+          #?@(:phel
+              [(is (p/thrown? (disj (transient someset) 42)))
+               (is (some? (conj (transient someset) 43)))]
+              :default
+              [(is (p/thrown? (disj (transient someset) 42)))
+               (is (p/thrown? (conj (transient someset) 43)))]))))
 
     (testing "calling transient a second time throws"
       (are [a-transient] (p/thrown? (transient a-transient))
@@ -87,7 +106,11 @@
                #(+ 1 %)
                '(1 2 3)
                ;; Basilisp does not currently implement sorted collections.
+               ;; Phel DOES support transients of sorted-set/sorted-map, so
+               ;; calling `transient` on them is valid (not "bad input") and
+               ;; does not throw. Documented divergence.
                #?@(:lpy []
+                   :phel []
                    :default [(sorted-set :i :j :k)
                              (sorted-map :hp 99)])
                #?@(:cljs [] ;; thrown? range error in clojurescript causes Javacript heap OOM

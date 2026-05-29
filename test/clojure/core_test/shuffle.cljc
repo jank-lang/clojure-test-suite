@@ -25,7 +25,14 @@
     (testing "negative cases"
       #?(:cljs (is (p/thrown? (shuffle 1)))
          :default (is (p/thrown? (shuffle 1))))
-      #?@(:cljr
+      ;; Phel's `shuffle` is lenient: it coerces any seqable (nil, strings,
+      ;; maps) into a vector instead of throwing. `nil` and `{}` yield `[]`;
+      ;; a string shuffles its characters. Documented leniency divergence.
+      #?@(:phel
+          [(is (= [] (shuffle nil)))
+           (is (= #{"a" "b" "c"} (set (shuffle "abc"))))
+           (is (= [] (shuffle {})))]
+          :cljr
           [(is (p/thrown? (shuffle nil)))
            (is (p/thrown? (shuffle "abc")))
            (is (= [] (shuffle {})))]

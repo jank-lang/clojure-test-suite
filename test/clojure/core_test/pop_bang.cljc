@@ -16,7 +16,13 @@
       (is (p/thrown? (pop! (transient [])))))
 
     ;; Basilisp does not prevent continuing to use transient vectors after persistent! call
+    ;; Phel likewise does not invalidate a transient after `persistent!`: it
+    ;; stays usable and `pop!` keeps mutating it. Documented divergence.
     #?@(:lpy []
+        :phel
+        [(testing "transient vector stays usable after persistent! call"
+           (let [t (transient [0 1]), _ (persistent! t)]
+             (is (= [0] (persistent! (pop! t))))))]
         :default
         [(testing "cannot pop! after call to persistent!"
            (let [t (transient [0 1]), _ (persistent! t)]

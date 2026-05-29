@@ -63,12 +63,18 @@
                             #{#?(:bb 'clojure.core_test.descendants/TestDescendantsRecord :default TestDescendantsRecord)} ::record))
 
       (testing "cannot get descendants by type inheritance"
+        ;; Phel's `descendants` returns `nil` for any tag that is not in the
+        ;; hierarchy (including PHP classes) rather than throwing. Documented
+        ;; divergence.
         #?@(:lpy
             [(is (nil? (descendants TestDescendantsProtocol)))
              (is (p/thrown? (descendants python/object)))]
             :cljs
             [(is (p/thrown? (descendants TestDescendantsProtocol)))
              (is (p/thrown? (descendants js/Object)))]
+            :phel
+            [(is (nil? (descendants TestDescendantsProtocol)))
+             (is (nil? (descendants Object)))]
             :default
             [(is (nil? (descendants TestDescendantsProtocol)))
              (is (p/thrown? (descendants Object)))]))
@@ -114,8 +120,12 @@
                               nil datatypes ::a))
 
       (testing "cannot get descendants by type inheritance, whether the tag is in h or not"
+        ;; Phel's `descendants` returns `nil` for a tag absent from the given
+        ;; hierarchy (including PHP classes) rather than throwing. Documented
+        ;; divergence.
         (are [h] #?(:lpy     (p/thrown? (descendants h python/object))
                     :cljs    (p/thrown? (descendants h js/Object))
+                    :phel    (nil? (descendants h Object))
                     :default (p/thrown? (descendants h Object)))
                  ; tag in h
                  (derive (make-hierarchy) #?(:lpy python/object :cljs js/Object :default Object) ::object)

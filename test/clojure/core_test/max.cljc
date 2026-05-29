@@ -45,6 +45,14 @@
         [(is (= 1 (max nil 1)))
          (is (= 1 (max 1 nil)))]
         
+        ;; Phel's `max` is lenient: it does not require numeric arguments and
+        ;; uses PHP's comparison instead of throwing. Strings compare
+        ;; lexicographically ("y" > "x") and nil is treated as the smaller
+        ;; value, so the numeric argument wins. Documented divergence.
+        :phel
+        [(is (= "y" (max "x" "y")))
+         (is (= 1 (max nil 1)))
+         (is (= 1 (max 1 nil)))]
         :default
         [(is (p/thrown? (max "x" "y")))
          (is (p/thrown? (max nil 1)))

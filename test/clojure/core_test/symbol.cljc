@@ -95,6 +95,14 @@
          (is (= 'abc/abc (symbol "abc" 'abc)))
          ;; (is (= :abc/abc (symbol :abc "abc"))) results in unreadable value
          (is (= 'abc/:abc (symbol "abc" :abc)))]
+        ;; Phel's two-arg `symbol` is lenient: unlike Clojure it accepts
+        ;; symbols and keywords (not just strings) for ns/name and coerces them
+        ;; to their string name instead of throwing. Documented divergence.
+        :phel
+        [(is (= 'abc/abc (symbol 'abc "abc")))
+         (is (= 'abc/abc (symbol "abc" 'abc)))
+         (is (= 'abc/abc (symbol :abc "abc")))
+         (is (= 'abc/abc (symbol "abc" :abc)))]
         :default
         [(is (p/thrown? (symbol 'abc "abc")))
          (is (p/thrown? (symbol "abc" 'abc)))

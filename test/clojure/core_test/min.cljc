@@ -36,7 +36,16 @@
     (is (NaN? (min ##-Inf ##NaN ##Inf)))
     (is (NaN? (min ##NaN)))
 
-    #?@(:lpy
+    ;; Phel's `min` is lenient: it uses PHP comparison so strings compare
+    ;; lexicographically ("x" < "y" => "x") instead of throwing, and `nil`
+    ;; compares as the smallest value, yielding `nil`. Documented leniency
+    ;; divergence.
+    #?@(:phel
+        [(is (= "x" (min "x" "y")))
+         (is (nil? (min nil 1)))
+         (is (nil? (min 1 nil)))]
+
+        :lpy
         [(is (= "x" (min "x" "y")))
          (is (p/thrown? (min nil 1)))
          (is (p/thrown? (min 1 nil)))]

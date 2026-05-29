@@ -17,7 +17,14 @@
       (is (= nil (last nil))))
 
     (testing "exceptions"
-      #?@(:lpy
+      ;; Phel divergence: `last` is lenient — a single char is treated as a
+      ;; one-element seq (returns the char) and a non-seqable scalar like 0
+      ;; yields nil rather than throwing.
+      #?@(:phel
+          [(is (= \a (last \a)))
+           (is (nil? (last 0)))]
+
+          :lpy
           [(is (= \a (last \a)))
            (is (p/thrown? (last 0)))]
 

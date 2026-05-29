@@ -37,6 +37,17 @@
          (is (= (float 0.0) (float "0")))
          (is (p/thrown? (float :0)))]
         
+        ;; Phel floats are PHP doubles, so casting max-double/##Inf/##-Inf is a
+        ;; no-op (no JVM float overflow), and a numeric string like "0" parses
+        ;; to `0.0`. Only a non-numeric value like `:0` throws. Documented
+        ;; divergence.
+        :phel
+        [(is (= r/max-double (float r/max-double)))
+         (is (= ##Inf (float ##Inf)))
+         (is (= ##-Inf (float ##-Inf)))
+         (is (= 0.0 (float "0")))
+         (is (p/thrown? (float :0)))]
+
         :lpy
         [(is (= r/max-double (float r/max-double)))
          (is (= ##Inf (float ##Inf)))

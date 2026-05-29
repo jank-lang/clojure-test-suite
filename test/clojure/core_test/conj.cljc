@@ -37,7 +37,10 @@
                     ;; Basilisp is fairly liberal with its coercion to map entry,
                     ;; meaning that many two element sequences can be conj'ed to
                     ;; a map.
+                    ;; Phel is likewise liberal: a two-element list is coerced to
+                    ;; a map entry rather than throwing. Documented divergence.
                     #?@(:lpy [(is (= {:a 0 :b 1} (conj {:a 0} '(:b 1))))]
+                        :phel [(is (= {:a 0 :b 1} (conj {:a 0} '(:b 1))))]
                         :default [(is (p/thrown? (conj {:a 0} '(:b 1))))])]))
 
     (testing "meta preservation"

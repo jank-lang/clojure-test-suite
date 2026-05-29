@@ -4,9 +4,15 @@
 
 (when-var-exists NaN?
  (deftest test-NaN?
+   ;; Phel is lenient on `NaN?` with nil: it returns false instead of
+   ;; throwing (PHP treats nil-as-float as 0.0, which is not NaN). A string
+   ;; argument still throws cleanly. Documented divergence.
    #?@(:cljs
        [(is (not (NaN? nil)))
         (is (NaN? "##NaN"))]            ; Surprising
+       :phel
+       [(is (not (NaN? nil)))
+        (is (p/thrown? (NaN? "##NaN")))]
        :default
        [(is (p/thrown? (NaN? nil)))
         (is (p/thrown? (NaN? "##NaN")))])

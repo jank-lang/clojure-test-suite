@@ -27,4 +27,6 @@
       1
       :a
       'a
-      #?@(:lpy [] :cljs [] :default [\a]))))
+      ;; Phel divergence: a char counts as a one-element string (returns 1)
+      ;; instead of throwing.
+      #?@(:phel [] :lpy [] :cljs [] :default [\a]))))
