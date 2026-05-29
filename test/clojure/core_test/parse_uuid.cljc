@@ -24,7 +24,19 @@
                         #uuid "00000012-0034-0056-0078-000000000009" "12-34-56-78-9"
                         #uuid "00000005-0004-0003-0002-009000000001" "5-4-3-DEADBEEF0002-9000000001"))
     (testing "exceptions"
-      #?(:lpy (are [x] (p/thrown? (parse-uuid x))
+      ;; Phel's `parse-uuid` is intentionally nil-safe: it returns `nil` for
+      ;; any non-string, non-UUID input instead of throwing, so it can be
+      ;; chained in `when`/`if-let` without guarding. Documented divergence.
+      #?(:phel (are [x] (nil? (parse-uuid x))
+                 {}
+                 '()
+                 []
+                 #{}
+                 :key
+                 0.0
+                 1000)
+
+         :lpy (are [x] (p/thrown? (parse-uuid x))
                 {}
                 '()
                 []

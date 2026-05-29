@@ -35,7 +35,18 @@
            ##Inf "Infinity"
            ##-Inf "-Infinity"))
     (testing "exceptions"
-      #?(:lpy (are [x] (p/thrown? (parse-double x))
+      ;; Phel's `parse-double` is intentionally nil-safe: it returns `nil` for
+      ;; any non-string (or unparseable) input instead of throwing, so it can
+      ;; be chained in `when`/`if-let` without guarding. Documented divergence.
+      #?(:phel (are [x] (nil? (parse-double x))
+                 {}
+                 '()
+                 []
+                 #{}
+                 :key
+                 0.0
+                 1000)
+         :lpy (are [x] (p/thrown? (parse-double x))
                 {}
                 '()
                 []

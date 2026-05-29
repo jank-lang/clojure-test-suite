@@ -33,7 +33,18 @@
                       999999999999999    "999999999999999"]
                :default [999999999999999999 "999999999999999999"])))
     (testing "exceptions"
-      #?(:lpy (are [x] (p/thrown? (parse-long x))
+      ;; Phel's `parse-long` is intentionally nil-safe: it returns `nil` for
+      ;; any non-string (or unparseable) input instead of throwing, so it can
+      ;; be chained in `when`/`if-let` without guarding. Documented divergence.
+      #?(:phel (are [x] (nil? (parse-long x))
+                 {}
+                 '()
+                 []
+                 #{}
+                 :key
+                 0.0
+                 1000)
+         :lpy (are [x] (p/thrown? (parse-long x))
                 {}
                 '()
                 []

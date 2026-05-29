@@ -25,7 +25,20 @@
            nil   "true "))
 
     (testing "exceptions"
-      #?(:lpy (are [x] (p/thrown? (parse-boolean x))
+      ;; Phel's `parse-boolean` is intentionally nil-safe: it returns `nil` for
+      ;; any non-string input (and any string other than "true"/"false")
+      ;; instead of throwing, so it can be chained in `when`/`if-let` without
+      ;; guarding. Documented divergence.
+      #?(:phel (are [x] (nil? (parse-boolean x))
+                 nil
+                 0
+                 0.0
+                 :key
+                 {}
+                 '()
+                 #{}
+                 [])
+         :lpy (are [x] (p/thrown? (parse-boolean x))
                 nil
                 0
                 0.0
