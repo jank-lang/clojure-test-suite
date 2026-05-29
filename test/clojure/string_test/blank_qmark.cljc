@@ -22,7 +22,10 @@
        :default (is (p/thrown? (str/blank? (keyword "")))))
     #?(:cljs (is (false? (str/blank? 1)))
        :default (is (p/thrown? (str/blank? 1))))
-    #?(:lpy (is (true? (str/blank? \space)))
+    ;; Phel reads `\space` as the single-space string " ", so `blank?` returns
+    ;; true (it is whitespace) rather than throwing on a character type.
+    #?(:phel (is (true? (str/blank? \space)))
+       :lpy (is (true? (str/blank? \space)))
        :cljs (do (is (true? (str/blank? \space)))
                  (is (false? (str/blank? \a))))
        :default (is (p/thrown? (str/blank? \space))))

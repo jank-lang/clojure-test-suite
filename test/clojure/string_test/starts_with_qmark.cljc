@@ -28,7 +28,15 @@
     (is (false? (str/starts-with? "a-test" "-")))
     (is (false? (str/starts-with? "a-test" "t")))
 
-    #?@(:cljr
+    ;; Phel's string functions are strict: a non-string argument throws
+    ;; rather than being coerced via `str`/`toString` (the JVM `:default`
+    ;; behaviour). Documented divergence; matches the :cljs/:lpy/:cljr stance.
+    #?@(:phel
+        [(is (p/thrown? (str/starts-with? 'ab ":a")))
+         (is (p/thrown? (str/starts-with? :ab ":a")))
+         (is (p/thrown? (str/starts-with? 'a/b ":a")))
+         (is (p/thrown? (str/starts-with? :a/b ":a")))]
+        :cljr
         [(is (p/thrown? (str/starts-with? 'ab ":a")))
          (is (p/thrown? (str/starts-with? :ab ":a")))
          (is (p/thrown? (str/starts-with? 'a/b ":a")))

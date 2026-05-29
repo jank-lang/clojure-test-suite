@@ -6,7 +6,14 @@
 (when-var-exists str/capitalize
   (deftest test-capitalize
     (is (p/thrown? (str/capitalize nil)))
-    #?(:cljr (do (is (p/thrown? (str/capitalize 1)))
+    ;; Phel's string functions are strict: a non-string argument throws
+    ;; rather than being coerced via `str`/`toString` (the JVM `:default`
+    ;; behaviour). Documented divergence; matches the :cljs/:lpy/:cljr stance.
+    #?(:phel (do (is (p/thrown? (str/capitalize 1)))
+                 (is (p/thrown? (str/capitalize 'Asdf)))
+                 (is (p/thrown? (str/capitalize 'asDf/aSdf)))
+                 (is (p/thrown? (str/capitalize :asDf/aSdf))))
+       :cljr (do (is (p/thrown? (str/capitalize 1)))
                  (is (p/thrown? (str/capitalize 'Asdf)))
                  (is (p/thrown? (str/capitalize 'asDf/aSdf)))
                  (is (p/thrown? (str/capitalize :asDf/aSdf))))

@@ -19,7 +19,15 @@
     #?(:cljs (is (false? (str/ends-with? "ab" 'b)))
        :default (is (p/thrown? (str/ends-with? "ab" 'b))))
 
-   #?@(:cljr
+   ;; Phel's string functions are strict: a non-string argument throws
+   ;; rather than being coerced via `str`/`toString` (the JVM `:default`
+   ;; behaviour). Documented divergence; matches the :cljs/:lpy/:cljr stance.
+   #?@(:phel
+       [(is (p/thrown? (str/ends-with? 'ab "b")))
+        (is (p/thrown? (str/ends-with? 'ab "a")))
+        (is (p/thrown? (str/ends-with? :ab "b")))
+        (is (p/thrown? (str/ends-with? :ab "b")))]
+       :cljr
        [(is (p/thrown? (str/ends-with? 'ab "b")))
         (is (p/thrown? (str/ends-with? 'ab "a")))
         (is (p/thrown? (str/ends-with? :ab "b")))

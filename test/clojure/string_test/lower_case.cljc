@@ -13,7 +13,17 @@
     (let [s "ASDF"]
       (is (= "asdf" (str/lower-case "ASDF")))
       (is (= "ASDF" s) "original string mutated"))
-    #?(:cljr
+    ;; Phel's string functions are strict: a non-string argument throws
+    ;; rather than being coerced via `str`/`toString` (the JVM `:default`
+    ;; behaviour). Documented divergence; matches the :cljs/:lpy/:cljr stance.
+    #?(:phel
+       (are [v] (p/thrown? (str/lower-case v))
+         :ASDF
+         :ASDF/ASDF
+         'ASDF
+         'ASDF/ASDF)
+
+       :cljr
        (are [v] (p/thrown? (str/lower-case v))
          :ASDF
          :ASDF/ASDF
