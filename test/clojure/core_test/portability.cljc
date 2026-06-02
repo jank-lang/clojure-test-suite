@@ -37,8 +37,9 @@
   sort, typically for whether `x` conforms to a specific object type."
   [x]
   #?(:cljs (instance? LazySeq x)
-     :phel (phel.core/lazy-seq? x)
      :lpy (instance? basilisp.lang.seq/LazySeq x)
+     :phel (phel.core/lazy-seq? x)
+     :jank (cpp/== (.get_type x) cpp/jank.runtime.object_type.lazy_sequence)
      :default (instance? clojure.lang.LazySeq x)))
 
 ;; --- Portable exception multimethod. ---
@@ -89,6 +90,13 @@
                             :message ~msg
                             :expected '~form
                             :actual actual#})
+              actual#))
+          (catch ~'jank.error_ref e#
+            (let [actual# (~'.-message (cpp/* e#))]
+              (t/do-report {:type :pass
+                            :message ~msg
+                            :expected '~form
+                            :actual actual#})
               actual#)))))
 
    :cljr
@@ -110,7 +118,7 @@
 
    :phel
    ;; Phel's `phel.test/report` multimethod dispatches on `:type` and only
-   ;; recognises `:pass`/`:failed`/`:error` — not Clojure's `:fail`. Use
+   ;; recognises `:pass`/`:failed`/`:error`, not Clojure's `:fail`. Use
    ;; phel-native event keys so the assertion counters update. Phel's
    ;; throwable hierarchy is rooted at PHP's `\Throwable`; the literal is
    ;; constructed via `symbol` because Clojure's reader treats a bare `\T`
