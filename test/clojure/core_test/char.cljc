@@ -17,7 +17,7 @@
        (is (= \ষ (char 2487))))
      (testing "4+ byte characters throw"
        (is #?(:jank    (= (first "𐅦") (char 65895))
-              ;; this seems to be a one off error
+              ;; this seems to be an off by one error
               :lpy     (= (first "𐅧") (char 65895))
               :cljs    (= \ŧ (char 65895))
               :default (p/thrown? (char 65895))))))
