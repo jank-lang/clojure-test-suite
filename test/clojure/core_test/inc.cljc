@@ -25,14 +25,11 @@
       (is (NaN? (inc ##NaN))))
 
     (testing "overflow"
-      #?(:cljr (is (p/thrown? (inc Int64/MaxValue)))
-         ;; Phel integers avoid overflow by being promoted to BigInteger
-         :phel (is (not (= (inc php/PHP_INT_MAX) (+ 2 php/PHP_INT_MAX))))
+      #?(;; Phel integers avoid overflow by being promoted to BigInteger
+         :phel (is (not (= (inc max-int) (+ 2 max-int))))
          :lpy nil  ; Python integers cannot overflow
-         :jank (is (p/thrown? (inc max-int)))
-         :cljs (is (= (inc js/Number.MAX_SAFE_INTEGER) (+ 2 js/Number.MAX_SAFE_INTEGER)))
-         :clj (is (p/thrown? (inc Long/MAX_VALUE)))
-         :default (is false "overflow untested")))
+         :cljs (is (= (inc max-int) (+ 2 max-int)))
+         :default (is (p/thrown? (inc max-int)))))
 
     (testing "inc-nil"
       ;; ClojureScript says (= 1 (inc nil)) because JavaScript casts null to 0
