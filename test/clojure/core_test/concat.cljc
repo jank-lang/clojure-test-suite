@@ -7,10 +7,8 @@
     (testing "arity 0"
       ;; returns an unrealized, empty lazy seq
       (let [s (concat)]
-        (is #?(:lpy     (not (p/lazy-seq? s))
-               :default (p/lazy-seq? s)))
-        (is #?(:lpy     true
-               :default (not (realized? s))))
+        (is (p/lazy-seq? s))
+        (is (not (realized? s)))
         (is (empty? s))))
 
     (testing "arity 1"
