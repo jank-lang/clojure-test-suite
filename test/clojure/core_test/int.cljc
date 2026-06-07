@@ -64,9 +64,21 @@
          (is (p/thrown? (int [0])))
          (is (p/thrown? (int nil)))]
 
+        :jank
+        [(is (= -2147483648 (int -2147483648.000001)))
+         (is (= -2147483649 (int -2147483649)))
+         (is (= 2147483648 (int 2147483648)))
+         (is (= 2147483647 (int 2147483647.000001)))
+
+         ;; Check handling of other types
+         (is (p/thrown? (int "0")))
+         (is (p/thrown? (int :0)))
+         (is (p/thrown? (int [0])))
+         (is (p/thrown? (int nil)))]
+
         :cljs
         []
-        
+
         :default
         [ ;; `int` throws outside the range of 32767 ... -32768.
          (is (p/thrown? (int -2147483648.000001)))
