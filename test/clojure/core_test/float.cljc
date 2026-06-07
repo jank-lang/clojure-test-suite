@@ -26,6 +26,7 @@
       ;; so float returns the same value here.
       #?@(:lpy [r/min-double r/min-double]
           :phel [r/min-double r/min-double]
+          :jank [r/min-double r/min-double]
           :cljs [r/min-double r/min-double]
           :default [(float 0.0) r/min-double]))
     (is (NaN? (float ##NaN)))
@@ -42,6 +43,13 @@
          (is (= ##Inf (float ##Inf)))
          (is (= ##-Inf (float ##-Inf)))
          (is (= 0.0 (float "0")))
+         (is (p/thrown? (float :0)))]
+        
+        :jank
+        [(is (= r/max-double (float r/max-double)))
+         (is (= ##Inf (float ##Inf)))
+         (is (= ##-Inf (float ##-Inf)))
+         (is (p/thrown? (float "0")))
          (is (p/thrown? (float :0)))]
 
         :cljs
