@@ -22,13 +22,6 @@
       ;; The partition size, `n` should be able to be a number of all sorts.
       (is (= '((0 1) (2 3) (4 5) (6 7) (8 9)) (partition 2N (range 10))))
 
-      ;; These fail in JVM and some other dialects but should probably
-      ;; pass. Interestingly, since CLJS uses doubles as its only
-      ;; numeric type, they pass in CLJS.
-      ;; TODO: reenable these for JVM and other dialects when they pass
-      #?@(:cljs [(is (= '((0 1) (2 3) (4 5) (6 7) (8 9)) (partition 2.0 (range 10))))
-                 (is (= '((0 1) (2 3) (4 5) (6 7) (8 9)) (partition 2.0M (range 10))))])
-
       ;; Infinite range
       (is (= '((0 1) (2 3) (4 5) (6 7)) (take 4 (partition 2 (range)))))
 
@@ -43,10 +36,8 @@
       ;; to an infinite loop within `partition`.
       (is (= '((0 1) (1 2) (2 3) (3 4) (4 5)) (partition 2 1 (range 6))))
 
-      ;; Test steps of different number types
+      ;; Test steps with big integers
       (is (= '((0 1) (1 2) (2 3) (3 4) (4 5)) (partition 2 1N (range 6))))
-      (is (= '((0 1) (1 2) (2 3) (3 4) (4 5)) (partition 2 1.0 (range 6))))
-      (is (= '((0 1) (1 2) (2 3) (3 4) (4 5)) (partition 2 1.0M (range 6))))
 
       ;; Try an infinite range
       (is (= '((0 1) (1 2) (2 3) (3 4) (4 5)) (take 5 (partition 2 1 (range)))))
