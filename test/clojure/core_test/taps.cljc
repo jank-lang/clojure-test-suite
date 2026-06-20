@@ -65,7 +65,10 @@
        (defn tap-tester
          [atom-ref]
          (fn [x]
-           (if (instance? #?(:lpy basilisp.lang.interfaces/IPending :phel Phel.Fiber.Domain.Awaitable :default clojure.lang.IPending) x)
+           (if #?(:lpy (instance? basilisp.lang.interfaces/IPending x)
+                  :phel (instance? Phel.Fiber.Domain.Awaitable x)
+                  :jank (cpp/== (.get_type x) cpp/jank.runtime.object_type.promise)
+                  :default (instance? clojure.lang.IPending x))
              (deliver x nil)
              (swap! atom-ref conj x))))
 
