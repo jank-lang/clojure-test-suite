@@ -16,7 +16,7 @@
      (testing "3 byte characters are valid"
        (is (= \ষ (char 2487))))
      (testing "4+ byte characters throw"
-       (is #?(:jank    (= (first "𐅦") (char 65895))
+       (is #?(:jank    (= \😀 (char 0x1F600))
               ;; this seems to be an off by one error
               :lpy     (= (first "𐅧") (char 65895))
               :cljs    (= \ŧ (char 65895))
