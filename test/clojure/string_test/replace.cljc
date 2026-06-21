@@ -5,7 +5,7 @@
 
 (when-var-exists str/replace
   (deftest test-replace
-    (is (p/thrown? (str/replace nil "")) "Input must be string")
+    (is (p/thrown? (str/replace nil "x" "y")) "Input must be string")
 
     (is (= "" (str/replace "x" "x" "")) "Replace can empty strings")
     #?(:cljr "ClojureCLR doesn't support empty strings for match"
