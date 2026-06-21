@@ -8,9 +8,11 @@
     (is (p/thrown? (str/replace nil "")) "Input must be string")
 
     (is (= "" (str/replace "x" "x" "")) "Replace can empty strings")
-    (is (= "" (str/replace "" "" "")) "Check for infinite loops")
-    (is (= "yxy" (str/replace "x" "" "y")) "Empty string matches between all characters")
-    (is (= "yyxyy" (str/replace "x" "" "yy")) "Empty string matches between all characters")
+    #?(:cljr "ClojureCLR doesn't support empty strings for match"
+       :default
+       (do (is (= "" (str/replace "" "" "")) "Check for infinite loops")
+           (is (= "yxy" (str/replace "x" "" "y")) "Empty string matches between all characters")
+           (is (= "yyxyy" (str/replace "x" "" "yy")) "Empty string matches between all characters")))
 
     (is (= "yy" (str/replace "xx" "x" "y")))
     (is (= "y" (str/replace "xx" "xx" "y")))
