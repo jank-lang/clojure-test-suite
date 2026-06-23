@@ -30,11 +30,6 @@
      :cljs    (.valueOf date)
      :default (.getTime date)))
 
-(defn read-opts [opts s]
-  #?(:lpy     (edn/read-string s opts)
-     :phel    (edn/read-string s opts)
-     :default (edn/read-string opts s)))
-
 (when-var-exists clojure.edn/read-string
   (deftest test-read-string
     (testing "nil and Booleans"
@@ -51,7 +46,8 @@
         ",,"
         "\t"
         "\r"
-        "\n"))
+        "\n"
+        "\r\n"))
 
     (testing "Strings"
       (are-read-as
@@ -661,7 +657,7 @@
     (testing "Reading with Options"
 
       (testing "EOF"
-        (are [expected edn] (= expected (read-opts {:eof :END} edn))
+        (are [expected edn] (= expected (edn/read-string {:eof :END} edn))
           ;; cljs short-circuits to nil on empty strings
           #?(:cljs nil :default :END) ""
           :END " "
@@ -669,13 +665,13 @@
           42 "42"))
 
       (testing "Default Reader"
-        (are [expected edn] (= expected (read-opts {:default (fn [_tag v] [:unknown v])} edn))
+        (are [expected edn] (= expected (edn/read-string {:default (fn [_tag v] [:unknown v])} edn))
           [:unknown 42] "#foo 42"
           [:unknown 42] "#foo/bar 42"
           #uuid "550e8400-e29b-41d4-a716-446655440000" "#uuid \"550e8400-e29b-41d4-a716-446655440000\""))
 
       (testing "Custom Readers"
-        (are [expected readers edn] (= expected (read-opts {:readers readers} edn))
+        (are [expected readers edn] (= expected (edn/read-string {:readers readers} edn))
           [:foo 42] {'my/foo (fn [x] [:foo x])} "#my/foo 42"
           :override {'uuid (constantly :override)} "#uuid \"550e8400-e29b-41d4-a716-446655440000\""
           :override {'inst (constantly :override)} "#inst \"2010-11-12T13:14:15.666-05:00\""
@@ -685,15 +681,15 @@
       (testing "Readers with Default"
         (let [opts {:readers {'my/foo (fn [x] [:foo x])}
                     :default (fn [tag v] [:default tag v])}]
-          (are [expected edn] (= expected (read-opts opts edn))
+          (are [expected edn] (= expected (edn/read-string opts edn))
             [:foo 42] "#my/foo 42"
             [:default 'my/bar 42] "#my/bar 42")))
 
       (testing "Unsupplied EOF"
         ;; basilisp and phel read these as nil - all others throw
-        (are [edn] #?(:lpy     (nil? (read-opts {} edn))
-                      :phel    (nil? (read-opts {} edn))
-                      :default (p/thrown? (read-opts {} edn)))
+        (are [edn] #?(:lpy     (nil? (edn/read-string {} edn))
+                      :phel    (nil? (edn/read-string {} edn))
+                      :default (p/thrown? (edn/read-string {} edn)))
           " "
           ";just a comment\n")))
 
@@ -791,12 +787,9 @@
       (testing "Discard Skips Tag Handlers"
         ;; the spec says a reader should NOT invoke tag handlers while reading a
         ;; discarded element. Only phel honors this.
-        #?(:phel
-           (is (= [42] (read-opts {:readers {'my/boom (fn [_] :handler-was-called)}}
-                                  "[#_ #my/boom 0 42]")))
-           :default
-           (is (p/thrown? (read-opts {:readers {'my/boom (fn [_] (throw (ex-info "handler called" {})))}}
-                                     "[#_ #my/boom 0 42]"))))))
+        (let [opts {:readers {'my/boom (fn [_] (throw (ex-info "handler called" {})))}}]
+          #?(:phel    (is (= [42] (edn/read-string opts "[#_ #my/boom 0 42]")))
+             :default (is (p/thrown? (edn/read-string opts "[#_ #my/boom 0 42]")))))))
 
     (testing "Whitespace Between Forms"
       (are-read-as
