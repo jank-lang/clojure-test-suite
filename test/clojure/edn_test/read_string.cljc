@@ -64,7 +64,7 @@
           "a\nb" "\"a\\nb\""
           "a\nb" "\"a\nb\""
           "a\nb\nc" "\"a\\nb\\nc\""
-          "a\nb\nc" "\"a\\nb\\nc\""
+          "a\nb\nc" "\"a\nb\nc\""
           "\n\\n\n" "\"\\n\\\\n\\n\""
           "\n\"\n" "\"\\n\\\"\\n\""
           "\ra\r" "\"\\ra\\r\""
