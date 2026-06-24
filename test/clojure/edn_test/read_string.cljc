@@ -1,5 +1,5 @@
 (ns clojure.edn-test.read-string
-  #?(:cljs (:require-macros [clojure.edn-test.read-string :refer [are-read-as are-read-as-nil are-thrown]]))
+  #?(:cljs (:require-macros [clojure.edn-test.read-string :refer [are-read-as are-thrown]]))
   (:require [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]
             [clojure.edn :as edn]
             [clojure.test :refer [are deftest is testing]]))
@@ -10,18 +10,8 @@
 (defmacro are-read-as [& pairs]
   `(are [expected# edn#] (= expected# (edn/read-string edn#)) ~@pairs))
 
-(defmacro are-read-as-nil [& edns]
-  `(are [edn#] (nil? (edn/read-string edn#)) ~@edns))
-
 (defmacro are-thrown [& edns]
   `(are [edn#] (~'p/thrown? (edn/read-string edn#)) ~@edns))
-
-(defn new-date [v]
-  #?(:cljr    (DateTime/Parse v)
-     :lpy     (basilisp.lang.util/inst-from-str v)
-     :phel    (php/new DateTimeImmutable v)
-     :cljs    (js/Date. v)
-     :default (clojure.instant/read-instant-date v)))
 
 (defn epoch-millis [date]
   #?(:cljr    (.ToUnixTimeMilliseconds (DateTimeOffset. date))
@@ -33,21 +23,14 @@
 (when-var-exists clojure.edn/read-string
   (deftest test-read-string
     (testing "nil and Booleans"
-      (are-read-as-nil "" "nil")
       (are-read-as
+        nil ""
+        nil "nil"
         true "true"
         false "false"))
 
     (testing "Whitespace Only"
-      (are-read-as-nil
-        " "
-        "  "
-        ","
-        ",,"
-        "\t"
-        "\r"
-        "\n"
-        "\r\n"))
+      (are-read-as nil "  , ,, \t \r \n \r\n"))
 
     (testing "Strings"
       (are-read-as
@@ -99,30 +82,17 @@
         \formfeed "\\formfeed")
 
       (testing "Backslash Followed by Whitespace"
-        ;; the edn spec forbids a backslash followed by whitespace.
-        ;; basilisp enforces it; JVM/CLR/cljs read it as the space char.
-        #?(:lpy     (are-thrown "\\ ")
-           :default (are-read-as \space "\\ "))
+        (are-read-as \space "\\ ")
         (are-thrown "\\"))
 
-      ;; non-edn extension
       (testing "Octal Escapes"
         (are-thrown "\\o18" "\\o8" "\\o1000")
-        #?(;; basilisp does not support octal char escapes
-           :lpy     (are-thrown "\\o0" "\\o101" "\\o377")
-           :default (let [octal-char #?(:phel php/chr :default char)]
-                      (are-read-as
-                        (octal-char 00) "\\o0"
-                        (octal-char 0101) "\\o101"
-                        (octal-char 0377) "\\o377")))
+        (are-read-as
+          (char 00) "\\o0"
+          (char 0101) "\\o101"
+          (char 0377) "\\o377")
         ;; above the 377 maximum
-        #?(;; phel takes the (mod octal 256) char value
-           :phel    (are [v edn] (= (php/chr (mod v 256))
-                                    (edn/read-string edn))
-                      0400 "\\o400"
-                      0477 "\\o477"
-                      0777 "\\o777")
-           ;; cljs is lenient, reading a broader range of octal characters
+        #?(;; cljs is lenient, reading a broader range of octal characters
            :cljs    (are-read-as
                       (char 0400) "\\o400"
                       (char 0477) "\\o477"
@@ -134,13 +104,11 @@
         'a1b2 "a1b2"
         'foo "foo"
         'foo/bar "foo/bar"
-        ;; basilisp fails compilation when using symbol literals on these three
-        (symbol "foo.bar" "baz.buzz") "foo.bar/baz.buzz"
-        (symbol "foo" "/") "foo//"
-        (symbol "foo.bar" "/") "foo.bar//"
+        'foo.bar/baz.buzz "foo.bar/baz.buzz"
+        'foo// "foo//"
+        'foo.bar// "foo.bar//"
         'foo:bar "foo:bar"
-        ;; phel fails compilation with 'foo#bar
-        (symbol "foo#bar") "foo#bar"
+        'foo#bar "foo#bar"
         'nilable "nilable"
         'truer "truer"
         'falsey "falsey"
@@ -169,11 +137,9 @@
         :a1b2 ":a1b2"
         :foo ":foo"
         :foo/bar ":foo/bar"
-        ;; basilisp fails compilation with :foo.bar/baz.buzz
-        (keyword "foo.bar" "baz.buzz") ":foo.bar/baz.buzz"
+        :foo.bar/baz.buzz ":foo.bar/baz.buzz"
         :foo:bar ":foo:bar"
-        ;; phel fails compilation with :foo#bar
-        (keyword "foo#bar") ":foo#bar"
+        :foo#bar ":foo#bar"
         :nilable ":nilable"
         :truer ":truer"
         :falsey ":falsey"
@@ -196,9 +162,7 @@
         :.-attr ":.-attr")
 
       (testing "Slash-Only"
-        ;; the spec calls :/ illegal. Most readers accept it; phel throws
-        #?(:phel    (are-thrown ":/")
-           :default (are-read-as (keyword "/") ":/"))
+        (are-read-as (keyword "/") ":/")
         (are-thrown ":/foo")))
 
     (testing "Invalid Tokens"
@@ -237,11 +201,6 @@
                     (let [result (edn/read-string ":foo/bar/baz")]
                       (is (keyword? result))
                       (is (= ["foo/bar" "baz"] (part-named result)))))
-         :phel    (are-read-as
-                    ;; phel is lenient with the symbols
-                    (symbol "foo/bar/baz") "foo/bar/baz"
-                    ;; ... but skips subsequent slashes in keywords
-                    :foo/bar ":foo/bar/baz")
          ;; JVM is lenient in these cases
          :clj     (are-read-as
                     (symbol "foo/bar/baz") "foo/bar/baz"
@@ -271,13 +230,10 @@
       (testing "Zero and Signs"
         (are [edn] (zero? (edn/read-string edn)) "0" " 0 " "-0" "+0"))
 
-      ;; non-edn extension - basilisp does not support octal/hex/radix literals
-      #?(:lpy nil
-         :default
-         (testing "Octal, Hex, Radix"
-           (are [edn] (= 42 (edn/read-string edn)) "052" "0x2a" "2r101010" "8R52" "16r2a" "36r16")
-           (are [edn] (= 42 (edn/read-string edn)) "+052" "+0x2a" "+2r101010" "+8r52" "+16R2a" "+36r16")
-           (are [edn] (= -42 (edn/read-string edn)) "-052" "-0X2a" "-2r101010" "-8r52" "-16r2a" "-36R16")))
+      (testing "Octal, Hex, Radix"
+        (are [edn] (= 42 (edn/read-string edn)) "052" "0x2a" "2r101010" "8R52" "16r2a" "36r16")
+        (are [edn] (= 42 (edn/read-string edn)) "+052" "+0x2a" "+2r101010" "+8r52" "+16R2a" "+36r16")
+        (are [edn] (= -42 (edn/read-string edn)) "-052" "-0X2a" "-2r101010" "-8r52" "-16r2a" "-36R16"))
 
       (testing "Invalid Octal"
         (are-thrown "08" "09")
@@ -299,7 +255,6 @@
         (let [result (edn/read-string "9223372036854775808")]
           #?(:cljr (is (= 9223372036854775808N result))     ;; CLR promotes to BigInt
              :lpy  (is (= 9223372036854775808 result))      ;; basilisp integers use arbitrary precision
-             :phel (is (float? result))                     ;; phel is lossy
              :cljs (is (= 9223372036854776000 result))      ;; cljs is lossy
              :clj  (is (= 9223372036854775808N result)))))) ;; JVM promotes to BigInt
 
@@ -374,55 +329,51 @@
           (is (zero? (edn/read-string "1e-400")))
           (is (zero? (edn/read-string "-1e-400")))))
 
-      ;; non-edn extension - basilisp and phel do not support ratios
-      #?(:lpy  nil
-         :phel nil
-         :default
-         (testing "Ratios"
-           (are [expected edn]
-             (let [result (edn/read-string edn)]
-               #?(:cljs    (= expected result)
-                  :default (and (ratio? result)
-                                (= expected result))))
-             #?(:cljs 0.5 :default 1/2) "1/2"
-             #?(:cljs (/ 2 3) :default 2/3) "2/3"
-             #?(:cljs (/ 2 3) :default 2/3) "02/03"
-             #?(:cljs (/ 12 345) :default 12/345) "12/345"
-             #?(:cljs 0.5 :default 1/2) "+1/2"
-             #?(:cljs (/ 2 3) :default 2/3) "+2/3"
-             #?(:cljs (/ 2 3) :default 2/3) "+02/03"
-             #?(:cljs (/ 12 345) :default 12/345) "+12/345"
-             #?(:cljs -0.5 :default -1/2) "-1/2"
-             #?(:cljs (/ -2 3) :default -2/3) "-2/3"
-             #?(:cljs (/ -2 3) :default -2/3) "-02/03"
-             #?(:cljs (/ -12 345) :default -12/345) "-12/345")
-           (are [expected edn]
-             (let [result (edn/read-string edn)]
-               #?(:cljs    (= expected result)
-                  :default (and (not (ratio? result))
-                                (= expected result))))
-             0 "0/1"
-             0 "0/2"
-             0 "00/1"
-             0 "-0/1"
-             0 "+0/1"
-             1 "1/1"
-             1 "2/2"
-             2 "4/2"
-             -1 "-1/1"
-             -1 "-2/2"
-             -2 "-4/2"
-             1 "12/12")
-           (are-thrown "1/-1" "1/+1")
-           #?(:cljs    (is (NaN? (edn/read-string "0/0")))
-              :default (are-thrown "0/0"))
-           #?(:cljs
-              (are-read-as
-                ##Inf "1/0"
-                ##-Inf "-1/0"
-                ##Inf "+1/0")
-              :default
-              (are-thrown "1/0" "-1/0" "+1/0")))))
+      (testing "Ratios"
+        (are [expected edn]
+          (let [result (edn/read-string edn)]
+            #?(:cljs    (= expected result)
+               :default (and (ratio? result)
+                             (= expected result))))
+          #?(:cljs 0.5 :default 1/2) "1/2"
+          #?(:cljs (/ 2 3) :default 2/3) "2/3"
+          #?(:cljs (/ 2 3) :default 2/3) "02/03"
+          #?(:cljs (/ 12 345) :default 12/345) "12/345"
+          #?(:cljs 0.5 :default 1/2) "+1/2"
+          #?(:cljs (/ 2 3) :default 2/3) "+2/3"
+          #?(:cljs (/ 2 3) :default 2/3) "+02/03"
+          #?(:cljs (/ 12 345) :default 12/345) "+12/345"
+          #?(:cljs -0.5 :default -1/2) "-1/2"
+          #?(:cljs (/ -2 3) :default -2/3) "-2/3"
+          #?(:cljs (/ -2 3) :default -2/3) "-02/03"
+          #?(:cljs (/ -12 345) :default -12/345) "-12/345")
+        (are [expected edn]
+          (let [result (edn/read-string edn)]
+            #?(:cljs    (= expected result)
+               :default (and (not (ratio? result))
+                             (= expected result))))
+          0 "0/1"
+          0 "0/2"
+          0 "00/1"
+          0 "-0/1"
+          0 "+0/1"
+          1 "1/1"
+          1 "2/2"
+          2 "4/2"
+          -1 "-1/1"
+          -1 "-2/2"
+          -2 "-4/2"
+          1 "12/12")
+        (are-thrown "1/-1" "1/+1")
+        #?(:cljs    (is (NaN? (edn/read-string "0/0")))
+           :default (are-thrown "0/0"))
+        #?(:cljs
+           (are-read-as
+             ##Inf "1/0"
+             ##-Inf "-1/0"
+             ##Inf "+1/0")
+           :default
+           (are-thrown "1/0" "-1/0" "+1/0"))))
 
     (testing "Collections"
       (testing "Lists"
@@ -436,10 +387,7 @@
             '(3 4) "(3 4)"
             '(7 8 9) "(7 8 9)"
             '(#uuid "550e8400-e29b-41d4-a716-446655440000") "(#uuid \"550e8400-e29b-41d4-a716-446655440000\")"
-            ;; phel fails compilation with #inst literals
-            #?(:phel    (list (new-date "2010-11-12T13:14:15.666-05:00"))
-               :default '(#inst "2010-11-12T13:14:15.666-05:00"))
-            "(#inst \"2010-11-12T13:14:15.666-05:00\")"))
+            '(#inst "2010-11-12T13:14:15.666-05:00") "(#inst \"2010-11-12T13:14:15.666-05:00\")"))
         (let [result (edn/read-string "(:a b #{c {:d (:e :f :g)}})")
               nested (->> (last result)
                           (remove #{'c})
@@ -460,10 +408,7 @@
             [3 4] "[3 4]"
             [7 8 9] "[7 8 9]"
             [#uuid "550e8400-e29b-41d4-a716-446655440000"] "[#uuid \"550e8400-e29b-41d4-a716-446655440000\"]"
-            ;; phel fails compilation with #inst literals
-            #?(:phel    [(new-date "2010-11-12T13:14:15.666-05:00")]
-               :default [#inst "2010-11-12T13:14:15.666-05:00"])
-            "[#inst \"2010-11-12T13:14:15.666-05:00\"]"))
+            [#inst "2010-11-12T13:14:15.666-05:00"] "[#inst \"2010-11-12T13:14:15.666-05:00\"]"))
         (let [result (edn/read-string "[:a b #{c {:d [:e :f :g]}}]")
               nested (->> (last result)
                           (remove #{'c})
@@ -490,15 +435,9 @@
           {[3 4] 5} "{[3 4] 5}"
           {#uuid "550e8400-e29b-41d4-a716-446655440000" 1} "{#uuid \"550e8400-e29b-41d4-a716-446655440000\" 1}"
           {1 #uuid "550e8400-e29b-41d4-a716-446655440000"} "{1 #uuid \"550e8400-e29b-41d4-a716-446655440000\"}"
-          ;; phel fails compilation with #inst literals
-          #?@(:phel    [{(new-date "2010-11-12T13:14:15.666-05:00") 1} "{#inst \"2010-11-12T13:14:15.666-05:00\" 1}"
-                        {1 (new-date "2010-11-12T13:14:15.666-05:00")} "{1 #inst \"2010-11-12T13:14:15.666-05:00\"}"]
-              :default [{#inst "2010-11-12T13:14:15.666-05:00" 1} "{#inst \"2010-11-12T13:14:15.666-05:00\" 1}"
-                        {1 #inst "2010-11-12T13:14:15.666-05:00"} "{1 #inst \"2010-11-12T13:14:15.666-05:00\"}"])
-          ;; non-edn extension - basilisp and phel do not support namespaced maps
-          #?@(:lpy     []
-              :phel    []
-              :default [{:foo/bar 1 :foo/baz {:buzz 2}} "#:foo{:bar 1 :baz {:buzz 2}}"])))
+          {#inst "2010-11-12T13:14:15.666-05:00" 1} "{#inst \"2010-11-12T13:14:15.666-05:00\" 1}"
+          {1 #inst "2010-11-12T13:14:15.666-05:00"} "{1 #inst \"2010-11-12T13:14:15.666-05:00\"}"
+          {:foo/bar 1 :foo/baz {:buzz 2}} "#:foo{:bar 1 :baz {:buzz 2}}"))
 
       (testing "Sets"
         (are-read-as
@@ -510,10 +449,7 @@
           #{:a :b :c} "#{:a :b :c}"
           #{:a "b" 'c [] #{}} "#{:a \"b\" c [] #{}}"
           #{#uuid "550e8400-e29b-41d4-a716-446655440000"} "#{#uuid \"550e8400-e29b-41d4-a716-446655440000\"}"
-          ;; phel fails compilation with #inst literals
-          #?(:phel    #{(new-date "2010-11-12T13:14:15.666-05:00")}
-             :default #{#inst "2010-11-12T13:14:15.666-05:00"})
-          "#{#inst \"2010-11-12T13:14:15.666-05:00\"}"))
+          #{#inst "2010-11-12T13:14:15.666-05:00"} "#{#inst \"2010-11-12T13:14:15.666-05:00\"}"))
 
       (testing "Key Uniqueness"
         (testing "Sets"
@@ -567,7 +503,7 @@
               est-inst      (edn/read-string est-edn)
               est-inst-copy (edn/read-string est-edn)
               utc-inst      (edn/read-string "#inst \"2010-11-12T18:14:15.666-00:00\"")
-              est-date      (new-date "2010-11-12T13:14:15.666-05:00")]
+              est-date      #inst "2010-11-12T13:14:15.666-05:00"]
           (are [inst-1 inst-2] (= (epoch-millis inst-1) (epoch-millis inst-2))
             est-date est-inst
             est-inst est-inst-copy
@@ -591,12 +527,7 @@
           1289538855666 "#inst \"2010-11-12T13:14:15.666+08:00\"")) ;; positive UTC offset
 
       (testing "Date Only Instant"
-        (let [edn    "#inst \"2026-02-03\""
-              millis 1770076800000]
-          #?(;; basilisp reads date-only instants with local timezone
-             :lpy     (is (= (new-date "2026-02-03") (edn/read-string edn)))
-             :phel    (are-thrown edn)
-             :default (is (= millis (epoch-millis (edn/read-string edn)))))))
+        (is (= 1770076800000 (epoch-millis (edn/read-string "#inst \"2026-02-03\"")))))
 
       (testing "UUIDs"
         ;; cljs seems to allow malformed uuids
@@ -632,9 +563,7 @@
           "#uuid"))
 
       (testing "Whitespace After Dispatch"
-        ;; the dispatch char must immediately follow # - phel returns nil instead
-        (are [edn] #?(:phel    (nil? (edn/read-string edn))
-                      :default (p/thrown? (edn/read-string edn)))
+        (are [edn] (p/thrown? (edn/read-string edn))
           "# foo"
           "#  foo"
           "#,foo"
@@ -686,10 +615,7 @@
             [:default 'my/bar 42] "#my/bar 42")))
 
       (testing "Unsupplied EOF"
-        ;; basilisp and phel read these as nil - all others throw
-        (are [edn] #?(:lpy     (nil? (edn/read-string {} edn))
-                      :phel    (nil? (edn/read-string {} edn))
-                      :default (p/thrown? (edn/read-string {} edn)))
+        (are [edn] (p/thrown? (edn/read-string {} edn))
           " "
           ";just a comment\n")))
 
@@ -699,8 +625,8 @@
         nil ";foo\n"
         3 ";foo\n3"
         3 ";foo\n3\n5"
-        ;; phel and cljs do not consider returns as newlines for comments
-        #?(:phel 5 :cljs 5 :default 3) ";foo\r3\n5"
+        ;; cljs does not consider returns as newlines for comments
+        #?(:cljs 5 :default 3) ";foo\r3\n5"
         nil ";#inst \"2010-11-12T13:14:15.666-05:00\""
         nil "#_nope"
         3 "#_nope 3"
@@ -741,24 +667,17 @@
         #{1 3} "#{1 #_,\t\n\r 2 3}")
 
       (testing "Discarding Metadata"
-        (are-read-as-nil "#_ ^:foo {}")
+        (are-read-as nil "#_ ^:foo {}")
         (are-thrown
           "#_ ^:foo"
           "#_ ^String"
           "#_ ^String \"\""))
 
       (testing "Discarding Tagged Elements"
-        ;; phel is the only dialect that ignores discarded tags' readers
-        #?(:phel
-           (are-read-as-nil
-             "#_ #inst \"not-an-instant\""
-             "#_ #foo 0"
-             "#_ #foo/bar 0")
-           :default
-           (are-thrown
-             "#_ #inst \"not-an-instant\""
-             "#_ #foo 0"
-             "#_ #foo/bar 0"))
+        (are-thrown
+          "#_ #inst \"not-an-instant\""
+          "#_ #foo 0"
+          "#_ #foo/bar 0")
         ;; cljs cannot discard tagged elements
         #?(:cljs
            (are-thrown
@@ -784,12 +703,9 @@
           "#{#_}"
           "#_ #_ 1"))
 
-      (testing "Discard Skips Tag Handlers"
-        ;; the spec says a reader should NOT invoke tag handlers while reading a
-        ;; discarded element. Only phel honors this.
+      (testing "Discarded Tag Handler Throws"
         (let [opts {:readers {'my/boom (fn [_] (throw (ex-info "handler called" {})))}}]
-          #?(:phel    (is (= [42] (edn/read-string opts "[#_ #my/boom 0 42]")))
-             :default (is (p/thrown? (edn/read-string opts "[#_ #my/boom 0 42]")))))))
+          (is (p/thrown? (edn/read-string opts "[#_ #my/boom 0 42]"))))))
 
     (testing "Whitespace Between Forms"
       (are-read-as
@@ -845,8 +761,7 @@
         'ทดสอบ "ทดสอบ"
         'こんにちは "こんにちは"
         '你好 "你好"
-        ;; basilisp fails compilation with a literal 'אַ symbol
-        (symbol "אַ") "אַ גוט יאָר"
+        'אַ "אַ גוט יאָר"
         'cześć "cześć"
         'привет "привет"
 
@@ -854,8 +769,7 @@
         :ทดสอบ ":ทดสอบ"
         :こんにちは ":こんにちは"
         :你好 ":你好"
-        ;; basilisp fails compilation with a literal :אַ keyword
-        (keyword "אַ") ":אַ גוט יאָר"
+        :אַ ":אַ גוט יאָר"
         :cześć ":cześć"
         :привет ":привет"
 
@@ -863,15 +777,11 @@
 
     (testing "Metadata"
       (let [edn "^String {:a 1}"]
-        ;; non-edn extension - basilisp does not support ^ metadata
-        #?(:lpy     (are-thrown edn)
-           :default (is (= {:tag 'String} (meta (edn/read-string edn)))))))
+        (is (= {:tag 'String} (meta (edn/read-string edn))))))
 
     (testing "Malformed Input"
       (testing "Non-String Inputs"
-        ;; phel stringifies non-string input rather than throwing
-        #?(:phel    (is (= :foo (edn/read-string :foo)))
-           :default (are-thrown :foo)))
+        (are-thrown :foo))
 
       (testing "Unbalanced Delimiters"
         (are-thrown
