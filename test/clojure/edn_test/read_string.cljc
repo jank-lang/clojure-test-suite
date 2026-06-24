@@ -332,7 +332,7 @@
           #?@(:cljr    [1293890399999 "#inst \"2010-12-31T23:59:59.999-14:00\""]
               :default [1293926339999 "#inst \"2010-12-31T23:59:59.999-23:59\""]))
 
-        (testing "Instant RFC3339 Formats"
+        (testing "Instant Formats"
           (are [edn] (= 1289585655666 (-> edn edn/read-string epoch-millis))
             "#inst \"2010-11-12T18:14:15.666Z\""
             "#inst \"2010-11-12T18:14:15.666-00:00\""
@@ -341,10 +341,8 @@
             "#inst \"2010-11-12T23:14:15.666+05:00\"")
           (are [millis edn] (= millis (-> edn edn/read-string epoch-millis))
             1289567655000 "#inst \"2010-11-12T13:14:15Z\""  ;; no fractional seconds
-            482196050520 "#inst \"1985-04-12T23:20:50.52Z\"")) ;; 2-digit fractional seconds
-
-        (testing "Date Only Instant"
-          (is (= 1770076800000 (epoch-millis (edn/read-string "#inst \"2026-02-03\""))))))
+            482196050520 "#inst \"1985-04-12T23:20:50.52Z\"" ;; 2-digit fractional seconds
+            1770076800000 "#inst \"2026-02-03\"")))         ;; date only
 
       (testing "UUIDs"
         ;; cljs seems to allow malformed uuids
@@ -363,16 +361,12 @@
 
       (testing "Variable Whitespace"
         (let [uid #uuid "550e8400-e29b-41d4-a716-446655440000"]
-          (are [edn] (= uid (edn/read-string edn))
-            "#uuid\"550e8400-e29b-41d4-a716-446655440000\"" ;; no space
-            "#uuid  ;comment\r\n\t,#_foo\"550e8400-e29b-41d4-a716-446655440000\""))) ;; whitespace / comments
+          (are-read-as
+            uid "#uuid\"550e8400-e29b-41d4-a716-446655440000\"" ;; no space
+            uid "#uuid  ;comment\r\n\t,#_foo\"550e8400-e29b-41d4-a716-446655440000\""))) ;; whitespace / comments
 
       (testing "Tag Without Element"
-        (are-thrown
-          "#foo"
-          "#my/bar"
-          "#inst"
-          "#uuid"))
+        (are-thrown "#foo" "#my/bar" "#inst" "#uuid"))
 
       (testing "Whitespace After Dispatch"
         ;; cljs is lenient here
@@ -380,7 +374,7 @@
                       :default (p/thrown? (edn/read-string edn)))
           "# ,\t\r\ninst \"2010-11-12T18:14:15.666Z\""
           "# ,\t\r\nuuid \"550e8400-e29b-41d4-a716-446655440000\"")
-        (are [edn] (p/thrown? (edn/read-string edn))
+        (are-thrown
           "# _foo"
           "#,_foo"
           "#\t_foo"
