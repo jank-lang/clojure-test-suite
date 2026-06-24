@@ -22,6 +22,9 @@
 
 (when-var-exists clojure.edn/read-string
   (deftest test-read-string
+    (testing "Throws Eval Reader"
+      (are-thrown (edn/read-string "#=(+ 1 2)")))
+
     (testing "nil and Booleans"
       (are-read-as
         nil "nil"
