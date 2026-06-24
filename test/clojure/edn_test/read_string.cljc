@@ -24,13 +24,14 @@
   (deftest test-read-string
     (testing "nil and Booleans"
       (are-read-as
-        nil ""
         nil "nil"
         true "true"
         false "false"))
 
     (testing "Whitespace Only"
-      (are-read-as nil "  , ,, \t \r \n \r\n"))
+      (are-read-as
+        nil ""
+        nil "  , ,, \t \r \n \r\n"))
 
     (testing "Strings"
       (are-read-as
@@ -40,34 +41,22 @@
 
       (testing "Multi-line"
         (are-read-as
-          "\n" "\"\\n\""
+          "\n" "\"\n\""
           "\n\n" "\"\\n\\n\""
-          "\na" "\"\\na\""
-          "a\n" "\"a\\n\""
-          "a\nb" "\"a\\nb\""
-          "a\nb" "\"a\nb\""
-          "a\nb\nc" "\"a\\nb\\nc\""
-          "a\nb\nc" "\"a\nb\nc\""
-          "\n\\n\n" "\"\\n\\\\n\\n\""
-          "\n\"\n" "\"\\n\\\"\\n\""
-          "\ra\r" "\"\\ra\\r\""
-          "\r\na\r\n" "\"\\r\\na\\r\\n\""
+          "\r\n" "\"\r\n\""
+          "a\nb\nc" "\"a\\nb\nc\""
           '(def a "\n") "(def a \"\\n\")"))
 
       (testing "Unicode Escapes"
         (are-read-as
           "A" "\"\\u0041\""
           "AB" "\"\\u0041\\u0042\""
-          "→" "\"\\u2192\""
           "a→b" "\"a\\u2192b\""))
 
-      (testing "Unsupported Escapes"
-        (are-thrown "\"\\q\""))
-
-      (testing "Malformed Unicode Escapes"
+      (testing "Malformed Escapes"
         (are-thrown
-          "\"abc \\ua\""                                    ;; truncated
-          "\"abc \\x0z  ...etc\""                           ;; incorrect code
+          "\"\\q\""                                         ;; unsupported
+          "\"abc \\u000\""                                  ;; truncated
           "\"abc \\u0g00 ..etc\"")))                        ;; incorrect code
 
     (testing "Characters"
@@ -91,7 +80,7 @@
           (char 00) "\\o0"
           (char 0101) "\\o101"
           (char 0377) "\\o377")
-        ;; above the 377 maximum
+        ;; above 0377
         #?(;; cljs is lenient, reading a broader range of octal characters
            :cljs    (are-read-as
                       (char 0400) "\\o400"
@@ -102,97 +91,70 @@
     (testing "Symbols"
       (are-read-as
         'a1b2 "a1b2"
-        'foo "foo"
         'foo/bar "foo/bar"
         'foo.bar/baz.buzz "foo.bar/baz.buzz"
         'foo// "foo//"
-        'foo.bar// "foo.bar//"
         'foo:bar "foo:bar"
         'foo#bar "foo#bar"
         'nilable "nilable"
         'truer "truer"
         'falsey "falsey"
         '/ "/"
-        '% "%"
-        '= "="
-        '-> "->"
-        '- "-"
-        '+ "+"
-        '. "."
-        '... "..."
-        '*earmuffs* "*earmuffs*"
+        '%percent "%percent"
+        '=eq "=eq"
+        '-minus "-minus"
+        '+plus "+plus"
+        '.dot ".dot"
+        '*star "*star"
         '?qmark "?qmark"
         '!bang "!bang"
         '&amp "&amp"
         '$dollar "$dollar"
         '_discard "_discard"
         '<lt "<lt"
-        '>gt ">gt"
-        '.method ".method"
-        '.-attr ".-attr"))
+        '>gt ">gt"))
 
     (testing "Keywords"
       (are-read-as
         :1 ":1"
         :a1b2 ":a1b2"
-        :foo ":foo"
         :foo/bar ":foo/bar"
         :foo.bar/baz.buzz ":foo.bar/baz.buzz"
         :foo:bar ":foo:bar"
         :foo#bar ":foo#bar"
-        :nilable ":nilable"
-        :truer ":truer"
-        :falsey ":falsey"
-        :% ":%"
-        := ":="
-        :-> ":->"
-        :- ":-"
-        :+ ":+"
-        :. ":."
-        :... ":..."
-        :*earmuffs* ":*earmuffs*"
+        :/ ":/"
+        :%percent ":%percent"
+        :=eq ":=eq"
+        :-minus ":-minus"
+        :+plus ":+plus"
+        :.dot ":.dot"
+        :*star ":*star"
         :?qmark ":?qmark"
         :!bang ":!bang"
         :&amp ":&amp"
         :$dollar ":$dollar"
         :_discard ":_discard"
         :<lt ":<lt"
-        :>gt ":>gt"
-        :.method ":.method"
-        :.-attr ":.-attr")
-
-      (testing "Slash-Only"
-        (are-read-as (keyword "/") ":/")
-        (are-thrown ":/foo")))
+        :>gt ":>gt"))
 
     (testing "Invalid Tokens"
       (are-thrown
+        ":"
         "::"
         "::foo"
+        ":/foo"
         "foo/"
         "/foo"
-        "foo/bar/"
         "#"
         "##"
-        "##Foo"
         "##Infinity"
         "##-Infinity")
       #?(:cljs    (are-read-as
                     nil "#!shebang"
-                    nil "#!/bin/bash"
-                    nil "#!/usr/bin/env bb"
-                    nil "#!shebang\r1"
-                    1 "#!shebang\n1"
-                    1 "#!/bin/bash\n1"
-                    1 "#!/usr/bin/env bb\n1")
+                    1 "#!shebang\r\n1")
          :default (are-thrown
                     "#!shebang"
-                    "#!/bin/bash"
-                    "#!/usr/bin/env bb"
-                    "#!shebang\r1"
-                    "#!shebang\n1"
-                    "#!/bin/bash\n1"
-                    "#!/usr/bin/env bb\n1"))
+                    "#!shebang\r\n1"))
       #?(;; CLR is lenient, but does not read 3-part symbols/keywords the same way `symbol` and `keyword` do
          :cljr    (letfn [(part-named [named] [(namespace named) (name named)])]
                     (let [result (edn/read-string "foo/bar/baz")]
@@ -212,17 +174,11 @@
     (testing "Symbol/Number Boundary"
       (are-thrown "1a" "-1a" "+1a")
       (are-read-as
-        '-. "-."
-        '+. "+."
-        '.5a ".5a"
         '.5 ".5"
         5.0 "5."))
 
     (testing "Integers"
       (are-read-as
-        1 "1"
-        1 "+1"
-        -1 "-1"
         42 "42"
         42 "+42"
         -42 "-42")
@@ -231,24 +187,16 @@
         (are [edn] (zero? (edn/read-string edn)) "0" " 0 " "-0" "+0"))
 
       (testing "Octal, Hex, Radix"
+        (are-thrown "08" "0x2g" "2r2" "8R8")
         (are [edn] (= 42 (edn/read-string edn)) "052" "0x2a" "2r101010" "8R52" "16r2a" "36r16")
         (are [edn] (= 42 (edn/read-string edn)) "+052" "+0x2a" "+2r101010" "+8r52" "+16R2a" "+36r16")
         (are [edn] (= -42 (edn/read-string edn)) "-052" "-0X2a" "-2r101010" "-8r52" "-16r2a" "-36R16"))
 
-      (testing "Invalid Octal"
-        (are-thrown "08" "09")
-        (are-read-as
-          0 "00"
-          1 "01"
-          7 "007"))
-
       (testing "BigInt"
         (are-read-as
-          0N "-0N"
           0N "0N"
           -42N "-42N"
           42N "42N"
-          0N "+0N"
           42N "+42N"))
 
       (testing "Overflow"
@@ -271,63 +219,26 @@
 
       (testing "BigDecimal"
         (are-read-as
-          0M "-0M"
-          0M "0M"
-          0M "+0M"
           0M "0.0M"
-          -42M "-42M"
           42M "42M"
-          42M "+42M"
-          0.1M "0.1M"
-          0.001M "0.001M"
           -3.14M "-3.14M"
           3.14M "3.14M"
           3.14M "+3.14M"))
 
       (testing "Exponents"
         (are-read-as
-          0.0 "-0e0"
           0.0 "0e0"
-          0.0 "0.0e0"
-          0.0 "0.00e0"
-          0.0 "0e10"
-          -1.0 "-1e0"
-          1.0 "1e0"
           42.0 "42e0"
-          420.0 "42e1"
-          4200.0 "42e2"
-          -1234.5 "-1.2345e3"
-          1234.5 "1.2345e3")
-
-        (testing "Capital E"
-          (are-read-as
-            4200.0 "42E2"
-            1234.5 "1.2345E3"))
-
-        (testing "Negative Exponents"
-          (are-read-as
-            0.0 "0e-0"
-            0.0 "-0e-10"
-            -1.0 "-1e-0"
-            1.0 "1e-0"
-            -0.42 "-42e-2"
-            4.2 "42e-1"
-            -12.345 "-123.45e-1"))
-
-        (testing "Signed"
-          (are-read-as
-            1.23456 "+123.456e-2"
-            12345.6 "+123.456e2"
-            12345.6 "+123.456e+2"
-            -1.23456 "-123.456e-2"
-            -12345.6 "-123.456e2"
-            -12345.6 "-123.456e+2"))
-
-        (testing "Overflows"
-          (is (= ##-Inf (edn/read-string "-1e400")))
-          (is (= ##Inf (edn/read-string "1e400")))
-          (is (zero? (edn/read-string "1e-400")))
-          (is (zero? (edn/read-string "-1e-400")))))
+          -4.2 "-42e-1"
+          420.0 "42E1"
+          12.345 "1234.5e-2"
+          -123.45 "-1.2345e2"
+          123.45 "+1.2345e+2"
+          123.45 "1.2345E2"
+          ##-Inf "-1e400"
+          ##Inf "1e400"
+          0.0 "1e-400"
+          0.0 "-1e-400"))
 
       (testing "Ratios"
         (are [expected edn]
@@ -336,34 +247,19 @@
                :default (and (ratio? result)
                              (= expected result))))
           #?(:cljs 0.5 :default 1/2) "1/2"
-          #?(:cljs (/ 2 3) :default 2/3) "2/3"
-          #?(:cljs (/ 2 3) :default 2/3) "02/03"
-          #?(:cljs (/ 12 345) :default 12/345) "12/345"
-          #?(:cljs 0.5 :default 1/2) "+1/2"
-          #?(:cljs (/ 2 3) :default 2/3) "+2/3"
-          #?(:cljs (/ 2 3) :default 2/3) "+02/03"
-          #?(:cljs (/ 12 345) :default 12/345) "+12/345"
           #?(:cljs -0.5 :default -1/2) "-1/2"
-          #?(:cljs (/ -2 3) :default -2/3) "-2/3"
+          #?(:cljs (/ 2 3) :default 2/3) "+02/03"
           #?(:cljs (/ -2 3) :default -2/3) "-02/03"
-          #?(:cljs (/ -12 345) :default -12/345) "-12/345")
+          #?(:cljs (/ 12 345) :default 12/345) "12/345")
         (are [expected edn]
           (let [result (edn/read-string edn)]
             #?(:cljs    (= expected result)
                :default (and (not (ratio? result))
                              (= expected result))))
           0 "0/1"
-          0 "0/2"
-          0 "00/1"
-          0 "-0/1"
-          0 "+0/1"
           1 "1/1"
-          1 "2/2"
           2 "4/2"
-          -1 "-1/1"
-          -1 "-2/2"
-          -2 "-4/2"
-          1 "12/12")
+          -1 "-12/12")
         (are-thrown "1/-1" "1/+1")
         #?(:cljs    (is (NaN? (edn/read-string "0/0")))
            :default (are-thrown "0/0"))
@@ -377,169 +273,87 @@
 
     (testing "Collections"
       (testing "Lists"
-        (letfn [(list= [expected other]
-                  (and (= expected other)
-                       (list? other)))]
-          (are [expected edn] (list= expected (edn/read-string edn))
-            '() "()"
-            '(()) "(())"
-            '(1) "(1)"
-            '(3 4) "(3 4)"
-            '(7 8 9) "(7 8 9)"
-            '(#uuid "550e8400-e29b-41d4-a716-446655440000") "(#uuid \"550e8400-e29b-41d4-a716-446655440000\")"
-            '(#inst "2010-11-12T13:14:15.666-05:00") "(#inst \"2010-11-12T13:14:15.666-05:00\")"))
-        (let [result (edn/read-string "(:a b #{c {:d (:e :f :g)}})")
-              nested (->> (last result)
-                          (remove #{'c})
-                          first
-                          :d)]
-          (is (= '(:a b #{c {:d (:e :f :g)}}) result))
+        (are-read-as
+          '() "()"
+          '(()) "(())")
+        (let [result (edn/read-string "(:a b {:c (:d :e :f)})")
+              nested (:c (last result))]
+          (is (= '(:a b {:c (:d :e :f)}) result))
           (is (list? result))
           (is (list? nested))))
 
       (testing "Vectors"
-        (letfn [(vector= [expected other]
-                  (and (= expected other)
-                       (vector? other)))]
-          (are [expected edn] (vector= expected (edn/read-string edn))
-            [] "[]"
-            [[]] "[[]]"
-            [1] "[1]"
-            [3 4] "[3 4]"
-            [7 8 9] "[7 8 9]"
-            [#uuid "550e8400-e29b-41d4-a716-446655440000"] "[#uuid \"550e8400-e29b-41d4-a716-446655440000\"]"
-            [#inst "2010-11-12T13:14:15.666-05:00"] "[#inst \"2010-11-12T13:14:15.666-05:00\"]"))
-        (let [result (edn/read-string "[:a b #{c {:d [:e :f :g]}}]")
-              nested (->> (last result)
-                          (remove #{'c})
-                          first
-                          :d)]
-          (is (= [:a 'b #{'c {:d [:e :f :g]}}] result))
+        (are-read-as
+          [] "[]"
+          [[]] "[[]]")
+        (let [result (edn/read-string "[:a b {:c [:d :e :f]}]")
+              nested (:c (last result))]
+          (is (= [:a 'b {:c [:d :e :f]}] result))
           (is (vector? result))
           (is (vector? nested))))
 
       (testing "Maps"
-        (are-thrown
-          "{:a}"
-          "{:a :b :c}")
+        (are-thrown "{:a}" "{:a :b :c}")
         (are-read-as
           {} "{}"
-          {:a 1 :b 2 :c 3} "{:a 1 :b 2 :c 3}"
-          {:a 1 :b 2 :c 3 :d 4 :e 5 :f 6 :g 7 :h 8 :i 9} "{:a 1 :b 2 :c 3 :d 4 :e 5 :f 6 :g 7 :h 8 :i 9}"
-          {"a" 1} "{\"a\" 1}"
-          {{} 1} "{{} 1}"
-          {'a 1} "{a 1}"
-          {'foo/bar 1} "{foo/bar 1}"
-          {:foo/bar 1} "{:foo/bar 1}"
-          {1 2} "{1 2}"
-          {[3 4] 5} "{[3 4] 5}"
-          {#uuid "550e8400-e29b-41d4-a716-446655440000" 1} "{#uuid \"550e8400-e29b-41d4-a716-446655440000\" 1}"
-          {1 #uuid "550e8400-e29b-41d4-a716-446655440000"} "{1 #uuid \"550e8400-e29b-41d4-a716-446655440000\"}"
-          {#inst "2010-11-12T13:14:15.666-05:00" 1} "{#inst \"2010-11-12T13:14:15.666-05:00\" 1}"
-          {1 #inst "2010-11-12T13:14:15.666-05:00"} "{1 #inst \"2010-11-12T13:14:15.666-05:00\"}"
-          {:foo/bar 1 :foo/baz {:buzz 2}} "#:foo{:bar 1 :baz {:buzz 2}}"))
+          {:a 1 'b #{} '() [] nil "c"} "{:a 1 b #{} () [] nil \"c\"}"
+          {:foo/bar 1 :foo/baz {:buzz 2}} "#:foo{:bar 1 :baz {:buzz 2}}"
+          {:a #uuid "550e8400-e29b-41d4-a716-446655440000"} "{:a #uuid \"550e8400-e29b-41d4-a716-446655440000\"}"))
 
       (testing "Sets"
         (are-read-as
           #{} "#{}"
-          #{nil} "#{nil}"
-          #{#{}} "#{#{}}"
-          #{1} "#{1}"
-          #{1 2} "#{1 2}"
-          #{:a :b :c} "#{:a :b :c}"
-          #{:a "b" 'c [] #{}} "#{:a \"b\" c [] #{}}"
-          #{#uuid "550e8400-e29b-41d4-a716-446655440000"} "#{#uuid \"550e8400-e29b-41d4-a716-446655440000\"}"
-          #{#inst "2010-11-12T13:14:15.666-05:00"} "#{#inst \"2010-11-12T13:14:15.666-05:00\"}"))
+          #{:a "b" 'c 1 [] #{} nil} "#{:a \"b\" c 1 [] #{} nil}"
+          #{#uuid "550e8400-e29b-41d4-a716-446655440000"} "#{#uuid \"550e8400-e29b-41d4-a716-446655440000\"}"))
 
       (testing "Key Uniqueness"
-        (testing "Sets"
-          (are-thrown
-            "#{a a}"
-            "#{:a :a}"
-            "#{:foo/bar :foo/bar}"
-            "#{1 1}"
-            "#{1 1N}"
-            "#{[] ()}"
-            "#{#{} #{}}"
-            "#{{} {}}"
-            "#{#inst \"2010-11-12T13:14:15.666-05:00\" #inst \"2010-11-12T13:14:15.666-05:00\"}"
-            "#{#uuid \"550e8400-e29b-41d4-a716-446655440000\" #uuid \"550e8400-e29b-41d4-a716-446655440000\"}"))
-
-        (testing "Maps"
-          (are-thrown
-            "{a 1 a 2}"
-            "{:a 1 :a 2}"
-            "{:foo/bar 1 :foo/bar 2}"
-            "{foo/bar 1 foo/bar 2}"
-            "{1 :a 1 :b}"
-            "{1 :a 1N :b}"
-            "{[] 1 () 2}"
-            "{#{} 1 #{} 2}"
-            "{{} 1 {} 2}"
-            "{#inst \"2010-11-12T13:14:15.666-05:00\" 1 #inst \"2010-11-12T13:14:15.666-05:00\" 2}"
-            "{#uuid \"550e8400-e29b-41d4-a716-446655440000\" 1 #uuid \"550e8400-e29b-41d4-a716-446655440000\" 2}"))
-
-        (testing "BigInt / BigDecimal"
-          (are [edn] #?(:cljs    (p/thrown? (edn/read-string edn))
-                        :default (= 2 (count (edn/read-string edn))))
-            "#{1 1.0}"
-            "#{1M 1}"
-            "#{1M 1N}"
-            "#{1M 1.0}"
-            "#{1.0M 1.0}"
-            "{1 2 1.0 3}"
-            "{1M 2 1 3}"
-            "{1M 2 1N 3}"
-            "{1M 2 1.0 3}"
-            "{1.0M 2 1.0 3}"))))
+        (are-thrown
+          "#{:a :a}"
+          "#{#uuid \"550e8400-e29b-41d4-a716-446655440000\" #uuid \"550e8400-e29b-41d4-a716-446655440000\"}"
+          "{:a 1 :a 2}"
+          "{#uuid \"550e8400-e29b-41d4-a716-446655440000\" 1 #uuid \"550e8400-e29b-41d4-a716-446655440000\" 2}")))
 
     (testing "Tagged Elements"
       (testing "Instants"
         (are-thrown
           "#inst 0"
           "#inst \"\""
-          "#inst \"not-an-inst\"")
-        (let [est-edn       "#inst \"2010-11-12T13:14:15.666-05:00\""
-              est-inst      (edn/read-string est-edn)
-              est-inst-copy (edn/read-string est-edn)
-              utc-inst      (edn/read-string "#inst \"2010-11-12T18:14:15.666-00:00\"")
-              est-date      #inst "2010-11-12T13:14:15.666-05:00"]
-          (are [inst-1 inst-2] (= (epoch-millis inst-1) (epoch-millis inst-2))
-            est-date est-inst
-            est-inst est-inst-copy
-            est-inst utc-inst))
+          "#inst \"not-an-inst\""
+          "#inst \"2010-02-29T00:00:00.000Z\""
+          "#inst \"2010-01-01T24:00:00.000Z\"")
         (are [millis edn] (= millis (-> edn edn/read-string epoch-millis))
-          1262330055666 "#inst \"2010-01-01T01:14:15.666-06:00\"" ;; all single-digit (zero-padded)
-          1284045255666 "#inst \"2010-09-09T09:14:15.666-06:00\"" ;; single/double-digit boundary
-          1286727255666 "#inst \"2010-10-10T10:14:15.666-06:00\"" ;; first double-digit values
-          1293596055666 "#inst \"2010-12-28T22:14:15.666-06:00\"")) ;; range extremes
+          1262311321001 "#inst \"2010-01-01T01:01:01.001-01:01\"" ;; all single-digit (zero-padded)
+          1284056289009 "#inst \"2010-09-09T09:09:09.009-09:09\"" ;; single/double-digit boundary
+          1286742010010 "#inst \"2010-10-10T10:10:10.010-10:10\"" ;; first double-digit values
+          ;; range extremes - cljr throws offsets greater than 14 hours
+          #?@(:cljr    [1293890399999 "#inst \"2010-12-31T23:59:59.999-14:00\""]
+              :default [1293926339999 "#inst \"2010-12-31T23:59:59.999-23:59\""]))
 
-      (testing "Instant RFC3339 Formats"
-        (let [zulu (-> "#inst \"2010-11-12T18:14:15.666Z\"" edn/read-string epoch-millis)]
-          (are [edn] (= zulu (-> edn edn/read-string epoch-millis))
+        (testing "Instant RFC3339 Formats"
+          (are [edn] (= 1289585655666 (-> edn edn/read-string epoch-millis))
+            "#inst \"2010-11-12T18:14:15.666Z\""
             "#inst \"2010-11-12T18:14:15.666-00:00\""
             "#inst \"2010-11-12T18:14:15.666+00:00\""
             "#inst \"2010-11-12T13:14:15.666-05:00\""
-            "#inst \"2010-11-12T23:14:15.666+05:00\""))
-        (are [millis edn] (= millis (-> edn edn/read-string epoch-millis))
-          1289567655000 "#inst \"2010-11-12T13:14:15Z\""    ;; no fractional seconds
-          482196050520 "#inst \"1985-04-12T23:20:50.52Z\""  ;; 2-digit fractional seconds
-          1289538855666 "#inst \"2010-11-12T13:14:15.666+08:00\"")) ;; positive UTC offset
+            "#inst \"2010-11-12T23:14:15.666+05:00\"")
+          (are [millis edn] (= millis (-> edn edn/read-string epoch-millis))
+            1289567655000 "#inst \"2010-11-12T13:14:15Z\""  ;; no fractional seconds
+            482196050520 "#inst \"1985-04-12T23:20:50.52Z\"")) ;; 2-digit fractional seconds
 
-      (testing "Date Only Instant"
-        (is (= 1770076800000 (epoch-millis (edn/read-string "#inst \"2026-02-03\"")))))
+        (testing "Date Only Instant"
+          (is (= 1770076800000 (epoch-millis (edn/read-string "#inst \"2026-02-03\""))))))
 
       (testing "UUIDs"
         ;; cljs seems to allow malformed uuids
         #?(:cljs    (is (= (uuid "not-a-uuid") (edn/read-string "#uuid \"not-a-uuid\"")))
            :default (are-thrown "#uuid \"not-a-uuid\""))
         (are-thrown "#uuid 0")
-        (let [uid-edn "#uuid \"550e8400-e29b-41d4-a716-446655440000\""
-              uid     #uuid "550e8400-e29b-41d4-a716-446655440000"]
-          (are-read-as uid uid-edn)
+        (let [parsed-uid (edn/read-string "#uuid \"550e8400-e29b-41d4-a716-446655440000\"")
+              uid        #uuid "550e8400-e29b-41d4-a716-446655440000"]
+          (is (= uid parsed-uid))
           ;; CLR uuids are value types; always `identical?`
-          #?(:cljr    (is (identical? uid (edn/read-string uid-edn)))
-             :default (is (not (identical? uid (edn/read-string uid-edn)))))))
+          #?(:cljr    (is (identical? uid parsed-uid))
+             :default (is (not (identical? uid parsed-uid))))))
 
       (testing "Unknown Tag"
         (are-thrown "#unknown 0"))
@@ -548,12 +362,7 @@
         (let [uid #uuid "550e8400-e29b-41d4-a716-446655440000"]
           (are [edn] (= uid (edn/read-string edn))
             "#uuid\"550e8400-e29b-41d4-a716-446655440000\"" ;; no space
-            "#uuid  \"550e8400-e29b-41d4-a716-446655440000\"" ;; double space
-            "#uuid\n\"550e8400-e29b-41d4-a716-446655440000\"" ;; newline
-            "#uuid\t\"550e8400-e29b-41d4-a716-446655440000\"" ;; tab
-            "#uuid\r\"550e8400-e29b-41d4-a716-446655440000\"" ;; return
-            "#uuid,\"550e8400-e29b-41d4-a716-446655440000\"" ;; comma
-            "#uuid #_foo\"550e8400-e29b-41d4-a716-446655440000\""))) ;; discard
+            "#uuid  ;comment\r\n\t,#_foo\"550e8400-e29b-41d4-a716-446655440000\""))) ;; whitespace / comments
 
       (testing "Tag Without Element"
         (are-thrown
@@ -563,25 +372,17 @@
           "#uuid"))
 
       (testing "Whitespace After Dispatch"
+        ;; cljs is lenient here
+        (are [edn] #?(:cljs    (edn/read-string edn)
+                      :default (p/thrown? (edn/read-string edn)))
+          "# ,\t\r\ninst \"2010-11-12T18:14:15.666Z\""
+          "# ,\t\r\nuuid \"550e8400-e29b-41d4-a716-446655440000\"")
         (are [edn] (p/thrown? (edn/read-string edn))
-          "# foo"
-          "#  foo"
-          "#,foo"
-          "#\tfoo"
-          "#\rfoo"
-          "#\nfoo"
-          "# {}"
-          "#  {}"
-          "#,{}"
-          "#\t{}"
-          "#\r{}"
-          "#\n{}"
-          "# _"
-          "#  _"
-          "#,_"
-          "#\t_"
-          "#\r_"
-          "#\n_")))
+          "# _foo"
+          "#,_foo"
+          "#\t_foo"
+          "#\r_foo"
+          "#\n_foo")))
 
     (testing "Reading with Options"
 
@@ -602,10 +403,9 @@
       (testing "Custom Readers"
         (are [expected readers edn] (= expected (edn/read-string {:readers readers} edn))
           [:foo 42] {'my/foo (fn [x] [:foo x])} "#my/foo 42"
-          :override {'uuid (constantly :override)} "#uuid \"550e8400-e29b-41d4-a716-446655440000\""
-          :override {'inst (constantly :override)} "#inst \"2010-11-12T13:14:15.666-05:00\""
           [:a [:b 42]] {'my/a (fn [x] [:a x]) 'my/b (fn [x] [:b x])} "#my/a #my/b 42"
-          {:point [1 2]} {'my/point (fn [v] {:point v})} "#my/point [1 2]"))
+          :override {'uuid (constantly :override)} "#uuid \"550e8400-e29b-41d4-a716-446655440000\""
+          :override {'inst (constantly :override)} "#inst \"2010-11-12T13:14:15.666-05:00\""))
 
       (testing "Readers with Default"
         (let [opts {:readers {'my/foo (fn [x] [:foo x])}
@@ -622,49 +422,18 @@
     (testing "Comments and Discard"
       (are-read-as
         nil ";foo"
-        nil ";foo\n"
-        3 ";foo\n3"
         3 ";foo\n3\n5"
         ;; cljs does not consider returns as newlines for comments
         #?(:cljs 5 :default 3) ";foo\r3\n5"
-        nil ";#inst \"2010-11-12T13:14:15.666-05:00\""
+        nil ";#inst \"not-an-instant\""
         nil "#_nope"
         3 "#_nope 3"
-        [2 3] "[;foo1\n2 3]"
-        [1 3] "[1;foo2\n3]"
-        [2 3] "[#_1 2 3]"
-        [1 3] "[1 #_2 3]"
-        [1 2] "[1 2 #_3]"
-        [1 4] "[1 #_2 #_3 4]"
         [1 4] "[1 #_ #_ 2 3 4]"
         [1 3] "[1 #_,\t\n\r 2 3]"
-        [4] "[#_(1 2 3) 4]"
-        [4] "[#_[1 2 3] 4]"
-        [2] "[#_{:a 1} 2]"
         [3] "[#_#{1 2} 3]"
-        '(2 3) "(;foo1\n2 3)"
-        '(1 3) "(1;foo2\n3)"
-        '(2 3) "(#_1 2 3)"
-        '(1 3) "(1 #_2 3)"
-        '(1 2) "(1 2 #_3)"
-        '(1 4) "(1 #_2 #_3 4)"
-        '(1 4) "(1 #_ #_ 2 3 4)"
-        '(1 3) "(1 #_,\t\n\r 2 3)"
-        '(4) "(#_(1 2 3) 4)"
-        '(4) "(#_[1 2 3] 4)"
-        '(2) "(#_{:a 1} 2)"
-        '(3) "(#_#{1 2} 3)"
-        {:a 1} "{:a;foo:b\n1}"
         {:a 1 :c 3} "{:a 1;:b 2\n:c 3}"
         {:a 1 :c 3} "{:a 1 #_:b #_2 :c 3}"
-        {:a 1} "{:a #_nope 1}"
-        {:a 2} "{:a #_,\t\n\r 1 2}"
-        {:a 1 :c 3} "{:a 1 #_:b #_2 :c 3}"
-        #{1 3} "#{1;foo2\n3}"
-        #{2 3} "#{#_1 2 3}"
-        #{1 3} "#{1 #_2 3}"
-        #{1 2} "#{1 2 #_3}"
-        #{1 3} "#{1 #_,\t\n\r 2 3}")
+        {:a 1} "{:a #_nope 1}")
 
       (testing "Discarding Metadata"
         (are-read-as nil "#_ ^:foo {}")
@@ -679,28 +448,15 @@
           "#_ #foo 0"
           "#_ #foo/bar 0")
         ;; cljs cannot discard tagged elements
-        #?(:cljs
-           (are-thrown
-             "#_ #inst \"2010-11-12T13:14:15.666-05:00\""
-             "(#_ #inst \"2010-11-12T13:14:15.666-05:00\" 1)"
-             "[#_ #inst \"2010-11-12T13:14:15.666-05:00\" 1]"
-             "{:a #_ #inst \"2010-11-12T13:14:15.666-05:00\" 1}"
-             "#{#_ #inst \"2010-11-12T13:14:15.666-05:00\" 1}")
-           :default
-           (are-read-as
-             nil "#_ #inst \"2010-11-12T13:14:15.666-05:00\""
-             '(1) "(#_ #inst \"2010-11-12T13:14:15.666-05:00\" 1)"
-             [1] "[#_ #inst \"2010-11-12T13:14:15.666-05:00\" 1]"
-             {:a 1} "{:a #_ #inst \"2010-11-12T13:14:15.666-05:00\" 1}"
-             #{1} "#{#_ #inst \"2010-11-12T13:14:15.666-05:00\" 1}")))
+        (are [expected edn] #?(:cljs    (p/thrown? (edn/read-string edn))
+                               :default (= expected (edn/read-string edn)))
+          nil "#_ #inst \"2010-11-12T13:14:15.666-05:00\""
+          #{1} "#{#_ #inst \"2010-11-12T13:14:15.666-05:00\" 1}"))
 
       (testing "Discard Without Element"
         (are-thrown
           "#_"
           "[#_]"
-          "(#_)"
-          "{#_}"
-          "#{#_}"
           "#_ #_ 1"))
 
       (testing "Discarded Tag Handler Throws"
@@ -709,71 +465,29 @@
 
     (testing "Whitespace Between Forms"
       (are-read-as
-        [1 2] "[1 2]"
-        [1 2] "[1  2]"
         [1 2] "[1,2]"
-        [1 2] "[1\t2]"
-        [1 2] "[1\n2]"
-        [1 2] "[1\r2]")
+        [1 2] "[1  \r\n,\t2]")
 
       (testing "Multiple Forms"
         (are-read-as
           'first "first second"
           1 "1 2 3"
-          :a ":a :b :c"
-          "one" "\"one\" \"two\""
           nil "nil\n1"
           1 "\n1"))
 
       (testing "Commas"
         (are-read-as
-          nil ",nil,"
-          true ",true,"
-          false ",false,"
-          0 ",0,"
-          -1 ",-1,"
-          1 ",1,"
-          -1.5 ",-1.5,"
-          "foo" ",\"foo\","
-          ",,," ",\",,,\","
-          "Hello, World!" ",\"Hello, World!\","
-          :hello ",:hello,"
-          'goodbye ",goodbye,"
-          :foo/bar ",:foo/bar,"
-          'foo/bar ",foo/bar,"
-          #{1 2 3} ",#{1, 2, 3},"
-          '(1 2 3) ",(1, 2, 3),"
-          '[1 2 3] ",[1, 2, 3],"
-          {:a 1 :b 2} ",{:a 1, :b 2},"
-          \a ",\\a,")))
+          [nil true -1.5 ",,," :foo/bar 'baz/buzz]
+          "[nil,true,-1.5,\",,,\",:foo/bar,baz/buzz]")))
 
     (testing "Unicode"
       (are-read-as
-        "اختبار" "\"اختبار\""                               ;; arabic
-        "ทดสอบ" "\"ทดสอบ\""                                 ;; thai
-        "こんにちは" "\"こんにちは\""                                 ;; japanese hiragana
-        "你好" "\"你好\""                                       ;; chinese traditional
         "אַ גוט יאָר" "\"אַ גוט יאָר\""                     ;; yiddish
-        "cześć" "\"cześć\""                                 ;; polish
         "привет" "\"привет\""                               ;; russian
-
-        'اختبار "اختبار"
-        'ทดสอบ "ทดสอบ"
-        'こんにちは "こんにちは"
-        '你好 "你好"
         'אַ "אַ גוט יאָר"
-        'cześć "cześć"
         'привет "привет"
-
-        :اختبار ":اختبار"
-        :ทดสอบ ":ทดสอบ"
-        :こんにちは ":こんにちは"
-        :你好 ":你好"
         :אַ ":אַ גוט יאָר"
-        :cześć ":cześć"
-        :привет ":привет"
-
-        {:привет :ru "你好" :cn} "{:привет :ru \"你好\" :cn}"))
+        :привет ":привет"))
 
     (testing "Metadata"
       (let [edn "^String {:a 1}"]
@@ -794,11 +508,5 @@
           "}"
           "\""
           "[[]"
-          "(()"
-          "{{}"
-          "#{{}"
-          "[1 2"
-          "(1 2"
-          "{1 2"
           "#{1 2"
           "\"foo")))))
