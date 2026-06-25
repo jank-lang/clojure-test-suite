@@ -86,6 +86,10 @@
          (is (= (str `bar) (str/replace `foo "foo" "bar")))
          (is (= (str [`bar]) (str/replace [`foo] "foo" "bar")))))
 
+    (testing "Unicode Emoji"
+      (is (= "😀" (str/replace "☹️" "☹️" "😀")))
+      (is (= "😀😀😀" (str/replace "☹️☹️☹️" "☹️" "😀"))))
+
     #?(:cljs nil ;; cljs converts chars into strings
        :default
        (testing "Invalid parameter combinations"
