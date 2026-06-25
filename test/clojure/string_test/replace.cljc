@@ -33,8 +33,7 @@
     (is (= "" (str/replace "" "x" "x")) "Empty string has nothing to replace")
     (is (= "" (str/replace "" "x" "")) "Empty string has nothing to replace")
 
-    #?@(:cljr
-        nil
+    #?@(:cljr nil ;; throws on cljr
         :default
         [(is (= "" (str/replace "" "" "")) "Check for infinite loops")
          (is (= "yxy" (str/replace "x" "" "y")) "Empty string matches between all characters")
@@ -76,16 +75,20 @@
       (is (= "/my/dir/path"
              (str/replace "/my/dir/path/" #".$" ""))))
 
-    (testing "First input does not need to be a string"
-      (is (= (str :bar) (str/replace :foo "foo" "bar")))
-      (is (= (str ::bar) (str/replace ::foo "foo" "bar")))
-      (is (= (str [:bar]) (str/replace [:foo] "foo" "bar")))
-      (is (= (str 'bar) (str/replace 'foo "foo" "bar")))
-      (is (= (str `bar) (str/replace `foo "foo" "bar")))
-      (is (= (str `[bar]) (str/replace `[foo] "foo" "bar"))))
+    #?(:cljs nil ;; not valid tests for cljs
+       :default
+       (testing "First input does not need to be a string"
+         (is (= (str :bar) (str/replace :foo "foo" "bar")))
+         (is (= (str ::bar) (str/replace ::foo "foo" "bar")))
+         (is (= (str [:bar]) (str/replace [:foo] "foo" "bar")))
+         (is (= (str 'bar) (str/replace 'foo "foo" "bar")))
+         (is (= (str `bar) (str/replace `foo "foo" "bar")))
+         (is (= (str [`bar]) (str/replace [`foo] "foo" "bar")))))
 
-    (testing "Invalid parameter combinations"
-      (is (p/thrown? (str/replace nil "x" "y")) "First input must not be nil")
-      (is (p/thrown? (str/replace "" "x" \y)) "Match and replacement parameters must match")
-      (is (p/thrown? (str/replace "" \x "y")) "Match and replacement parameters must match")
-      (is (p/thrown? (str/replace "a" #"." (constantly \1))) "Replacement function must be string"))))
+    #?(:cljs nil ;; cljs converts chars into strings
+       :default
+       (testing "Invalid parameter combinations"
+         (is (p/thrown? (str/replace nil "x" "y")) "First input must not be nil")
+         (is (p/thrown? (str/replace "" "x" \y)) "Match and replacement parameters must match")
+         (is (p/thrown? (str/replace "" \x "y")) "Match and replacement parameters must match")
+         (is (p/thrown? (str/replace "a" #"." (constantly \1))) "Replacement function must be string")))))
