@@ -33,7 +33,7 @@
     (is (= "" (str/replace "" "x" "x")) "Empty string has nothing to replace")
     (is (= "" (str/replace "" "x" "")) "Empty string has nothing to replace")
 
-    #?@(:cljr nil ;; throws on cljr
+    #?@(:cljr [] ;; throws on cljr
         :default
         [(is (= "" (str/replace "" "" "")) "Check for infinite loops")
          (is (= "yxy" (str/replace "x" "" "y")) "Empty string matches between all characters")
@@ -76,6 +76,7 @@
              (str/replace "/my/dir/path/" #".$" ""))))
 
     #?(:cljs nil ;; not valid tests for cljs
+       :cljr nil ;; not valid tests for cljr
        :default
        (testing "First input does not need to be a string"
          (is (= (str :bar) (str/replace :foo "foo" "bar")))
