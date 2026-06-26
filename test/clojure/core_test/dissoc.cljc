@@ -2,9 +2,10 @@
   (:require [clojure.test :refer [are deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
-(when-var-exists dissoc
+(when-var-exists defrecord
+  (defrecord TestDissocRecord [a b c]))
 
-  (defrecord TestDissocRecord [a b c])
+(when-var-exists dissoc
 
   (deftest test-dissoc
 
@@ -35,13 +36,14 @@
             with-test-meta? #(= test-meta (meta %))]
         (is (with-test-meta? (dissoc (with-test-meta {:a 1 :b 2}) :a)))))
 
-    (testing "records"
-      (let [r (TestDissocRecord. 1 2 nil)]
-        (are [expected keys] (= expected (apply dissoc r keys))
-                             {:b 2 :c nil} [:a]
-                             {:b 2 :c nil} [:a :d]
-                             {} [:a :b :c]
-                             r [:d])))
+    (when-var-exists defrecord
+      (testing "records"
+        (let [r (TestDissocRecord. 1 2 nil)]
+          (are [expected keys] (= expected (apply dissoc r keys))
+                               {:b 2 :c nil} [:a]
+                               {:b 2 :c nil} [:a :d]
+                               {} [:a :b :c]
+                               r [:d]))))
 
     (testing "bad shape"
       (are [m keys] (p/thrown? (apply dissoc m keys))
