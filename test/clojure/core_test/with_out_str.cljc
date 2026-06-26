@@ -16,7 +16,6 @@
      :default
      s))
 
-
 (when-var-exists with-out-str
   (deftest test-with-out-str
     (is (= (platform-newlines
@@ -24,4 +23,17 @@
                  "[:a :b] {:c :d} #{:e} (:f)" \newline))
            (with-out-str
              (println "some" "sample" :text 'here)
-             (prn [:a :b] {:c :d} #{:e} '(:f)))))))
+             (prn [:a :b] {:c :d} #{:e} '(:f)))))
+    (is (= (platform-newlines (str "hi" \newline))
+           (with-out-str (println "hi"))))
+    (is (= "abc" (with-out-str (print "a") (print "b") (print "c")))
+        "Multiple prints")
+    (is (= "" (with-out-str)) "Empty body")
+    (is (= "hello" (with-out-str (print "hello"))) "print single arg")
+    (is (= (platform-newlines
+            (str "outer" \newline "inner" \newline))
+           (with-out-str
+             (println "outer")
+             (let [inner (with-out-str (println "inner"))]
+               (print inner))))
+        "Nested with-out-str")))
