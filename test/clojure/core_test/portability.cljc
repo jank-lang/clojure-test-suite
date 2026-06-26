@@ -1,5 +1,6 @@
 (ns clojure.core-test.portability
-  #?(:lpy (:import time))
+  #?(:lpy (:import time)
+     :jank (:include "chrono"))
   (:require #?(:cljs [cljs.test :as t]
                :default [clojure.test :as t])))
 
@@ -29,7 +30,10 @@
       :cljs #(js/setTimeout identity %)
       :clj Thread/sleep
       :lpy time/sleep
-      :phel #(phel.async/delay (/ % 1000)))
+      :phel #(phel.async/delay (/ % 1000))
+      :jank #(cpp/std.this_thread.sleep_for
+              (cpp/std.chrono.milliseconds
+               (cpp/jank.runtime.to_int %))))
    ms))
 
 (defn lazy-seq?
