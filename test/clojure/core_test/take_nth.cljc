@@ -35,7 +35,7 @@
         (range 0 10 1) -1 (range 10)
         (range 0 10 2) -2 (range 10))
 
-      (is (p/thrown? (seq (take-nth nil (range 10)))))
+      (is (p/thrown? (doall (take-nth nil (range 10)))))
       (is (p/thrown? (transduce (take-nth nil) conj [] (range 10))))
       #?(:cljs
          (is (= [] (transduce (take-nth 0) conj [] (range 10))))
