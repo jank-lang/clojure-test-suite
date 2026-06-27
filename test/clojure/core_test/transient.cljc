@@ -88,6 +88,7 @@
                '(1 2 3)
                ;; Basilisp does not currently implement sorted collections.
                #?@(:lpy []
+                   :jank [] ;; jank supports transient for sorted-set / sorted-map
                    :default [(sorted-set :i :j :k)
                              (sorted-map :hp 99)])
                #?@(:cljs [] ;; thrown? range error in clojurescript causes Javacript heap OOM
