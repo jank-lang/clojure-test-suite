@@ -35,6 +35,9 @@
         (range 0 10 1) -1 (range 10)
         (range 0 10 2) -2 (range 10))
 
+      ;; Note: `doall` is a portable way to coax out the exception for
+      ;; 'lazy-seq'. Sequences that don't implement 'IDrop' will only throw
+      ;; after accessing the second element.
       (is (p/thrown? (doall (take-nth nil (range 10)))))
       (is (p/thrown? (transduce (take-nth nil) conj [] (range 10))))
       #?(:cljs
