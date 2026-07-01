@@ -13,9 +13,11 @@
     {
       devShell = pkgs.mkShell {
         buildInputs = [
+          pkgs.babashka
           pkgs.clj-kondo
           pkgs.clojure
           pkgs.clojure-lsp
+          pkgs.dotnet-sdk
           pkgs.leiningen
           pkgs.temurin-jre-bin-21
           pkgs.nodejs_23
