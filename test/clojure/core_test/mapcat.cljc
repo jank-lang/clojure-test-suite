@@ -30,6 +30,7 @@
       (is (= [\h \i] (mapcat identity ["hi"]))))
     (testing "flatten key/value pairs"
       #?(:lpy (is (contains? #{[:a 1 :b 2] [:b 2 :a 1]} (vec (mapcat identity {:a 1 :b 2}))))
+         :lg (is (contains? #{[:a 1 :b 2] [:b 2 :a 1]} (vec (mapcat identity {:a 1 :b 2}))))
          :default (is (= [:a 1 :b 2 :c 3] (mapcat identity {:a 1 :b 2 :c 3})))))
     (testing "function returns nil"
       (is (= [] (mapcat (constantly nil) [1 2 3]))))

@@ -21,6 +21,9 @@
       #?(:lpy (is (contains? #{[[:a 1] [:b 2] [:a 1]]
                                [[:b 2] [:a 1] [:b 2]]}
                              (vec (take 3 (cycle {:a 1 :b 2})))))
+         :lg (is (contains? #{[[:a 1] [:b 2] [:a 1]]
+                              [[:b 2] [:a 1] [:b 2]]}
+                            (vec (take 3 (cycle {:a 1 :b 2})))))
          :default (is (= [[:a 1] [:b 2] [:a 1]] (take 3 (cycle {:a 1 :b 2}))))))
 
     (testing "bad shape"
