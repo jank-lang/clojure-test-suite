@@ -12,8 +12,10 @@
       '(1 2) [1 2 3]
       '(1 2) (int-array [1 2 3])
       '(\a \b) "abc"
-      '([:a 1] [:b 2]) (sorted-map :a 1 :b 2 :c 3)
-      '(:a :b) (sorted-set :a :b :c)
+      ;; Sorted collections not currently implemented in Basilisp
+      #?@(:lpy []
+          :default ['([:a 1] [:b 2]) (sorted-map :a 1 :b 2 :c 3)
+                    '(:a :b) (sorted-set :a :b :c)])
       nil '(0)
       nil [0]
       nil '()

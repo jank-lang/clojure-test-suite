@@ -10,8 +10,10 @@
       '(2 3) [1 2 3]
       '(\e \l \l \o) "hello"
       '(1 2 3 4) (int-array (range 5))
-      '([:b 2] [:c 3]) (sorted-map :a 1 :b 2 :c 3)
-      '(:b :c) (sorted-set :a :b :c)
+      ;; Sorted collections not currently implemented in Basilisp
+      #?@(:lpy []
+          :default ['([:b 2] [:c 3]) (sorted-map :a 1 :b 2 :c 3)
+                    '(:b :c) (sorted-set :a :b :c)])
       '() [1]
       '() '(1)
       '() {:a 1}
@@ -21,7 +23,7 @@
       '() '()
       '() []
       '() "")
-    
+
     (is (= 1 (first (rest (range)))))   ; infinite lazy seq
     (is (= 2 (count (rest {:a 1 :b 2 :c 3})))) ; don't know order
     (is (= 2 (count (rest #{:a :b :c})))) ; don't know order
