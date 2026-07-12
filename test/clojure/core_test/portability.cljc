@@ -58,15 +58,15 @@
 #?(:cljs nil   ; CLJS is special. See below.
 
    :lpy
-   (defmethod t/gen-assert 'p/thrown?
-     [form msg _line-num]
+   (defmethod t/assert-expr 'p/thrown?
+     [form msg]
      (let [body (rest form)]
        `(try
           (let [result# (do ~@body)]
-            (vswap! t/*test-failures* conj {:type :failure
-                                            :message ~msg
-                                            :expected '~form
-                                            :actual result#}))
+            (t/do-report {:type :fail
+                          :message ~msg
+                          :expected '~form
+                          :actual result#}))
           (catch ~'Exception e#
             ;; don't do anything on success
             e#))))
