@@ -21,6 +21,9 @@
       true {nil :a} nil                 ; doesn't matter if key is nil
       true {:a nil} :a                  ; doesn't matter if val is nil
       true {[:a 1] 17} [:a 1]           ; keys can be collections
+      true {^:foo [:a 1] 17} [:a 1]     ; metadata doesn't matter
+      true {^:foo [:a 1] 17} ^:bar [:a 1]
+      true {[:a 1] 17} ^:bar [:a 1]
       false {[:a 1] 17} [:a 2]
       true (sorted-map :a 1 :b 2) :a    ; no difference if sorted maps
       false (sorted-map :a 1 :b 2) :c
@@ -38,6 +41,9 @@
       true #{nil :a} :a
       true #{[:a 1] [:b 2]} [:a 1]
       true #{[:a 1] [:b 2]} [:b 2]
+      true #{^:foo [:a 1] [:b 2]} [:a 1]  ; metadata doesn't matter
+      true #{^:foo [:a 1] [:b 2]} ^:bar [:a 1]
+      true #{[:a 1] [:b 2]} ^:bar [:a 1]
       false #{[:a 1] [:b 2]} [:a 2]
       true (sorted-set :a :b) :a
       false (sorted-set :a :b) :c
@@ -69,6 +75,11 @@
       false (int-array []) 0
       false (int-array []) 1
       false (int-array []) -1
+
+      ;; map entries
+      true (first {:a 1}) 0             ; map entries contain two items
+      true (first {:a 1}) 1
+      false (first {:a 1}) 2
 
       ;; strings
       true "abc" 0
