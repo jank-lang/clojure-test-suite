@@ -101,15 +101,15 @@
         ;; CLJS just returns false for any args it doesn't like, but
         ;; doesn't throw
         :cljs
-        [(is (= false (contains? (int-array [0 1 2]) nil)))
-         (is (= false (contains? (int-array [0 1 2]) :a)))
-         (is (= false (contains? (int-array [0 1 2]) [0 1 2])))
-         (is (= false (contains? "abc" \c)))
-         (is (= false (contains? "abc" "c")))
-         (is (= false (contains? '(1 2 3) 0)))
-         (is (= false (contains? '(1 2 3) 3)))
-         (is (= false (contains? 42 0)))
-         (is (= false (contains? :a :a)))]
+        [(is (false? (contains? (int-array [0 1 2]) nil)))
+         (is (false? (contains? (int-array [0 1 2]) :a)))
+         (is (false? (contains? (int-array [0 1 2]) [0 1 2])))
+         (is (false? (contains? "abc" \c)))
+         (is (false? (contains? "abc" "c")))
+         (is (false? (contains? '(1 2 3) 0)))
+         (is (false? (contains? '(1 2 3) 3)))
+         (is (false? (contains? 42 0)))
+         (is (false? (contains? :a :a)))]
 
         :default
         [(is (p/thrown? (contains? (int-array [0 1 2]) nil)))
