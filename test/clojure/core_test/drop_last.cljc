@@ -44,7 +44,6 @@
         (is (not (realized? s)))
         (is (= [1] s)))
 
-      ;; TODO: convert to arity 2
       (are [expected n coll] (= expected (drop-last n coll))
         (range 0 5) 0 (range 0 5)
         (range 0 4) 1 (range 0 5)
