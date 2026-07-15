@@ -91,12 +91,16 @@
       false "" 1
       false "" -1)
 
-    ;; Throws if the first arg isn't a collection
+    ;; Does a map contain a map-entry
+    (let [m1 {:a 1}
+          m2 {(first m1) true}]         ; put a map-entry in m2 as key
+      (is (false? (contains? m1 (first m1)))) ; m1 doesn't contain map-entry as key
+      (is (contains? m2 (first m1))))
 
     #?@(
         ;; CLJS just returns false for any args it doesn't like, but
         ;; doesn't throw
-        :cljs      
+        :cljs
         [(is (= false (contains? (int-array [0 1 2]) nil)))
          (is (= false (contains? (int-array [0 1 2]) :a)))
          (is (= false (contains? (int-array [0 1 2]) [0 1 2])))
