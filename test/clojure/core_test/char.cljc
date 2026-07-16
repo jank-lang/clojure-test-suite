@@ -17,7 +17,10 @@
        (is (= \ষ (char 2487))))
      (testing "4+ byte characters throw"
        (is #?(:jank    (= (first "𐅦") (char 65895))
-              ;; this seems to be an off by one error
+              ;; 65895 is U+10167 ("𐅧"). Runtimes with Unicode-scalar
+              ;; characters can represent it directly; JVM Clojure's char is
+              ;; a UTF-16 code unit and rejects values above U+FFFF.
+              :lg      (= (first "𐅧") (char 65895))
               :lpy     (= (first "𐅧") (char 65895))
               :cljs    (= \ŧ (char 65895))
               :default (p/thrown? (char 65895))))))
