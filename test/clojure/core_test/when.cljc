@@ -15,6 +15,7 @@
 
       (testing "things which are false in other languages but not false in Clojure"
         (is (= :foo (when 0 :foo)))
+        (is (= :foo (when 0.0 :foo)))
         (is (= :foo (when "" :foo)))
         (is (= :foo (when (list) :foo)))
         (is (= :foo (when '() :foo))))
