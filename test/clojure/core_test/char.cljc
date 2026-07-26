@@ -16,7 +16,7 @@
      (testing "3 byte characters are valid"
        (is (= \ষ (char 2487))))
      (testing "4+ byte characters throw"
-       (is #?(:jank    (= (first "𐅦") (char 65895))
+       (is #?(:jank    (= (first "𐅧") (char 65895))
               ;; 65895 is U+10167 ("𐅧"). Runtimes with Unicode-scalar
               ;; characters can represent it directly; JVM Clojure's char is
               ;; a UTF-16 code unit and rejects values above U+FFFF.
