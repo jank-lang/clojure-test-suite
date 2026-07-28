@@ -17,7 +17,8 @@
       (is (= ["foo" "" "bar"] (str/split-lines "foo\n\nbar")))
       (is (= ["foo " " bar"] (str/split-lines "foo \n bar")))
       (is (= ["foo"] (str/split-lines "foo\n\n")))
-      (is (= ["foo" "bar" "spam"] (str/split-lines "foo\nbar\r\nspam"))))
+      (is (= ["foo" "bar" "spam"] (str/split-lines "foo\nbar\r\nspam")))
+      (is (= ["🫸" "🫷"] (str/split-lines "🫸\n🫷"))))
 
     #?(:cljs nil ;; CLJS will coerce the argument to a string so it will not throw
        :default
