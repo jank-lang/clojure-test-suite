@@ -9,14 +9,17 @@
       #?(:cljr (is (= [] (str/split-lines "")))
          :default (is (= [""] (str/split-lines ""))))
       (is (= [] (str/split-lines "\n")))
+      (is (= [] (str/split-lines "\n\n")))
       (is (= [] (str/split-lines "\r\n")))
       (is (= ["" "bar"] (str/split-lines "\nbar")))
       (is (= ["foo"] (str/split-lines "foo\n")))
       (is (= ["foo" "bar"] (str/split-lines "foo\nbar")))
+      (is (= ["foo" "" "bar"] (str/split-lines "foo\n\nbar")))
       (is (= ["foo " " bar"] (str/split-lines "foo \n bar")))
-      (is (= ["foo"] (str/split-lines "foo\n\n"))))
+      (is (= ["foo"] (str/split-lines "foo\n\n")))
+      (is (= ["foo" "bar" "spam"] (str/split-lines "foo\nbar\r\nspam"))))
 
-    #?(:cljs nil
+    #?(:cljs nil ;; CLJS will coerce the argument to a string so it will not throw
        :default
        (testing "Exceptions"
          (is (p/thrown? (str/split-lines nil)))
