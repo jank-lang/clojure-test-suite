@@ -15,7 +15,7 @@
     (testing "`key` throws on lots of things"
       (are [arg] (p/thrown? (key arg))
         0
-        #?@(:jank [] ; jank doesn't have a concept of a map entry.
+        #?@(:jank [] ; jank just returns the result of `first`, since it assumes a map entry is a vector of two objects.
             :default [nil
                       '()
                       '(1 2)
