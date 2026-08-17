@@ -23,8 +23,7 @@
           (is (= (nth avec 1) (nth (transient avec) 1)))
           (is (= (get avec 1) (get (transient avec) 1)))
           (is (= (contains? avec 1) (contains? (transient avec) 1)))
-          #?@(:cljr [(is (p/thrown? ((transient avec) 1)))] ;; arity exception
-              :default [(is (= (avec 1) ((transient avec) 1)))])
+          (is (= (avec 1) ((transient avec) 1)))
           (is (= (count avec) (count (transient avec))))))
 
       (testing "for transient map"
