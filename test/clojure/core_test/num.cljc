@@ -62,7 +62,7 @@
                   (long 1)
                   (float 1.0)
                   (double 1.0)
-                  nil
+                  ; nil ; throws not a numeric error on CLJR
                   ##Inf)]
          
          :cljs
@@ -103,25 +103,7 @@
                      nil
                      ##Inf)])
      (testing "exceptions thrown"
-       ;; [[num]] is *almost* a true no-op in `cljr`, equivalent to [[identity]],
-       ;; except that it will upcast to System.Int64/System.UInt64
-       #?@(:cljr
-           [(are [x] (and (= x (num x))
-                          (= (type x) (type (num x))))
-              f
-              {}
-              #{}
-              []
-              '()
-              \1
-              \a
-              ""
-              "1"
-              'a
-              #"")
-            (is (fn? (num (fn []))))]
-
-           :cljs
+       #?@(:cljs
            []
            
            :default
