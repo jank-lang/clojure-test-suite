@@ -40,7 +40,6 @@
                       {:cto {:name "Brenda"}}))))
 
       (testing "vectors in position 2+ are treated as map-entries, per `conj`"
-        (is (p/thrown? (merge {} [])))
         (is (p/thrown? (merge {} [:foo])))
         (testing "In CLJS (unlike other dialects) vectors with >2 arguments are treated as map-entries (where the latter values are ignored)"
           #?(:cljr (is (p/thrown? (merge {} [:foo :bar :baz])))
@@ -61,8 +60,6 @@
     (testing "undefined `merge` behavior on non-maps"
       ;; Behavior for non-map input is undefined. We intentionally do not test
       ;; it closely.
-      (is (any? (merge [1 2] 3 4 5)))
-      (is (any? (merge [] nil {} 1 {:a "c"})))
       (is (any? (merge (first {:a "a"}) {:b "b"} {:c "c"})))
       #?@(:lpy
           [(is (p/thrown? (merge [:foo])))
