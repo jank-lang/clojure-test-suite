@@ -14,6 +14,13 @@
          ~@body)
       `(println "SKIP -" '~var-sym))))
 
+(defn string-encoding []
+  #?(:clj :utf16
+     :cljs :utf16
+     :cljr :utf16
+     :jank :utf8
+     :default :utf16))
+
 (defn big-int? [n]
   ;; In CLJS, all numbers are really doubles and integer? and int?
   ;; return true if the fractional part of the double is zero
