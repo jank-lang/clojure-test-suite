@@ -15,10 +15,7 @@
       `(println "SKIP -" '~var-sym))))
 
 (defn string-encoding []
-  #?(:clj :utf16
-     :cljs :utf16
-     :cljr :utf16
-     :jank :utf8
+  #?(:jank :utf8
      :default :utf16))
 
 (defn big-int? [n]
