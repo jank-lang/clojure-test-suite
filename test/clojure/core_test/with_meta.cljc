@@ -47,38 +47,23 @@
         '(:a :b :c)
         "foo"))
 
-    (testing "ensure exiting meta is replaced"
+    (testing "ensure existing meta is replaced"
       (are [v]
-           (-> v (with-meta {:foo false}) meta :foo false?)
-        ^:foo {}
-        ^:foo []
-        ^:foo #{}))
+           (= {:foo false} (-> v (with-meta {:foo false}) meta))
+        ^{:foo true :bar true} {}
+        ^{:foo true :bar true} []
+        ^{:foo true :bar true} #{}))
 
-    #?(:cljs
-       (testing "invalid values"
-         (are [v]
-              (p/thrown? (with-meta v {:foo true}))
-           true
-           false
-           3.14
-           42
-           "foo"
-           :foo
-           (keyword "foo")))
-       :default
-       (testing "invalid values"
-         (are [v]
-              (p/thrown? (with-meta v {:foo true}))
-           nil
-           true
-           false
-           3.14
-           42
-           "foo"
-           :foo
-           (keyword "foo")
-           *ns*
-           #'with-meta)))
+    (testing "invalid values"
+      (are [v]
+           (p/thrown? (with-meta v {:foo true}))
+        true
+        false
+        3.14
+        42
+        "foo"
+        :foo
+        (keyword "foo")))
 
     (when-var-exists sorted-map
       (testing "sorted map"
