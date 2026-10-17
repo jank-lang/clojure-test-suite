@@ -8,10 +8,15 @@
       (are [v]
            (-> v (with-meta {:foo true}) meta :foo)
         {}
+        {:a :b :c :d}
         []
+        [0 1 2]
         #{}
+        #{:a :b :c}
         '()
-        'foo))
+        '(:a :b :c)
+        'foo
+        #()))
 
     (testing "constructed values"
       (are [v]
@@ -20,7 +25,8 @@
         (vector)
         (hash-set)
         (list)
-        (symbol "foo")))
+        (symbol "foo")
+        (fn [])))
 
     (testing "seq values"
       (are [v]
@@ -31,6 +37,20 @@
         '(:a :b :c)
         "foo"))
 
+    (testing "special values"
+      (are [v]
+           (-> v seq (with-meta {:foo true}) meta :foo)
+        (keys {:a :b :c :d}) ;; KeySeq
+        (vals {:a :b :c :d}) ;; ValSeq
+        (subvec [1 2] 0 1) ;; SubVector
+        (concat [1 2 3]) ;; LazySeq
+        (range 10) ;; LongRange
+        (range 10.0) ;; Range
+        ((fn [& args] args) 1 2 3) ;; ArraySeq
+        (repeat 5 0) ;; Repeat
+        (cons 1 []) ;; Cons
+        ))
+
     (testing "ensure exiting meta is replaced"
       (are [v]
            (-> v (with-meta {:foo false}) meta :foo false?)
@@ -38,18 +58,31 @@
         ^:foo []
         ^:foo #{}))
 
-    (testing "invalid values"
-      (are [v]
-           (p/thrown? (with-meta v {:foo true}))
-        nil
-        true
-        false
-        3.14
-        42
-        "foo"
-        :foo
-        (keyword "foo")
-        #'with-meta))
+    #?(:cljs
+       (testing "invalid values"
+         (are [v]
+              (p/thrown? (with-meta v {:foo true}))
+           true
+           false
+           3.14
+           42
+           "foo"
+           :foo
+           (keyword "foo")))
+       :default
+       (testing "invalid values"
+         (are [v]
+              (p/thrown? (with-meta v {:foo true}))
+           nil
+           true
+           false
+           3.14
+           42
+           "foo"
+           :foo
+           (keyword "foo")
+           *ns*
+           #'with-meta)))
 
     (when-var-exists sorted-map
       (testing "sorted map"
