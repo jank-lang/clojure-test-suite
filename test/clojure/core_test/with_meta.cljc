@@ -26,20 +26,7 @@
         (hash-set)
         (list)
         (symbol "foo")
-        (fn [])))
-
-    (testing "seq values"
-      (are [v]
-           (-> v seq (with-meta {:foo true}) meta :foo)
-        {:a :b :c :d}
-        [0 1 2]
-        #{:a :b :c}
-        '(:a :b :c)
-        "foo"))
-
-    (testing "special values"
-      (are [v]
-           (-> v seq (with-meta {:foo true}) meta :foo)
+        (fn [])
         (keys {:a :b :c :d}) ;; KeySeq
         (vals {:a :b :c :d}) ;; ValSeq
         (subvec [1 2] 0 1) ;; SubVector
@@ -50,6 +37,15 @@
         (repeat 5 0) ;; Repeat
         (cons 1 []) ;; Cons
         ))
+
+    (testing "seq values"
+      (are [v]
+           (-> v seq (with-meta {:foo true}) meta :foo)
+        {:a :b :c :d}
+        [0 1 2]
+        #{:a :b :c}
+        '(:a :b :c)
+        "foo"))
 
     (testing "ensure exiting meta is replaced"
       (are [v]
