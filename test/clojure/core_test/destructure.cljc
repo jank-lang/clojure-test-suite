@@ -43,7 +43,7 @@
       (testing "pick args"
         (let [[item1 & remaining] ["Michael" "Amber" "Aaron" "Nick" "Earl" "Joe"]]
           (is (= "Michael" item1))
-          (is (= remaining ["Amber" "Aaron" "Nick" "Earl" "Joe"])))
+          (is (= ["Amber" "Aaron" "Nick" "Earl" "Joe"] remaining)))
         (let [[item1 _ item3 _ item5 _] ["Michael" "Amber" "Aaron" "Nick" "Earl" "Joe"]]
           (is (= "Michael" item1))
           (is (= "Aaron" item3))
