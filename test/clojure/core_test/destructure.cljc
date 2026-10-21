@@ -60,13 +60,13 @@
           (is (= "Clojure" all))))
 
       (testing "nested"
-        (let [[[x1 y1 :as group1] [x2 y2 :as group2]] [[5 10] [10 20]]]
+        (let [[[x1 y1 :as group1] [x2 y2 :as group2]] [[5 10] [15 20]]]
           (is (= 5 x1))
           (is (= 10 y1))
-          (is (= 10 x2))
+          (is (= 15 x2))
           (is (= 20 y2))
           (is (= [5 10] group1))
-          (is (= [10 20] group2)))))
+          (is (= [15 20] group2)))))
 
     (testing "Associative Destructuring"
       (let [data {:name "Super Co."
