@@ -53,9 +53,9 @@
                (reduce-kv assoc {:k :v} (sorted-map :foo :bar :beep :boop))))))
 
     (testing "If coll contains no entries, returns init and f is not called."
-      (is (= ::init (reduce-kv (fn [_ _ _]) ::init nil)))
-      (is (= ::init (reduce-kv (fn [_ _ _]) ::init {})))
-      (is (= ::init (reduce-kv (fn [_ _ _]) ::init [])))
+      (is (= ::init (reduce-kv (fn [_ _ _] (throw (ex-info "not called" {}))) ::init nil)))
+      (is (= ::init (reduce-kv (fn [_ _ _] (throw (ex-info "not called" {}))) ::init {})))
+      (is (= ::init (reduce-kv (fn [_ _ _] (throw (ex-info "not called" {}))) ::init [])))
 
       (is (= ::init (reduce-kv nil ::init nil)))
       (is (= ::init (reduce-kv nil ::init {})))
