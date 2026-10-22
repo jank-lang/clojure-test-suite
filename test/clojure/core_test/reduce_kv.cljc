@@ -70,10 +70,14 @@
                         (vec (repeat 10 10))))))
 
     (testing "reduced is supported"
-      (is (= ::reduced
-             (reduce-kv (fn [_ _ _] (reduced ::reduced)) ::init {:foo :bar})))
-      (is (= ::reduced
-             (reduce-kv (fn [_ _ _] (reduced ::reduced)) ::init [:foo :bar]))))
+      (doseq [coll [{:foo :bar :beep :boop} [:foo :bar]]]
+        (let [calls (atom 0)]
+          (is (= ::reduced
+                 (reduce-kv (fn [_ _ _]
+                              (swap! calls inc)
+                              (reduced ::reduced))
+                            ::init coll)))
+          (is (= 1 @calls)))))
 
     (testing "Some examples from https://clojuredocs.org/clojure.core/reduce-kv"
       (testing "Swap keys and values in a map"
