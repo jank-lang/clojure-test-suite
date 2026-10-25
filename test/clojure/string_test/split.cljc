@@ -14,6 +14,8 @@
 
     (testing "positive limit"
       (is (= [""] (str/split "" #"" 1)))
+      (is (= ["a"] (str/split "a" #"a" 1)))
+      (is (= ["" ""] (str/split "a" #"a" 2)))
       (is (= ["aaaaaaaaaa"] (str/split "aaaaaaaaaa" #"" 1))))
 
     (testing "negative limit"
@@ -31,7 +33,7 @@
                   (str/split "aaaaaaaaaa" #"" 10)))))
 
        :cljr
-       (testing "dialect quirks - default"
+       (testing "dialect quirks - cljr"
          (testing "basic input"
            (is (= [] (str/split "" #"")))
            (is (= ["" "a"] (str/split "a" #""))))
