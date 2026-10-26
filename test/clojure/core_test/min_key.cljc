@@ -97,8 +97,12 @@
              "x" identity ["y" "x" "z"]
              [1] identity [[1] [2]]
              [1] identity [[2] [1] [3]]
+             ;; set comparison returns first value
              #{1} identity [#{1} #{2}]
-             #{2} identity [#{2} #{1} #{3}]]
+             #{2} identity [#{2} #{1}]
+             #{1} identity [#{1} #{2} #{3}]
+             #{2} identity [#{2} #{3} #{1}]
+             #{3} identity [#{3} #{2} #{1}]]
             :cljs
             ["x" identity ["x" "y"]
              "x" identity ["y" "x" "z"]
