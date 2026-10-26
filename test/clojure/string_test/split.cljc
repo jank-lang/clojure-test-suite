@@ -20,7 +20,11 @@
 
     (testing "negative limit"
       (is (= ["a" "" ""]
-             (str/split "a\n\n" #"\n" -1))))
+             (str/split "a\n\n" #"\n" -1)))
+      (is (= ["a" "" ""]
+             (str/split "a\n\n" #"\n" -10)))
+      (is (= ["a" "" ""]
+             (str/split "a\n\n" #"\n" -100))))
 
     #?(:cljs
        (testing "dialect quirks - cljs"
