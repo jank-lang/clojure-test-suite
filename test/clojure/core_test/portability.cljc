@@ -16,6 +16,7 @@
 
 (defn string-encoding []
   #?(:jank :utf8
+     :clje :utf8
      :default :utf16))
 
 (defn big-int? [n]
@@ -34,6 +35,7 @@
      :cljs (js/setTimeout identity ms)
      :clj (Thread/sleep ms)
      :lpy (time/sleep ms)
+     :clje (timer/sleep ms)
      :phel (phel.async/delay (/ ms 1000))
      :jank (cpp/std.this_thread.sleep_for
             (cpp/std.chrono.milliseconds
@@ -46,6 +48,7 @@
   #?(:cljs (instance? LazySeq x)
      :lpy (instance? basilisp.lang.seq/LazySeq x)
      :phel (phel.core/lazy-seq? x)
+     :clje (instance? clojerl.LazySeq x)
      :jank (cpp/== (.get_type x) cpp/jank.runtime.object_type.lazy_sequence)
      :default (instance? clojure.lang.LazySeq x)))
 
@@ -117,6 +120,24 @@
                           :expected '~form
                           :actual result#}))
           (catch ~'Exception e#
+            (t/do-report {:type :pass
+                          :message ~msg
+                          :expected '~form
+                          :actual e#})
+            e#))))
+
+   :clje
+   ;; Clojerl has no exception class hierarchy. `_` catches any error.
+   (defmethod t/assert-expr 'p/thrown?
+     [msg form]
+     (let [body (rest form)]
+       `(try
+          (let [result# (do ~@body)]
+            (t/do-report {:type :fail
+                          :message ~msg
+                          :expected '~form
+                          :actual result#}))
+          (catch ~'_ e#
             (t/do-report {:type :pass
                           :message ~msg
                           :expected '~form

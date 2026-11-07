@@ -1,0 +1,18 @@
+{"1.2.0",
+[{<<"clojerl">>,
+  {git,"https://github.com/clojerl/clojerl",
+       {ref,"b0cbe4e0b89a4afc7ed2878b4bab2803c494e197"}},
+  0},
+ {<<"core_specs_alpha">>,{pkg,<<"clje_core_specs_alpha">>,<<"0.2.56">>},1},
+ {<<"spec_alpha">>,{pkg,<<"clje_spec_alpha">>,<<"0.2.194">>},1},
+ {<<"test_check">>,{pkg,<<"clje_test_check">>,<<"1.1.1">>},1}]}.
+[
+{pkg_hash,[
+ {<<"core_specs_alpha">>, <<"7A4E2001385EE12E765C7B8C8EE82890504F28F837918A76C54FB2F265989928">>},
+ {<<"spec_alpha">>, <<"8A4501F2CBE0930A33973033F1261D5121B0D809306D5F2811659FFA0531F017">>},
+ {<<"test_check">>, <<"825BA73800595ECF17BCE653CB38145016DF201ED1D36D80DB47E7C195BD714F">>}]},
+{pkg_hash_ext,[
+ {<<"core_specs_alpha">>, <<"2EE4994C54B55A4DC2CB81C79023D9E252727D7AD5A8E7D38A510C6F0D53C39D">>},
+ {<<"spec_alpha">>, <<"7DD352938B59F9750BCF5FF42A8A6C228458C0EB7BBE9E1E3713973830DF6973">>},
+ {<<"test_check">>, <<"9BE0931F695A8F8F1F54383B5B33C479B101E57A195750FA3DB224D37EF20C05">>}]}
+].

@@ -40,6 +40,10 @@
              :task (do
                     (banner "Running Phel Tests")
                     (shell "composer test"))}
+  test-clje {:doc "Runs tests in Clojerl"
+             :task (do
+                    (banner "Running Clojerl Tests")
+                    (shell "rebar3 clojerl run"))}
   test-all {:doc "Run tests under all dialects"
             :task (do
                    (run 'test-jvm)
@@ -48,7 +52,7 @@
                    (run 'test-bb)
                    (run 'test-lpy)
                    (run 'test-phel))}
-  test {:doc "Runs tests in multiple named dialects: jvm, bb, cljs, lpy, or phel"
+  test {:doc "Runs tests in multiple named dialects: jvm, bb, cljs, lpy, phel, or clje"
         :task (letfn [(help []
                        (println "Usage: bb test <dialect1> [<dialect2>]...")
                        (println "Where <dialect> is one of:")
@@ -58,9 +62,10 @@
                        (println "  bb      Runs tests in Babashka")
                        (println "  lpy     Runs tests in Basilisp")
                        (println "  phel    Runs tests in Phel")
+                       (println "  clje    Runs tests in Clojerl")
                        (println "  all     Runs tests in all supported dialects")
                        (println "Tests are run in the order given."))]
-               (let [valid #{"jvm" "cljs" "cljr" "bb" "lpy" "phel" "all"}
+               (let [valid #{"jvm" "cljs" "cljr" "bb" "lpy" "phel" "clje" "all"}
                      unknown (remove valid *command-line-args*)]
                 (cond
                  (not (some? (seq *command-line-args*)))
@@ -83,7 +88,8 @@
                    "cljr" (run 'test-cljr)
                    "bb" (run 'test-bb)
                    "lpy" (run 'test-lpy)
-                   "phel" (run 'test-phel))))))}
+                   "phel" (run 'test-phel)
+                   "clje" (run 'test-clje))))))}
   new-test {:doc "Creates new test for the Clojure symbols named by <args>. Unqualified symbols assume clojure.core"
             :requires ([new-test])
             :task (new-test/new-test *command-line-args*)}}}

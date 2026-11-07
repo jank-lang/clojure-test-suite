@@ -29,3 +29,4 @@ poetry.lock
 *.egg-info/
 .DS_Store
 /vendor/
+/_build

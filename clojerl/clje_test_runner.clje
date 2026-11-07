@@ -1,0 +1,58 @@
+(ns clje-test-runner
+  "This runner loads each Clojerl namespace on its own and reports the load failures as results.
+  This ensures even namespaces that Clojerl cannot yet load do not stop the full test suite from running."
+  (:require [clojure.string :as str]
+            [clojure.test :as t]))
+
+(def helper-namespaces
+  '#{clojure.core-test.portability
+     clojure.core-test.number-range})
+
+(defn- path->ns [path]
+  (-> path
+      (str/replace #"^test/" "")
+      (str/replace #"\.cljc$" "")
+      (str/replace "/" ".")
+      (str/replace "_" "-")
+      symbol))
+
+(defn- test-namespaces []
+  (->> (filelib/wildcard (erlang/binary_to_list "test/**/*.cljc"))
+       (map #(erlang/list_to_binary %))
+       (map path->ns)
+       (remove helper-namespaces)
+       sort))
+
+(defn- try-require
+  [ns-sym]
+  (try
+    (require ns-sym)
+    nil
+    (catch _ e
+      (or (ex-message e) (pr-str e)))))
+
+(defn -main [& _]
+  ;; `rebar3 clojerl run` does not put test/ on the code path.
+  (code/add_patha (erlang/binary_to_list "test"))
+  (let [all-ns   (test-namespaces)
+        failures (into (sorted-map)
+                       (keep (fn [ns-sym]
+                               (when-let [msg (try-require ns-sym)]
+                                 [ns-sym msg])))
+                       all-ns)
+        loaded   (remove #(contains? failures %) all-ns)
+        summary  (apply t/run-tests loaded)]
+    (println)
+    (println "Namespaces that did not load:")
+    (doseq [[ns-sym msg] failures]
+      (println " " ns-sym "-" msg))
+    (println)
+    (println "Namespaces:" (count all-ns)
+             "total," (count loaded) "loaded,"
+             (count failures) "did not load.")
+    (println "Tests:" (:test summary)
+             "assertions:" (+ (:pass summary) (:fail summary) (:error summary))
+             "pass:" (:pass summary)
+             "fail:" (:fail summary)
+             "error:" (:error summary))
+    (erlang/halt (if (and (empty? failures) (t/successful? summary)) 0 1))))
