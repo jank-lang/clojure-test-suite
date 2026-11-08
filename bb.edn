@@ -43,7 +43,7 @@
   test-clje {:doc "Runs tests in Clojerl"
              :task (do
                     (banner "Running Clojerl Tests")
-                    (shell "rebar3 clojerl run"))}
+                    (shell "rebar3 clojerl run -m clojure-test-suite.runner"))}
   test-all {:doc "Run tests under all dialects"
             :task (do
                    (run 'test-jvm)

@@ -1,4 +1,0 @@
-{application, clojure_test_suite,
- [{description, "Runs the clojure-test-suite on Clojerl"},
-  {vsn, "0.1.0"},
-  {applications, [kernel, stdlib, clojerl]}]}.
