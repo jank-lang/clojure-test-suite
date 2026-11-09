@@ -45,6 +45,27 @@
   (apply fs/path
          (-> ns namespace-munge (str/split #"\."))))
 
+(defn format-docstring-comment
+  "Returns a string that comprises the docstring comment (indented with
+  embedded newlines), or `nil` if the var for the `fut` couldn't be
+  found."
+  [fut]
+  (let [indent 2
+        indented-comment (str (str/join (repeat indent " ")) ";; ")]
+    (if-let [fut-var (try (requiring-resolve fut)
+                          (catch Exception _ nil))]
+      (let [{:keys [arglists doc]} (meta fut-var)]
+        (str/join (System/lineSeparator)
+                  (concat [(str indented-comment "DOCSTRING:")]
+                          [(str indented-comment fut)]
+                          (map (fn [x]
+                                 (str indented-comment x))
+                               arglists)
+                          (map (fn [x]
+                                 (str indented-comment (str/triml x)))
+                               (str/split-lines doc)))))
+      (str indented-comment "DOCSTRING: unable to locate"))))
+
 (defn new-test
   "Create a new test file for the symbol which is the first command line argument."
   [args]
@@ -63,7 +84,8 @@
                                            ns->path))
               test-filename (str (namespace-munge no-specials-sym) ".cljc")
               test-path (fs/path test-dir test-filename)
-              deftest-name (str "test-" fut-sym)]
+              deftest-name (str "test-" fut-sym)
+              docstring-comment (format-docstring-comment fut)]
           (if (fs/exists? test-path)
             (println (str test-path) "already exists. No action taken.")
             (do (println "Creating" (str test-path))
@@ -80,5 +102,6 @@
                                     :test-dir test-dir
                                     :test-filename test-filename
                                     :test-path test-path
-                                    :deftest-name deftest-name})))))))
+                                    :deftest-name deftest-name
+                                    :docstring-comment docstring-comment})))))))
         (recur args)))))

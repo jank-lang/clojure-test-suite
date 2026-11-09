@@ -4,6 +4,9 @@
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 (when-var-exists {{fut}}
+
+{{docstring-comment}}
+
   (deftest {{deftest-name}}
     ;; `testing` sections are optional, depending on how you want to
     ;; structure your tests. If you have a lot of tests and they group
