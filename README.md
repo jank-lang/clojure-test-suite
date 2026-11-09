@@ -23,3 +23,4 @@ See these documents for how to set up individual dialect-specific environments a
 4. [ClojureCLR](doc/clojureclr.md)
 5. [Basilisp](doc/basilisp.md)
 6. [Phel](doc/phel.md)
+7. [Clojerl](doc/clojerl.md)
