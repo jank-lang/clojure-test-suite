@@ -5,60 +5,80 @@
             [selmer.parser :as s]
             [selmer.util :as util]))
 
-;;; *, +, !, -, _, ', ?, <, > and =
-(defn sym-name->ns-suffix
-  "Replace special characters in symbol name to make the final component of the ns name."
+;;; This whole process is a bit convoluted, so here's a short glossary:
+;;; fut = "function under test"; the function we're creating the new test for.
+;;; fut-sym = isolated symbol name of the fut, with no namespace
+;;; fut-ns = namespace of the fut itself, with no symbol name
+;;; thus, fut = fut-ns/fut-sym
+;;; no-specials-sym = fut-sym with special chars replaced with words
+;;; test-ns = test namespace
+;;; test-dir = directory the test source code lives in
+;;; test-filename = name of the actual test file
+;;; test-path = the path to the file (basically test-dir + test-filename)
+;;; deftest-name = the name of the test in the `deftest` form
+
+(defn replace-specials
+  "Replace special characters (leading -, *, +, !, ', ?, <, >, =, and %)
+  in symbol name with filename safe alphabetic names."
   [sym]
   (let [n (name sym)
-        ns-sym (-> (if (str/starts-with? n "-")
-                     (str/replace-first n "-" "minus")
-                     n)
-                   (str/replace "*" "-star")
-                   (str/replace "+" "-plus")
-                   (str/replace "!" "-bang")
-                   (str/replace "'" "-squote")
-                   (str/replace "?" "-qmark")
-                   (str/replace "<" "-lt")
-                   (str/replace ">" "-gt")
-                   (str/replace "=" "-eq")
-                   (str/replace "%" "-percent"))]
-    (if (str/starts-with? ns-sym "-")
-      (subs ns-sym 1)
-      ns-sym)))
+        no-specials-sym (-> (if (str/starts-with? n "-")
+                              (str/replace-first n "-" "minus")
+                              n)
+                            (str/replace "*" "-star")
+                            (str/replace "+" "-plus")
+                            (str/replace "!" "-bang")
+                            (str/replace "'" "-squote")
+                            (str/replace "?" "-qmark")
+                            (str/replace "<" "-lt")
+                            (str/replace ">" "-gt")
+                            (str/replace "=" "-eq")
+                            (str/replace "%" "-percent"))]
+    (if (str/starts-with? no-specials-sym "-")
+      (subs no-specials-sym 1)
+      no-specials-sym)))
 
-(defn ns-suffix->file-name
-  "Replace hyphens with underscores to create the file name."
-  [ns-name]
-  (str/replace ns-name "-" "_"))
-
-(defn ns->resource [nsym]
-  (-> nsym namespace-munge (str/replace "." "/")))
+(defn ns->path
+  "Converts a namespace like 'clojure-foo.bar to a path like \"clojure_foo/bar\"."
+  [ns]
+  ;; note: `namespace-munge` is in `clojure.core` and converts '-' to '_'
+  (apply fs/path
+         (-> ns namespace-munge (str/split #"\."))))
 
 (defn new-test
   "Create a new test file for the symbol which is the first command line argument."
   [args]
   (if (zero? (count args))
     (println "Please supply one or more Clojure symbols corresponding to the new tests.")
-    (loop [[sym & args] (map symbol args)]
-      (when sym
-        (let [sym-name (if (namespace sym)
-                         (-> sym name symbol)
-                         sym)
-              base-ns (or (some-> sym namespace symbol)
-                          'clojure.core)
-              ns-suffix (sym-name->ns-suffix sym-name)
-              file-name (namespace-munge ns-suffix)
-              dest-dir (format "test/%s_test" (ns->resource base-ns))
-              dest-file-name (format "%s/%s.cljc" dest-dir file-name)]
-          (if (fs/exists? dest-file-name)
-            (println dest-file-name "already exists. No action taken.")
-            (do (println "Creating" dest-file-name)
-                (fs/create-dirs dest-dir)
+    (loop [[fut & args] (map symbol args)] ; fut = function under test
+      (when fut
+        (let [fut-sym (-> fut name)
+              fut-ns (or (namespace fut)
+                         "clojure.core")
+              fut (symbol fut-ns fut-sym)
+              no-specials-sym (replace-specials fut-sym)
+              test-ns (str fut-ns "-test." no-specials-sym)
+              test-dir (fs/path "test" (-> fut-ns
+                                           (str "-test")
+                                           ns->path))
+              test-filename (str (namespace-munge no-specials-sym) ".cljc")
+              test-path (fs/path test-dir test-filename)
+              deftest-name (str "test-" fut-sym)]
+          (if (fs/exists? test-path)
+            (println (str test-path) "already exists. No action taken.")
+            (do (println "Creating" (str test-path))
+                (fs/create-dirs test-dir)
                 (let [template (slurp "templates/test-template.cljc")]
-                  (spit dest-file-name
+                  (spit (str test-path)
                         (util/without-escaping
-                         (s/render template {:base-ns base-ns
-                                             :sym-name sym-name
-                                             :ns-suffix ns-suffix
-                                             :file-name file-name})))))))
+                         (s/render template
+                                   {:fut fut
+                                    :fut-sym fut-sym
+                                    :fut-ns fut-ns
+                                    :no-specials-sym no-specials-sym
+                                    :test-ns test-ns
+                                    :test-dir test-dir
+                                    :test-filename test-filename
+                                    :test-path test-path
+                                    :deftest-name deftest-name})))))))
         (recur args)))))
