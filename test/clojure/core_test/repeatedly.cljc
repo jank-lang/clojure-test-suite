@@ -12,13 +12,13 @@
       (testing "handles mid failures gracefully"
         (let [state (atom 0)
               fails-second-run (fn [n] (if (> @n 0)
-                                        (throw (ex-info "expected" {}))
-                                        (swap! n inc)))]
+                                         (throw (ex-info "expected" {}))
+                                         (swap! n inc)))]
           (is (p/thrown? (last (repeatedly 2 #(fails-second-run state)))))
-          (is (= #?(;; phel doesn't seem to handle mid failures gracefully
+          (is (= #?( ;; phel doesn't seem to handle mid failures gracefully
                     :phel    0
                     :default 1)
-                 @state))))))
+                 @state)))))
 
     (testing "Single argument"
       (is (= 0 (first (repeatedly +))))
@@ -58,7 +58,7 @@
       (testing "non-numeric first arguments throw"
         (is #?(:cljr    (= 0 (first (repeatedly \a +)))
                :default (p/thrown? (first (repeatedly \a +)))))
-        (are [x] 
+        (are [x]
             (p/thrown? (first (repeatedly x +)))
           ""
           #""
@@ -67,4 +67,4 @@
           {}
           #{}
           '()
-          []))))
+          [])))))
