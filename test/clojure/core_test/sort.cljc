@@ -23,4 +23,10 @@
     (testing "stable sort"
       (is (= '([1 :a] [1 :e] [2 :b] [2 :d] [3 :c])
              (sort (fn [[a _] [b _]] (compare a b))
-                   [[1 :a] [2 :b] [3 :c] [2 :d] [1 :e]]))))))
+                   [[1 :a] [2 :b] [3 :c] [2 :d] [1 :e]]))))
+    (testing "empty values"
+      (is (nil? (first (sort ""))))
+      (is (nil? (first (sort []))))
+      (is (nil? (first (sort #{}))))
+      (is (nil? (first (sort '()))))
+      (is (nil? (first (sort {})))))))
