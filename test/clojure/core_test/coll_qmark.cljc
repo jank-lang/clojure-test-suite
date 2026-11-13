@@ -8,10 +8,17 @@
       true [1 2 3]
       true '(1 2 3)
       true (hash-map :a 1)
+      true (array-map :a 1)
       true (hash-set :a)
-      true (seq [1 2 3])
       true (range 0 10)
       true (range)
+
+      true (seq "hello")
+      true (seq [:a :b :c])
+      true (seq #{:a :b :c})
+      true (seq '(:a :b :c))
+      true (seq {:a :b :c :d})
+      true (concat [:a :b :c])
 
       ;; Basilisp does not currently implement sorted collections or array-map.
       #?@(:lpy []
