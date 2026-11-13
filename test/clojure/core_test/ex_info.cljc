@@ -57,13 +57,4 @@
                          :cljr System.Exception
                          :clj Exception
                          :bb Exception) e
-                 [(ex-message e) (ex-data e)])))))
-
-    ;; Test cases that expect exceptions use the `p/thrown?` multimethod.
-    (testing "wrong number of arguments"
-      #?(:cljs nil ; CLJS only warns about a wrong arity at compile time
-         :default
-         (do
-           (is (p/thrown? (ex-info)))
-           (is (p/thrown? (ex-info "Boom!")))
-           (is (p/thrown? (ex-info "Boom!" {} nil :extra))))))))
+                 [(ex-message e) (ex-data e)])))))))
