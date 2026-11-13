@@ -18,13 +18,17 @@
 ;;; deftest-name = the name of the test in the `deftest` form
 
 (defn replace-specials
-  "Replace special characters (leading -, *, +, !, ', ?, <, >, =, and %)
-  in symbol name with filename safe alphabetic names."
+  "Replace special characters (-, *, +, !, ', ?, <, >, =, and %) in
+  symbol name with filename safe alphabetic names. The '-' character
+  has some special handling: if it's the first character or is used in
+  combination with '>', it's expanded to 'minus', otherwise it's left
+  alone."
   [sym]
   (let [n (name sym)
         no-specials-sym (-> (if (str/starts-with? n "-")
                               (str/replace-first n "-" "minus")
                               n)
+                            (str/replace "->" "-minus-gt") ; cond->, some->, as->, etc.
                             (str/replace "*" "-star")
                             (str/replace "+" "-plus")
                             (str/replace "!" "-bang")
