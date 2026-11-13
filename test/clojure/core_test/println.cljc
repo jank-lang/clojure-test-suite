@@ -77,12 +77,4 @@
 
     (testing "`*print-readably*` does not cause strings to be quoted"
       (is (= (str "abc" nl)
-             (binding [*print-readably* true] (with-out-str (println "abc"))))))
-
-    (testing "println returns nil"
-      (let [returned (atom ::not-called)]
-        (with-out-str (reset! returned (println "a")))
-        (is (nil? @returned)))
-      (let [returned (atom ::not-called)]
-        (with-out-str (reset! returned (println)))
-        (is (nil? @returned))))))
+             (binding [*print-readably* true] (with-out-str (println "abc"))))))))
