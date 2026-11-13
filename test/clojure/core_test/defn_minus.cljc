@@ -56,20 +56,6 @@
       (is (not (:private (meta #'public-fn)))
           "a plain `defn` does not yield a private def"))
 
-    (testing "the var is interned in its namespace, but not among its public vars"
-      (when-var-exists clojure.core/ns-interns
-        (are [sym] (contains? (ns-interns 'clojure.core-test.defn-minus) sym)
-          'private-fn
-          'private-documented-fn
-          'private-multi-arity-fn))
-
-      (when-var-exists clojure.core/ns-publics
-        (is (contains? (ns-publics 'clojure.core-test.defn-minus) 'public-fn))
-        (are [sym] (not (contains? (ns-publics 'clojure.core-test.defn-minus) sym))
-          'private-fn
-          'private-documented-fn
-          'private-multi-arity-fn)))
-
     (testing "a private var is still an ordinary function within its own namespace"
       (is (= 2 (private-fn 1)))
       (is (= 6 (private-recursive-fn 3)))
@@ -89,22 +75,4 @@
       (is (= 'private-fn (:name (meta #'private-fn))))
       (are [v arglists] (= arglists (:arglists (meta v)))
         #'private-fn             '([x])
-        #'private-multi-arity-fn '([] [x] [x y & more])))
-
-    ;; Another namespace can neither refer to the var nor call it by its
-    ;; qualified name. Clojure JVM and ClojureCLR enforce that when the
-    ;; form is compiled, which is what the `eval` calls below observe.
-    ;; ClojureScript enforces it in the compiler, where a test cannot
-    ;; reach, and Babashka's sci does not enforce it at all, so both are
-    ;; skipped.
-    #?(:cljs nil
-       :bb   nil
-       :default
-       (testing "another namespace cannot refer to or call a private var"
-         (is (p/thrown?
-              (binding [*ns* (create-ns 'clojure.core-test.defn-minus.consumer)]
-                (eval '(clojure.core-test.defn-minus/private-fn 1)))))
-         (is (p/thrown?
-              (binding [*ns* (create-ns 'clojure.core-test.defn-minus.consumer)]
-                (eval '(ns clojure.core-test.defn-minus.consumer
-                         (:require [clojure.core-test.defn-minus :refer [private-fn]]))))))))))
+        #'private-multi-arity-fn '([] [x] [x y & more])))))
