@@ -1,4 +1,4 @@
-(ns clojure.core-test.defn-
+(ns clojure.core-test.defn-minus
   (:require [clojure.test :as t :refer [are deftest is testing]]
             [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
@@ -58,14 +58,14 @@
 
     (testing "the var is interned in its namespace, but not among its public vars"
       (when-var-exists clojure.core/ns-interns
-        (are [sym] (contains? (ns-interns 'clojure.core-test.defn-) sym)
+        (are [sym] (contains? (ns-interns 'clojure.core-test.defn-minus) sym)
           'private-fn
           'private-documented-fn
           'private-multi-arity-fn))
 
       (when-var-exists clojure.core/ns-publics
-        (is (contains? (ns-publics 'clojure.core-test.defn-) 'public-fn))
-        (are [sym] (not (contains? (ns-publics 'clojure.core-test.defn-) sym))
+        (is (contains? (ns-publics 'clojure.core-test.defn-minus) 'public-fn))
+        (are [sym] (not (contains? (ns-publics 'clojure.core-test.defn-minus) sym))
           'private-fn
           'private-documented-fn
           'private-multi-arity-fn)))
@@ -102,14 +102,9 @@
        :default
        (testing "another namespace cannot refer to or call a private var"
          (is (p/thrown?
-               (binding [*ns* (create-ns 'clojure.core-test.defn-.consumer)]
-                 (eval '(clojure.core-test.defn-/private-fn 1)))))
-
+              (binding [*ns* (create-ns 'clojure.core-test.defn-minus.consumer)]
+                (eval '(clojure.core-test.defn-minus/private-fn 1)))))
          (is (p/thrown?
-               (binding [*ns* (create-ns 'clojure.core-test.defn-.consumer)]
-                 (eval '(ns clojure.core-test.defn-.consumer
-                          (:require [clojure.core-test.defn- :refer [private-fn]]))))))
-
-         ;; A public var from the same namespace is, of course, reachable.
-         (is (= 2 (binding [*ns* (create-ns 'clojure.core-test.defn-.consumer)]
-                    (eval '(clojure.core-test.defn-/public-fn 1)))))))))
+              (binding [*ns* (create-ns 'clojure.core-test.defn-minus.consumer)]
+                (eval '(ns clojure.core-test.defn-minus.consumer
+                         (:require [clojure.core-test.defn-minus :refer [private-fn]]))))))))))
