@@ -28,6 +28,7 @@
         no-specials-sym (-> (if (str/starts-with? n "-")
                               (str/replace-first n "-" "minus")
                               n)
+                            (str/replace #"-$" "-minus")
                             (str/replace "->" "-minus-gt") ; cond->, some->, as->, etc.
                             (str/replace "*" "-star")
                             (str/replace "+" "-plus")
