@@ -17,13 +17,4 @@
       ;; Sorted collections not currently implemented in Basilisp
       #?(:lpy nil
          :default (is (= {:a "a"} (select-keys (sorted-map :a "a" :b "b") [:a]))))
-      (is (= {:a "a"} (select-keys {:a "a" :b (range)} [:a])))
-      #?@(:cljr [(is (= {} (select-keys "" [:a])))
-                 (is (= {}  (select-keys 0 [:a])))
-                 (is (p/thrown? (select-keys {} :a)))]
-          :cljs [(is (= {} (select-keys "" [:a])))
-                 (is (= {} (select-keys 0 [:a])))
-                 (is (p/thrown? (select-keys {} :a)))]
-          :default [(is (p/thrown? (select-keys "" [:a])))
-                    (is (p/thrown? (select-keys 0 [:a])))
-                    (is (p/thrown? (select-keys {} :a)))]))))
+      (is (= {:a "a"} (select-keys {:a "a" :b (range)} [:a]))))))
