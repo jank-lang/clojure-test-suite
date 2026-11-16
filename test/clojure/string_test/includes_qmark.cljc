@@ -36,6 +36,7 @@
 
     (testing "non-ASCII text"
       (is (true? (str/includes? "▒a-test" "▒")))
+      (is (true? (str/includes? "a-▒test" "▒")))
       (is (true? (str/includes? "a-test▒" "▒")))
       (is (false? (str/includes? "a-test" "▒"))))
 
