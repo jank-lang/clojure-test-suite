@@ -219,6 +219,42 @@
                      :while (= :item (:tag (meta x)))]
                  x)))))
 
+    (testing "an exception thrown by a modifier propagates when realized"
+      ;; the comprehension is lazy, so a modifier's exception is not thrown
+      ;; where the comprehension is built, only once the failing element is
+      ;; reached. A list (rather than a chunked range) is used so that exactly
+      ;; the elements up to the failing one are realized.
+      (let [s (for [x (list 0 1 2 3 4 5)
+                    :when (if (= 3 x) (throw (ex-info "uh oh" {})) true)]
+                x)]
+        (is (seq? s))
+        (is (= [0 1 2] (vec (take 3 s))))
+        (is (p/thrown? (doall s))))
+      (let [s (for [x (list 0 1 2 3 4 5)
+                    :let [y (if (= 3 x) (throw (ex-info "uh oh" {})) x)]]
+                y)]
+        (is (seq? s))
+        (is (= [0 1 2] (vec (take 3 s))))
+        (is (p/thrown? (doall s))))
+      (let [s (for [x (list 0 1 2 3 4 5)
+                    :while (if (= 3 x) (throw (ex-info "uh oh" {})) true)]
+                x)]
+        (is (seq? s))
+        (is (= [0 1 2] (vec (take 3 s))))
+        (is (p/thrown? (doall s))))
+      ;; the exception ends the whole comprehension, whichever nested binding
+      ;; group the failing modifier belongs to
+      (are [result] (p/thrown? (doall result))
+        (for [x [0 1] y (range 4)
+              :when (if (and (= x 1) (= y 2)) (throw (ex-info "uh oh" {})) true)]
+          [x y])
+        (for [x [0 1] y (range 4)
+              :let [z (if (and (= x 1) (= y 2)) (throw (ex-info "uh oh" {})) y)]]
+          [x z])
+        (for [x [1 2 3] y (range 4)
+              :while (if (and (= x 2) (= y 1)) (throw (ex-info "uh oh" {})) (< y x))]
+          [x y])))
+
     (testing "collection expressions must be seqable"
       (is (p/thrown? (doall (for [x 5] x))))
       (is (p/thrown? (doall (for [x [1 2] y :a] [x y])))))))
