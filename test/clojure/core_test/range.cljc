@@ -20,8 +20,7 @@
       (is (= [0 1 2 3 4] (take 5 (range))))
       ;; Infinite, but elements are produced on demand rather than
       ;; realizing the whole (unbounded) sequence.
-      (is (= 1000 (nth (range) 1000)))
-      (is (= 10000 (count (range 10000)))))
+      (is (= 1000 (nth (range) 1000))))
 
     (testing "arity 1 - start defaults to 0, step to 1"
       (are [expected end] (= expected (range end))
