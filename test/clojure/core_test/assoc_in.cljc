@@ -62,6 +62,36 @@
       (is (= {:a [{:b [0 9]}]}
              (assoc-in {:a [{:b [0 1]}]} [:a 0 :b 1] 9))))
 
+    (testing "key sequences that are not vectors"
+      ;; The keys need only be a sequence, so lists, lazy seqs and other
+      ;; seqs work exactly like vectors.
+      (are [expected m ks v] (= expected (assoc-in m ks v))
+                             {:a 1}             {}              '(:a)          1
+                             {:a 2 :b 2}        {:a 1 :b 2}     (list :a)      2
+                             {:a {:b 1}}        {}              '(:a :b)       1
+                             {:a {:b 2} :c 3}   {:a {:b 1} :c 3} (list :a :b)   2
+                             {:a {:b {:c 1}}}   {}              '(:a :b :c)    1
+                             {:a {:b 1}}        nil             (list :a :b)   1
+                             {nil 1}            {}              '(nil)         1
+                             [0 9]              [0 1]           '(1)           9
+                             [0 9 2 3]          [0 1 2 3]       (list 1)       9
+                             [0 [1 9]]          [0 [1 2]]       '(1 1)         9
+                             {:a [{:b 1}]}      {:a [{:b 0}]}   '(:a 0)        {:b 1})
+
+      ;; A lazy seq of keys is only realized as far as it is descended, so
+      ;; an infinite seq of keys works.
+      (is (= {:a {:a {:a 1}}}
+             (assoc-in {} (take 3 (repeat :a)) 1)))
+
+      (is (= {:a {:b 1}}
+             (assoc-in {} (cons :a [:b]) 1)))
+
+      (is (= {:a {:b 1}}
+             (assoc-in {} (seq [:a :b]) 1)))
+
+      (is (= {:a {:b {:c 1}}}
+             (assoc-in {} (map identity [:a :b :c]) 1))))
+
     (testing "empty key sequence"
       ;; With no keys there is no level to descend to, so the value is
       ;; associated under a `nil` key at the top level.
