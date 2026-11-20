@@ -1,7 +1,7 @@
 (ns {{test-ns}}
   (:require {% if not fut-ns = "clojure.core" %}{{fut-ns}}
             {% endif %}[clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
+            [clojure.core-test.portability :as p #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists {{fut}}
 
