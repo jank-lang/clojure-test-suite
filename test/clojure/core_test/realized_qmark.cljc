@@ -1,6 +1,6 @@
 (ns clojure.core-test.realized-qmark
   (:require [clojure.test :as t :refer [deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists sleep] :as p]))
+            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
 
 ;; You realize the sun doesn't go down
 ;; It's just an illusion caused by the world spinning 'round
@@ -43,18 +43,25 @@
             (let [ftr (future :foo)]
               (deref ftr)
               (is (true? (realized? ftr))))
-            (let [ftr2 (future (sleep 10000))] ; don't worry, we won't wait the full 10s
+            ;; Gated like `ftr3` below, so the "not yet realized" state
+            ;; cannot be missed even on a loaded machine. Cancelling leaves
+            ;; the parked body alone, so release the gate afterwards to let
+            ;; its thread exit.
+            (let [gate (promise)
+                  ftr2 (future @gate)]
               (is (false? (realized? ftr2)))
               (future-cancel ftr2)
-              (is (true? (realized? ftr2))))
-            (let [ftr3 (future (sleep 1))]
+              (is (true? (realized? ftr2)))
+              (deliver gate :done))
+            ;; Gate the future's body on an undelivered promise so that it
+            ;; cannot possibly finish before we check. A fixed sleep would
+            ;; race the main thread and flake on a loaded machine.
+            (let [gate (promise)
+                  ftr3 (future @gate)]
               (is (false? (realized? ftr3)))
-              (deref ftr3)
-              (is (true? (realized? ftr3))))
-            (let [ftr4 (future (sleep 1))]
-              (is (false? (realized? ftr4)))
-              (deref ftr4)
-              (is (true? (realized? ftr4))))))
+              (deliver gate :done)
+              (deref ftr3)                  ; barrier: the body has now returned
+              (is (true? (realized? ftr3))))))
 
         (testing "lazy sequences"
           (is (false? (realized? (lazy-seq))))
