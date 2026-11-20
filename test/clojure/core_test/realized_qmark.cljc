@@ -47,14 +47,15 @@
               (is (false? (realized? ftr2)))
               (future-cancel ftr2)
               (is (true? (realized? ftr2))))
-            (let [ftr3 (future (sleep 1))]
+            ;; Gate the future's body on an undelivered promise so that it
+            ;; cannot possibly finish before we check. A fixed `sleep`
+            ;; would race the main thread and flake on a loaded machine.
+            (let [gate (promise)
+                  ftr3 (future @gate)]
               (is (false? (realized? ftr3)))
-              (deref ftr3)
-              (is (true? (realized? ftr3))))
-            (let [ftr4 (future (sleep 1))]
-              (is (false? (realized? ftr4)))
-              (deref ftr4)
-              (is (true? (realized? ftr4))))))
+              (deliver gate :done)
+              (deref ftr3)                  ; barrier: the body has now returned
+              (is (true? (realized? ftr3))))))
 
         (testing "lazy sequences"
           (is (false? (realized? (lazy-seq))))
