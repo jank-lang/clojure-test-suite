@@ -138,9 +138,17 @@
                        (greet-named [this name] name))]
                [(str o) (greet o)]))))
 
-    ;; bb is skipped here: it requires the target object as the first argument
-    ;; to a recur in a reify method, rather than supplying it automatically.
-    #?(:bb      nil
+    #?(:bb
+       (testing "a method head is a recursion point for recur"
+         ;; bb requires the target object as the first argument to a
+         ;; recur in a reify method, rather than supplying it
+         ;; automatically
+         (let [o (reify TestCountdown
+                   (countdown [this n]
+                     (if (zero? n) :done (recur this (dec n)))))]
+           (is (= :done (countdown o 3)))
+           ;; recurs in a method do not grow the stack
+           (is (= :done (countdown o 10000)))))
        :default
        (testing "a method head is a recursion point for recur"
          ;; recur passes only the method's parameters, not the target object
@@ -185,7 +193,7 @@
       (let [o (with-meta (reify TestGreeter
                            (greet [this] :greeted)
                            (greet-named [this name] name))
-                       {:a 1})]
+                {:a 1})]
         (is (= {:a 1} (meta o)))
         (is (= :greeted (greet o)))))
 
