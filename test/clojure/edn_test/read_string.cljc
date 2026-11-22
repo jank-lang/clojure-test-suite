@@ -166,6 +166,11 @@
                     (let [result (edn/read-string ":foo/bar/baz")]
                       (is (keyword? result))
                       (is (= ["foo/bar" "baz"] (part-named result)))))
+         ;; Basilisp is lenient in these cases, like the JVM: the extra '/' is part of
+         ;; the name, exactly as `symbol`/`keyword` construct such names
+         :lpy     (are-read-as
+                    (symbol "foo/bar/baz") "foo/bar/baz"
+                    (keyword "foo/bar/baz") ":foo/bar/baz")
          ;; JVM is lenient in these cases
          :clj     (are-read-as
                     (symbol "foo/bar/baz") "foo/bar/baz"

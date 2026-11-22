@@ -51,6 +51,7 @@
       ;; re-matchers are stateful, so set it up and then force the
       ;; matching with `re-find`.
       #?(:cljs nil ; CLJS doesn't have re-matcher
+         :lpy nil ; Basilisp doesn't have re-matcher
          :default (let [m (re-matcher #"(\d+),(\d+),(\d+)" "123,456,789")]
                     (re-find m)
                     (are [expected coll index] (= expected (nth coll index))
@@ -113,6 +114,7 @@
       ;; re-matchers are stateful, so set it up and then force the
       ;; matching with `re-find`.
       #?(:cljs nil ; CLJS doesn't have re-matcher
+         :lpy nil ; Basilisp doesn't have re-matcher
          :default (let [m (re-matcher #"(\d+),(\d+),(\d+)" "123,456,789")]
                     (re-find m)
                     (are [expected coll index] (= expected (nth coll index))
@@ -142,8 +144,12 @@
       (is (p/thrown? (nth {:a 1 :b 2} 0)))
       (is (p/thrown? (nth #{:a :b :c :d} 0)))
       ;; but does work if you explicitly convert to seqs
-      (is (= [:a 1] (nth (seq (sorted-map :a 1 :b 2)) 0))) ; we use sorted maps and sets here
-      (is (= :a (nth (seq (sorted-set :a :b :c :d)) 0))) ; to control order
+      ;; Sorted collections are not available in every dialect (e.g. Basilisp);
+      ;; sort a plain map/set's elements to control order there instead.
+      #?(:lpy (is (= [:a 1] (nth (sort-by first (seq {:a 1 :b 2})) 0)))
+          :default (is (= [:a 1] (nth (seq (sorted-map :a 1 :b 2)) 0)))) ; we use sorted maps and sets here
+      #?(:lpy (is (= :a (nth (sort (seq #{:a :b :c :d})) 0)))
+          :default (is (= :a (nth (seq (sorted-set :a :b :c :d)) 0)))) ; to control order
 
       (is (p/thrown? (nth [0 1 2] nil)))
 

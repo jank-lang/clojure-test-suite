@@ -22,8 +22,9 @@
         [1 2 3 4] (list 1 2 3 4 5)
         [\a \b \c \d] "abcde"
         [1 2 3 4] (int-array [1 2 3 4 5])
-        [[:a 1] [:b 2] [:c 3]] (sorted-map :a 1 :b 2 :c 3 :d 4)
-        [:a :b :c :d] (sorted-set :a :b :c :d :e)
+        #?@(:lpy []
+            :default [[[:a 1] [:b 2] [:c 3]] (sorted-map :a 1 :b 2 :c 3 :d 4)
+                      [:a :b :c :d] (sorted-set :a :b :c :d :e)])
         [] [1]
         [] (list 1)
         [] '()
@@ -60,12 +61,13 @@
         [1 2 3 4 5] 0 (int-array [1 2 3 4 5])
         [1 2 3 4] 1 (int-array [1 2 3 4 5])
         [1 2 3] 2 (int-array [1 2 3 4 5])
-        [[:a 1] [:b 2] [:c 3] [:d 4]] 0 (sorted-map :a 1 :b 2 :c 3 :d 4)
-        [[:a 1] [:b 2] [:c 3]] 1 (sorted-map :a 1 :b 2 :c 3 :d 4)
-        [[:a 1] [:b 2]] 2 (sorted-map :a 1 :b 2 :c 3 :d 4)
-        [:a :b :c :d :e] 0 (sorted-set :a :b :c :d :e)
-        [:a :b :c :d] 1 (sorted-set :a :b :c :d :e)
-        [:a :b :c] 2 (sorted-set :a :b :c :d :e)
+        #?@(:lpy []
+            :default [[[:a 1] [:b 2] [:c 3] [:d 4]] 0 (sorted-map :a 1 :b 2 :c 3 :d 4)
+                      [[:a 1] [:b 2] [:c 3]] 1 (sorted-map :a 1 :b 2 :c 3 :d 4)
+                      [[:a 1] [:b 2]] 2 (sorted-map :a 1 :b 2 :c 3 :d 4)
+                      [:a :b :c :d :e] 0 (sorted-set :a :b :c :d :e)
+                      [:a :b :c :d] 1 (sorted-set :a :b :c :d :e)
+                      [:a :b :c] 2 (sorted-set :a :b :c :d :e)])
         (range 0 5) -1 (range 0 5)      ; n < 0
         (range 0 5) -100 (range 0 5)
         [] 1 [1]                       ; n = count

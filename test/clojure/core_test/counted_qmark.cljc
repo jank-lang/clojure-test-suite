@@ -13,7 +13,7 @@
         #?@(:cljs [nil] :default [])    ; CLJS nil is `counted?`
         (hash-map :a 1 :b 2 :c 3)
         ;; Basilisp does not currently implement sorted collections.
-        #?@(:lpy []
+        #?@(:lpy [(array-map :a 1 :b 2 :c 3)]
             :default
             [(array-map :a 1 :b 2 :c 3)
              (sorted-map :a 1 :b 2 :c 3)

@@ -9,6 +9,7 @@
       true (first {:a 1})               ; map entries are also vectors
       false '(1 2 3)
       false (hash-map :a 1)
+      false (array-map :a 1)
       false (hash-set :a)
       false (seq [1 2 3])
       false (range 0 10)
@@ -24,11 +25,10 @@
       false \a
       false (object-array 3)
 
-      ;; Basilisp does not currently implement sorted collections or array-map.
+      ;; Basilisp does not currently implement sorted collections.
       #?@(:lpy []
           :default
           [false (sorted-map :a 1)
            false (sorted-set :a)
-           false (array-map :a 1)
            false (seq (sorted-map :a 1))
            false (seq (sorted-set :a))]))))

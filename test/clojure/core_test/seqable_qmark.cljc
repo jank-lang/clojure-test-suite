@@ -22,8 +22,9 @@
       false 1.0M
       false :a-keyword
       false 'a-sym
-      ;; Basilisp does not currently implement sorted collections or array-map.
-      #?@(:lpy [true \a]
+      ;; Basilisp does not currently implement sorted collections.
+      #?@(:lpy [true \a
+                true (array-map :a 1)]
 
           :phel [true \a
                  true (sorted-map :a 1)

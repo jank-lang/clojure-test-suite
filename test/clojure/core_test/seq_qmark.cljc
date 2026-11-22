@@ -19,6 +19,7 @@
 
       false [1 2 3]
       false (hash-map :a 1)
+      false (array-map :a 1)
       false (hash-set :a)
       false nil
       false 1
@@ -31,9 +32,8 @@
       false \a
       false (object-array 3)
 
-      ;; Basilisp does not currently implement sorted collections or array-map.
+      ;; Basilisp does not currently implement sorted collections.
       #?@(:lpy []
           :default
           [false (sorted-map :a 1)
-           false (sorted-set :a)
-           false (array-map :a 1)]))))
+           false (sorted-set :a)]))))

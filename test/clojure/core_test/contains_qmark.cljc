@@ -25,9 +25,10 @@
       true {^:foo [:a 1] 17} ^:bar [:a 1]
       true {[:a 1] 17} ^:bar [:a 1]
       false {[:a 1] 17} [:a 2]
-      true (sorted-map :a 1 :b 2) :a    ; no difference if sorted maps
-      false (sorted-map :a 1 :b 2) :c
-      true (sorted-map nil 1) nil
+      #?@(:lpy []
+          :default [true (sorted-map :a 1 :b 2) :a    ; no difference if sorted maps
+                    false (sorted-map :a 1 :b 2) :c
+                    true (sorted-map nil 1) nil])
       false {} :a
       false {} nil
       false nil :a
@@ -45,9 +46,10 @@
       true #{^:foo [:a 1] [:b 2]} ^:bar [:a 1]
       true #{[:a 1] [:b 2]} ^:bar [:a 1]
       false #{[:a 1] [:b 2]} [:a 2]
-      true (sorted-set :a :b) :a
-      false (sorted-set :a :b) :c
-      true (sorted-set :a nil :b) nil
+      #?@(:lpy []
+          :default [true (sorted-set :a :b) :a
+                    false (sorted-set :a :b) :c
+                    true (sorted-set :a nil :b) nil])
       false #{} :a
       false #{} nil
 

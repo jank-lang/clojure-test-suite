@@ -11,8 +11,7 @@
                          (= (type coll) (type persisted))))
                   [1 2 3]
                   {:x 0 :y -1}
-                  ;; Basilisp does not currently implement sorted collections.
-                  #?@(:lpy [] :default [(array-map :a 1)])
+                  (array-map :a 1)
                   (hash-map :b 2)
                   #{42 "life"}
                   (hash-set 43 "thing")))
