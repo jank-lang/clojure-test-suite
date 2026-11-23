@@ -1,6 +1,9 @@
 (ns clojure.core-test.portability
   #?(:lpy (:import time)
      :jank (:include "chrono"))
+  ;; `delete-file` shadows a clojure.core var of the same name; the core var is
+  ;; excluded so that the shadowing is deliberate.
+  (:refer-clojure :exclude [delete-file])
   (:require #?(:cljs [cljs.test :as t]
                :default [clojure.test :as t])))
 
@@ -51,6 +54,43 @@
      :clje (instance? clojerl.LazySeq x)
      :jank (cpp/== (.get_type x) cpp/jank.runtime.object_type.lazy_sequence)
      :default (instance? clojure.lang.LazySeq x)))
+
+;; --- Portable filesystem helpers. ---
+;;
+;; Of the dialects supported here, only Clojure, Babashka and ClojureCLR have
+;; a filesystem. The other dialects still load this namespace, so they compile
+;; the branches which throw rather than interop forms they do not have.
+(defn temp-filename
+  "Create a new, empty temporary file and return its filename as a string."
+  []
+  #?(:cljr    (System.IO.Path/GetTempFileName)
+     :clj     (.getAbsolutePath (java.io.File/createTempFile "clojure-test-suite" ".tmp"))
+     :default (throw (ex-info "temp-filename requires a filesystem" {}))))
+
+(defn delete-file
+  "Delete the file named by `path`. Any failure to delete is returned as
+  false rather than thrown."
+  [path]
+  #?(:cljr    (System.IO.File/Delete path)
+     :clj     (.delete (java.io.File. path))
+     :default (throw (ex-info "delete-file requires a filesystem" {}))))
+
+(defmacro with-temp-file
+  "Bind `sym` to the filename of a new temporary file, evaluate `body`,
+  then delete the file. The file is deleted even when `body` throws."
+  [[sym] & body]
+  `(let [~sym (temp-filename)]
+     (try
+       ~@body
+       (finally
+         (delete-file ~sym)))))
+
+(defn string-reader
+  "Returns a reader, of the dialect's native reader type, over `s`."
+  [s]
+  #?(:cljr    (System.IO.StringReader. s)
+     :clj     (java.io.StringReader. s)
+     :default (throw (ex-info "string-reader is not supported" {}))))
 
 ;; --- Portable exception multimethod. ---
 
