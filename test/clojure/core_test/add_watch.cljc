@@ -143,7 +143,18 @@
                (is (contains? (set (keyed :e @state))
                               {:key :e :ref #'testvar-a :old 4 :new 5 :tester :err}))
                (is (contains? (set (keyed :e @state))
-                              {:key :e :ref #'testvar-b :old 14 :new 15 :tester :err})))))])
+                              {:key :e :ref #'testvar-b :old 14 :new 15 :tester :err}))
+
+               ;; Remove the watches so this namespace can be run again
+               ;; in-process. `testvar-a`/`testvar-b` are top-level, and the
+               ;; `:e` watcher throws on any later update, which would abort
+               ;; a subsequent run.
+               (remove-watch #'testvar-a :va)
+               (remove-watch #'testvar-a :sa)
+               (remove-watch #'testvar-a :e)
+               (remove-watch #'testvar-b :vb)
+               (remove-watch #'testvar-b :sb)
+               (remove-watch #'testvar-b :e))))])
 
     #?(:lpy nil
        :phel nil
@@ -310,17 +321,23 @@
              (add-watch g :e err)
              (update!)
              (deref agent-end)
-             (sleep 1)
-             (if-let [e (agent-error g)]
-               (do
-                 (is (= {:key :e :old 26 :new 27 :tester :err} (ex-data e)))
-                 ;; The final call may not have gone to tester 1
-                 (is (= #{{:key :g :old 20 :new 21 :tester 1}
-                          {:key :g :old 21 :new 22 :tester 1}
-                          {:key :s :old 21 :new 22 :tester 2}
-                          {:key :g :old 22 :new 23 :tester 2}
-                          {:key :s :old 22 :new 23 :tester 2}
-                          {:key :s :old 23 :new 24 :tester 2}
-                          {:key :g :old 25 :new 26 :tester 1}}
-                        (disj (set @state) {:key :g :old 26 :new 27 :tester 1}))))
-               (println "Unexpected lack of error"))))])))
+             ;; `agent-end` is delivered from inside `err`, i.e. before the
+             ;; failing action is recorded on the agent, so it does NOT mean
+             ;; `agent-error` is set yet. Poll for the error to be recorded
+             ;; instead of sleeping a fixed amount and hoping it landed.
+             (loop [n 0]
+               (when (and (nil? (agent-error g)) (< n 5000))
+                 (sleep 1)
+                 (recur (inc n))))
+             (let [e (agent-error g)]
+               (is (some? e) "agent should have recorded the error")
+               (is (= {:key :e :old 26 :new 27 :tester :err} (ex-data e)))
+               ;; The final call may not have gone to tester 1
+               (is (= #{{:key :g :old 20 :new 21 :tester 1}
+                        {:key :g :old 21 :new 22 :tester 1}
+                        {:key :s :old 21 :new 22 :tester 2}
+                        {:key :g :old 22 :new 23 :tester 2}
+                        {:key :s :old 22 :new 23 :tester 2}
+                        {:key :s :old 23 :new 24 :tester 2}
+                        {:key :g :old 25 :new 26 :tester 1}}
+                      (disj (set @state) {:key :g :old 26 :new 27 :tester 1}))))))])))
