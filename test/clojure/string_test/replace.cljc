@@ -77,6 +77,7 @@
 
     #?(:cljs nil ;; not valid tests for cljs
        :cljr nil ;; not valid tests for cljr
+       :lpy nil ;; not valid tests for Basilisp
        :default
        (testing "First input does not need to be a string"
          (is (= (str :bar) (str/replace :foo "foo" "bar")))
@@ -91,6 +92,7 @@
       (is (= "😀😀😀" (str/replace "☹️☹️☹️" "☹️" "😀"))))
 
     #?(:cljs nil ;; cljs converts chars into strings
+       :lpy nil  ;; Basilisp reads characters as strings
        :default
        (testing "Invalid parameter combinations"
          (is (p/thrown? (str/replace nil "x" "y")) "First input must not be nil")

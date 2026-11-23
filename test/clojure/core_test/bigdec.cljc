@@ -1,4 +1,5 @@
 (ns clojure.core-test.bigdec
+  #?(:lpy (:import math))
   (:require [clojure.test :as t :refer [deftest is are testing]]
             [clojure.core-test.portability :as p #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
@@ -54,13 +55,21 @@
       (is (decimal? (bigdec 1))))
 
     (testing "exception cases"
-      (is (p/thrown? (bigdec ##Inf)))
-      (is (p/thrown? (bigdec ##-Inf)))
-      (is (p/thrown? (bigdec ##NaN)))
+      #?@(:lpy
+          [(is (math/isinf (bigdec ##Inf)))
+           (is (math/isinf (bigdec ##-Inf)))
+           (is (math/isnan (bigdec ##NaN)))]
+          :default
+          [(is (p/thrown? (bigdec ##Inf)))
+           (is (p/thrown? (bigdec ##-Inf)))
+           (is (p/thrown? (bigdec ##NaN)))])
       (is (p/thrown? (bigdec nil)))
       (is (p/thrown? (bigdec "abc")))   ; can't coerce to number
       (is (p/thrown? (bigdec "")))      ; can't coerce to number
       #?@(:cljr
+          [(is (= 1.0M (bigdec true)))
+           (is (= 0.0M (bigdec false)))]
+          :lpy
           [(is (= 1.0M (bigdec true)))
            (is (= 0.0M (bigdec false)))]
           :default

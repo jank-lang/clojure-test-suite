@@ -19,10 +19,14 @@
         [1 2 3] keyword? (list :a :b :c 1 2 3)
         [\o] #(not= % \o) "hello"
         [5 6 7 8 9] #(< % 5) (int-array [0 1 2 3 4 5 6 7 8 9])
-        [[:c 3] [:d 4]] #(not= (first %) :c) (sorted-map :a 1 :b 2 :c 3 :d 4)
         [] (constantly true) {:a 1 :b 2 :c 3 :d 4}
-        [:c :d] #(not= % :c) (sorted-set :a :b :c :d)
         [] (constantly true) #{:a :b :c :d}
+        ;; Basilisp does not implement sorted-map/sorted-set; these are used
+        ;; here only to get predictable traversal order.
+        #?@(:lpy []
+            :default
+            [[[:c 3] [:d 4]] #(not= (first %) :c) (sorted-map :a 1 :b 2 :c 3 :d 4)
+             [:c :d] #(not= % :c) (sorted-set :a :b :c :d)])
 
         ;; constant predicates
         [] (constantly true) [:a :b :c 1 2 3]
@@ -56,10 +60,14 @@
         [1 2 3] keyword? (list :a :b :c 1 2 3)
         [\o] #(not= % \o) "hello"
         [5 6 7 8 9] #(< % 5) (int-array [0 1 2 3 4 5 6 7 8 9])
-        [[:c 3] [:d 4]] #(not= (first %) :c) (sorted-map :a 1 :b 2 :c 3 :d 4)
         [] (constantly true) {:a 1 :b 2 :c 3 :d 4}
-        [:c :d] #(not= % :c) (sorted-set :a :b :c :d)
         [] (constantly true) #{:a :b :c :d}
+        ;; Basilisp does not implement sorted-map/sorted-set; these are used
+        ;; here only to get predictable traversal order.
+        #?@(:lpy []
+            :default
+            [[[:c 3] [:d 4]] #(not= (first %) :c) (sorted-map :a 1 :b 2 :c 3 :d 4)
+             [:c :d] #(not= % :c) (sorted-set :a :b :c :d)])
 
         ;; constant predicates
         [] (constantly true) [:a :b :c 1 2 3]

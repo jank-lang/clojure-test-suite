@@ -100,7 +100,10 @@
           #?@(:cljs []             ; CLJS doesn't have `boolean-array`
               :default [true #(and %1 %2) true a-boolean-array])
           [\h \e \l \l \o] conj [\h] "ello"
-          [[:a 1] [:b 2] [:c 3] [:d 4]] conj [] (sorted-map :a 1 :b 2 :c 3 :d 4)
+          ;; Basilisp does not currently implement sorted collections; sort a
+          ;; plain map's entries to control traversal order there instead.
+          #?@(:lpy [[[:a 1] [:b 2] [:c 3] [:d 4]] conj [] (sort-by first (seq {:a 1 :b 2 :c 3 :d 4}))]
+              :default [[[:a 1] [:b 2] [:c 3] [:d 4]] conj [] (sorted-map :a 1 :b 2 :c 3 :d 4)])
           {1 :a, 2 :b, 3 :c, 4 :d} (fn [m [k v]] (conj m [v k])) {} {:a 1 :b 2 :c 3 :d 4}
           3 + 3 '()
           3 + 3 []

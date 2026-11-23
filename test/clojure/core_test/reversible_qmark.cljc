@@ -16,6 +16,7 @@
       false '(1 2 3)
       false (hash-map :a 1)
       false (hash-set :a)
+      false (array-map :a 1)
       false (range 0 10)
       false (range)
       false nil
@@ -30,9 +31,8 @@
       false (object-array 3)
       #?(:cljs true :default false) (seq [1 2 3])
 
-      ;; Basilisp does not currently implement sorted collections or array-map.
+      ;; Basilisp does not currently implement sorted collections.
       #?@(:lpy []
           :default
-          [false (array-map :a 1)
-           false (seq (sorted-map :a 1))
+          [false (seq (sorted-map :a 1))
            false (seq (sorted-set :a))]))))

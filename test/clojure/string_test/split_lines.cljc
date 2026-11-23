@@ -21,6 +21,7 @@
       (is (= ["🫸" "🫷"] (str/split-lines "🫸\n🫷"))))
 
     #?(:cljs nil ;; CLJS will coerce the argument to a string so it will not throw
+       :lpy nil ;; Basilisp characters are just single character strings, so will not throw
        :default
        (testing "Exceptions"
          (is (p/thrown? (str/split-lines nil)))

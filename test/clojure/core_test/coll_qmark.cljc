@@ -20,12 +20,11 @@
       true (seq {:a :b :c :d})
       true (concat [:a :b :c])
 
-      ;; Basilisp does not currently implement sorted collections or array-map.
+      ;; Basilisp does not currently implement sorted collections.
       #?@(:lpy []
           :default
           [true (sorted-map :a 1)
            true (sorted-set :a)
-           true (array-map :a 1)
            true (seq (sorted-map :a 1))
            true (seq (sorted-set :a))])
 
