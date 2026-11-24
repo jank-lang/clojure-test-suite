@@ -31,7 +31,7 @@
 
     #?@(:lpy []
         ; Clojure CLR has a bug which permits this.
-        :clr []
+        :cljr []
         :default
         [(testing "calling nth after persistent throws"
            (let [t (transient [:a])
