@@ -29,6 +29,13 @@
            (let [coll (transient {}), _ (persistent! coll)]
              (is (p/thrown? (persistent! coll)))))])
 
+    #?@(:lpy []
+        :default
+        [(testing "calling nth after persistent throws"
+           (let [t (transient [:a])
+                 _ (persistent! t)]
+             (is (p/thrown? (nth t 0)))))])
+
     (testing "bad shape"
       (are [coll] (p/thrown? (persistent! coll))
                   nil
