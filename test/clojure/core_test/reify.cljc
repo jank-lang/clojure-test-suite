@@ -1,6 +1,6 @@
 (ns clojure.core-test.reify
   (:require [clojure.test :as t :refer [are deftest is testing]]
-            [clojure.core-test.portability #?(:cljs :refer-macros :default :refer) [when-var-exists] :as p]))
+            [clojure.core-test.portability :as p #?(:cljs :refer-macros :default :refer) [when-var-exists]]))
 
 (when-var-exists clojure.core/reify
 
@@ -138,25 +138,13 @@
                        (greet-named [this name] name))]
                [(str o) (greet o)]))))
 
-    #?(:bb
-       (testing "a method head is a recursion point for recur"
-         ;; bb requires the target object as the first argument to a
-         ;; recur in a reify method, rather than supplying it
-         ;; automatically
-         (let [o (reify TestCountdown
-                   (countdown [this n]
-                     (if (zero? n) :done (recur this (dec n)))))]
-           (is (= :done (countdown o 3)))
-           ;; recurs in a method do not grow the stack
-           (is (= :done (countdown o 10000)))))
-       :default
-       (testing "a method head is a recursion point for recur"
-         ;; recur passes only the method's parameters, not the target object
-         (let [o (reify TestCountdown
-                   (countdown [this n] (if (zero? n) :done (recur (dec n)))))]
-           (is (= :done (countdown o 3)))
-           ;; recurs in a method do not grow the stack
-           (is (= :done (countdown o 10000))))))
+    (testing "a method head is a recursion point for recur"
+      ;; recur passes only the method's parameters, not the target object
+      (let [o (reify TestCountdown
+                (countdown [this n] (if (zero? n) :done (recur (dec n)))))]
+        (is (= :done (countdown o 3)))
+        ;; recurs in a method do not grow the stack
+        (is (= :done (countdown o 10000)))))
 
     (testing "method bodies are lexical closures over the surrounding scope"
       ;; reify can implement an interface, here one that closes over a local
