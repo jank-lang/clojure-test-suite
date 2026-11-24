@@ -10,7 +10,8 @@
          :output-to "target/js/node-tests.js"
          :ns-regexp "-test"
          :autorun true
-         :compiler-options {:warnings {:invalid-arithmetic false}}
+         :compiler-options {:warnings {:invalid-arithmetic false}
+                            :warnings-as-errors true}
          :release {:autorun false
                    :compiler-options {:optimizations :simple
                                       :elide-asserts false}}}}}
