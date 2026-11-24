@@ -30,6 +30,8 @@
              (is (p/thrown? (persistent! coll)))))])
 
     #?@(:lpy []
+        ; Clojure CLR has a bug which permits this.
+        :clr []
         :default
         [(testing "calling nth after persistent throws"
            (let [t (transient [:a])
