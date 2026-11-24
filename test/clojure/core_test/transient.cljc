@@ -42,11 +42,12 @@
           (is (= (count someset) (count (transient someset)))))))
 
     (testing "modifying the transient doesn't modify the original"
-      (let [m {}
-            t (transient m)
-            t (assoc! t :a 1)]
-        (is (= {:a 1} m))
-        (is (= {} m))))
+      (let [m1 {}
+            t (transient m1)
+            t (assoc! t :a 1)
+            m2 (persistent! t)]
+        (is (= {} m1))
+        (is (= {:a 1} m2))))
 
     (testing "calling non-bang interface throws"
       (testing "for transient vector"
