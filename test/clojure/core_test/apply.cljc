@@ -30,6 +30,8 @@
            (apply conj #{} {:a 1, :b 2})))
     (is (= [\a \b \c]                   ; String is sequence of chars
            (apply conj [] "abc")))
+    (is (= 0 (apply (fn [& args]
+                      (first args)) (range))))
 
     ;; Try various IFn things
     (is (= 1 (apply {:a 1} [:a])))            ; apply map to key
